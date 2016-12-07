@@ -81,8 +81,8 @@ public class UnRootMode extends Activity
 				@Override
 				public void onClick(DialogInterface p1, int p2)
 				{
-					Toast.makeText(UnRootMode.this,"_(´Дˋ」∠)З|📱🔞(≧ω≦)☕。。(嫐)|8='''',D--",Toast.LENGTH_SHORT).show();
-					Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://coolapk.com/apk/com.ryuunoakaihitomi.rebootmenu"));
+					Toast.makeText(UnRootMode.this, "_(´Дˋ」∠)З|📱🔞(≧ω≦)☕。。(嫐)|8='''',D--\n彩蛋：我的个人主页", Toast.LENGTH_SHORT).show();
+					Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.coolapk.com/u/532521"));
 					startActivity(i);
 					finish();
 				}
@@ -166,8 +166,7 @@ public class UnRootMode extends Activity
 			}
 		}
 		else
-		{
-		}
+		{}
 		return false;
 	}
 }

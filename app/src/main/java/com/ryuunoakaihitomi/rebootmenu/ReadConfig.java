@@ -16,6 +16,14 @@ public class ReadConfig
 	{
 		return fileIsExists("/sdcard/dreapm/c");
 	}
+	public static boolean noRootCheck()
+	{
+		return fileIsExists("/sdcard/dreapm/nrc");
+	}
+	public static boolean unRootMode()
+	{
+		return fileIsExists("/sdcard/dreapm/urm");
+	}
 	private static boolean fileIsExists(String strFile)
     {
         try

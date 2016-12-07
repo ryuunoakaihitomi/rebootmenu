@@ -26,15 +26,34 @@ public class MainActivity extends Activity
 		{
 			s = s + "\n√ 无需二次确认";
 		}
-		Toast.makeText(MainActivity.this, s, Toast.LENGTH_SHORT).show();
-		if (isRoot())
+		if (ReadConfig.noRootCheck())
 		{
-			startActivity(new Intent(this, RootMode.class));
+			s = s + "\n√ 不检查root权限";
+			if (ReadConfig.unRootMode())
+			{
+				s = s + "\n√ 手动免root模式";
+			}
+		}
+		Toast.makeText(MainActivity.this, s, Toast.LENGTH_SHORT).show();
+		if (!ReadConfig.noRootCheck())
+		{
+			activitySwitch(isRoot());
+		}
+		else
+		{
+			activitySwitch(!ReadConfig.unRootMode());
+		}
+	}
+	private void activitySwitch(boolean isRoot)
+	{
+		if (!isRoot)
+		{
+			startActivity(new Intent(this, UnRootMode.class));
 			finish();
 		}
 		else
 		{
-			startActivity(new Intent(this, UnRootMode.class));
+			startActivity(new Intent(this, RootMode.class));
 			finish();
 		}
 	}
@@ -79,5 +98,4 @@ public class MainActivity extends Activity
 			}  
 		}  
 	}  
-
 }

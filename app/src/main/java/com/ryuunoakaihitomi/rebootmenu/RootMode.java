@@ -2,11 +2,10 @@ package com.ryuunoakaihitomi.rebootmenu;
 
 import android.app.*;
 import android.content.*;
-import android.content.pm.*;
 import android.os.*;
-import android.view.*;
 import android.widget.*;
 import java.io.*;
+
 import java.lang.Process;
 
 public class RootMode extends Activity 

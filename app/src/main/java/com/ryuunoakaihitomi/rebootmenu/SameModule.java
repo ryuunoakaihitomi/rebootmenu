@@ -3,9 +3,8 @@ package com.ryuunoakaihitomi.rebootmenu;
 import android.app.*;
 import android.content.*;
 import android.content.pm.*;
+import android.net.*;
 import android.view.*;
-import android.widget.*;
-import android.app.AlertDialog.*;
 
 public class SameModule
 {
@@ -20,17 +19,27 @@ public class SameModule
 			return new AlertDialog.Builder(activityThis, AlertDialog.THEME_DEVICE_DEFAULT_DARK);
 		}
 	}
-	public static void helpDialog(Context activityThis, final AlertDialog.Builder returnTo)
+	public static void helpDialog(final Context activityThis, final AlertDialog.Builder returnTo)
 	{
 		AlertDialog.Builder h=LoadDialog(activityThis);
 		h.setTitle("帮助");
-		h.setMessage(HelpText.get() + "版本：" + getAppVersionName(activityThis) + "\n20161018");
+		h.setMessage(HelpText.get() + "版本：" + getAppVersionName(activityThis) + "\n20161205");
 		h.setOnCancelListener(new DialogInterface.OnCancelListener(){
 
 				@Override
 				public void onCancel(DialogInterface p1)
 				{
 					SameModule.alphaShow(returnTo.create(), 0.75f);
+				}
+			});
+		h.setNeutralButton("官方下载链接", new DialogInterface.OnClickListener(){
+
+				@Override
+				public void onClick(DialogInterface p1, int p2)
+				{
+					Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://coolapk.com/apk/com.ryuunoakaihitomi.rebootmenu"));
+					activityThis.startActivity(i);
+					System.exit(0);
 				}
 			});
 		if (!ReadConfig.cancelable())
@@ -45,7 +54,7 @@ public class SameModule
 				});
 			h.setCancelable(false);
 		}
-		alphaShow(h.create(),0.8f);
+		alphaShow(h.create(), 0.8f);
 	}
 	public static void alphaShow(AlertDialog w, Float f)
 	{

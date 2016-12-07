@@ -1,9 +1,9 @@
 package com.ryuunoakaihitomi.rebootmenu;
 
 import android.accessibilityservice.*;
+import android.content.*;
 import android.view.accessibility.*;
 import android.widget.*;
-import android.content.*;
 
 public class SystemPowerDialog extends AccessibilityService
 {
@@ -23,16 +23,12 @@ public class SystemPowerDialog extends AccessibilityService
 		registerReceiver(a, b);
 		super.onServiceConnected();
 	}
-
 	@Override
 	public void onAccessibilityEvent(AccessibilityEvent p1)
-	{
-	}
-
+	{}
 	@Override
 	public void onInterrupt()
-	{
-	}
+	{}
 	@Override
 	public void onUnbind()
 	{
