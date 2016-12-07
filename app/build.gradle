@@ -8,13 +8,14 @@ android {
         applicationId "com.ryuunoakaihitomi.rebootmenu"
         minSdkVersion 14
         targetSdkVersion 21
-        versionCode 16
-        versionName "6.1_X"
+        versionCode 22
+        versionName "7_ナナ.終わり"
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 }
+
