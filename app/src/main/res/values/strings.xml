@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+    <string name="app_name">高级电源菜单</string>
+    <string name="hello_world">Hello world!</string>
+	<string name="lsrm">锁屏依赖条件，卸载时请关闭</string>
+	<string name="accessibility_service_description">Text</string>
+</resources>
