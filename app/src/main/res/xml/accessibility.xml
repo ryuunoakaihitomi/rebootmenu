@@ -5,3 +5,4 @@
 	android:accessibilityFlags="flagDefault"  
     android:canRetrieveWindowContent="true"  
 />
+

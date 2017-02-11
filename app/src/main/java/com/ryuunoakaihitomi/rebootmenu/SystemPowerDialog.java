@@ -7,6 +7,15 @@ import android.widget.*;
 
 public class SystemPowerDialog extends AccessibilityService
 {
+
+	@Override
+	public void onAccessibilityEvent(AccessibilityEvent p1)
+	{}
+
+	@Override
+	public void onInterrupt()
+	{}
+	
 	private BroadcastReceiver a=new BroadcastReceiver(){
 		@Override
 		public void onReceive(Context p1, Intent p2)
@@ -23,12 +32,7 @@ public class SystemPowerDialog extends AccessibilityService
 		registerReceiver(a, b);
 		super.onServiceConnected();
 	}
-	@Override
-	public void onAccessibilityEvent(AccessibilityEvent p1)
-	{}
-	@Override
-	public void onInterrupt()
-	{}
+	
 	@Override
 	public void onUnbind()
 	{
