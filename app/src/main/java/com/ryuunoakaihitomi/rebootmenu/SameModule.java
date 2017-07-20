@@ -1,10 +1,14 @@
 package com.ryuunoakaihitomi.rebootmenu;
 
-import android.app.*;
-import android.content.*;
-import android.content.pm.*;
-import android.net.*;
-import android.view.*;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.view.Window;
+import android.view.WindowManager;
 
 public class SameModule
 {
@@ -23,7 +27,7 @@ public class SameModule
 	{
 		AlertDialog.Builder h=LoadDialog(activityThis);
 		h.setTitle("帮助");
-		h.setMessage(HelpText.get() + "版本：" + getAppVersionName(activityThis) + "\n20161205");
+		h.setMessage(HelpText.get() + "版本：" + getAppVersionName(activityThis) + "\n20170720");
 		h.setOnCancelListener(new DialogInterface.OnCancelListener(){
 
 				@Override

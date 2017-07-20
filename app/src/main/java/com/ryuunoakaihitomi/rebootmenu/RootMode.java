@@ -1,12 +1,14 @@
 package com.ryuunoakaihitomi.rebootmenu;
 
-import android.app.*;
-import android.content.*;
-import android.os.*;
-import android.widget.*;
-import java.io.*;
-
-import java.lang.Process;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.widget.Toast;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
 public class RootMode extends Activity 
 {
@@ -95,26 +97,35 @@ public class RootMode extends Activity
 					SameModule.helpDialog(RootMode.this, ab);
 				}
 			});
-		ab.setNeutralButton("切换模式", new AlertDialog.OnClickListener(){
+		if (svcCompatibilityCheck())
+		{
+			ab.setNeutralButton("切换模式", new AlertDialog.OnClickListener(){
 
-				@Override
-				public void onClick(DialogInterface p1, int p2)
-				{
-					if (!state)
+					@Override
+					public void onClick(DialogInterface p1, int p2)
 					{
-						ab.setItems(s2, l);
-						state = true;
-						Toast.makeText(getApplicationContext(), "转换成强制模式", Toast.LENGTH_SHORT).show();
+						if (!state)
+						{
+							ab.setItems(s2, l);
+							state = true;
+							Toast.makeText(getApplicationContext(), "转换成强制模式", Toast.LENGTH_SHORT).show();
+						}
+						else
+						{
+							ab.setItems(s, l);
+							state = false;
+							Toast.makeText(getApplicationContext(), "转换成默认模式", Toast.LENGTH_SHORT).show();
+						}
+						SameModule.alphaShow(ab.create(), 0.75f);
 					}
-					else
-					{
-						ab.setItems(s, l);
-						state = false;
-						Toast.makeText(getApplicationContext(), "转换成默认模式", Toast.LENGTH_SHORT).show();
-					}
-					SameModule.alphaShow(ab.create(), 0.75f);
-				}
-			});
+				});
+		}
+		else
+		{
+			ab.setItems(s2, l);
+			state = true;
+			Toast.makeText(getApplicationContext(), "转换成强制模式，因为你的系统不支持默认模式", Toast.LENGTH_SHORT).show();
+		}
 		ab.setCancelable(ReadConfig.cancelable());
 		ab.setOnCancelListener(e);
 		SameModule.alphaShow(ab.create(), 0.75f);
@@ -131,8 +142,7 @@ public class RootMode extends Activity
 			p.getErrorStream().close();
 		}
 		catch (IOException s)
-		{
-		}
+		{}
 	}
 	private void exeKernel(String[] rt, String[] rt2, Integer w)
 	{
@@ -153,5 +163,33 @@ public class RootMode extends Activity
 		}
 		Toast.makeText(getApplicationContext(), "命令已发送。。。如果这片烤面包片消失之后手机还是没有反应，应该是执行失败了。请到帮助那里查看解决方法", Toast.LENGTH_LONG).show();
 		finish();
+	}
+	boolean svcCompatibilityCheck()
+	{
+		StringBuilder sb = new StringBuilder();
+		try
+		{
+			Process p = Runtime.getRuntime().exec("sh");
+			DataOutputStream d = new DataOutputStream(p.getOutputStream());
+			d.writeBytes("svc power\n");
+			d.writeBytes("exit\n");
+			d.flush();
+			BufferedReader br=new BufferedReader(new InputStreamReader(p.getErrorStream()));
+			String l="";
+			while ((l = br.readLine()) != null)
+			{
+				sb.append(l);
+			}
+			p.getErrorStream().close();
+		}
+		catch (IOException s)
+		{
+			s.printStackTrace();
+			return false;
+		}
+		if (sb.toString().contains("reboot"))
+			return true;
+		else
+			return false;
 	}
 }

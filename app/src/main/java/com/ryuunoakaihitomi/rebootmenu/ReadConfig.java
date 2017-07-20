@@ -1,6 +1,6 @@
 package com.ryuunoakaihitomi.rebootmenu;
 
-import java.io.*;
+import java.io.File;
 
 public class ReadConfig
 {

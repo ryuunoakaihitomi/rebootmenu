@@ -1,9 +1,12 @@
 package com.ryuunoakaihitomi.rebootmenu;
 
-import android.accessibilityservice.*;
-import android.content.*;
-import android.view.accessibility.*;
-import android.widget.*;
+import android.accessibilityservice.AccessibilityService;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.view.accessibility.AccessibilityEvent;
+import android.widget.Toast;
 
 public class SystemPowerDialog extends AccessibilityService
 {
@@ -11,11 +14,9 @@ public class SystemPowerDialog extends AccessibilityService
 	@Override
 	public void onAccessibilityEvent(AccessibilityEvent p1)
 	{}
-
 	@Override
 	public void onInterrupt()
 	{}
-	
 	private BroadcastReceiver a=new BroadcastReceiver(){
 		@Override
 		public void onReceive(Context p1, Intent p2)
@@ -32,11 +33,11 @@ public class SystemPowerDialog extends AccessibilityService
 		registerReceiver(a, b);
 		super.onServiceConnected();
 	}
-	
 	@Override
-	public void onUnbind()
+	public boolean onUnbind(Intent intent)
 	{
 		unregisterReceiver(a);
+		return super.onUnbind(intent);
 	}
 }
 

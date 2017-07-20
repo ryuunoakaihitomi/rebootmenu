@@ -1,11 +1,9 @@
 package com.ryuunoakaihitomi.rebootmenu;
-import android.app.*;
-import android.content.*;
-import android.os.*;
-import android.widget.*;
-import java.io.*;
-
-import java.lang.Process;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.Toast;
+import java.io.DataOutputStream;
 public class MainActivity extends Activity 
 {
 	protected void onCreate(Bundle savedInstanceState)

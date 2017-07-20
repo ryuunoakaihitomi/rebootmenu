@@ -1,13 +1,18 @@
 package com.ryuunoakaihitomi.rebootmenu;
 
-import android.app.*;
-import android.app.admin.*;
-import android.content.*;
-import android.net.*;
-import android.os.*;
-import android.provider.*;
-import android.text.*;
-import android.widget.*;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.admin.DevicePolicyManager;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
+import android.provider.Settings;
+import android.text.TextUtils;
+import android.widget.Toast;
 
 public class UnRootMode extends Activity 
 {
@@ -58,7 +63,13 @@ public class UnRootMode extends Activity
 				}
 			}
 		};
-		ab.setItems(rebootText, l);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+			ab.setItems(rebootText, l);
+		else
+		{
+			ab.setItems(new String[]{"打开系统电源菜单"}, l);
+			Toast.makeText(getApplicationContext(), "你的Android版本在5.0以下，在免root模式中只能使用锁屏功能", Toast.LENGTH_SHORT).show();
+		}
 		if (!ReadConfig.cancelable())
 		{
 			ab.setPositiveButton("退出", new DialogInterface.OnClickListener(){
