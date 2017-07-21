@@ -6,10 +6,10 @@ android {
 
     defaultConfig {
         applicationId "com.ryuunoakaihitomi.rebootmenu"
-        minSdkVersion 14
+        minSdkVersion 16
         targetSdkVersion 21
-        versionCode 22
-        versionName "7_ナナ.終わり"
+        versionCode 23
+        versionName "8_新しい早口言葉なんて全然見つからない"
     }
     buildTypes {
         release {
