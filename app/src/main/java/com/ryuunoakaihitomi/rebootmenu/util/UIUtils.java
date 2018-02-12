@@ -10,7 +10,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 import com.ryuunoakaihitomi.rebootmenu.R;
 
@@ -80,7 +79,7 @@ public class UIUtils {
 
             @Override
             public void onClick(DialogInterface p1, int p2) {
-                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/ryuunoakaihitomi/rebootmenu/release"));
+                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/ryuunoakaihitomi/rebootmenu/releases"));
                 activityThis.startActivity(i);
                 System.exit(0);
             }
