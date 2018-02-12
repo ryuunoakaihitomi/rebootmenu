@@ -1,43 +1,52 @@
 package com.ryuunoakaihitomi.rebootmenu;
 
 import android.accessibilityservice.AccessibilityService;
+import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.view.accessibility.AccessibilityEvent;
-import android.widget.Toast;
 
-public class SystemPowerDialog extends AccessibilityService
-{
+import com.ryuunoakaihitomi.rebootmenu.util.TextToast;
 
-	@Override
-	public void onAccessibilityEvent(AccessibilityEvent p1)
-	{}
-	@Override
-	public void onInterrupt()
-	{}
-	private BroadcastReceiver a=new BroadcastReceiver(){
-		@Override
-		public void onReceive(Context p1, Intent p2)
-		{
-			performGlobalAction(AccessibilityService.GLOBAL_ACTION_POWER_DIALOG);
-			Toast.makeText(getApplicationContext(), "已经调出系统电源菜单...", Toast.LENGTH_SHORT).show(); 
-		}
-	};
-	@Override
-	protected void onServiceConnected()
-	{
-		IntentFilter b=new IntentFilter();
-		b.addAction("com.ryuunoakaihitomi.rebootmenu.SPD_broadcast");
-		registerReceiver(a, b);
-		super.onServiceConnected();
-	}
-	@Override
-	public boolean onUnbind(Intent intent)
-	{
-		unregisterReceiver(a);
-		return super.onUnbind(intent);
-	}
+/**
+ * 辅助服务
+ * Created by ZQY on 2018/2/12.
+ */
+
+public class SystemPowerDialog extends AccessibilityService {
+
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            //调用系统电源菜单核心代码
+            performGlobalAction(AccessibilityService.GLOBAL_ACTION_POWER_DIALOG);
+            new TextToast(getApplicationContext(), getString(R.string.spd_showed));
+        }
+    };
+
+    @Override
+    protected void onServiceConnected() {
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(getString(R.string.service_action_key));
+        registerReceiver(broadcastReceiver, intentFilter);
+        super.onServiceConnected();
+    }
+
+    @Override
+    public boolean onUnbind(Intent intent) {
+        unregisterReceiver(broadcastReceiver);
+        return super.onUnbind(intent);
+    }
+
+    @Override
+    public void onAccessibilityEvent(AccessibilityEvent accessibilityEvent) {
+    }
+
+    @Override
+    public void onInterrupt() {
+    }
 }
-

@@ -1,15 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 21
-    buildToolsVersion "21.1.0"
-
+    compileSdkVersion 26
     defaultConfig {
         applicationId "com.ryuunoakaihitomi.rebootmenu"
         minSdkVersion 16
         targetSdkVersion 21
-        versionCode 23
-        versionName "8_新しい早口言葉なんて全然見つからない"
+        versionCode 24
+        versionName "9_箱庭に居る人"
     }
     buildTypes {
         release {
@@ -19,3 +17,6 @@ android {
     }
 }
 
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+}

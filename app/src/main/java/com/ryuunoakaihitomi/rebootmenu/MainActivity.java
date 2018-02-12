@@ -1,99 +1,48 @@
 package com.ryuunoakaihitomi.rebootmenu;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
-import java.io.DataOutputStream;
-public class MainActivity extends Activity 
-{
-	protected void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-		setContentView(R.layout.main);
-		String s;
-		s = "载入中...";
-		if (ReadConfig.whiteTheme())
-		{
-			s = s + "\n√ 白色主题";
-		}
-		if (ReadConfig.cancelable())
-		{
-			s = s + "\n√ 返回键退出";
-		}
-		if (ReadConfig.normalDo())
-		{
-			s = s + "\n√ 无需二次确认";
-		}
-		if (ReadConfig.noRootCheck())
-		{
-			s = s + "\n√ 不检查root权限";
-			if (ReadConfig.unRootMode())
-			{
-				s = s + "\n√ 手动免root模式";
-			}
-		}
-		Toast.makeText(MainActivity.this, s, Toast.LENGTH_SHORT).show();
-		if (!ReadConfig.noRootCheck())
-		{
-			activitySwitch(isRoot());
-		}
-		else
-		{
-			activitySwitch(!ReadConfig.unRootMode());
-		}
-	}
-	private void activitySwitch(boolean isRoot)
-	{
-		if (!isRoot)
-		{
-			startActivity(new Intent(this, UnRootMode.class));
-			finish();
-		}
-		else
-		{
-			startActivity(new Intent(this, RootMode.class));
-			finish();
-		}
-	}
-	public synchronized boolean isRoot()  
-	{  
-		Process process = null;  
-		DataOutputStream os = null;  
-		try  
-		{  
-			process = Runtime.getRuntime().exec("su");  
-			os = new DataOutputStream(process.getOutputStream());  
-			os.writeBytes("exit\n");  
-			os.flush();  
-			int exitValue = process.waitFor();  
-			if (exitValue == 0)  
-			{  
-				return true;  
-			}
-			else  
-			{  
-				return false;  
-			}  
-		}
-		catch (Exception e)  
-		{  
 
-			return false;  
-		}
-		finally  
-		{  
-			try  
-			{  
-				if (os != null)  
-				{  
-					os.close();  
-				}  
-				process.destroy();  
-			}
-			catch (Exception e)  
-			{  
-				e.printStackTrace();  
-			}  
-		}  
-	}  
+import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
+import com.ryuunoakaihitomi.rebootmenu.util.ShellUtils;
+import com.ryuunoakaihitomi.rebootmenu.util.TextToast;
+
+/**
+ * 主活动，(免)Root模式的加载
+ * Created by ZQY on 2018/2/8.
+ */
+
+public class MainActivity extends Activity {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //配置选项
+        String configView = getString(R.string.loading);
+        if (ConfigManager.get(ConfigManager.WHITE_THEME))
+            configView += getString(R.string.r_whitetheme);
+        if (ConfigManager.get(ConfigManager.CANCELABLE))
+            configView += getString(R.string.r_cancelable);
+        if (ConfigManager.get(ConfigManager.NO_NEED_TO_COMFIRM))
+            configView += getString(R.string.r_normal_do);
+        if (ConfigManager.get(ConfigManager.DO_NOT_CHECK_ROOT)) {
+            configView += getString(R.string.r_no_root_check);
+            if (ConfigManager.get(ConfigManager.UNROOT_MODE))
+                configView += getString(R.string.r_unroot_mode);
+        }
+        new TextToast(this, configView);
+        if (!ConfigManager.get(ConfigManager.DO_NOT_CHECK_ROOT))
+            activitySwitch(ShellUtils.isRoot());
+        else    //如果不检查root权限，则检查“手动免root模式”配置
+            activitySwitch(!ConfigManager.get(ConfigManager.UNROOT_MODE));
+    }
+
+    void activitySwitch(boolean isRootMode) {
+        if (isRootMode)
+            startActivity(new Intent(this, RootMode.class));
+        else
+            startActivity(new Intent(this, UnRootMode.class));
+        new DebugLog("主活动准备销毁");
+        finish();
+    }
 }

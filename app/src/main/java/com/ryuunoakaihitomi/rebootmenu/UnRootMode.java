@@ -12,172 +12,162 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.text.TextUtils;
-import android.widget.Toast;
 
-public class UnRootMode extends Activity 
-{
-	AlertDialog.Builder ab;
-	DevicePolicyManager policyManager;  
-	ComponentName componentName;  
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data)
-	{
-		super.onActivityResult(requestCode, resultCode, data);
-		if (0 == requestCode)
-		{
-			if (resultCode == Activity.RESULT_OK)
-			{
-				policyManager.lockNow();
-				if (!ReadConfig.normalDo())
-				{
-					policyManager.removeActiveAdmin(componentName);
-				}
-				finish();
-			}
-			else
-			{
-				Toast.makeText(getApplicationContext(), "未开启设备管理器，锁屏失败！", Toast.LENGTH_SHORT).show();
-				finish();
-			}
-		}
-	}
-	protected void onCreate(Bundle savedInstanceState)
-    {
+import com.ryuunoakaihitomi.rebootmenu.util.TextToast;
+import com.ryuunoakaihitomi.rebootmenu.util.UIUtils;
+
+/**
+ * 免root模式活动
+ * Created by ZQY on 2018/2/8.
+ */
+
+public class UnRootMode extends Activity {
+    AlertDialog.Builder mainDialog;
+    DevicePolicyManager devicePolicyManager;
+    ComponentName componentName;
+
+    //辅助服务申请回调
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (0 == requestCode) {
+            //若同意
+            if (resultCode == Activity.RESULT_OK) {
+                devicePolicyManager.lockNow();
+                //如果需要二次确认，禁用设备管理器。
+                if (!ConfigManager.get(ConfigManager.NO_NEED_TO_COMFIRM))
+                    devicePolicyManager.removeActiveAdmin(componentName);
+                finish();
+            } else {
+                new TextToast(this, getString(R.string.lockscreen_failed));
+                finish();
+            }
+        }
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
-		ab = SameModule.LoadDialog(this);
-		ab.setTitle("高级电源菜单↓(免root模式)");
-		final String[]rebootText={"锁屏","打开系统电源菜单"};
-		DialogInterface.OnClickListener l=new DialogInterface.OnClickListener(){
+        mainDialog = UIUtils.LoadDialog(ConfigManager.get(ConfigManager.WHITE_THEME), this);
+        mainDialog.setTitle(getString(R.string.unroot_title));
+        final String[] uiTextList = {getString(R.string.lockscreen), getString(R.string.system_power_dialog)};
+        DialogInterface.OnClickListener mainListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if (i == 0)
+                    lockscreen();
+                else
+                    //调用系统电源菜单无需二次确认
+                    accessbilityon();
+            }
+        };
+        //Android5.0以下不支持系统电源菜单
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            mainDialog.setItems(uiTextList, mainListener);
+        else {
+            mainDialog.setItems(new String[]{getString(R.string.lockscreen)}, mainListener);
+            new TextToast(getApplicationContext(), getString(R.string.lollipop_notice));
+        }
+        //是否需要退出键
+        if (!ConfigManager.get(ConfigManager.CANCELABLE))
+            mainDialog.setPositiveButton(R.string.exit, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    finish();
+                }
+            });
+        //帮助
+        mainDialog.setNegativeButton(R.string.help, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                UIUtils.helpDialog(UnRootMode.this, mainDialog, ConfigManager.get(ConfigManager.CANCELABLE), ConfigManager.get(ConfigManager.WHITE_THEME));
+            }
+        });
+        //egg
+        mainDialog.setNeutralButton(" ", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                new TextToast(getApplicationContext(),true,"生きて");
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.bilibili.com/video/av19384384/"));
+                startActivity(intent);
+                finish();
+            }
+        });
+        //不按退出的退出监听
+        mainDialog.setCancelable(ConfigManager.get(ConfigManager.CANCELABLE));
+        mainDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface p1) {
+                new TextToast(getApplicationContext(), false, getString(R.string.exit_notice));
+                finish();
+            }
+        });
+        UIUtils.alphaShow(mainDialog.create(), 0.75f);
+    }
 
-			@Override
-			public void onClick(DialogInterface p1, int which)
-			{
-				if (which == 0)
-				{
-					lockscreen();
-				}
-				else
-				{
-					accessbilityon();
-				}
-			}
-		};
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-			ab.setItems(rebootText, l);
-		else
-		{
-			ab.setItems(new String[]{"打开系统电源菜单"}, l);
-			Toast.makeText(getApplicationContext(), "你的Android版本在5.0以下，在免root模式中只能使用锁屏功能", Toast.LENGTH_SHORT).show();
-		}
-		if (!ReadConfig.cancelable())
-		{
-			ab.setPositiveButton("退出", new DialogInterface.OnClickListener(){
-					@Override
-					public void onClick(DialogInterface p1, int p2)
-					{
-						finish();
-					}
-				});
-		}
-		ab.setNegativeButton("帮助", new DialogInterface.OnClickListener(){
-				@Override
-				public void onClick(DialogInterface p1, int p2)
-				{
-					SameModule.helpDialog(UnRootMode.this, ab);
-				}
-			});
-		ab.setNeutralButton(" ", new DialogInterface.OnClickListener(){
+    //用辅助功能锁屏
+    private void lockscreen() {
+        devicePolicyManager = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
+        componentName = new ComponentName(this, AdminReceiver.class);
+        //设备管理器是否启用
+        boolean active = devicePolicyManager.isAdminActive(componentName);
+        if (!active) {
+            //请求启用
+            Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
+            intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, componentName);
+            intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, getString(R.string.service_explanation));
+            startActivityForResult(intent, 0);
+        }
+        if (active) {
+            devicePolicyManager.lockNow();
+            //如果需要二次确认，禁用设备管理器。（这里的策略和root模式的锁屏无需确认不同）
+            if (!ConfigManager.get(ConfigManager.NO_NEED_TO_COMFIRM)) {
+                devicePolicyManager.removeActiveAdmin(componentName);
+            }
+            //自杀退出
+            android.os.Process.killProcess(android.os.Process.myPid());
+        }
+    }
 
-				@Override
-				public void onClick(DialogInterface p1, int p2)
-				{
-					Toast.makeText(UnRootMode.this, "_(´Дˋ」∠)З|📱🔞(≧ω≦)☕。。(嫐)|8='''',D--\n彩蛋：我的个人主页", Toast.LENGTH_SHORT).show();
-					Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.coolapk.com/u/532521"));
-					startActivity(i);
-					finish();
-				}
-			});
-		ab.setCancelable(ReadConfig.cancelable());
-		ab.setOnCancelListener(new DialogInterface.OnCancelListener(){
+    //打开辅助服务设置或者发送执行广播
+    private void accessbilityon() {
+        if (!isAccessibilitySettingsOn(getApplicationContext())) {
+            new TextToast(getApplicationContext(), getString(R.string.service_disabled));
+            Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+            startActivity(intent);
+        } else {
+            sendBroadcast(new Intent(getString(R.string.service_action_key)));
+        }
+        finish();
+    }
 
-				@Override
-				public void onCancel(DialogInterface p1)
-				{
-					Toast.makeText(getApplicationContext(), "点击了界面外或按下了返回键，程序退出", Toast.LENGTH_SHORT).show();
-					finish();
-				}
-			});
-		SameModule.alphaShow(ab.create(), 0.75f);
 
-	}
-	private void lockscreen()
-	{
-		policyManager = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);    
-		componentName = new ComponentName(this, AdminReceiver.class);  
-		boolean active = policyManager.isAdminActive(componentName);  
-		if (!active)
-		{
-			Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);  
-			intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, componentName);  
-			intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, "这里是高级电源菜单的锁屏确认选项(可以这么理解吧)，打开设备管理器锁定屏幕。");
-			startActivityForResult(intent, 0);
-		}  
-		if (active)
-		{  
-			policyManager.lockNow();
-			if (!ReadConfig.normalDo())
-			{
-				policyManager.removeActiveAdmin(componentName);
-			}
-			android.os.Process.killProcess(android.os.Process.myPid());   
-		}  
-	}
-	private void accessbilityon()
-	{
-		if (!isAccessibilitySettingsOn(getApplicationContext()))
-		{
-			Toast.makeText(getApplicationContext(), "你未开启辅助服务...请开启辅助服务之后再打开菜单选择此选项", Toast.LENGTH_SHORT).show();
-			Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
-			startActivity(intent);
-		}
-		else
-		{
-			sendBroadcast(new Intent("com.ryuunoakaihitomi.rebootmenu.SPD_broadcast"));
-		}
-		finish();
-	}
-
-	private boolean isAccessibilitySettingsOn(Context mContext)
-	{
-		int accessibilityEnabled = 0;
-		final String service = getPackageName() + "/" + SystemPowerDialog.class.getCanonicalName();
-		try
-		{
-			accessibilityEnabled = Settings.Secure.getInt(mContext.getApplicationContext().getContentResolver(), android.provider.Settings.Secure.ACCESSIBILITY_ENABLED);
-		}
-		catch (Settings.SettingNotFoundException e)
-		{
-		}
-		TextUtils.SimpleStringSplitter mStringColonSplitter = new TextUtils.SimpleStringSplitter(':');
-		if (accessibilityEnabled == 1)
-		{
-			String settingValue = Settings.Secure.getString(mContext.getApplicationContext().getContentResolver(), Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);
-			if (settingValue != null)
-			{
-				mStringColonSplitter.setString(settingValue);
-				while (mStringColonSplitter.hasNext())
-				{
-					String accessibilityService = mStringColonSplitter.next();
-					if (accessibilityService.equalsIgnoreCase(service))
-					{
-						return true;
-					}
-				}
-			}
-		}
-		else
-		{}
-		return false;
-	}
+    /**
+     * 检查辅助服务是否打开
+     *
+     * @param mContext 上下文
+     * @return 返回值
+     */
+    private boolean isAccessibilitySettingsOn(Context mContext) {
+        int accessibilityEnabled = 0;
+        final String service = getPackageName() + "/" + SystemPowerDialog.class.getCanonicalName();
+        try {
+            accessibilityEnabled = Settings.Secure.getInt(mContext.getApplicationContext().getContentResolver(), android.provider.Settings.Secure.ACCESSIBILITY_ENABLED);
+        } catch (Settings.SettingNotFoundException ignored) {
+        }
+        TextUtils.SimpleStringSplitter mStringColonSplitter = new TextUtils.SimpleStringSplitter(':');
+        if (accessibilityEnabled == 1) {
+            String settingValue = Settings.Secure.getString(mContext.getApplicationContext().getContentResolver(), Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);
+            if (settingValue != null) {
+                mStringColonSplitter.setString(settingValue);
+                while (mStringColonSplitter.hasNext()) {
+                    String accessibilityService = mStringColonSplitter.next();
+                    if (accessibilityService.equalsIgnoreCase(service)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
 }

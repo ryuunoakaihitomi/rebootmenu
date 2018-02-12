@@ -1,59 +1,53 @@
-<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.ryuunoakaihitomi.rebootmenu" >
-	<uses-permission android:name="android.permission.BIND_ACCESSIBILITY_SERVICE" />
-	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-	<application
-        android:icon="@drawable/ic_launcher"
+    package="com.ryuunoakaihitomi.rebootmenu">
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.BIND_ACCESSIBILITY_SERVICE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@android:style/Theme.NoDisplay">
         <activity
             android:name=".MainActivity"
+            android:excludeFromRecents="false"
             android:label="@string/app_name"
-			android:theme="@android:style/Theme.NoDisplay"
-			android:excludeFromRecents="false"
-			android:launchMode="singleInstance">
+            android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-		<activity
+        <activity
             android:name=".RootMode"
-            android:label="@string/app_name"
-			android:theme="@android:style/Theme.NoDisplay"
-		>
-        </activity>
-		<activity
+            android:label="@string/app_name" />
+        <activity
             android:name=".UnRootMode"
+            android:label="@string/app_name" />
+
+        <receiver
+            android:name=".AdminReceiver"
+            android:description="@string/description"
             android:label="@string/app_name"
-			android:theme="@android:style/Theme.NoDisplay"
-		>
-        </activity>
-		<receiver android:name=".AdminReceiver"  
-			android:label="@string/app_name" 
-			android:description="@string/lsrm"
-			android:permission="android.permission.BIND_DEVICE_ADMIN">  
-			<meta-data 
-				android:name="android.app.device_admin"  
-				android:resource="@xml/lock_screen" />  
-			<intent-filter>  
-				<action  
-					android:name="android.app.action.DEVICE_ADMIN_ENABLED" />  
-			</intent-filter>  
-        </receiver>  
-		<service android:name="com.ryuunoakaihitomi.rebootmenu.SystemPowerDialog"  
-			android:description="@string/accessibility_service_description"
-			android:label="高级电源菜单_调用系统电源菜单服务"
-			android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE" >
-			<intent-filter>
-				<action android:name="android.accessibilityservice.AccessibilityService"/>
-			</intent-filter>
-			<mate-data
-				android:name="android.accessibilityservice"
-				android:resource="@xml/accessibility"/>
-		</service>
-
+            android:permission="android.permission.BIND_DEVICE_ADMIN">
+            <meta-data
+                android:name="android.app.device_admin"
+                android:resource="@xml/lockscreen" />
+            <intent-filter>
+                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
+            </intent-filter>
+        </receiver>
+        <service
+            android:name="com.ryuunoakaihitomi.rebootmenu.SystemPowerDialog"
+            android:label="@string/service_name"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/accessibility" />
+        </service>
     </application>
-
 </manifest>
