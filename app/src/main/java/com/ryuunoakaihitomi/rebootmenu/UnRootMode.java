@@ -87,7 +87,7 @@ public class UnRootMode extends Activity {
         mainDialog.setNeutralButton(" ", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                new TextToast(getApplicationContext(),true,"生きて");
+                new TextToast(getApplicationContext(), true, "生きて");
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.bilibili.com/video/av19384384/"));
                 startActivity(intent);
                 finish();
@@ -103,6 +103,13 @@ public class UnRootMode extends Activity {
             }
         });
         UIUtils.alphaShow(mainDialog.create(), 0.75f);
+    }
+
+    //目前已知的问题有启动失败和主题应用失败
+    @Override
+    protected void onRestart() {
+        new TextToast(this, getString(R.string.activity_onrestart_notice));
+        super.onRestart();
     }
 
     //用辅助功能锁屏

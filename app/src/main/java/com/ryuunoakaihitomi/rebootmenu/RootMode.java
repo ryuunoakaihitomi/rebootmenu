@@ -182,4 +182,11 @@ public class RootMode extends Activity {
         new TextToast(getApplicationContext(), true, getString(R.string.cmd_send_notice));
         finish();
     }
+
+    //目前已知的问题有启动失败和主题应用失败
+    @Override
+    protected void onRestart() {
+        new TextToast(this,getString(R.string.activity_onrestart_notice));
+        super.onRestart();
+    }
 }

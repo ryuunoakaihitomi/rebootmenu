@@ -28,19 +28,20 @@
     <string name="yes">是</string>
     <string name="no">否</string>
     <string name="root_title">启动选项↓</string>
-    <string name="help_body">关于： 一个重启菜单应用.包括重启和关机(默认和强制模式),重启至recovery和bootloader,热重启,重启用户界面,安全模式和锁屏.无root环境下亦可使用(功能受限). by酷安基佬　@龙红瞳 帮助： 如果执行失败,手机没有任何反应,请检查本应用是否得到root权限或安装busybox补足Linux二进制试试,还可以切换到强制模式再操作. 功能解释： 0.切换模式:切换至强制模式或默认模式,使用强制模式的功能加上*标记.(注意:4.4.x的某个版本以下不支持默认模式，将自动切换成强制模式) 1.强制模式中的重启和关机：调用linux中的命令.强制切断设备电源,执行速度快,成功率高,但是有极小的可能性会导致文件损坏甚至系统崩溃. 2.默认模式中的重启和关机：调用Android系统电源管理模块.速度慢,有一点执行失败的可能性(一直显示正在xx的对话),但是更加安全. 3.recovery:恢复模式.默认模式中会先调用默认重启. 4.bootloader,亦称fastboot模式,线刷模式.默认模式中会先调用默认重启. 5.热重启,在保持设备开机的情况下,关闭并重新加载系统. 6.重启用户界面,重启com.android.systemui,用于刷新桌面UI,重新加载桌面小部件或刷新图标显示. 7.安全模式：重启系统停用所有第三方应用,用于排查有问题的应用并恢复系统. 8.锁屏：熄灭屏幕。 注意：设备管理器和辅助服务是为免root模式准备的。已经root的用户，完全不需要打开这个应用的设备管理器和辅助服务。 配置文件帮助：本应用已经为用户做好了万全的选项操作设计，因此不推荐使用任何自定义的配置选项。不过如果需要，可以通过在特定的目录创建文件解决。在手机内置存储中的/Android/data/com.ryuunoakaihitomi.rebootmenu/files/（如果没有root，可能需要手动创建这最后标示的files目录）。再在此目录中加入相应文件名的空文件。加入wt启用白色主题，加入c可以返回键退出，加入nntc取消显示确认对话直接执行命令，加入dncr启动时不检查root权限，加入urm在启动时不检查root权限的基础上手动开启免root模式。 免root模式帮助 关于： 一个重启菜单应用.包括锁屏和调用系统电源菜单。(免root模式下) 功能解释： 1.锁屏：锁定屏幕 2.打开系统电源菜单：调用系统电源菜单，效果与长按电源键相同。 注意：没有获取到root权限的高级电源菜单功能将会受到限制，你需要手动打开设备管理器来实现锁屏。并且只有打开辅助服务时才能调用系统的电源菜单。emui用户请将本应用的后台卡片锁定以防止辅助服务被杀。只有Android5.0或以上才能使用调用系统电源菜单功能。 (≧∇≦)/  </string>
+    <string name="help_body">关于： \n一个重启菜单应用.包括重启和关机(默认和强制模式),重启至recovery和bootloader,热重启,重启用户界面,安全模式和锁屏.无root环境下亦可使用(功能受限). \nby酷安开发者 @龙红瞳 \n帮助： 如果执行失败,手机没有任何反应,请检查本应用是否得到root权限或安装busybox补足Linux二进制试试,还可以切换到强制模式再操作. \n功能解释： \n0.切换模式:切换至强制模式或默认模式,使用强制模式的功能加上*标记.(注意:4.4.x的某个版本以下不支持默认模式，将自动切换成强制模式) \n1.强制模式中的重启和关机：调用linux中的命令.强制切断设备电源,执行速度快,成功率高,但是有极小的可能性会导致文件损坏甚至系统崩溃. \n2.默认模式中的重启和关机：调用Android系统电源管理模块.速度慢,有一点执行失败的可能性(一直显示正在xx的对话),但是更加安全. \n3.recovery:恢复模式.默认模式中会先调用默认重启. \n4.bootloader,亦称fastboot模式,线刷模式.默认模式中会先调用默认重启. \n5.热重启,在保持设备开机的情况下,关闭并重新加载系统. \n6.重启用户界面,重启com.android.systemui,用于刷新桌面UI,重新加载桌面小部件或刷新图标显示. \n7.安全模式：重启系统停用所有第三方应用,用于排查有问题的应用并恢复系统. \n8.锁屏：通过模拟按下电源键熄灭屏幕。 \n注意：设备管理器和辅助服务是为免root模式准备的。已经root的用户，完全不需要打开这个应用的设备管理器和辅助服务。 \n配置文件帮助：本应用已经为用户做好了万全的选项操作设计，因此不推荐使用任何自定义的配置选项。不过如果需要，可以通过在特定的目录创建文件解决。在手机内置存储中的/Android/data/com.ryuunoakaihitomi.rebootmenu/files/（如果没有root，可能需要手动创建这最后标示的files目录）。再在此目录中加入相应文件名的空文件。加入wt启用白色主题，加入c可以返回键退出，加入nntc取消显示确认对话直接执行命令，加入dncr启动时不检查root权限，加入urm在启动时不检查root权限的基础上手动开启免root模式。 \n免root模式帮助 \n关于： 一个重启菜单应用.包括锁屏和调用系统电源菜单。\n(免root模式下) 功能解释： \n1.锁屏：锁定屏幕（注意：这种模式下的锁屏有可能失去某些快捷解锁的功能） \n2.打开系统电源菜单：调用系统电源菜单，效果与长按电源键相同。 \n注意：没有获取到root权限的启动选项功能将会受到限制，你需要手动打开设备管理器来实现锁屏，并且只有打开辅助服务时才能调用系统的电源菜单。\nemui用户请将本应用的后台卡片锁定以防止辅助服务被杀，并且需要注意不要通过本应用保留的后台卡片来启动本应用。\n只有Android5.0或以上才能使用调用系统电源菜单功能。 \n\n(≧∇≦)/</string>
     <string name="unroot_title">启动选项↓(免root模式)</string>
     <string name="description">锁屏依赖条件，卸载时请关闭</string>
     <string name="accessibility_service_description">只有开启本服务才能调用系统电源菜单，这并不会泄露你的任何隐私</string>
-    <string name="service_name">高级电源菜单_调用系统电源菜单服务</string>
+    <string name="service_name">启动选项 - 调用系统电源菜单服务</string>
     <string name="lockscreen_failed">未开启设备管理器，锁屏失败！</string>
-    <string name="service_disabled">你未开启辅助服务...请开启辅助服务之后再打开菜单选择此选项</string>
+    <string name="service_disabled">你未开启辅助服务…请开启辅助服务之后再打开菜单选择此选项</string>
     <string name="service_action_key">rebootmenu.SPD_13304EC</string>
-    <string name="service_explanation">这里是高级电源菜单的锁屏确认选项(可以这么理解吧)，打开设备管理器锁定屏幕。</string>
+    <string name="service_explanation">这里是启动选项的锁屏确认界面(可以这么理解吧)，打开设备管理器锁定屏幕。</string>
     <string name="lollipop_notice">你的Android版本在5.0以下，在免root模式中只能使用锁屏功能</string>
-    <string name="spd_showed">已经调出系统电源菜单...</string>
+    <string name="spd_showed">已经调出系统电源菜单…</string>
     <string name="offical_download_link">官方下载链接</string>
-    <string name="donate">捐赠...</string>
+    <string name="donate">捐赠…</string>
     <string name="help_notice">应用版本：%s\n帮助更新日期：%s</string>
-    <string name="help_update_date">20180212</string>
+    <string name="help_update_date">20180214</string>
+    <string name="activity_onrestart_notice">注意：不要在最近任务卡片启动本应用，这有可能使应用出现问题</string>
 </resources>
