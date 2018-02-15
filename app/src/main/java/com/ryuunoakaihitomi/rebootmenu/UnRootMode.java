@@ -3,16 +3,20 @@ package com.ryuunoakaihitomi.rebootmenu;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.admin.DevicePolicyManager;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
 import android.text.TextUtils;
 
+import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 import com.ryuunoakaihitomi.rebootmenu.util.TextToast;
 import com.ryuunoakaihitomi.rebootmenu.util.UIUtils;
 
@@ -26,6 +30,16 @@ public class UnRootMode extends Activity {
     DevicePolicyManager devicePolicyManager;
     ComponentName componentName;
 
+    //亮屏监听用变量和接收器
+    boolean isScreenOn;
+    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            new DebugLog("亮屏", DebugLog.V);
+            isScreenOn = true;
+        }
+    };
+
     //辅助服务申请回调
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -37,11 +51,9 @@ public class UnRootMode extends Activity {
                 //如果需要二次确认，禁用设备管理器。
                 if (!ConfigManager.get(ConfigManager.NO_NEED_TO_COMFIRM))
                     devicePolicyManager.removeActiveAdmin(componentName);
-                finish();
-            } else {
+            } else
                 new TextToast(this, getString(R.string.lockscreen_failed));
-                finish();
-            }
+            finish();
         }
     }
 
@@ -103,13 +115,31 @@ public class UnRootMode extends Activity {
             }
         });
         UIUtils.alphaShow(mainDialog.create(), 0.75f);
+        //亮屏监听，防止在应用开启熄屏又亮屏时显示警告toast
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Intent.ACTION_SCREEN_ON);
+        registerReceiver(broadcastReceiver, intentFilter);
     }
 
     //目前已知的问题有启动失败和主题应用失败
     @Override
     protected void onRestart() {
-        new TextToast(this, getString(R.string.activity_onrestart_notice));
+        //由于onRestart比SCREEN_ON更早执行，因此在此设置延迟
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (!isScreenOn)
+                    new TextToast(getApplicationContext(), getString(R.string.activity_onrestart_notice));
+                isScreenOn = false;
+            }
+        }, 1000);
         super.onRestart();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(broadcastReceiver);
     }
 
     //用辅助功能锁屏
@@ -155,9 +185,9 @@ public class UnRootMode extends Activity {
      * @param mContext 上下文
      * @return 返回值
      */
-    private boolean isAccessibilitySettingsOn(Context mContext) {
+    static boolean isAccessibilitySettingsOn(Context mContext) {
         int accessibilityEnabled = 0;
-        final String service = getPackageName() + "/" + SystemPowerDialog.class.getCanonicalName();
+        final String service = mContext.getPackageName() + "/" + SystemPowerDialog.class.getCanonicalName();
         try {
             accessibilityEnabled = Settings.Secure.getInt(mContext.getApplicationContext().getContentResolver(), android.provider.Settings.Secure.ACCESSIBILITY_ENABLED);
         } catch (Settings.SettingNotFoundException ignored) {

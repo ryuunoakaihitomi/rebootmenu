@@ -92,6 +92,7 @@ public class UIUtils {
                 System.exit(0);
             }
         });
+        //有意保留的bug:帮助对话框的退出方式与配置相反
         if (cancelable) {
             h.setPositiveButton(activityThis.getString(R.string.exit), new AlertDialog.OnClickListener() {
 

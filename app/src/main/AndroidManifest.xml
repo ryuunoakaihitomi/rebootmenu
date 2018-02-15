@@ -27,6 +27,15 @@
             android:name=".UnRootMode"
             android:label="@string/app_name" />
 
+        <activity
+            android:name=".Shortcut"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="com.ryuunoakaihitomi.rebootmenu.SHORTCUT_ACTION" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
         <receiver
             android:name=".AdminReceiver"
             android:description="@string/description"

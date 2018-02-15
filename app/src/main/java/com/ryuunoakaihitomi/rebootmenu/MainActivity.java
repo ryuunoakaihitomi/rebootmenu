@@ -38,10 +38,14 @@ public class MainActivity extends Activity {
     }
 
     void activitySwitch(boolean isRootMode) {
-        if (isRootMode)
+        //在加载相应模式的窗口时加载对应的shortcut
+        if (isRootMode) {
             startActivity(new Intent(this, RootMode.class));
-        else
+            startActivity(new Intent(Shortcut.action).putExtra(Shortcut.extraTag, Shortcut.ROOT));
+        } else {
             startActivity(new Intent(this, UnRootMode.class));
+            startActivity(new Intent(Shortcut.action).putExtra(Shortcut.extraTag, Shortcut.UNROOT));
+        }
         new DebugLog("主活动准备销毁");
         finish();
     }

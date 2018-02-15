@@ -16,7 +16,8 @@ public class DebugLog {
     //标签
     final String TAG = "rebootmenu";
     //切记 ：调试输出开关
-    final boolean isLog = false;
+    //算了算了，源代码都被看透了还想办法管束调试日志的输出...
+    final boolean isLog = true;
     //日志等级
     public static final int V = 0;
     public static final int D = 1;
