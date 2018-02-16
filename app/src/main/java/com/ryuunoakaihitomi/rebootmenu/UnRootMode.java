@@ -154,8 +154,7 @@ public class UnRootMode extends Activity {
             intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, componentName);
             intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, getString(R.string.service_explanation));
             startActivityForResult(intent, 0);
-        }
-        if (active) {
+        } else {
             devicePolicyManager.lockNow();
             //如果需要二次确认，禁用设备管理器。（这里的策略和root模式的锁屏无需确认不同）
             if (!ConfigManager.get(ConfigManager.NO_NEED_TO_COMFIRM)) {

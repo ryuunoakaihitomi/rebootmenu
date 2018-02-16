@@ -13,6 +13,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 
+import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 import com.ryuunoakaihitomi.rebootmenu.util.ShellUtils;
 import com.ryuunoakaihitomi.rebootmenu.util.TextToast;
 
@@ -166,7 +167,8 @@ public class Shortcut extends Activity {
                     accessbilityon();
                     break;
                 default:
-                    new TextToast(this, "Shortcut:Unknown param!");
+                    new DebugLog("Shortcut:Unknown param!", DebugLog.WTF);
+                    finish();
             }
         }
         //<---注意：不要在这里放finish()，因为还需要等待锁屏时设备管理器申请回调
