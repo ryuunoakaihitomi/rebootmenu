@@ -87,6 +87,7 @@ public class Shortcut extends Activity {
         //shortcut功能选项
         final int REBOOT = 2;
         final int SHUTDOWN = 3;
+        final int RECOVERY = 8;
         final int REBOOT_UI = 4;
         final int LOCKSCREEN = 5;
         final int UR_LOCKSCREEN = 6;
@@ -98,45 +99,58 @@ public class Shortcut extends Activity {
             switch (param) {
                 //Root模式下的快捷方式
                 case ROOT:
+                    ShortcutInfo recovery = new ShortcutInfo.Builder(this, "r_frr")
+                            //超出长度文本将截断
+                            .setShortLabel("*" + getString(R.string.recovery_short))
+                            //分割成六块的工具箱
+                            .setIcon(Icon.createWithResource(this, android.R.drawable.ic_menu_today))
+                            .setIntent(new Intent(action).putExtra(extraTag, RECOVERY))
+                            .setRank(4)
+                            .build();
                     ShortcutInfo reboot = new ShortcutInfo.Builder(this, "r_fr")
                             .setShortLabel("*" + getString(R.string.reboot))
-                            .setIcon(Icon.createWithResource(this, R.mipmap.ic_launcher))
+                            //回转箭头中心一点
+                            .setIcon(Icon.createWithResource(this, android.R.drawable.ic_menu_rotate))
                             .setIntent(new Intent(action).putExtra(extraTag, REBOOT))
                             .setRank(3)
                             .build();
                     ShortcutInfo shutdown = new ShortcutInfo.Builder(this, "r_fs")
                             .setShortLabel("*" + getString(R.string.shutdown))
-                            .setIcon(Icon.createWithResource(this, R.mipmap.ic_launcher))
+                            //垃圾桶
+                            .setIcon(Icon.createWithResource(this, android.R.drawable.ic_menu_delete))
                             .setIntent(new Intent(action).putExtra(extraTag, SHUTDOWN))
                             .setRank(2)
                             .build();
                     ShortcutInfo rebootui = new ShortcutInfo.Builder(this, "r_ru")
                             .setShortLabel(getString(R.string.reboot_ui))
-                            .setIcon(Icon.createWithResource(this, R.mipmap.ic_launcher))
+                            //眼睛（看见的就是UI）
+                            .setIcon(Icon.createWithResource(this, android.R.drawable.ic_menu_view))
                             .setIntent(new Intent(action).putExtra(extraTag, REBOOT_UI))
                             .setRank(1)
                             .build();
                     ShortcutInfo lockscreen = new ShortcutInfo.Builder(this, "r_l")
                             .setShortLabel(getString(R.string.lockscreen))
-                            .setIcon(Icon.createWithResource(this, R.mipmap.ic_launcher))
+                            //方框围住播放标志
+                            .setIcon(Icon.createWithResource(this, android.R.drawable.ic_menu_slideshow))
                             .setIntent(new Intent(action).putExtra(extraTag, LOCKSCREEN))
                             .setRank(0)
                             .build();
                     assert shortcutManager != null;
-                    shortcutManager.setDynamicShortcuts(Arrays.asList(reboot, shutdown, rebootui, lockscreen));
+                    shortcutManager.setDynamicShortcuts(Arrays.asList(recovery, reboot, shutdown, rebootui, lockscreen));
                     finish();
                     break;
                 //免root模式下的快捷方式
                 case UNROOT:
                     ShortcutInfo ur_lockscreen = new ShortcutInfo.Builder(this, "ur_l")
                             .setShortLabel(getString(R.string.lockscreen))
-                            .setIcon(Icon.createWithResource(this, R.mipmap.ic_launcher))
+                            .setIcon(Icon.createWithResource(this, android.R.drawable.ic_menu_slideshow))
                             .setIntent(new Intent(action).putExtra(extraTag, UR_LOCKSCREEN))
                             .setRank(1)
                             .build();
                     ShortcutInfo ur_powerdialog = new ShortcutInfo.Builder(this, "ur_p")
                             .setShortLabel(getString(R.string.system_power_dialog))
-                            .setIcon(Icon.createWithResource(this, R.mipmap.ic_launcher))
+                            //扳手
+                            .setIcon(Icon.createWithResource(this, android.R.drawable.ic_menu_preferences))
                             .setIntent(new Intent(action).putExtra(extraTag, UR_POWERDIALOG))
                             .setRank(0)
                             .build();
@@ -145,6 +159,9 @@ public class Shortcut extends Activity {
                     finish();
                     break;
                 //快捷方式使用强制执行
+                case RECOVERY:
+                    ShellUtils.suCmdExec("reboot recovery");
+                    break;
                 case REBOOT:
                     ShellUtils.suCmdExec("reboot");
                     break;
