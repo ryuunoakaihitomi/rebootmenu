@@ -34,8 +34,4 @@ class ConfigManager {
         new DebugLog("配置管理:" + key + " " + isExist);
         return isExist;
     }
-
-//    static boolean set(String key,boolean value) {
-//        用户的手;
-//    }
 }

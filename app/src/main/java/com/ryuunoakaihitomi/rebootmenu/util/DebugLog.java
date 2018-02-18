@@ -14,10 +14,10 @@ import android.util.Log;
 public class DebugLog {
 
     //标签
-    final String TAG = "rebootmenu";
+    private final String TAG = "rebootmenu";
     //切记 ：调试输出开关
     //算了算了，源代码都被看透了还想办法管束调试日志的输出...
-    final boolean isLog = true;
+    private final boolean isLog = true;
     //日志等级
     public static final int V = 0;
     public static final int D = 1;
@@ -67,15 +67,4 @@ public class DebugLog {
                     Log.w(TAG, "(level?)" + msg);
             }
     }
-
-//    //笔记：
-//    //检测apk是否为debug版本（若需要）
-//    private boolean isApkInDebug(Context context) {
-//        try {
-//            ApplicationInfo info = context.getApplicationInfo();
-//            return (info.flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
-//        } catch (Exception e) {
-//            return false;
-//        }
-//    }
 }
