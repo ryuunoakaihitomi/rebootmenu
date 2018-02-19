@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--在Android M以下可用，状态栏不变黑，显示效果最完美-->
+    <style name="AppTheme" parent="@android:style/Theme.NoDisplay" />
+</resources>
