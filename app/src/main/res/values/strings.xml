@@ -34,7 +34,7 @@
     <string name="accessibility_service_description">只有开启本服务才能调用系统电源菜单,这并不会泄露你的任何隐私</string>
     <string name="service_name">启动选项 - 调用系统电源菜单服务</string>
     <string name="lockscreen_failed">未开启设备管理器,锁屏失败！</string>
-    <string name="service_disabled">你未开启辅助服务或广播已失效…请开启或重新开启辅助服务之后再打开菜单选择此选项</string>
+    <string name="service_disabled">你未开启辅助服务或服务已失效…请开启或重新开启辅助服务之后再打开菜单选择此选项</string>
     <string name="service_action_key">rebootmenu.SPD_13304EC</string>
     <string name="service_explanation">这里是启动选项的锁屏确认界面(可以这么理解吧),打开设备管理器锁定屏幕.</string>
     <string name="lollipop_notice">你的Android版本在5.0以下,在免root模式中只能使用锁屏功能</string>
