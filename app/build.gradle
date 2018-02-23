@@ -7,7 +7,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 25
         versionCode 32
-        versionName "9_箱庭に居る人_f"
+        versionName "9_箱庭に居る人_i"
     }
     buildTypes {
         release {
