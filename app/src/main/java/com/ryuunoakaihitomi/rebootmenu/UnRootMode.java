@@ -16,7 +16,6 @@ import android.os.Handler;
 import android.provider.Settings;
 import android.text.TextUtils;
 
-import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 import com.ryuunoakaihitomi.rebootmenu.util.TextToast;
 import com.ryuunoakaihitomi.rebootmenu.util.UIUtils;
 
@@ -35,7 +34,6 @@ public class UnRootMode extends Activity {
     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            new DebugLog("亮屏", DebugLog.V);
             isScreenOn = true;
         }
     };
@@ -60,6 +58,9 @@ public class UnRootMode extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            UIUtils.transparentStatusBar(this);
+        }
         mainDialog = UIUtils.LoadDialog(ConfigManager.get(ConfigManager.WHITE_THEME), this);
         mainDialog.setTitle(getString(R.string.unroot_title));
         final String[] uiTextList = {getString(R.string.lockscreen), getString(R.string.system_power_dialog)};

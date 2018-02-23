@@ -61,7 +61,7 @@ public class ShellUtils {
             d.writeBytes("exit\n");
             d.flush();
             BufferedReader br = new BufferedReader(new InputStreamReader(p.getErrorStream()));
-            String l = "";
+            String l;
             while ((l = br.readLine()) != null) {
                 sb.append(l);
             }
@@ -79,7 +79,7 @@ public class ShellUtils {
      * @param command 一条所要执行的命令
      */
     public static void suCmdExec(String command) {
-        new DebugLog("执行的命令为：" + command, DebugLog.I);
+        //new DebugLog("su执行的命令为：" + command, DebugLog.I);
         try {
             Process p = Runtime.getRuntime().exec("su");
             DataOutputStream d = new DataOutputStream(p.getOutputStream());
@@ -87,6 +87,19 @@ public class ShellUtils {
             d.writeBytes("exit\n");
             d.flush();
             p.getErrorStream().close();
+        } catch (IOException ignored) {
+        }
+    }
+
+    /**
+     * 普通权限shell
+     *
+     * @param command 一条所要执行的命令
+     */
+    public static void shCmdExec(String command) {
+        //new DebugLog("sh执行的命令为：" + command, DebugLog.I);
+        try {
+            Runtime.getRuntime().exec(command).getErrorStream().close();
         } catch (IOException ignored) {
         }
     }

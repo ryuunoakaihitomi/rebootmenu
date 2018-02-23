@@ -1,11 +1,14 @@
 package com.ryuunoakaihitomi.rebootmenu.util;
 
+import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.view.Window;
@@ -29,6 +32,7 @@ public class UIUtils {
      * @param activityThis 当前activity的上下文
      * @return 已处理Builder对象
      */
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP_MR1)
     public static AlertDialog.Builder LoadDialog(boolean isWhite, Context activityThis) {
         //在API级别23中，AlertDialog的主题定义被废弃。用在API级别22中新引入的Android默认主题格式代替。
         boolean isAndroidMPlus = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1;
@@ -53,6 +57,7 @@ public class UIUtils {
      *
      * @param w 欲透明化的dialog
      * @param f 透明度
+     * @throws NullPointerException window.getAttributes()
      */
     public static void alphaShow(AlertDialog w, Float f) {
         Window window = w.getWindow();
@@ -104,6 +109,24 @@ public class UIUtils {
             h.setCancelable(false);
         }
         alphaShow(h.create(), 0.8f);
+    }
+
+    /**
+     * 使状态栏透明
+     * 来自https://github.com/laobie/StatusBarUtil
+     *
+     * @param activity 要渲染的活动
+     */
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    public static void transparentStatusBar(Activity activity) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+            activity.getWindow().setStatusBarColor(Color.TRANSPARENT);
+        } else {
+            activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        }
     }
 
     /**

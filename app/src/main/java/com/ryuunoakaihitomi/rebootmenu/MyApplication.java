@@ -23,9 +23,7 @@ public class MyApplication extends Application {
                     .getDeclaredField("disableHooks");
             field.setAccessible(true);
             field.set(null, true);
-        } catch (Throwable e) {
-            new DebugLog("エラーメッセージある：マイアプリから", DebugLog.W);
-            e.printStackTrace();
+        } catch (Throwable ignored) {
         }
     }
 }

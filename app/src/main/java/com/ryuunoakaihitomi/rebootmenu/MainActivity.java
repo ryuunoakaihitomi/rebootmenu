@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 import com.ryuunoakaihitomi.rebootmenu.util.ShellUtils;
 import com.ryuunoakaihitomi.rebootmenu.util.TextToast;
 
@@ -46,7 +45,6 @@ public class MainActivity extends Activity {
             startActivity(new Intent(this, UnRootMode.class));
             startActivity(new Intent(Shortcut.action).putExtra(Shortcut.extraTag, Shortcut.UNROOT));
         }
-        new DebugLog("主活动准备销毁");
         finish();
     }
 }

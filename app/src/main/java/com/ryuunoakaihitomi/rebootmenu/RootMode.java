@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 
@@ -36,6 +37,11 @@ public class RootMode extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //只有API Level 23或以上才需要做此妥协
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            UIUtils.transparentStatusBar(this);
+        }
+
         final AlertDialog.Builder mainDialog = UIUtils.LoadDialog(ConfigManager.get(ConfigManager.WHITE_THEME), this);
         mainDialog.setTitle(getString(R.string.root_title));
         //默认模式功能列表
@@ -190,15 +196,20 @@ public class RootMode extends Activity {
         //模式选择
         if (!isForceMode)
             command = shellList[i];
-        else
+        else {
             command = shellListForce[i];
+            //首先尝试普通权限shell，只在强制模式可能有效
+            ShellUtils.shCmdExec(command);
+        }
         ShellUtils.suCmdExec(command);
         //如果是安全模式，MIUI执行完不能立即重启，还得执行一次重启
         if (command == shellList[6])
             if (!isForceMode)
                 ShellUtils.suCmdExec(shellList[0]);
-            else
+            else {
+                ShellUtils.shCmdExec(shellListForce[0]);
                 ShellUtils.suCmdExec(shellListForce[0]);
+            }
         new TextToast(getApplicationContext(), true, getString(R.string.cmd_send_notice));
         finish();
     }
