@@ -1,9 +1,8 @@
 package com.ryuunoakaihitomi.rebootmenu;
 
-import android.os.Environment;
+import android.content.Context;
 
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
-import com.ryuunoakaihitomi.rebootmenu.util.ShellUtils;
 
 import java.io.File;
 
@@ -22,15 +21,18 @@ class ConfigManager {
     static final String UNROOT_MODE = "urm";
 
     //父目录
-    private static String path = Environment.getExternalStorageDirectory().getPath() + "/Android/data/com.ryuunoakaihitomi.rebootmenu/files/";
+    private static String path;
 
-    //如果files目录不存在
-    static {
-        ShellUtils.suCmdExec("mkdir -p " + path);
+    //初始化外部files目录
+    @SuppressWarnings("ConstantConditions")
+    static void initDir(Context context) {
+        path = context.getExternalFilesDir(null).getPath();
+        if (!context.getExternalFilesDir(null).mkdirs())
+            new DebugLog("创建配置目录失败", DebugLog.V);
     }
 
     static boolean get(String key) {
-        boolean isExist = new File(path + key).exists();
+        boolean isExist = new File(path + "/" + key).exists();
         new DebugLog("配置管理:" + key + " " + isExist);
         return isExist;
     }

@@ -2,6 +2,8 @@
     package="com.ryuunoakaihitomi.rebootmenu">
     <!--此权限在Android5.0之后已被弃用-->
     <uses-permission android:name="android.permission.ACCESS_SUPERUSER" />
+    <!--为Android4.4以前准备-->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.BIND_ACCESSIBILITY_SERVICE" />
 
     <application

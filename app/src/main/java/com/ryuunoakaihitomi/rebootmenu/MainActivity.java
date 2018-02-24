@@ -16,6 +16,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ConfigManager.initDir(this);
         //配置选项
         String configView = getString(R.string.loading);
         if (ConfigManager.get(ConfigManager.WHITE_THEME))
