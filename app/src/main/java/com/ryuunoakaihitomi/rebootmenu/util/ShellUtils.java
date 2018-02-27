@@ -38,8 +38,8 @@ public class ShellUtils {
                 }
                 assert process != null;
                 process.destroy();
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (Exception ignored) {
+                //不再打印堆栈以提高性能
             }
         }
     }
@@ -66,8 +66,7 @@ public class ShellUtils {
                 sb.append(l);
             }
             p.getErrorStream().close();
-        } catch (IOException s) {
-            s.printStackTrace();
+        } catch (IOException ignored) {
             return false;
         }
         return sb.toString().contains("reboot");
@@ -79,7 +78,6 @@ public class ShellUtils {
      * @param command 一条所要执行的命令
      */
     public static void suCmdExec(String command) {
-        //new DebugLog("su执行的命令为：" + command, DebugLog.I);
         try {
             Process p = Runtime.getRuntime().exec("su");
             DataOutputStream d = new DataOutputStream(p.getOutputStream());
@@ -97,7 +95,6 @@ public class ShellUtils {
      * @param command 一条所要执行的命令
      */
     public static void shCmdExec(String command) {
-        //new DebugLog("sh执行的命令为：" + command, DebugLog.I);
         try {
             Runtime.getRuntime().exec(command).getErrorStream().close();
         } catch (IOException ignored) {

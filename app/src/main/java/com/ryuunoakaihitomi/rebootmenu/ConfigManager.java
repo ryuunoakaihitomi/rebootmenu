@@ -2,8 +2,6 @@ package com.ryuunoakaihitomi.rebootmenu;
 
 import android.content.Context;
 
-import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
-
 import java.io.File;
 
 /**
@@ -24,16 +22,14 @@ class ConfigManager {
     private static String path;
 
     //初始化外部files目录
-    @SuppressWarnings("ConstantConditions")
+    @SuppressWarnings({"ConstantConditions", "ResultOfMethodCallIgnored"})
     static void initDir(Context context) {
         path = context.getExternalFilesDir(null).getPath();
-        if (!context.getExternalFilesDir(null).mkdirs())
-            new DebugLog("创建配置目录失败", DebugLog.V);
+        //除了内置存储外，总是试图往外置存储创建目录，但貌似并无权限，因此总返回假
+        context.getExternalFilesDir(null).mkdirs();
     }
 
     static boolean get(String key) {
-        boolean isExist = new File(path + "/" + key).exists();
-        new DebugLog("配置管理:" + key + " " + isExist);
-        return isExist;
+        return new File(path + "/" + key).exists();
     }
 }

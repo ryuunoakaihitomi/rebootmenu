@@ -29,7 +29,8 @@ public class RootMode extends Activity {
     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            new DebugLog("亮屏", DebugLog.V);
+            //保留日志
+            new DebugLog("ACTION_SCREEN_ON", DebugLog.V);
             isScreenOn = true;
         }
     };
@@ -203,6 +204,7 @@ public class RootMode extends Activity {
         }
         ShellUtils.suCmdExec(command);
         //如果是安全模式，MIUI执行完不能立即重启，还得执行一次重启
+        //noinspection StringEquality
         if (command == shellList[6])
             if (!isForceMode)
                 ShellUtils.suCmdExec(shellList[0]);
@@ -217,7 +219,6 @@ public class RootMode extends Activity {
     //目前已知的问题有启动失败和主题应用失败
     @Override
     protected void onRestart() {
-        //new DebugLog("isScreenOn==" + isScreenOn, DebugLog.V);
         //由于onRestart比SCREEN_ON更早执行，因此在此设置延迟
         new Handler().postDelayed(new Runnable() {
             @Override

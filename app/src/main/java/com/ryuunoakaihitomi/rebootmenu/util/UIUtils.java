@@ -48,7 +48,6 @@ public class UIUtils {
             else
                 themeCode = AlertDialog.THEME_DEVICE_DEFAULT_DARK;
         }
-        new DebugLog("themeCode==" + themeCode);
         return new AlertDialog.Builder(activityThis, themeCode);
     }
 
@@ -61,6 +60,7 @@ public class UIUtils {
      */
     public static void alphaShow(AlertDialog w, Float f) {
         Window window = w.getWindow();
+        assert window != null;
         WindowManager.LayoutParams lp = window.getAttributes();
         lp.alpha = f;
         window.setAttributes(lp);
@@ -125,6 +125,7 @@ public class UIUtils {
             activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
             activity.getWindow().setStatusBarColor(Color.TRANSPARENT);
         } else {
+            //保留
             activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
     }
