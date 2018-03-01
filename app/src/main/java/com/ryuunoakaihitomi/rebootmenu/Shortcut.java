@@ -33,7 +33,6 @@ public class Shortcut extends Activity {
     //不使用二次确认直接执行。有意保留的bug:下次在UR活动中执行时要先执行一次才能执行二次确认。
     DevicePolicyManager devicePolicyManager;
 
-    //来自UnRootMode.java -- 结束
     ComponentName componentName;
 
     //辅助服务申请回调
@@ -76,6 +75,8 @@ public class Shortcut extends Activity {
             sendBroadcast(new Intent(getString(R.string.service_action_key)));
         finish();
     }
+
+    //来自UnRootMode.java -- 结束
 
     @TargetApi(Build.VERSION_CODES.N_MR1)
     @Override
