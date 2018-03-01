@@ -19,6 +19,7 @@ import com.ryuunoakaihitomi.rebootmenu.util.TextToast;
 
 public class SystemPowerDialog extends AccessibilityService {
 
+    private boolean isBroadcastRegistered;
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @TargetApi(Build.VERSION_CODES.LOLLIPOP)
         @Override
@@ -31,18 +32,24 @@ public class SystemPowerDialog extends AccessibilityService {
 
     @Override
     protected void onServiceConnected() {
+        super.onServiceConnected();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction(getString(R.string.service_action_key));
             registerReceiver(broadcastReceiver, intentFilter);
-        } else
+            isBroadcastRegistered = true;
+        } else {
             new DebugLog("onServiceConnected() + (<- Android 5.0)");
-        super.onServiceConnected();
+            System.exit(-1);
+        }
     }
 
     @Override
     public boolean onUnbind(Intent intent) {
-        unregisterReceiver(broadcastReceiver);
+        if (isBroadcastRegistered) {
+            isBroadcastRegistered = false;
+            unregisterReceiver(broadcastReceiver);
+        }
         return super.onUnbind(intent);
     }
 

@@ -53,6 +53,7 @@
         </receiver>
         <service
             android:name="com.ryuunoakaihitomi.rebootmenu.SystemPowerDialog"
+            android:exported="false"
             android:label="@string/service_name"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>
