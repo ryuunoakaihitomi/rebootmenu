@@ -30,7 +30,7 @@ public class RootMode extends Activity {
         @Override
         public void onReceive(Context context, Intent intent) {
             //保留日志
-            new DebugLog("ACTION_SCREEN_ON", DebugLog.V);
+            new DebugLog("ACTION_SCREEN_ON", DebugLog.LogLevel.I);
             isScreenOn = true;
         }
     };

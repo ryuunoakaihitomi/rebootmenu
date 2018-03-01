@@ -7,7 +7,7 @@ import android.util.Log;
  * Created by ZQY on 2018/2/11.
  *
  * @author ZQY
- * @version 1.0
+ * @version 1.1
  * @see android.util.Log
  */
 
@@ -15,16 +15,9 @@ public class DebugLog {
 
     //标签
     private final String TAG = "rebootmenu";
-    //切记 ：调试输出开关
-    //算了算了，源代码都被看透了还想办法管束调试日志的输出...
+
+    //总输出开关
     private final boolean isLog = true;
-    //日志等级
-    public static final int V = 0;
-    public static final int D = 1;
-    public static final int I = 2;
-    public static final int W = 3;
-    public static final int E = 4;
-    public static final int WTF = 5;
 
     /**
      * debug级日志输出
@@ -39,12 +32,12 @@ public class DebugLog {
     /**
      * 其他等级日志输出
      *
-     * @param msg 输出内容
-     * @param lev 输出等级
+     * @param msg      输出内容
+     * @param logLevel 日志等级
      */
-    public DebugLog(String msg, int lev) {
+    public DebugLog(String msg, LogLevel logLevel) {
         if (isLog)
-            switch (lev) {
+            switch (logLevel) {
                 case V:
                     Log.v(TAG, msg);
                     break;
@@ -66,5 +59,10 @@ public class DebugLog {
                 default:
                     Log.w(TAG, "(level?)" + msg);
             }
+    }
+
+    //日志等级
+    public enum LogLevel {
+        V, D, I, W, E, WTF
     }
 }

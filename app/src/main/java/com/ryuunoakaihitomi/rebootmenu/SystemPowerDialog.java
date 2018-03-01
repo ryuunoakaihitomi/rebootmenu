@@ -9,6 +9,7 @@ import android.content.IntentFilter;
 import android.os.Build;
 import android.view.accessibility.AccessibilityEvent;
 
+import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 import com.ryuunoakaihitomi.rebootmenu.util.TextToast;
 
 /**
@@ -30,9 +31,12 @@ public class SystemPowerDialog extends AccessibilityService {
 
     @Override
     protected void onServiceConnected() {
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(getString(R.string.service_action_key));
-        registerReceiver(broadcastReceiver, intentFilter);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction(getString(R.string.service_action_key));
+            registerReceiver(broadcastReceiver, intentFilter);
+        } else
+            new DebugLog("onServiceConnected() + (<- Android 5.0)");
         super.onServiceConnected();
     }
 

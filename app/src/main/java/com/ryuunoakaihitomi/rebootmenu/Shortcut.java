@@ -13,7 +13,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 
-import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 import com.ryuunoakaihitomi.rebootmenu.util.ShellUtils;
 import com.ryuunoakaihitomi.rebootmenu.util.TextToast;
 
@@ -26,9 +25,15 @@ import java.util.Arrays;
 
 public class Shortcut extends Activity {
 
+    static final int ROOT = 0;
+    static final int UNROOT = 1;
+    static final String extraTag = "shortcut";
+    static final String action = "com.ryuunoakaihitomi.rebootmenu.SHORTCUT_ACTION";
     //来自UnRootMode.java -- 开始
     //不使用二次确认直接执行。有意保留的bug:下次在UR活动中执行时要先执行一次才能执行二次确认。
     DevicePolicyManager devicePolicyManager;
+
+    //来自UnRootMode.java -- 结束
     ComponentName componentName;
 
     //辅助服务申请回调
@@ -71,13 +76,6 @@ public class Shortcut extends Activity {
             sendBroadcast(new Intent(getString(R.string.service_action_key)));
         finish();
     }
-
-    //来自UnRootMode.java -- 结束
-
-    static final int ROOT = 0;
-    static final int UNROOT = 1;
-    static final String extraTag = "shortcut";
-    static final String action = "com.ryuunoakaihitomi.rebootmenu.SHORTCUT_ACTION";
 
     @TargetApi(Build.VERSION_CODES.N_MR1)
     @Override
@@ -184,7 +182,6 @@ public class Shortcut extends Activity {
                     accessbilityon();
                     break;
                 default:
-                    new DebugLog("Shortcut:Unknown param!", DebugLog.WTF);
                     finish();
             }
         }
