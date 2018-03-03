@@ -100,8 +100,8 @@ public class UnRootMode extends Activity {
         mainDialog.setNeutralButton(" ", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                new TextToast(getApplicationContext(), true, "生きて");
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.bilibili.com/video/av19384384/"));
+                new TextToast(getApplicationContext(), true, "とまれかくもあはれ\nほたるほたるおいで");
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://music.163.com/#/song?id=22765874"));
                 startActivity(intent);
                 finish();
             }

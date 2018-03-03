@@ -15,6 +15,7 @@ import android.provider.Settings;
 
 import com.ryuunoakaihitomi.rebootmenu.util.ShellUtils;
 import com.ryuunoakaihitomi.rebootmenu.util.TextToast;
+import com.ryuunoakaihitomi.rebootmenu.util.UIUtils;
 
 import java.util.Arrays;
 
@@ -185,6 +186,8 @@ public class Shortcut extends Activity {
                 default:
                     finish();
             }
+            //非常规操作：比如root模式下App Shortcut权限拒绝时，活动长期驻留时，保持状态栏透明。
+            UIUtils.transparentStatusBar(this);
         }
         //<---注意：不要在这里放finish()，因为还需要等待锁屏时设备管理器申请回调
         else {
