@@ -27,3 +27,7 @@
 请到本仓库的[发布页面](https://github.com/ryuunoakaihitomi/rebootmenu/releases)下载本应用的官方发布版编译版本。~~已经会熟练找releases页面的请无视。~~
 ## License
 基于[MIT协议](./LICENSE)发布。
+## 杂项
+本应用已经将所有必要可见文本收拾进了[字体资源文件](./app/src/main/res/values/strings.xml)里。~~欢迎提交翻译。~~
+
+[捐赠地址](http://ryuunoakaihitomi.info/donate/)
