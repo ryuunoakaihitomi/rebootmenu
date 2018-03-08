@@ -11,7 +11,6 @@ import android.content.pm.ShortcutManager;
 import android.graphics.drawable.Icon;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 
 import com.ryuunoakaihitomi.rebootmenu.util.ShellUtils;
 import com.ryuunoakaihitomi.rebootmenu.util.TextToast;
@@ -36,12 +35,10 @@ public class Shortcut extends Activity {
 
     ComponentName componentName;
 
-    //辅助服务申请回调
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (0 == requestCode) {
-            //若同意
             if (resultCode == Activity.RESULT_OK)
                 devicePolicyManager.lockNow();
             else
@@ -50,12 +47,10 @@ public class Shortcut extends Activity {
         }
     }
 
-    //用辅助功能锁屏
     private void lockscreen() {
         devicePolicyManager = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
         componentName = new ComponentName(this, AdminReceiver.class);
         if (!devicePolicyManager.isAdminActive(componentName)) {
-            //请求启用
             Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
             intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, componentName);
             intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, getString(R.string.service_explanation));
@@ -64,17 +59,6 @@ public class Shortcut extends Activity {
             devicePolicyManager.lockNow();
             finish();
         }
-    }
-
-    //打开辅助服务设置或者发送执行广播
-    private void accessbilityon() {
-        if (!UnRootMode.isAccessibilitySettingsOn(getApplicationContext())) {
-            new TextToast(getApplicationContext(), getString(R.string.service_disabled));
-            Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
-            startActivity(intent);
-        } else
-            sendBroadcast(new Intent(getString(R.string.service_action_key)));
-        finish();
     }
 
     //来自UnRootMode.java -- 结束
@@ -181,7 +165,7 @@ public class Shortcut extends Activity {
                     lockscreen();
                     break;
                 case UR_POWERDIALOG:
-                    accessbilityon();
+                    UnRootMode.accessbilityon(Shortcut.this);
                     break;
                 default:
                     finish();

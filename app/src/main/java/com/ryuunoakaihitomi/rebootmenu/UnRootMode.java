@@ -29,7 +29,6 @@ public class UnRootMode extends Activity {
     DevicePolicyManager devicePolicyManager;
     ComponentName componentName;
 
-    //亮屏监听用变量和接收器
     boolean isScreenOn;
     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -71,7 +70,7 @@ public class UnRootMode extends Activity {
                     lockscreen();
                 else
                     //调用系统电源菜单无需二次确认
-                    accessbilityon();
+                    accessbilityon(UnRootMode.this);
             }
         };
         //Android5.0以下不支持系统电源菜单
@@ -116,16 +115,13 @@ public class UnRootMode extends Activity {
             }
         });
         UIUtils.alphaShow(mainDialog.create(), 0.75f);
-        //亮屏监听，防止在应用开启熄屏又亮屏时显示警告toast
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Intent.ACTION_SCREEN_ON);
         registerReceiver(broadcastReceiver, intentFilter);
     }
 
-    //目前已知的问题有启动失败和主题应用失败
     @Override
     protected void onRestart() {
-        //由于onRestart比SCREEN_ON更早执行，因此在此设置延迟
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -166,16 +162,20 @@ public class UnRootMode extends Activity {
         }
     }
 
-    //打开辅助服务设置或者发送执行广播
-    private void accessbilityon() {
-        if (!isAccessibilitySettingsOn(getApplicationContext())) {
-            new TextToast(getApplicationContext(), getString(R.string.service_disabled));
+    /**
+     * 打开辅助服务设置或者发送执行广播
+     *
+     * @param activity a
+     */
+    static void accessbilityon(Activity activity) {
+        if (!isAccessibilitySettingsOn(activity.getApplicationContext())) {
+            new TextToast(activity.getApplicationContext(), activity.getString(R.string.service_disabled));
             Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
-            startActivity(intent);
+            activity.startActivity(intent);
         } else {
-            sendBroadcast(new Intent(getString(R.string.service_action_key)));
+            activity.sendBroadcast(new Intent(activity.getString(R.string.service_action_key)));
         }
-        finish();
+        activity.finish();
     }
 
 
