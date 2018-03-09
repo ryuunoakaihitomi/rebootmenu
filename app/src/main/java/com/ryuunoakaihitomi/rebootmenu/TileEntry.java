@@ -17,7 +17,7 @@ public class TileEntry extends TileService {
         startActivityAndCollapse(getPackageManager().getLaunchIntentForPackage(getPackageName()));
     }
 
-    //这是一个随时可用的磁贴，因此应该在可见时时刻保持“活跃状态”（白色图标）
+    //这是一个随时可用的磁贴，因此应该在可见时时刻保持“活跃状态”（对比突出图标）
     @Override
     public void onStartListening() {
         getQsTile().setState(Tile.STATE_ACTIVE);
