@@ -1,4 +1,8 @@
 # 启动选项
+
+[![GitHub license](https://img.shields.io/github/license/ryuunoakaihitomi/rebootmenu.svg)](https://github.com/ryuunoakaihitomi/rebootmenu/blob/master/LICENSE)
+[![OS Environment](https://img.shields.io/badge/platform-Android-6AB344.svg)](https://www.android.com/)
+
 ![image](./app/src/main/res/mipmap/ic_launcher.png)
 ## 概要
 本**Android**应用程序是一个**简体中文**的**电源菜单**应用。
