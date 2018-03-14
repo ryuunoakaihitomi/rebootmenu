@@ -15,13 +15,19 @@ import android.service.quicksettings.TileService;
 public class TileEntry extends TileService {
     @Override
     public void onClick() {
-        startActivityAndCollapse(new Intent(this, MainActivity.class));
+        if (!isLocked())
+            startActivityAndCollapse(new Intent(this, MainActivity.class));
+        else {
+            getQsTile().setState(Tile.STATE_UNAVAILABLE);
+            getQsTile().updateTile();
+        }
     }
 
-    //这是一个随时可用的磁贴，因此应该在可见时时刻保持“活跃状态”（对比突出图标）
+    //这是一个随时可用的磁贴，因此应该在可见时时刻保持“活跃状态”（对比突出图标），但在锁屏使没有使用的理由
     @Override
     public void onStartListening() {
-        getQsTile().setState(Tile.STATE_ACTIVE);
+        int state = isLocked() ? Tile.STATE_UNAVAILABLE : Tile.STATE_ACTIVE;
+        getQsTile().setState(state);
         getQsTile().updateTile();
     }
 }

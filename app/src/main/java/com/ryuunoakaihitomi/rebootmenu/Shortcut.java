@@ -144,13 +144,13 @@ public class Shortcut extends Activity {
                     break;
                 //快捷方式使用强制执行
                 case RECOVERY:
-                    ShellUtils.suCmdExec("reboot recovery");
+                    rebootExec("recovery");
                     break;
                 case REBOOT:
-                    ShellUtils.suCmdExec("reboot");
+                    rebootExec(null);
                     break;
                 case SHUTDOWN:
-                    ShellUtils.suCmdExec("reboot -p");
+                    rebootExec("-p");
                     break;
                 case REBOOT_UI:
                     ShellUtils.suCmdExec("busybox pkill com.android.systemui");
@@ -177,5 +177,13 @@ public class Shortcut extends Activity {
         else {
             finish();
         }
+    }
+
+    //只有rebooot系才有可能免root执行
+    void rebootExec(String arg) {
+        String cmd = arg == null ? "reboot" : "reboot " + arg;
+        ShellUtils.shCmdExec(cmd);
+        ShellUtils.suCmdExec(cmd);
+        finish();
     }
 }

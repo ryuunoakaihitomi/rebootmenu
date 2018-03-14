@@ -6,8 +6,8 @@ android {
         applicationId "com.ryuunoakaihitomi.rebootmenu"
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 39
-        versionName "10_蛍夢_3"
+        versionCode 40
+        versionName "10_蛍夢_4"
     }
     buildTypes {
         release {
