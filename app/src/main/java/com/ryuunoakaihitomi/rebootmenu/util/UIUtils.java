@@ -53,17 +53,20 @@ public class UIUtils {
 
     /**
      * 将窗体透明展示
+     * 不建议在Low Ram设备启动此功能
      *
      * @param w 欲透明化的dialog
      * @param f 透明度
-     * @throws NullPointerException window.getAttributes()
+     * @throws NullPointerException null.XXX();
      */
     public static void alphaShow(AlertDialog w, Float f) {
         Window window = w.getWindow();
         assert window != null;
-        WindowManager.LayoutParams lp = window.getAttributes();
-        lp.alpha = f;
-        window.setAttributes(lp);
+        if ("false".equals(System.getProperty("ro.config.low_ram", "false"))) {
+            WindowManager.LayoutParams lp = window.getAttributes();
+            lp.alpha = f;
+            window.setAttributes(lp);
+        }
         w.show();
     }
 

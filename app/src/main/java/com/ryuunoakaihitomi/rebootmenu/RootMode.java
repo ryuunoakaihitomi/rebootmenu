@@ -35,6 +35,7 @@ public class RootMode extends Activity {
         }
     };
 
+    @SuppressWarnings("DanglingJavadoc")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,10 +70,10 @@ public class RootMode extends Activity {
         };
         //强制模式功能列表
         final String[] uiTextListForce = {
-                "*" + getString(R.string.reboot),
-                "*" + getString(R.string.shutdown),
-                "*" + getString(R.string.recovery),
-                "*" + getString(R.string.fastboot),
+                "*" + uiTextList[0],
+                "*" + uiTextList[1],
+                "*" + uiTextList[2],
+                "*" + uiTextList[3],
                 uiTextList[4],
                 uiTextList[5],
                 "*" + uiTextList[6],
@@ -158,8 +159,12 @@ public class RootMode extends Activity {
                 UIUtils.helpDialog(RootMode.this, mainDialog, ConfigManager.get(ConfigManager.CANCELABLE), ConfigManager.get(ConfigManager.WHITE_THEME));
             }
         });
-        //svc兼容性检查
-        if (ShellUtils.svcCompatibilityCheck()) {
+        /**
+         * 经代码查阅对比，发现在Android4.3中加入了svc控制关机的功能。
+         *
+         * @see https://github.com/aosp-mirror/platform_frameworks_base/commit/62aad7f66fcd673831029eb96dd49c95f76b17bd
+         */
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             mainDialog.setNeutralButton(R.string.mode_switch, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {

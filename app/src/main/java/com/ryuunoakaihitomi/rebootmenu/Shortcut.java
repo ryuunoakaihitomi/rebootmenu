@@ -72,6 +72,7 @@ public class Shortcut extends Activity {
         final int REBOOT = 2;
         final int SHUTDOWN = 3;
         final int RECOVERY = 8;
+        final int FASTBOOT = 9;
         final int REBOOT_UI = 4;
         final int LOCKSCREEN = 5;
         final int UR_LOCKSCREEN = 6;
@@ -83,6 +84,13 @@ public class Shortcut extends Activity {
             switch (param) {
                 //Root模式下的快捷方式
                 case ROOT:
+                    ShortcutInfo fastboot = new ShortcutInfo.Builder(this, "r_ffb")
+                            .setShortLabel("*" + getString(R.string.fastboot_short))
+                            //命令行
+                            .setIcon(Icon.createWithResource(this, android.R.drawable.ic_menu_sort_by_size))
+                            .setIntent(new Intent(action).putExtra(extraTag, FASTBOOT))
+                            .setRank(5)
+                            .build();
                     ShortcutInfo recovery = new ShortcutInfo.Builder(this, "r_frr")
                             //超出长度文本将截断
                             .setShortLabel("*" + getString(R.string.recovery_short))
@@ -120,7 +128,11 @@ public class Shortcut extends Activity {
                             .setRank(0)
                             .build();
                     assert shortcutManager != null;
-                    shortcutManager.setDynamicShortcuts(Arrays.asList(recovery, reboot, shutdown, rebootui, lockscreen));
+                    //无论如何，没有root不能用shell锁屏和重启UI，所以在不检查root模式下的无root模式改为增加fast boot。
+                    if (ShellUtils.isRoot())
+                        shortcutManager.setDynamicShortcuts(Arrays.asList(recovery, reboot, shutdown, rebootui, lockscreen));
+                    else
+                        shortcutManager.setDynamicShortcuts(Arrays.asList(fastboot, recovery, reboot, shutdown));
                     finish();
                     break;
                 //免root模式下的快捷方式
@@ -143,6 +155,9 @@ public class Shortcut extends Activity {
                     finish();
                     break;
                 //快捷方式使用强制执行
+                case FASTBOOT:
+                    rebootExec("bootloader");
+                    break;
                 case RECOVERY:
                     rebootExec("recovery");
                     break;

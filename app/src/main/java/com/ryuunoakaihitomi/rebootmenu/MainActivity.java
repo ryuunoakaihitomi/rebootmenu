@@ -2,6 +2,7 @@ package com.ryuunoakaihitomi.rebootmenu;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 
 import com.ryuunoakaihitomi.rebootmenu.util.ShellUtils;
@@ -41,10 +42,12 @@ public class MainActivity extends Activity {
         //在加载相应模式的窗口时加载对应的shortcut
         if (isRootMode) {
             startActivity(new Intent(this, RootMode.class));
-            startActivity(new Intent(Shortcut.action).putExtra(Shortcut.extraTag, Shortcut.ROOT));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1)
+                startActivity(new Intent(Shortcut.action).putExtra(Shortcut.extraTag, Shortcut.ROOT));
         } else {
             startActivity(new Intent(this, UnRootMode.class));
-            startActivity(new Intent(Shortcut.action).putExtra(Shortcut.extraTag, Shortcut.UNROOT));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1)
+                startActivity(new Intent(Shortcut.action).putExtra(Shortcut.extraTag, Shortcut.UNROOT));
         }
         finish();
     }

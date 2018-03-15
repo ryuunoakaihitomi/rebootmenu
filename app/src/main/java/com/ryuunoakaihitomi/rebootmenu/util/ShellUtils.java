@@ -1,9 +1,7 @@
 package com.ryuunoakaihitomi.rebootmenu.util;
 
-import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
 /**
  * 本应用中关于shell操作的工具集合
@@ -42,34 +40,6 @@ public class ShellUtils {
                 //不再打印堆栈以提高性能
             }
         }
-    }
-
-    /**
-     * svc兼容性检查
-     * <p>
-     * 检查当前Android环境中svc命令是否支持重启关机电源操作
-     * 原理：目前尚未知晓svc是从Android的哪一个版本支持此功能，所以在非root模式下尝试执行svc power取用法列表。当返回值包括reboot时判断支持。
-     *
-     * @return 真：支持
-     */
-    public static boolean svcCompatibilityCheck() {
-        StringBuilder sb = new StringBuilder();
-        try {
-            Process p = Runtime.getRuntime().exec("sh");
-            DataOutputStream d = new DataOutputStream(p.getOutputStream());
-            d.writeBytes("svc power\n");
-            d.writeBytes("exit\n");
-            d.flush();
-            BufferedReader br = new BufferedReader(new InputStreamReader(p.getErrorStream()));
-            String l;
-            while ((l = br.readLine()) != null) {
-                sb.append(l);
-            }
-            p.getErrorStream().close();
-        } catch (IOException ignored) {
-            return false;
-        }
-        return sb.toString().contains("reboot");
     }
 
     /**
