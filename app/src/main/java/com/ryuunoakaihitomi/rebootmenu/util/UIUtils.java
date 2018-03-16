@@ -12,11 +12,15 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
+import android.text.Html;
 import android.view.Window;
 import android.view.WindowManager;
 
 import com.ryuunoakaihitomi.rebootmenu.R;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 
 /**
@@ -86,7 +90,8 @@ public class UIUtils {
         new TextToast(activityThis, String.format(activityThis.getString(R.string.help_notice), getAppVersionName(activityThis), activityThis.getString(R.string.help_update_date)));
         AlertDialog.Builder h = LoadDialog(isWhite, activityThis);
         h.setTitle(activityThis.getString(R.string.help));
-        h.setMessage(activityThis.getString(R.string.help_body));
+        String help = inputStream2String(activityThis.getResources().openRawResource(R.raw.help_body), null);
+        h.setMessage(Html.fromHtml(help));
         h.setOnCancelListener(new DialogInterface.OnCancelListener() {
 
             @Override
@@ -163,5 +168,29 @@ public class UIUtils {
         } catch (Exception ignored) {
         }
         return versionName;
+    }
+
+    /**
+     * 将输入流转为字符串
+     *
+     * @param in     待转换的输入流
+     * @param encode 字符编码
+     * @return 转换后的字符串
+     */
+    private static String inputStream2String(InputStream in, @SuppressWarnings("SameParameterValue") String encode) {
+        String str = "";
+        try {
+            if (encode == null || encode.equals("")) {
+                encode = "utf-8";
+            }
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in, encode));
+            StringBuilder sb = new StringBuilder();
+            while ((str = reader.readLine()) != null) {
+                sb.append(str).append("\n");
+            }
+            return sb.toString();
+        } catch (Exception ignored) {
+        }
+        return str;
     }
 }
