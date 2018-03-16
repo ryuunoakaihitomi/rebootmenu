@@ -1,5 +1,6 @@
 package com.ryuunoakaihitomi.rebootmenu.util;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -15,6 +16,8 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.ryuunoakaihitomi.rebootmenu.R;
+
+import java.lang.reflect.Method;
 
 /**
  * 本应用关于界面操作的工具集合
@@ -62,7 +65,15 @@ public class UIUtils {
     public static void alphaShow(AlertDialog w, Float f) {
         Window window = w.getWindow();
         assert window != null;
-        if ("false".equals(System.getProperty("ro.config.low_ram", "false"))) {
+        //由于ActivityManager的isLowRamDevice方法非静态，因此只能使用反射来取系统属性了。（但在Android P(ill)上可能行不通）
+        boolean isLowRam = false;
+        try {
+            @SuppressLint("PrivateApi") Class<?> clazz = Class.forName("android.os.SystemProperties");
+            Method method = clazz.getMethod("get", String.class);
+            isLowRam = "true".equals(method.invoke(null, "ro.config.low_ram"));
+        } catch (Exception ignored) {
+        }
+        if (!isLowRam) {
             WindowManager.LayoutParams lp = window.getAttributes();
             lp.alpha = f;
             window.setAttributes(lp);

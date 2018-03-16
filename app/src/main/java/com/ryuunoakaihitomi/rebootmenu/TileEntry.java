@@ -26,8 +26,9 @@ public class TileEntry extends TileService {
     //这是一个随时可用的磁贴，因此应该在可见时时刻保持“活跃状态”（对比突出图标），但在锁屏时没有使用的理由
     @Override
     public void onStartListening() {
-        int state = isLocked() ? Tile.STATE_UNAVAILABLE : Tile.STATE_ACTIVE;
-        getQsTile().setState(state);
-        getQsTile().updateTile();
+        if (!isLocked() && getQsTile().getState() != Tile.STATE_ACTIVE) {
+            getQsTile().setState(Tile.STATE_ACTIVE);
+            getQsTile().updateTile();
+        }
     }
 }
