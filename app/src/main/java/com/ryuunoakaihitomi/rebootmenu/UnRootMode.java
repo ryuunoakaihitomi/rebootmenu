@@ -57,9 +57,8 @@ public class UnRootMode extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             UIUtils.transparentStatusBar(this);
-        }
         mainDialog = UIUtils.LoadDialog(ConfigManager.get(ConfigManager.WHITE_THEME), this);
         mainDialog.setTitle(getString(R.string.unroot_title));
         final String[] uiTextList = {getString(R.string.lockscreen), getString(R.string.system_power_dialog)};

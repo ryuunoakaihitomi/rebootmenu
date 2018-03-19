@@ -71,12 +71,13 @@ public class UIUtils {
         assert window != null;
         //由于ActivityManager的isLowRamDevice方法非静态，因此只能使用反射来取系统属性了。（但在Android P(ill)上可能行不通）
         boolean isLowRam = false;
-        try {
-            @SuppressLint("PrivateApi") Class<?> clazz = Class.forName("android.os.SystemProperties");
-            Method method = clazz.getMethod("get", String.class);
-            isLowRam = "true".equals(method.invoke(null, "ro.config.low_ram"));
-        } catch (Exception ignored) {
-        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+            try {
+                @SuppressLint("PrivateApi") Class<?> clazz = Class.forName("android.os.SystemProperties");
+                Method method = clazz.getMethod("get", String.class);
+                isLowRam = "true".equals(method.invoke(null, "ro.config.low_ram"));
+            } catch (Exception ignored) {
+            }
         if (!isLowRam) {
             WindowManager.LayoutParams lp = window.getAttributes();
             lp.alpha = f;
@@ -136,17 +137,12 @@ public class UIUtils {
      *
      * @param activity 要渲染的活动
      */
-    @TargetApi(Build.VERSION_CODES.KITKAT)
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public static void transparentStatusBar(Activity activity) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-            activity.getWindow().setStatusBarColor(Color.TRANSPARENT);
-        } else {
-            //保留
-            activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        }
+        activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        activity.getWindow().setStatusBarColor(Color.TRANSPARENT);
     }
 
     /**
