@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Process;
 import android.provider.Settings;
 import android.text.TextUtils;
 
@@ -157,7 +158,7 @@ public class UnRootMode extends Activity {
                 devicePolicyManager.removeActiveAdmin(componentName);
             }
             //自杀退出
-            android.os.Process.killProcess(android.os.Process.myPid());
+            Process.killProcess(Process.myPid());
         }
     }
 
@@ -188,7 +189,7 @@ public class UnRootMode extends Activity {
         int accessibilityEnabled = 0;
         final String service = mContext.getPackageName() + "/" + SystemPowerDialog.class.getCanonicalName();
         try {
-            accessibilityEnabled = Settings.Secure.getInt(mContext.getApplicationContext().getContentResolver(), android.provider.Settings.Secure.ACCESSIBILITY_ENABLED);
+            accessibilityEnabled = Settings.Secure.getInt(mContext.getApplicationContext().getContentResolver(), Settings.Secure.ACCESSIBILITY_ENABLED);
         } catch (Settings.SettingNotFoundException ignored) {
         }
         TextUtils.SimpleStringSplitter mStringColonSplitter = new TextUtils.SimpleStringSplitter(':');
