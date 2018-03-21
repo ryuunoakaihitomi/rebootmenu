@@ -20,9 +20,9 @@ public class TileLongPressEntry extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        new TextToast(this, true, "クイック設定タイルを長押し:音量調節");
-        AudioManager audioManager = getSystemService(AudioManager.class);
-        audioManager.adjustVolume(AudioManager.ADJUST_SAME, AudioManager.FLAG_SHOW_UI);
+        new TextToast(this, true, "音量調節");
+        getSystemService(AudioManager.class)
+                .adjustVolume(AudioManager.ADJUST_SAME, AudioManager.FLAG_SHOW_UI);
         finish();
     }
 }
