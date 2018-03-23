@@ -20,7 +20,8 @@ public class TileLongPressEntry extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        new TextToast(this, true, "音量調節");
+        //Emoji:Volume Control
+        new TextToast(this, true, "\uD83C\uDF9A");
         getSystemService(AudioManager.class)
                 .adjustVolume(AudioManager.ADJUST_SAME, AudioManager.FLAG_SHOW_UI);
         finish();
