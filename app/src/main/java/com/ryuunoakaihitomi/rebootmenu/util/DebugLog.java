@@ -11,6 +11,7 @@ import android.util.Log;
  * @see android.util.Log
  */
 
+@SuppressWarnings("ConstantConditions")
 public class DebugLog {
 
     //标签

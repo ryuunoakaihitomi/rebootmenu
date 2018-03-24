@@ -141,7 +141,7 @@ public class UnRootMode extends Activity {
 
     //用辅助功能锁屏
     private void lockscreen() {
-        devicePolicyManager = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
+        devicePolicyManager = (DevicePolicyManager) getSystemService(DEVICE_POLICY_SERVICE);
         componentName = new ComponentName(this, AdminReceiver.class);
         //设备管理器是否启用
         boolean active = devicePolicyManager.isAdminActive(componentName);
