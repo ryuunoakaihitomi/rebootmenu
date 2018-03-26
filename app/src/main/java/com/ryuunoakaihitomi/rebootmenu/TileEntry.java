@@ -16,7 +16,8 @@ public class TileEntry extends TileService {
     @Override
     public void onClick() {
         if (!isLocked())
-            startActivityAndCollapse(new Intent(this, MainActivity.class));
+            startActivityAndCollapse(new Intent(this, MainActivity.class)
+                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         else {
             getQsTile().setState(Tile.STATE_UNAVAILABLE);
             getQsTile().updateTile();
