@@ -1,5 +1,6 @@
 package com.ryuunoakaihitomi.rebootmenu;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.admin.DevicePolicyManager;
@@ -62,24 +63,41 @@ public class UnRootMode extends Activity {
             UIUtils.transparentStatusBar(this);
         mainDialog = UIUtils.LoadDialog(ConfigManager.get(ConfigManager.WHITE_THEME), this);
         mainDialog.setTitle(getString(R.string.unroot_title));
-        final String[] uiTextList = {getString(R.string.lockscreen), getString(R.string.system_power_dialog)};
+        String[] uiTextList;
         DialogInterface.OnClickListener mainListener = new DialogInterface.OnClickListener() {
+            @TargetApi(Build.VERSION_CODES.N)
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                if (i == 0)
-                    lockscreen();
-                else
-                    //调用系统电源菜单无需二次确认
-                    accessbilityon(UnRootMode.this);
+                switch (i) {
+                    case 0:
+                        lockscreen();
+                        break;
+                    case 1:
+                        //调用系统电源菜单无需二次确认
+                        accessbilityon(UnRootMode.this);
+                        break;
+                    case 2:
+                        initDPMCN();
+                        try {
+                            devicePolicyManager.reboot(componentName);
+                        } catch (Throwable ignored) {
+                            new TextToast(getApplicationContext(), true, getString(R.string.dpm_reboot_error));
+                        }
+                }
             }
         };
-        //Android5.0以下不支持系统电源菜单
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            mainDialog.setItems(uiTextList, mainListener);
-        else {
-            mainDialog.setItems(new String[]{getString(R.string.lockscreen)}, mainListener);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+            uiTextList = new String[]{getString(R.string.lockscreen), getString(R.string.system_power_dialog), getString(R.string.reboot)};
+            //Android7.0以下不支持设备管理器重启
+        else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            uiTextList = new String[]{getString(R.string.lockscreen), getString(R.string.system_power_dialog)};
+            new TextToast(getApplicationContext(), getString(R.string.nougat_notice));
+        } else {
+            //Android5.0以下不支持系统电源菜单
+            uiTextList = new String[]{getString(R.string.lockscreen)};
             new TextToast(getApplicationContext(), getString(R.string.lollipop_notice));
         }
+        mainDialog.setItems(uiTextList, mainListener);
         //是否需要退出键
         if (!ConfigManager.get(ConfigManager.CANCELABLE))
             mainDialog.setPositiveButton(R.string.exit, new DialogInterface.OnClickListener() {
@@ -141,8 +159,7 @@ public class UnRootMode extends Activity {
 
     //用辅助功能锁屏
     private void lockscreen() {
-        devicePolicyManager = (DevicePolicyManager) getSystemService(DEVICE_POLICY_SERVICE);
-        componentName = new ComponentName(this, AdminReceiver.class);
+        initDPMCN();
         //设备管理器是否启用
         boolean active = devicePolicyManager.isAdminActive(componentName);
         if (!active) {
@@ -206,5 +223,11 @@ public class UnRootMode extends Activity {
             }
         }
         return false;
+    }
+
+    //初始化设备政策管理者和组件名称
+    void initDPMCN() {
+        devicePolicyManager = (DevicePolicyManager) getSystemService(DEVICE_POLICY_SERVICE);
+        componentName = new ComponentName(this, AdminReceiver.class);
     }
 }
