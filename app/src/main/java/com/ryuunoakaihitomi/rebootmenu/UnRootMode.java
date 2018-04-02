@@ -68,6 +68,7 @@ public class UnRootMode extends Activity {
         mainDialog.setTitle(getString(R.string.unroot_title));
         String[] uiTextList;
         DialogInterface.OnClickListener mainListener = new DialogInterface.OnClickListener() {
+            @TargetApi(Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 switch (i) {
@@ -81,13 +82,19 @@ public class UnRootMode extends Activity {
                     case 2:
                         initCN();
                         reboot(devicePolicyManager, componentName, UnRootMode.this);
+                        break;
+                    case 3:
+                        //警告：在26中弃用，之后可能只能使用wipeData解除。在今后可能要移除重启功能。
+                        devicePolicyManager.clearDeviceOwnerApp(getPackageName());
+                        new TextToast(getApplicationContext(), getString(R.string.clear_owner_notice));
+                        finish();
                 }
             }
         };
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             //检查Device Owner
             if (devicePolicyManager.isDeviceOwnerApp(getPackageName()))
-                uiTextList = new String[]{getString(R.string.lockscreen), getString(R.string.system_power_dialog), getString(R.string.reboot)};
+                uiTextList = new String[]{getString(R.string.lockscreen), getString(R.string.system_power_dialog), getString(R.string.reboot), getString(R.string.clear_owner)};
             else {
                 uiTextList = new String[]{getString(R.string.lockscreen), getString(R.string.system_power_dialog)};
                 new TextToast(getApplicationContext(), true, getString(R.string.device_owner_disabled));
