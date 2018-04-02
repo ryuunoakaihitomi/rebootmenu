@@ -1,79 +1,88 @@
-<h2 id="-">关于：</h2>
-<ul>
-    <li>一个重启菜单应用.包括重启和关机(默认和强制模式),重启至recovery和bootloader,热重启,重启用户界面,安全模式和锁屏.无root环境下亦可使用(功能受限).
-        帮助： 如果在root模式下执行失败,手机没有任何反应,请检查本应用是否得到root权限或安装<strong>busybox</strong>补足Linux二进制试试,还可以切换到
-        <strong>强制模式</strong>再尝试操作.
-    </li>
-</ul>
-<h3 id="-">功能解释：</h3>
-<p>0.切换模式:切换至强制模式或默认模式,使用强制模式的功能加上*标记.</p>
-<p>(注意:4.3或以下<strong>不支持</strong>默认模式,将自动切换成<strong>强制模式</strong>)
-</p>
-<p>1.强制模式中的重启和关机：调用linux中的命令.强制切断设备电源,执行速度快,成功率高,但是有极小的可能性会导致<strong>文件损坏</strong>甚至<strong>
-    系统崩溃</strong>.
-</p>
-<p>2.默认模式中的重启和关机：调用Android系统电源管理模块.速度慢,有一点执行失败的可能性(一直显示正在xx的对话),但是更加安全.</p>
-<p>3.recovery:恢复模式.</p>
-<p>4.bootloader,亦称fastboot模式,线刷模式.</p>
-<p>5.热重启,在保持设备硬件通电的情况下,关闭并重新加载系统.</p>
-<p>6.重启用户界面,重启com.android.systemui,用于刷新桌面UI,重新加载桌面小部件或刷新图标显示.</p>
-<p>7.安全模式：重启系统停用所有第三方应用,用于排查有问题的应用并恢复系统.</p>
-<p>(备注：<strong>强制模式</strong>下的<strong>安全模式</strong>在某些环境下可能会失效)
-</p>
-<p>8.锁屏：通过模拟按下电源键熄灭屏幕.</p>
-<p>注意：设备管理器和辅助服务是为免root模式准备的.已经root的用户,完全不需要打开这个应用的设备管理器和辅助服务.</p>
-<h3 id="-">配置文件帮助：</h3>
-<p>本应用已经为用户做好了万全的选项操作设计,因此<strong>不推荐</strong>使用任何自定义的配置选项.不过如果需要,也可以通过在特定的目录创建文件解决.
-</p>
-<p>在手机
-    <strong>内置存储(/storage/emulated/0/)中的/Android/data/com.ryuunoakaihitomi.rebootmenu/files/
-    </strong>
-    中加入相应文件名的
-    <strong>空文件或文件夹</strong>
-    .加入wt启用白色主题,加入c可以返回键退出,加入nntc取消显示确认对话直接执行命令,加入dncr启动时不检查root权限,加入urm在启动时不检查root权限的基础上手动开启免root模式.
-</p>
-<h2 id="-root-">免root模式帮助</h2>
-<ul>
-    <li>包括锁屏和调用系统电源菜单.</li>
-    <li>从<strong>Android 7.0</strong>开始支持重启,(需要执行<strong>device owner</strong>)
-    </li>
-</ul>
-<p>(免root模式下) 功能解释：</p>
-<p>1.锁屏：锁定屏幕(注意：这种模式下的锁屏有可能失去某些<strong>快捷解锁</strong>的功能,例如：<strong>需要重新输入密码</strong>)
-</p>
-<p>2.打开系统电源菜单：调用系统电源菜单,效果与长按电源键相同</p>
-<p>3.重启：类比root默认模式重启</p>
-<p>注意：没有获取到root权限的启动选项功能将会受到限制,你需要手动打开<strong>设备管理器</strong>来实现锁屏,并且只有打开
-    <strong>辅助(无障碍)服务</strong>
-    时才能调用系统的电源菜单.
-    emui或者其他后台管理异常严格的系统环境用户请将本应用的后台卡片锁定以防止辅助服务被杀,并且需要注意<strong>不要</strong>通过本应用保留的<strong>
-        后台卡片</strong>来启动本应用.
-    只有Android5.0或以上才能使用调用系统电源菜单功能.
-</p>
-<p>快捷方式：本应用在Android7.0和7.1及以上系统中分别增加了
-    <strong>状态栏下拉图块(Tile)</strong>
-    和对支持的启动器增设了<strong>长按应用图标即可弹出的快捷方式菜单(App Shortcut)</strong>,该菜单
-    <strong>至少正常运行过本应用一次</strong>
-    才可用.如进入过root模式,根据功能是否可用添加相应图块.如进入过免root模式,则选项和对话框模式相同,只是不是二次确认模式.而图块的功能和使用方法同启动器应用图标相同
-    (为防止误操作,在锁屏模式下禁止使用图块).
-</p>
-<p>device owner(设备所有者权限申请)：使用<strong>ADB调试</strong>,执行命令
-</p>
-<p>
-    <strong>adb shell dpm set-device-owner com.ryuunoakaihitomi.rebootmenu/.AdminReceiver</strong>
-</p>
-<p>显示以Success打头的信息即表示成功,可以使用免root重启功能.</p>
-<p>注意：注册为系统所用者后,不能够卸载或停用本应用,也不能够取消本应用的设备管理器(无法对免root模式的锁屏进行二次确认).如果想反注册之,请将上述命令的<strong>
-    set-device-owner</strong>改为<strong>remove-active-admin</strong>.在ADB下执行.
-</p>
-<p>
-    <del>(致高级用户：在多用户模式下要加UID,详情请自行查找dpm命令用法)</del>
-</p>
-<h3 id="-root-">特殊免root模式：</h3>
-<p>这种模式仅在<strong>部分环境</strong>中有效,原理是执行普通权限而非root权限的shell.
-    需要设置dncr不检查root权限再选择强制模式启用.支持的功能随环境差异可能有所不同
-    <del>(有待研究)</del>.在长按图标菜单中只有reboot系(需要调用reboot命令的)功能可在此模式下使用.
-</p>
-<h1 id="-">(≧∇≦)/</h1>
-<p>开发者：</p>
-<p>@ryuunoakaihitomi github.com</p>
+<html>
+    <body>
+        <h2 id="-">关于：</h2>
+        <ul>
+            <li>
+                一个重启菜单应用.包括重启和关机(默认和强制模式),重启至recovery和bootloader,热重启,重启用户界面,安全模式和锁屏.无root环境下亦可使用(功能受限).
+                帮助： 如果在root模式下执行失败,手机没有任何反应,请检查本应用是否得到root权限或安装
+                <strong>busybox</strong>
+                补足Linux二进制试试,还可以切换到<strong>强制模式</strong>再尝试操作.
+            </li>
+        </ul>
+        <h3 id="-">功能解释：</h3>
+        <p>0.切换模式:切换至强制模式或默认模式,使用强制模式的功能加上*标记.</p>
+        <p>(注意:4.3或以下<strong>不支持</strong>默认模式,将自动切换成<strong>强制模式</strong>)
+        </p>
+        <p>1.强制模式中的重启和关机：调用linux中的命令.强制切断设备电源,执行速度快,成功率高,但是有极小的可能性会导致<strong>文件损坏</strong>甚至<strong>
+            系统崩溃</strong>.
+        </p>
+        <p>2.默认模式中的重启和关机：调用Android系统电源管理模块.速度慢,有一点执行失败的可能性(一直显示正在xx的对话),但是更加安全.</p>
+        <p>3.recovery:恢复模式.</p>
+        <p>4.bootloader,亦称fastboot模式,线刷模式.</p>
+        <p>5.热重启,在保持设备硬件通电的情况下,关闭并重新加载系统.</p>
+        <p>6.重启用户界面,重启com.android.systemui,用于刷新桌面UI,重新加载桌面小部件或刷新图标显示.</p>
+        <p>7.安全模式：重启系统停用所有第三方应用,用于排查有问题的应用并恢复系统.</p>
+        <p>(备注：<strong>强制模式</strong>下的<strong>安全模式</strong>在某些环境下可能会失效)
+        </p>
+        <p>8.锁屏：通过模拟按下电源键熄灭屏幕.</p>
+        <p>注意：设备管理器和辅助服务是为免root模式准备的.已经root的用户,完全不需要打开这个应用的设备管理器和辅助服务.</p>
+        <h3 id="-">配置文件帮助：</h3>
+        <p>本应用已经为用户做好了万全的选项操作设计,因此<strong>不推荐</strong>使用任何自定义的配置选项.不过如果需要,也可以通过在特定的目录创建文件解决.
+        </p>
+        <p>在手机
+            <strong>
+                内置存储(/storage/emulated/0/)中的/Android/data/com.ryuunoakaihitomi.rebootmenu/files/
+            </strong>
+            中加入相应文件名的
+            <strong>空文件或文件夹</strong>
+            .加入wt启用白色主题,加入c可以返回键退出,加入nntc取消显示确认对话直接执行命令,加入dncr启动时不检查root权限,加入urm在启动时不检查root权限的基础上手动开启免root模式.
+        </p>
+        <h2 id="-root-">免root模式帮助</h2>
+        <ul>
+            <li>包括锁屏和调用系统电源菜单.</li>
+            <li>从<strong>Android 7.0</strong>开始支持重启,(需要执行<strong>device owner</strong>)
+            </li>
+        </ul>
+        <p>(免root模式下) 功能解释：</p>
+        <p>1.锁屏：锁定屏幕(注意：这种模式下的锁屏有可能失去某些<strong>快捷解锁</strong>的功能,例如：<strong>需要重新输入密码</strong>)
+        </p>
+        <p>2.打开系统电源菜单：调用系统电源菜单,效果与长按电源键相同</p>
+        <p>3.重启：类比root默认模式重启</p>
+        <p>注意：没有获取到root权限的启动选项功能将会受到限制,你需要手动打开<strong>设备管理器</strong>来实现锁屏,并且只有打开<strong>
+            辅助(无障碍)服务</strong>时才能调用系统的电源菜单.
+            emui或者其他后台管理异常严格的系统环境用户请将本应用的后台卡片锁定以防止辅助服务被杀,并且需要注意<strong>不要</strong>通过本应用保留的<strong>
+                后台卡片</strong>来启动本应用.
+            只有Android5.0或以上才能使用调用系统电源菜单功能.
+        </p>
+        <p>快捷方式：本应用在Android7.0和7.1及以上系统中分别增加了
+            <strong>状态栏下拉图块(Tile)</strong>
+            和对支持的启动器增设了<strong>长按应用图标即可弹出的快捷方式菜单(App Shortcut)</strong>,该菜单
+            <strong>
+                至少正常运行过本应用一次
+            </strong>
+            才可用.如进入过root模式,根据功能是否可用添加相应图块.如进入过免root模式,则选项和对话框模式相同,只是不是二次确认模式.而图块的功能和使用方法同启动器应用图标相同
+            (为防止误操作,在锁屏模式下禁止使用图块).
+        </p>
+        <p>device owner(设备所有者权限申请)：使用<strong>ADB调试</strong>,执行命令
+        </p>
+        <p>
+            <strong>adb shell dpm set-device-owner com.ryuunoakaihitomi.rebootmenu/.AdminReceiver
+            </strong>
+        </p>
+        <p>显示以Success打头的信息即表示成功,可以使用免root重启功能.</p>
+        <p>注意：注册为设备所用者后,不能够卸载或停用本应用,也不能够取消本应用的设备管理器(无法对免root模式的锁屏进行二次确认).如果想反注册之,请将上述命令的<strong>
+            set-device-owner</strong>改为<strong>remove-active-admin</strong>.在ADB下执行.
+        </p>
+        <p>
+            <del>(致高级用户：在多用户模式下要加UID,详情请自行查找dpm命令用法)</del>
+        </p>
+        <h3 id="-root-">特殊免root模式：</h3>
+        <p>这种模式仅在<strong>部分环境</strong>中有效,原理是执行普通权限而非root权限的shell.
+            需要设置dncr不检查root权限再选择强制模式启用.支持的功能随环境差异可能有所不同
+            <del>(有待研究)</del>.在长按图标菜单中只有reboot系(需要调用reboot命令的)功能可在此模式下使用.
+        </p>
+        <h1 id="-">(≧∇≦)/</h1>
+        <p>开发者：</p>
+        <p>@ryuunoakaihitomi github.com</p>
+    </body>
+</html>

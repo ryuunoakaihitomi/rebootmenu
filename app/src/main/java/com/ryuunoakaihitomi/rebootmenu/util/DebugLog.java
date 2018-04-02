@@ -7,7 +7,7 @@ import android.util.Log;
  * Created by ZQY on 2018/2/11.
  *
  * @author ZQY
- * @version 1.1
+ * @version 1.2
  * @see android.util.Log
  */
 
@@ -15,7 +15,7 @@ import android.util.Log;
 public class DebugLog {
 
     //标签
-    private final String TAG = "rebootmenu";
+    public static final String TAG = "rebootmenu";
 
     //总输出开关
     private final boolean isLog = true;

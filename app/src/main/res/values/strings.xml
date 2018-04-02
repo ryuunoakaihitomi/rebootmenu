@@ -47,5 +47,6 @@
     <string name="tile_label">电源菜单</string>
     <string name="fastboot_short">Fastboot</string>
     <string name="nougat_notice">你的Android版本在7.0以下,不支持免root模式直接重启</string>
-    <string name="dpm_reboot_error">出现错误,你的设备可能在呼叫状态或者是未设置device owner</string>
+    <string name="dpm_reboot_error">出现错误,你的设备可能在呼叫状态或者发生了其他未知异常</string>
+    <string name="device_owner_disabled">未申请设备所有者,重启功能被禁用</string>
 </resources>

@@ -46,8 +46,6 @@ public class Shortcut extends Activity {
     }
 
     private void lockscreen() {
-        devicePolicyManager = (DevicePolicyManager) getSystemService(DEVICE_POLICY_SERVICE);
-        componentName = new ComponentName(this, AdminReceiver.class);
         if (!devicePolicyManager.isAdminActive(componentName)) {
             Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
             intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, componentName);
@@ -65,6 +63,9 @@ public class Shortcut extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        componentName = new ComponentName(this, AdminReceiver.class);
+        devicePolicyManager = (DevicePolicyManager) getSystemService(DEVICE_POLICY_SERVICE);
 
         //shortcut功能选项
         final int REBOOT = 2;
@@ -135,12 +136,15 @@ public class Shortcut extends Activity {
                 break;
             //免root模式下的快捷方式
             case UNROOT:
-                ShortcutInfo ur_reboot = new ShortcutInfo.Builder(this, "ur_r")
-                        .setShortLabel(getString(R.string.reboot))
-                        .setIcon(Icon.createWithResource(this, android.R.drawable.ic_menu_rotate))
-                        .setIntent(new Intent(action).putExtra(extraTag, UR_REBOOT))
-                        .setRank(2)
-                        .build();
+                boolean isDevOwner = devicePolicyManager.isDeviceOwnerApp(getPackageName());
+                ShortcutInfo ur_reboot = null;
+                if (isDevOwner)
+                    ur_reboot = new ShortcutInfo.Builder(this, "ur_r")
+                            .setShortLabel(getString(R.string.reboot))
+                            .setIcon(Icon.createWithResource(this, android.R.drawable.ic_menu_rotate))
+                            .setIntent(new Intent(action).putExtra(extraTag, UR_REBOOT))
+                            .setRank(2)
+                            .build();
                 ShortcutInfo ur_lockscreen = new ShortcutInfo.Builder(this, "ur_l")
                         .setShortLabel(getString(R.string.lockscreen))
                         .setIcon(Icon.createWithResource(this, android.R.drawable.ic_menu_slideshow))
@@ -155,7 +159,10 @@ public class Shortcut extends Activity {
                         .setRank(0)
                         .build();
                 assert shortcutManager != null;
-                shortcutManager.setDynamicShortcuts(Arrays.asList(ur_lockscreen, ur_powerdialog, ur_reboot));
+                if (isDevOwner)
+                    shortcutManager.setDynamicShortcuts(Arrays.asList(ur_lockscreen, ur_powerdialog, ur_reboot));
+                else
+                    shortcutManager.setDynamicShortcuts(Arrays.asList(ur_lockscreen, ur_powerdialog));
                 finish();
                 break;
             //快捷方式使用强制执行
@@ -187,9 +194,6 @@ public class Shortcut extends Activity {
                 UnRootMode.accessbilityon(Shortcut.this);
                 break;
             case UR_REBOOT:
-                //Note:重复代码
-                devicePolicyManager = (DevicePolicyManager) getSystemService(DEVICE_POLICY_SERVICE);
-                componentName = new ComponentName(this, AdminReceiver.class);
                 UnRootMode.reboot(devicePolicyManager, componentName, this);
             default:
                 finish();

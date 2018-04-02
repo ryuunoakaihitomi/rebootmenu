@@ -17,7 +17,9 @@ import android.os.Handler;
 import android.os.Process;
 import android.provider.Settings;
 import android.text.TextUtils;
+import android.util.Log;
 
+import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 import com.ryuunoakaihitomi.rebootmenu.util.TextToast;
 import com.ryuunoakaihitomi.rebootmenu.util.UIUtils;
 
@@ -59,6 +61,7 @@ public class UnRootMode extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        devicePolicyManager = (DevicePolicyManager) getSystemService(DEVICE_POLICY_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             UIUtils.transparentStatusBar(this);
         mainDialog = UIUtils.LoadDialog(ConfigManager.get(ConfigManager.WHITE_THEME), this);
@@ -76,14 +79,21 @@ public class UnRootMode extends Activity {
                         accessbilityon(UnRootMode.this);
                         break;
                     case 2:
-                        initDPMCN();
+                        initCN();
                         reboot(devicePolicyManager, componentName, UnRootMode.this);
                 }
             }
         };
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-            uiTextList = new String[]{getString(R.string.lockscreen), getString(R.string.system_power_dialog), getString(R.string.reboot)};
-            //Android7.0以下不支持设备管理器重启
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            //检查Device Owner
+            if (devicePolicyManager.isDeviceOwnerApp(getPackageName()))
+                uiTextList = new String[]{getString(R.string.lockscreen), getString(R.string.system_power_dialog), getString(R.string.reboot)};
+            else {
+                uiTextList = new String[]{getString(R.string.lockscreen), getString(R.string.system_power_dialog)};
+                new TextToast(getApplicationContext(), true, getString(R.string.device_owner_disabled));
+            }
+        }
+        //Android7.0以下不支持设备管理器重启
         else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             uiTextList = new String[]{getString(R.string.lockscreen), getString(R.string.system_power_dialog)};
             new TextToast(getApplicationContext(), getString(R.string.nougat_notice));
@@ -154,7 +164,7 @@ public class UnRootMode extends Activity {
 
     //用辅助功能锁屏
     private void lockscreen() {
-        initDPMCN();
+        initCN();
         //设备管理器是否启用
         boolean active = devicePolicyManager.isAdminActive(componentName);
         if (!active) {
@@ -220,9 +230,8 @@ public class UnRootMode extends Activity {
         return false;
     }
 
-    //初始化设备政策管理者和组件名称
-    void initDPMCN() {
-        devicePolicyManager = (DevicePolicyManager) getSystemService(DEVICE_POLICY_SERVICE);
+    //初始化组件名称
+    void initCN() {
         componentName = new ComponentName(this, AdminReceiver.class);
     }
 
@@ -231,8 +240,9 @@ public class UnRootMode extends Activity {
     static void reboot(DevicePolicyManager devicePolicyManager, ComponentName componentName, Activity activity) {
         try {
             devicePolicyManager.reboot(componentName);
-        } catch (Throwable ignored) {
+        } catch (Throwable t) {
             new TextToast(activity.getApplicationContext(), true, activity.getString(R.string.dpm_reboot_error));
+            Log.e(DebugLog.TAG, "devicePolicyManager.reboot()", t);
         }
         activity.finish();
     }
