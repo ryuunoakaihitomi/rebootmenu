@@ -57,16 +57,17 @@
     才可用.如进入过root模式,根据功能是否可用添加相应图块.如进入过免root模式,则选项和对话框模式相同,只是不是二次确认模式.而图块的功能和使用方法同启动器应用图标相同
     (为防止误操作,在锁屏模式下禁止使用图块).
 </p>
-<p>device owner(设备拥有者权限申请)：使用<strong>ADB调试</strong>,执行命令
+<p>device owner(设备所有者权限申请)：使用<strong>ADB调试</strong>,执行命令
 </p>
 <p>
     <strong>adb shell dpm set-device-owner com.ryuunoakaihitomi.rebootmenu/.AdminReceiver</strong>
 </p>
-<p>显示以Success打头的信息即表示成功,可以使用免root重启功能.
-    (注意可能不能在多用户环境申请成功,
-    <del>测试时异常日志显示java.lang.IllegalStateException: Not allowed to set the device owner because there
-        are already several users on the device)
-    </del>
+<p>显示以Success打头的信息即表示成功,可以使用免root重启功能.</p>
+<p>注意：注册为系统所用者后,不能够卸载或停用本应用,也不能够取消本应用的设备管理器(无法对免root模式的锁屏进行二次确认).如果想反注册之,请将上述命令的<strong>
+    set-device-owner</strong>改为<strong>remove-active-admin</strong>.在ADB下执行.
+</p>
+<p>
+    <del>(致高级用户：在多用户模式下要加UID,详情请自行查找dpm命令用法)</del>
 </p>
 <h3 id="-root-">特殊免root模式：</h3>
 <p>这种模式仅在<strong>部分环境</strong>中有效,原理是执行普通权限而非root权限的shell.

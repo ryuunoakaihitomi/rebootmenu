@@ -65,7 +65,6 @@ public class UnRootMode extends Activity {
         mainDialog.setTitle(getString(R.string.unroot_title));
         String[] uiTextList;
         DialogInterface.OnClickListener mainListener = new DialogInterface.OnClickListener() {
-            @TargetApi(Build.VERSION_CODES.N)
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 switch (i) {
@@ -78,11 +77,7 @@ public class UnRootMode extends Activity {
                         break;
                     case 2:
                         initDPMCN();
-                        try {
-                            devicePolicyManager.reboot(componentName);
-                        } catch (Throwable ignored) {
-                            new TextToast(getApplicationContext(), true, getString(R.string.dpm_reboot_error));
-                        }
+                        reboot(devicePolicyManager, componentName, UnRootMode.this);
                 }
             }
         };
@@ -229,5 +224,16 @@ public class UnRootMode extends Activity {
     void initDPMCN() {
         devicePolicyManager = (DevicePolicyManager) getSystemService(DEVICE_POLICY_SERVICE);
         componentName = new ComponentName(this, AdminReceiver.class);
+    }
+
+    //用设备政策管理器实现重启
+    @TargetApi(Build.VERSION_CODES.N)
+    static void reboot(DevicePolicyManager devicePolicyManager, ComponentName componentName, Activity activity) {
+        try {
+            devicePolicyManager.reboot(componentName);
+        } catch (Throwable ignored) {
+            new TextToast(activity.getApplicationContext(), true, activity.getString(R.string.dpm_reboot_error));
+        }
+        activity.finish();
     }
 }

@@ -72,6 +72,7 @@ public class Shortcut extends Activity {
         final int RECOVERY = 8;
         final int FASTBOOT = 9;
         final int REBOOT_UI = 4;
+        final int UR_REBOOT = 10;
         final int LOCKSCREEN = 5;
         final int UR_LOCKSCREEN = 6;
         final int UR_POWERDIALOG = 7;
@@ -134,6 +135,12 @@ public class Shortcut extends Activity {
                 break;
             //免root模式下的快捷方式
             case UNROOT:
+                ShortcutInfo ur_reboot = new ShortcutInfo.Builder(this, "ur_r")
+                        .setShortLabel(getString(R.string.reboot))
+                        .setIcon(Icon.createWithResource(this, android.R.drawable.ic_menu_rotate))
+                        .setIntent(new Intent(action).putExtra(extraTag, UR_REBOOT))
+                        .setRank(2)
+                        .build();
                 ShortcutInfo ur_lockscreen = new ShortcutInfo.Builder(this, "ur_l")
                         .setShortLabel(getString(R.string.lockscreen))
                         .setIcon(Icon.createWithResource(this, android.R.drawable.ic_menu_slideshow))
@@ -148,7 +155,7 @@ public class Shortcut extends Activity {
                         .setRank(0)
                         .build();
                 assert shortcutManager != null;
-                shortcutManager.setDynamicShortcuts(Arrays.asList(ur_lockscreen, ur_powerdialog));
+                shortcutManager.setDynamicShortcuts(Arrays.asList(ur_lockscreen, ur_powerdialog, ur_reboot));
                 finish();
                 break;
             //快捷方式使用强制执行
@@ -179,6 +186,11 @@ public class Shortcut extends Activity {
             case UR_POWERDIALOG:
                 UnRootMode.accessbilityon(Shortcut.this);
                 break;
+            case UR_REBOOT:
+                //Note:重复代码
+                devicePolicyManager = (DevicePolicyManager) getSystemService(DEVICE_POLICY_SERVICE);
+                componentName = new ComponentName(this, AdminReceiver.class);
+                UnRootMode.reboot(devicePolicyManager, componentName, this);
             default:
                 finish();
         }
