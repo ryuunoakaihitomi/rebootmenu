@@ -84,10 +84,18 @@ public class UnRootMode extends Activity {
                         reboot(devicePolicyManager, componentName, UnRootMode.this);
                         break;
                     case 3:
-                        //警告：在26中弃用，之后可能只能使用wipeData解除。在今后可能要移除重启功能。
-                        devicePolicyManager.clearDeviceOwnerApp(getPackageName());
-                        new TextToast(getApplicationContext(), getString(R.string.clear_owner_notice));
-                        finish();
+                        mainDialog.setTitle(getString(R.string.confirm_operation));
+                        mainDialog.setItems(null, null);
+                        mainDialog.setNeutralButton(R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //警告：在26中弃用，之后可能只能使用wipeData解除。在今后可能要移除重启功能。
+                                devicePolicyManager.clearDeviceOwnerApp(getPackageName());
+                                new TextToast(getApplicationContext(), getString(R.string.clear_owner_notice));
+                                finish();
+                            }
+                        });
+                        UIUtils.alphaShow(mainDialog.create(), UIUtils.TransparentLevel.CONFIRM);
                 }
             }
         };
@@ -144,7 +152,7 @@ public class UnRootMode extends Activity {
                 finish();
             }
         });
-        UIUtils.alphaShow(mainDialog.create(), 0.75f);
+        UIUtils.alphaShow(mainDialog.create(), UIUtils.TransparentLevel.NORMAL);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Intent.ACTION_SCREEN_ON);
         registerReceiver(broadcastReceiver, intentFilter);

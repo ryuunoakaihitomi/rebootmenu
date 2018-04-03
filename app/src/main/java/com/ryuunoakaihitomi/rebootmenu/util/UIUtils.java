@@ -58,6 +58,13 @@ public class UIUtils {
         return new AlertDialog.Builder(activityThis, themeCode);
     }
 
+    //半透明级别(alphaShow参数)
+    public class TransparentLevel {
+        public static final float NORMAL = 0.75f;
+        public static final float CONFIRM = 0.9f;
+        static final float HELP = 0.8f;
+    }
+
     /**
      * 将窗体透明展示
      * 不建议在Low Ram设备启动此功能
@@ -97,7 +104,7 @@ public class UIUtils {
 
             @Override
             public void onCancel(DialogInterface p1) {
-                alphaShow(returnTo.create(), 0.75f);
+                alphaShow(returnTo.create(), TransparentLevel.NORMAL);
             }
         });
         h.setNeutralButton(activityThis.getString(R.string.offical_download_link), new DialogInterface.OnClickListener() {
@@ -123,12 +130,12 @@ public class UIUtils {
 
                 @Override
                 public void onClick(DialogInterface p1, int p2) {
-                    alphaShow(returnTo.create(), 0.75f);
+                    alphaShow(returnTo.create(), TransparentLevel.NORMAL);
                 }
             });
             h.setCancelable(false);
         }
-        alphaShow(h.create(), 0.8f);
+        alphaShow(h.create(), TransparentLevel.HELP);
     }
 
     /**
@@ -158,9 +165,8 @@ public class UIUtils {
             PackageManager pm = context.getPackageManager();
             PackageInfo pi = pm.getPackageInfo(context.getPackageName(), 0);
             versionName = pi.versionName;
-            if (versionName == null || versionName.length() <= 0) {
+            if (versionName == null || versionName.length() <= 0)
                 return "";
-            }
         } catch (Exception ignored) {
         }
         return versionName;
@@ -176,14 +182,12 @@ public class UIUtils {
     private static String inputStream2String(InputStream in, @SuppressWarnings("SameParameterValue") String encode) {
         String str = "";
         try {
-            if (encode == null || encode.equals("")) {
+            if (encode == null || encode.equals(""))
                 encode = "utf-8";
-            }
             BufferedReader reader = new BufferedReader(new InputStreamReader(in, encode));
             StringBuilder sb = new StringBuilder();
-            while ((str = reader.readLine()) != null) {
+            while ((str = reader.readLine()) != null)
                 sb.append(str).append("\n");
-            }
             return sb.toString();
         } catch (Exception ignored) {
         }

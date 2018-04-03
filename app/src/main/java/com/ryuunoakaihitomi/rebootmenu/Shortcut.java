@@ -11,10 +11,12 @@ import android.graphics.drawable.Icon;
 import android.os.Build;
 import android.os.Bundle;
 
+import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 import com.ryuunoakaihitomi.rebootmenu.util.ShellUtils;
 import com.ryuunoakaihitomi.rebootmenu.util.TextToast;
 
 import java.util.Arrays;
+import java.util.Random;
 
 /**
  * 在Android API level 25中对Shortcut的处理
@@ -194,7 +196,15 @@ public class Shortcut extends Activity {
                 UnRootMode.accessbilityon(Shortcut.this);
                 break;
             case UR_REBOOT:
-                UnRootMode.reboot(devicePolicyManager, componentName, this);
+                if (devicePolicyManager.isDeviceOwnerApp(getPackageName()))
+                    UnRootMode.reboot(devicePolicyManager, componentName, this);
+                else {
+                    int random = new Random().nextInt(99);
+                    //保留日志
+                    new DebugLog("DEVICE_OWNER_DISABLED from SHORTCUT random=" + random, DebugLog.LogLevel.V);
+                    new TextToast(getApplicationContext(), random > 50, getString(R.string.device_owner_disabled));
+                    finish();
+                }
             default:
                 finish();
         }

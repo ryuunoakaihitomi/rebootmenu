@@ -11,7 +11,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 
-import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 import com.ryuunoakaihitomi.rebootmenu.util.ShellUtils;
 import com.ryuunoakaihitomi.rebootmenu.util.TextToast;
 import com.ryuunoakaihitomi.rebootmenu.util.UIUtils;
@@ -29,8 +28,6 @@ public class RootMode extends Activity {
     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            //保留日志
-            new DebugLog("ACTION_SCREEN_ON", DebugLog.LogLevel.I);
             isScreenOn = true;
         }
     };
@@ -137,7 +134,7 @@ public class RootMode extends Activity {
                     mainDialog.setNeutralButton(null, null);
                     mainDialog.setPositiveButton(null, null);
                     mainDialog.setNegativeButton(null, null);
-                    UIUtils.alphaShow(mainDialog.create(), 0.9f);
+                    UIUtils.alphaShow(mainDialog.create(), UIUtils.TransparentLevel.CONFIRM);
                 } else
                     //直接执行（无需确认）
                     exeKernel(shellList, shellListForce, i);
@@ -178,7 +175,7 @@ public class RootMode extends Activity {
                         isForceMode = false;
                         new TextToast(getApplicationContext(), getString(R.string.normal_mode));
                     }
-                    UIUtils.alphaShow(mainDialog.create(), 0.75f);
+                    UIUtils.alphaShow(mainDialog.create(), UIUtils.TransparentLevel.NORMAL);
                 }
             });
         } else {
@@ -190,7 +187,7 @@ public class RootMode extends Activity {
         //是否取消（与是否需要退出键相对）
         mainDialog.setCancelable(ConfigManager.get(ConfigManager.CANCELABLE));
         mainDialog.setOnCancelListener(exitListener);
-        UIUtils.alphaShow(mainDialog.create(), 0.75f);
+        UIUtils.alphaShow(mainDialog.create(), UIUtils.TransparentLevel.NORMAL);
         //亮屏监听，防止在应用开启熄屏又亮屏时显示警告toast
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Intent.ACTION_SCREEN_ON);
