@@ -16,6 +16,7 @@ import com.ryuunoakaihitomi.rebootmenu.util.ShellUtils;
 import com.ryuunoakaihitomi.rebootmenu.util.TextToast;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Random;
 
 /**
@@ -25,6 +26,7 @@ import java.util.Random;
 
 public class Shortcut extends Activity {
 
+    final int requestCode = 1729;
     static final int ROOT = 0;
     static final int UNROOT = 1;
     static final String extraTag = "shortcut";
@@ -38,7 +40,7 @@ public class Shortcut extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (0 == requestCode) {
+        if (this.requestCode == requestCode) {
             if (resultCode == Activity.RESULT_OK)
                 devicePolicyManager.lockNow();
             else
@@ -52,7 +54,7 @@ public class Shortcut extends Activity {
             Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
             intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, componentName);
             intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, getString(R.string.service_explanation));
-            startActivityForResult(intent, 0);
+            startActivityForResult(intent, requestCode);
         } else {
             devicePolicyManager.lockNow();
             finish();
@@ -82,6 +84,7 @@ public class Shortcut extends Activity {
 
         int param = getIntent().getIntExtra(extraTag, -1);
         ShortcutManager shortcutManager = getSystemService(ShortcutManager.class);
+        assert shortcutManager != null;
         switch (param) {
             //Root模式下的快捷方式
             case ROOT:
@@ -128,7 +131,6 @@ public class Shortcut extends Activity {
                         .setIntent(new Intent(action).putExtra(extraTag, LOCKSCREEN))
                         .setRank(0)
                         .build();
-                assert shortcutManager != null;
                 //无论如何，没有root不能用shell锁屏和重启UI，所以在不检查root模式下的无root模式改为增加fast boot。
                 if (ShellUtils.isRoot())
                     shortcutManager.setDynamicShortcuts(Arrays.asList(recovery, reboot, shutdown, rebootui, lockscreen));
@@ -142,13 +144,13 @@ public class Shortcut extends Activity {
                 ShortcutInfo ur_reboot = null;
                 if (isDevOwner)
                     ur_reboot = new ShortcutInfo.Builder(this, "ur_r")
-                            .setShortLabel(getString(R.string.reboot))
+                            .setShortLabel(getString(R.string.reboot_unroot))
                             .setIcon(Icon.createWithResource(this, android.R.drawable.ic_menu_rotate))
                             .setIntent(new Intent(action).putExtra(extraTag, UR_REBOOT))
                             .setRank(2)
                             .build();
                 ShortcutInfo ur_lockscreen = new ShortcutInfo.Builder(this, "ur_l")
-                        .setShortLabel(getString(R.string.lockscreen))
+                        .setShortLabel(getString(R.string.lockscreen_unroot))
                         .setIcon(Icon.createWithResource(this, android.R.drawable.ic_menu_slideshow))
                         .setIntent(new Intent(action).putExtra(extraTag, UR_LOCKSCREEN))
                         .setRank(1)
@@ -160,7 +162,6 @@ public class Shortcut extends Activity {
                         .setIntent(new Intent(action).putExtra(extraTag, UR_POWERDIALOG))
                         .setRank(0)
                         .build();
-                assert shortcutManager != null;
                 if (isDevOwner)
                     shortcutManager.setDynamicShortcuts(Arrays.asList(ur_lockscreen, ur_powerdialog, ur_reboot));
                 else
@@ -199,9 +200,10 @@ public class Shortcut extends Activity {
                 if (devicePolicyManager.isDeviceOwnerApp(getPackageName()))
                     UnRootMode.reboot(devicePolicyManager, componentName, this);
                 else {
+                    shortcutManager.removeDynamicShortcuts(Collections.singletonList("ur_r"));
                     int random = new Random().nextInt(99);
                     //保留日志
-                    new DebugLog("DEVICE_OWNER_DISABLED from SHORTCUT random=" + random, DebugLog.LogLevel.V);
+                    new DebugLog("DEVICE_OWNER_DISABLED from SHORTCUT random " + random, DebugLog.LogLevel.V);
                     new TextToast(getApplicationContext(), random > 50, getString(R.string.device_owner_disabled));
                     finish();
                 }

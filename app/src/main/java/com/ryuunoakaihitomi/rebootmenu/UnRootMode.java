@@ -62,6 +62,7 @@ public class UnRootMode extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         devicePolicyManager = (DevicePolicyManager) getSystemService(DEVICE_POLICY_SERVICE);
+        componentName = new ComponentName(this, AdminReceiver.class);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             UIUtils.transparentStatusBar(this);
         mainDialog = UIUtils.LoadDialog(ConfigManager.get(ConfigManager.WHITE_THEME), this);
@@ -80,8 +81,23 @@ public class UnRootMode extends Activity {
                         accessbilityon(UnRootMode.this);
                         break;
                     case 2:
-                        initCN();
-                        reboot(devicePolicyManager, componentName, UnRootMode.this);
+                        if (!ConfigManager.get(ConfigManager.NO_NEED_TO_COMFIRM)) {
+                            mainDialog.setTitle(getString(R.string.confirm_operation));
+                            mainDialog.setItems(new String[]{getString(R.string.yes), getString(R.string.no)}, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int iConfirm) {
+                                    if (iConfirm == 1)
+                                        finish();
+                                    else
+                                        reboot(devicePolicyManager, componentName, UnRootMode.this);
+                                }
+                            });
+                            mainDialog.setNeutralButton(null, null);
+                            mainDialog.setPositiveButton(null, null);
+                            mainDialog.setNegativeButton(null, null);
+                            UIUtils.alphaShow(mainDialog.create(), UIUtils.TransparentLevel.CONFIRM);
+                        } else
+                            reboot(devicePolicyManager, componentName, UnRootMode.this);
                         break;
                     case 3:
                         mainDialog.setTitle(getString(R.string.confirm_operation));
@@ -179,7 +195,6 @@ public class UnRootMode extends Activity {
 
     //用辅助功能锁屏
     private void lockscreen() {
-        initCN();
         //设备管理器是否启用
         boolean active = devicePolicyManager.isAdminActive(componentName);
         if (!active) {
@@ -243,11 +258,6 @@ public class UnRootMode extends Activity {
             }
         }
         return false;
-    }
-
-    //初始化组件名称
-    void initCN() {
-        componentName = new ComponentName(this, AdminReceiver.class);
     }
 
     //用设备政策管理器实现重启

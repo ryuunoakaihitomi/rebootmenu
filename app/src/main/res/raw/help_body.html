@@ -70,14 +70,12 @@
             </strong>
         </p>
         <p>显示以Success打头的信息即表示成功,可以使用免root重启功能.</p>
-        <p>注意：注册为设备所用者后,不能够<strong>卸载</strong>或<strong>停用</strong>本应用,也不能够取消本应用的<strong>
+        <p>注意：注册为设备所有者后,不能够<strong>卸载</strong>或<strong>停用</strong>本应用,也不能够取消本应用的<strong>
             设备管理器</strong>(无法对免root模式的锁屏进行二次确认).如果想反注册之,请点击
             <strong>解除Device Owner身份</strong>
-            选项.届时将禁用重启,并且<strong>仍需ADB才能开启</strong>.如果在授权时出现Not allowed to set the device owner
-            because there are already several users on the device这个错误或长时间停滞,请删除
-            <strong>设置</strong>
-            中的所有<strong>账号</strong>和<strong>工作资料</strong>.
-            <del>(猜测：可能要使设备摆脱多用户账户环境或者需要指定User ID)</del>
+            选项.届时将禁用重启,并且<strong>仍需ADB才能开启</strong>.如果在授权时出现错误或长时间停滞,请设法在<strong>设置</strong>中删除所有
+            <strong>账号/用户/访客模式/工作资料/其他应用的设备所有者权限</strong>(在其应用中解除),并确保<strong>
+                ADB具有所有权限/非重复申请</strong>.
         </p>
         <h3 id="-root-">特殊免root模式：</h3>
         <p>这种模式仅在<strong>部分环境</strong>中有效,原理是执行普通权限而非root权限的shell.

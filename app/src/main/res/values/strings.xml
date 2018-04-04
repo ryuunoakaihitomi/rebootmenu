@@ -41,7 +41,7 @@
     <string name="offical_download_link">官方下载链接</string>
     <string name="donate">捐赠…</string>
     <string name="help_notice">应用版本：%s\n帮助更新日期：%s</string>
-    <string name="help_update_date">20180403</string>
+    <string name="help_update_date">20180404</string>
     <string name="activity_onrestart_notice">注意：不要在最近任务卡片启动本应用,这有可能使应用出现问题</string>
     <string name="recovery_short">Recovery</string>
     <string name="tile_label">电源菜单</string>
@@ -51,4 +51,6 @@
     <string name="device_owner_disabled">未申请设备所有者,重启功能被禁用</string>
     <string name="clear_owner">解除Device Owner身份</string>
     <string name="clear_owner_notice">已解除Device Owner,再次进入重启将禁用</string>
+    <string name="lockscreen_unroot">锁屏免R</string>
+    <string name="reboot_unroot">重启免R</string>
 </resources>
