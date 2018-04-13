@@ -21,11 +21,11 @@ import com.ryuunoakaihitomi.rebootmenu.util.UIUtils;
  */
 
 public class RootMode extends Activity {
-    boolean isForceMode;
+    private boolean isForceMode;
 
     //亮屏监听用变量和接收器
-    boolean isScreenOn;
-    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+    private boolean isScreenOn;
+    private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             isScreenOn = true;
@@ -214,6 +214,11 @@ public class RootMode extends Activity {
                 ShellUtils.shCmdExec(shellListForce[0]);
                 ShellUtils.suCmdExec(shellListForce[0]);
             }
+            //重启UI：两套备选方案
+        else if (shellList[5].equals(command)) {
+            ShellUtils.suCmdExec("killall com.android.systemui");
+            ShellUtils.killShKillProcess("com.android.systemui");
+        }
         new TextToast(getApplicationContext(), true, getString(R.string.cmd_send_notice));
         finish();
     }

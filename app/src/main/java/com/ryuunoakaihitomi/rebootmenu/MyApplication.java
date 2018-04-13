@@ -9,6 +9,7 @@ import java.lang.reflect.Field;
  * Created by ZQY on 2018/2/17.
  */
 
+@SuppressWarnings("WeakerAccess")
 public class MyApplication extends Application {
     @Override
     public void onCreate() {

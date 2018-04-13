@@ -26,16 +26,16 @@ import java.util.Random;
 
 public class Shortcut extends Activity {
 
-    final int requestCode = 1729;
+    private final int requestCode = 1729;
     static final int ROOT = 0;
     static final int UNROOT = 1;
     static final String extraTag = "shortcut";
     static final String action = "com.ryuunoakaihitomi.rebootmenu.SHORTCUT_ACTION";
     //来自UnRootMode.java -- 开始
     //不使用二次确认直接执行。有意保留的bug:下次在UR活动中执行时要先执行一次才能执行二次确认。
-    DevicePolicyManager devicePolicyManager;
+    private DevicePolicyManager devicePolicyManager;
 
-    ComponentName componentName;
+    private ComponentName componentName;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -213,7 +213,7 @@ public class Shortcut extends Activity {
     }
 
     //只有rebooot系才有可能免root执行
-    void rebootExec(String arg) {
+    private void rebootExec(String arg) {
         String cmd = arg == null ? "reboot" : "reboot " + arg;
         ShellUtils.shCmdExec(cmd);
         ShellUtils.suCmdExec(cmd);

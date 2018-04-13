@@ -29,12 +29,13 @@ import com.ryuunoakaihitomi.rebootmenu.util.UIUtils;
  */
 
 public class UnRootMode extends Activity {
-    AlertDialog.Builder mainDialog;
-    DevicePolicyManager devicePolicyManager;
-    ComponentName componentName;
+    private final int requestCode = 1989;
+    private AlertDialog.Builder mainDialog;
+    private DevicePolicyManager devicePolicyManager;
+    private ComponentName componentName;
 
-    boolean isScreenOn;
-    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+    private boolean isScreenOn;
+    private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             isScreenOn = true;
@@ -45,7 +46,7 @@ public class UnRootMode extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (0 == requestCode) {
+        if (this.requestCode == requestCode) {
             //若同意
             if (resultCode == Activity.RESULT_OK) {
                 devicePolicyManager.lockNow();
@@ -202,7 +203,7 @@ public class UnRootMode extends Activity {
             Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
             intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, componentName);
             intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, getString(R.string.service_explanation));
-            startActivityForResult(intent, 0);
+            startActivityForResult(intent, requestCode);
         } else {
             devicePolicyManager.lockNow();
             //如果需要二次确认，禁用设备管理器。（这里的策略和root模式的锁屏无需确认不同）
@@ -237,7 +238,7 @@ public class UnRootMode extends Activity {
      * @param mContext 上下文
      * @return 返回值
      */
-    static boolean isAccessibilitySettingsOn(Context mContext) {
+    private static boolean isAccessibilitySettingsOn(Context mContext) {
         int accessibilityEnabled = 0;
         final String service = mContext.getPackageName() + "/" + SystemPowerDialog.class.getCanonicalName();
         try {

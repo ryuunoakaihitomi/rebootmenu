@@ -20,7 +20,7 @@ import com.ryuunoakaihitomi.rebootmenu.util.TextToast;
 public class SystemPowerDialog extends AccessibilityService {
 
     private boolean isBroadcastRegistered;
-    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @TargetApi(Build.VERSION_CODES.LOLLIPOP)
         @Override
         public void onReceive(Context context, Intent intent) {

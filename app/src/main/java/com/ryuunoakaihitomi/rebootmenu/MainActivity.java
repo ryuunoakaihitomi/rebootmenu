@@ -38,7 +38,7 @@ public class MainActivity extends Activity {
             activitySwitch(!ConfigManager.get(ConfigManager.UNROOT_MODE));
     }
 
-    void activitySwitch(boolean isRootMode) {
+    private void activitySwitch(boolean isRootMode) {
         //在加载相应模式的窗口时加载对应的shortcut
         if (isRootMode) {
             startActivity(new Intent(this, RootMode.class));
