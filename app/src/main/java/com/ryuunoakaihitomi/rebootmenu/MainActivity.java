@@ -2,9 +2,13 @@ package com.ryuunoakaihitomi.rebootmenu;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 
+import com.ryuunoakaihitomi.rebootmenu.util.ConfigManager;
+import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 import com.ryuunoakaihitomi.rebootmenu.util.ShellUtils;
 import com.ryuunoakaihitomi.rebootmenu.util.TextToast;
 
@@ -17,7 +21,14 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ConfigManager.initDir(this);
+        //可能利用这个搞一些事情，先记录一下
+        boolean isSystemApp = false;
+        try {
+            isSystemApp = (getPackageManager().getApplicationInfo(getPackageName(), 0).flags & ApplicationInfo.FLAG_SYSTEM) > 0;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        new DebugLog("isSystemApp:" + isSystemApp);
         //配置选项
         String configView = getString(R.string.loading);
         if (ConfigManager.get(ConfigManager.WHITE_THEME))

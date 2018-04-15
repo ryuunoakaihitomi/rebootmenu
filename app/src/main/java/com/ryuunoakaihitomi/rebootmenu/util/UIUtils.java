@@ -40,7 +40,7 @@ public class UIUtils {
      * @return 已处理Builder对象
      */
     @TargetApi(Build.VERSION_CODES.LOLLIPOP_MR1)
-    public static AlertDialog.Builder LoadDialog(boolean isWhite, Context activityThis) {
+    public static AlertDialog.Builder LoadDialog(boolean isWhite, Activity activityThis) {
         //在API级别23中，AlertDialog的主题定义被废弃。用在API级别22中新引入的Android默认主题格式代替。
         boolean isAndroidMPlus = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1;
         int themeCode;
@@ -94,7 +94,7 @@ public class UIUtils {
     }
 
     //显示帮助对话框
-    public static void helpDialog(final Context activityThis, final AlertDialog.Builder returnTo, boolean cancelable, boolean isWhite) {
+    private static void helpDialog(final Activity activityThis, final AlertDialog.Builder returnTo, boolean cancelable, boolean isWhite) {
         new TextToast(activityThis, String.format(activityThis.getString(R.string.help_notice), getAppVersionName(activityThis), activityThis.getString(R.string.help_update_date)));
         AlertDialog.Builder h = LoadDialog(isWhite, activityThis);
         h.setTitle(activityThis.getString(R.string.help));
@@ -150,6 +150,34 @@ public class UIUtils {
         activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         activity.getWindow().setStatusBarColor(Color.TRANSPARENT);
+    }
+
+    //通过配置文件选择退出方式和设置帮助按钮
+    public static void setExitStyleAndHelp(final Activity context, final AlertDialog.Builder builder) {
+        //是否需要退出键
+        if (!ConfigManager.get(ConfigManager.CANCELABLE))
+            builder.setPositiveButton(R.string.exit, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    context.finish();
+                }
+            });
+        //不按退出的退出监听
+        builder.setCancelable(ConfigManager.get(ConfigManager.CANCELABLE));
+        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface p1) {
+                new TextToast(context.getApplicationContext(), false, context.getString(R.string.exit_notice));
+                context.finish();
+            }
+        });
+        //帮助
+        builder.setNegativeButton(R.string.help, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                UIUtils.helpDialog(context, builder, ConfigManager.get(ConfigManager.CANCELABLE), ConfigManager.get(ConfigManager.WHITE_THEME));
+            }
+        });
     }
 
     /**

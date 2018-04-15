@@ -1,7 +1,6 @@
 package com.ryuunoakaihitomi.rebootmenu;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Intent;
@@ -14,6 +13,7 @@ import android.os.Bundle;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 import com.ryuunoakaihitomi.rebootmenu.util.ShellUtils;
 import com.ryuunoakaihitomi.rebootmenu.util.TextToast;
+import com.ryuunoakaihitomi.rebootmenu.util.URMUtils;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -24,42 +24,13 @@ import java.util.Random;
  * Created by ZQY on 2018/2/15.
  */
 
-public class Shortcut extends Activity {
+public class Shortcut extends MyActivity {
 
-    private final int requestCode = 1729;
     static final int ROOT = 0;
     static final int UNROOT = 1;
     static final String extraTag = "shortcut";
     static final String action = "com.ryuunoakaihitomi.rebootmenu.SHORTCUT_ACTION";
-    //来自UnRootMode.java -- 开始
-    //不使用二次确认直接执行。有意保留的bug:下次在UR活动中执行时要先执行一次才能执行二次确认。
-    private DevicePolicyManager devicePolicyManager;
 
-    private ComponentName componentName;
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (this.requestCode == requestCode) {
-            if (resultCode == Activity.RESULT_OK)
-                devicePolicyManager.lockNow();
-            else
-                new TextToast(this, getString(R.string.lockscreen_failed));
-            finish();
-        }
-    }
-
-    private void lockscreen() {
-        if (!devicePolicyManager.isAdminActive(componentName)) {
-            Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
-            intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, componentName);
-            intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, getString(R.string.service_explanation));
-            startActivityForResult(intent, requestCode);
-        } else {
-            devicePolicyManager.lockNow();
-            finish();
-        }
-    }
 
     //来自UnRootMode.java -- 结束
 
@@ -70,6 +41,9 @@ public class Shortcut extends Activity {
 
         componentName = new ComponentName(this, AdminReceiver.class);
         devicePolicyManager = (DevicePolicyManager) getSystemService(DEVICE_POLICY_SERVICE);
+        requestCode = 1729;
+        assert devicePolicyManager != null;
+        URLockScrInit(true, requestCode, devicePolicyManager, componentName);
 
         //shortcut功能选项
         final int REBOOT = 2;
@@ -182,7 +156,8 @@ public class Shortcut extends Activity {
                 rebootExec("-p");
                 break;
             case REBOOT_UI:
-                ShellUtils.suCmdExec("busybox pkill com.android.systemui");
+                if (!ShellUtils.suCmdExec("busybox pkill com.android.systemui"))
+                    RootMode.rebootSystemUIAlternativeMethod();
                 finish();
                 break;
             case LOCKSCREEN:
@@ -191,14 +166,14 @@ public class Shortcut extends Activity {
                 break;
             //免root模式
             case UR_LOCKSCREEN:
-                lockscreen();
+                URMUtils.lockscreen(this, componentName, requestCode, devicePolicyManager, false);
                 break;
             case UR_POWERDIALOG:
-                UnRootMode.accessbilityon(Shortcut.this);
+                URMUtils.accessbilityon(Shortcut.this);
                 break;
             case UR_REBOOT:
                 if (devicePolicyManager.isDeviceOwnerApp(getPackageName()))
-                    UnRootMode.reboot(devicePolicyManager, componentName, this);
+                    URMUtils.reboot(devicePolicyManager, componentName, this);
                 else {
                     shortcutManager.removeDynamicShortcuts(Collections.singletonList("ur_r"));
                     int random = new Random().nextInt(99);

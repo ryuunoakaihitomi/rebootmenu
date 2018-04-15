@@ -9,7 +9,6 @@ import android.content.IntentFilter;
 import android.os.Build;
 import android.view.accessibility.AccessibilityEvent;
 
-import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 import com.ryuunoakaihitomi.rebootmenu.util.TextToast;
 
 /**
@@ -39,7 +38,6 @@ public class SystemPowerDialog extends AccessibilityService {
             registerReceiver(broadcastReceiver, intentFilter);
             isBroadcastRegistered = true;
         } else {
-            new DebugLog("onServiceConnected() + (<- Android 5.0)");
             System.exit(-1);
         }
     }

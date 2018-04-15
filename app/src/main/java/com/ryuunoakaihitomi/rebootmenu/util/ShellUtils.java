@@ -52,7 +52,8 @@ public class ShellUtils {
      *
      * @param command 一条所要执行的命令
      */
-    public static void suCmdExec(String command) {
+    public static boolean suCmdExec(String command) {
+        boolean ret = false;
         try {
             Process p = Runtime.getRuntime().exec("su");
             DataOutputStream d = new DataOutputStream(p.getOutputStream());
@@ -60,8 +61,12 @@ public class ShellUtils {
             d.writeBytes("exit\n");
             d.flush();
             p.getErrorStream().close();
+            ret = true;
         } catch (IOException ignored) {
+        } finally {
+            new DebugLog("suCmdExec: cmd:" + command + " ret:" + ret);
         }
+        return ret;
     }
 
     /**

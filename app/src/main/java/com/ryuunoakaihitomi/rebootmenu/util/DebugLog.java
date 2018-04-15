@@ -18,7 +18,7 @@ public class DebugLog {
     public static final String TAG = "rebootmenu";
 
     //总输出开关
-    private final boolean isLog = true;
+    private final boolean isLog = ConfigManager.get(ConfigManager.DEBUG_LOG);
 
     /**
      * debug级日志输出
