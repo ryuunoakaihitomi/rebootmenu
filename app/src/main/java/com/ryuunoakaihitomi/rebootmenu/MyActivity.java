@@ -11,6 +11,7 @@ import android.content.IntentFilter;
 import android.os.Handler;
 
 import com.ryuunoakaihitomi.rebootmenu.util.ConfigManager;
+import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 import com.ryuunoakaihitomi.rebootmenu.util.TextToast;
 
 /**
@@ -33,6 +34,7 @@ public class MyActivity extends Activity {
     private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            new DebugLog("onReceive: Intent.ACTION_SCREEN_ON", DebugLog.LogLevel.V);
             isScreenOn = true;
         }
     };
@@ -40,6 +42,7 @@ public class MyActivity extends Activity {
     @Override
     protected void onStart() {
         super.onStart();
+        new DebugLog("MyActivity.onStart", DebugLog.LogLevel.V);
         if (!isShortcut && !isBroadcastRegistered) {
             //亮屏监听，防止在应用开启熄屏又亮屏时显示警告toast
             IntentFilter intentFilter = new IntentFilter();
@@ -52,15 +55,13 @@ public class MyActivity extends Activity {
     //目前已知的问题有启动失败和主题应用失败
     @Override
     protected void onRestart() {
+        new DebugLog("MyActivity.onRestart", DebugLog.LogLevel.V);
         if (!isShortcut)
             //由于onRestart比SCREEN_ON更早执行，因此在此设置延迟
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (!isScreenOn)
-                        new TextToast(getApplicationContext(), getString(R.string.activity_onrestart_notice));
-                    isScreenOn = false;
-                }
+            new Handler().postDelayed(() -> {
+                if (!isScreenOn)
+                    new TextToast(getApplicationContext(), getString(R.string.activity_onrestart_notice));
+                isScreenOn = false;
             }, 1000);
         super.onRestart();
     }
@@ -68,6 +69,7 @@ public class MyActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        new DebugLog("MyActivity.onDestroy", DebugLog.LogLevel.V);
         if (!isShortcut)
             unregisterReceiver(broadcastReceiver);
     }
@@ -76,6 +78,7 @@ public class MyActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        new DebugLog("MyActivity.onActivityResult", DebugLog.LogLevel.V);
         if (this.requestCode == requestCode) {
             //若同意
             if (resultCode == Activity.RESULT_OK) {
@@ -92,6 +95,7 @@ public class MyActivity extends Activity {
 
     //免root模式下锁屏重启的初始化
     void URLockScrInit(boolean isShortcut, int requestCode, DevicePolicyManager devicePolicyManager, ComponentName componentName) {
+        new DebugLog("URLockScrInit: isShortcut:" + isShortcut + " requestCode:" + requestCode + " ..", DebugLog.LogLevel.V);
         this.isShortcut = isShortcut;
         this.componentName = componentName;
         this.devicePolicyManager = devicePolicyManager;

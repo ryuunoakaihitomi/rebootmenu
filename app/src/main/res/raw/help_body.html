@@ -82,6 +82,18 @@
             需要设置dncr不检查root权限再选择强制模式启用.支持的功能随环境差异可能有所不同
             <del>(有待研究)</del>.在长按图标菜单中只有reboot系(需要调用reboot命令的)功能可在此模式下使用.
         </p>
+        <h1 id="-">实验性</h1>
+        <p>以下功能或特性可能随需求更改或删除，请不要过于依赖这些。</p>
+        <ul>
+            <li>在<strong>内置存储根目录</strong>中加
+                <strong>rebootmenuLog</strong>
+                文件名空文件，打印标签为rebootmenu的调试日志。可以在<strong>ADB SHell</strong>中用<strong>logcat -s
+                    rebootmenu</strong>命令查看。
+            </li>
+            <li>长按图块弹出音量调节面板。</li>
+            <li>安装为<strong>系统应用</strong>后，使用一个系统API接口而不是用命令来实现重启。
+            </li>
+        </ul>
         <h1 id="-">(≧∇≦)/</h1>
         <p>开发者：</p>
         <p>@ryuunoakaihitomi github.com</p>

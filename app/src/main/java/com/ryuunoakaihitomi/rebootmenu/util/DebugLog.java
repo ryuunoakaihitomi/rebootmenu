@@ -1,24 +1,41 @@
 package com.ryuunoakaihitomi.rebootmenu.util;
 
+import android.annotation.SuppressLint;
+import android.os.Environment;
 import android.util.Log;
+
+import java.io.File;
 
 /**
  * 日志输出调试工具
  * Created by ZQY on 2018/2/11.
+ * <p>
+ * "不再打印堆栈以提高性能"之类的话deprecated，因为现在
+ * 的话输出已经可以由用户控制。而且没有日志实在难以调试。
+ * <p>
+ * 规范：在必要时：
+ * 标注方法名，有时标注类名。
+ * 冒号标示参数和返回值，等号标示赋值。
+ * 仅有一个不标注名称
  *
  * @author ZQY
- * @version 1.2
+ * @version 1.3
  * @see android.util.Log
  */
 
-@SuppressWarnings("ConstantConditions")
+@SuppressLint("SdCardPath")
 public class DebugLog {
 
     //标签
-    public static final String TAG = "rebootmenu";
+    private static final String TAG = "rebootmenu";
 
     //总输出开关
-    private final boolean isLog = ConfigManager.get(ConfigManager.DEBUG_LOG);
+    private static final boolean isLog;
+
+    //用配置管理取不到值，所以在这里使用内置存储。而且卸载重装不用重新配置。
+    static {
+        isLog = new File(Environment.getExternalStorageDirectory().getPath() + "/rebootmenuLog").exists();
+    }
 
     /**
      * debug级日志输出
@@ -43,7 +60,7 @@ public class DebugLog {
                     Log.v(TAG, msg);
                     break;
                 case D:
-                    Log.d(TAG, msg);
+                    new DebugLog(msg);
                     break;
                 case I:
                     Log.i(TAG, msg);
@@ -60,6 +77,22 @@ public class DebugLog {
                 default:
                     Log.w(TAG, "(level?)" + msg);
             }
+    }
+
+    /**
+     * 打印堆栈
+     *
+     * @param t           待打印堆栈
+     * @param label       简述标签
+     * @param isImportant 是否是重要堆栈，若是，日志级别设为Error
+     *                    重要堆栈指不太可能发生或有待深入研究的异常
+     */
+    public DebugLog(Throwable t, String label, boolean isImportant) {
+        if (isLog)
+            if (isImportant)
+                Log.e(TAG, label, t);
+            else
+                Log.w(TAG, label, t);
     }
 
     //日志等级

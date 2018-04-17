@@ -30,6 +30,7 @@ public class Shortcut extends MyActivity {
     static final int UNROOT = 1;
     static final String extraTag = "shortcut";
     static final String action = "com.ryuunoakaihitomi.rebootmenu.SHORTCUT_ACTION";
+    boolean isSysApp;
 
 
     //来自UnRootMode.java -- 结束
@@ -38,7 +39,7 @@ public class Shortcut extends MyActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        new DebugLog("Shortcut.onCreate", DebugLog.LogLevel.V);
         componentName = new ComponentName(this, AdminReceiver.class);
         devicePolicyManager = (DevicePolicyManager) getSystemService(DEVICE_POLICY_SERVICE);
         requestCode = 1729;
@@ -56,7 +57,9 @@ public class Shortcut extends MyActivity {
         final int UR_LOCKSCREEN = 6;
         final int UR_POWERDIALOG = 7;
 
+        isSysApp = URMUtils.isSystemApp(this);
         int param = getIntent().getIntExtra(extraTag, -1);
+        new DebugLog("onCreate: param=" + param + " isSysApp=" + isSysApp, DebugLog.LogLevel.I);
         ShortcutManager shortcutManager = getSystemService(ShortcutManager.class);
         assert shortcutManager != null;
         switch (param) {
@@ -177,21 +180,26 @@ public class Shortcut extends MyActivity {
                 else {
                     shortcutManager.removeDynamicShortcuts(Collections.singletonList("ur_r"));
                     int random = new Random().nextInt(99);
-                    //保留日志
                     new DebugLog("DEVICE_OWNER_DISABLED from SHORTCUT random " + random, DebugLog.LogLevel.V);
                     new TextToast(getApplicationContext(), random > 50, getString(R.string.device_owner_disabled));
-                    finish();
                 }
+                finish();
             default:
                 finish();
         }
     }
 
     //只有rebooot系才有可能免root执行
+    @SuppressWarnings("StringEquality")
     private void rebootExec(String arg) {
-        String cmd = arg == null ? "reboot" : "reboot " + arg;
-        ShellUtils.shCmdExec(cmd);
-        ShellUtils.suCmdExec(cmd);
+        new DebugLog("rebootExec: arg:" + arg, DebugLog.LogLevel.V);
+        if (isSysApp && arg != "-p")
+            URMUtils.rebootedByPowerManager(this, arg);
+        else {
+            String cmd = arg == null ? "reboot" : "reboot " + arg;
+            ShellUtils.shCmdExec(cmd);
+            ShellUtils.suCmdExec(cmd);
+        }
         finish();
     }
 }

@@ -23,6 +23,7 @@ public class ShellUtils {
      * @return 如已获得root权限，返回为真，反之为假
      */
     public static synchronized boolean isRoot() {
+        new DebugLog("isRoot", DebugLog.LogLevel.V);
         Process process = null;
         DataOutputStream os = null;
         try {
@@ -33,6 +34,7 @@ public class ShellUtils {
             int exitValue = process.waitFor();
             return exitValue == 0;
         } catch (Exception e) {
+            new DebugLog(e, "isRoot", true);
             return false;
         } finally {
             try {
@@ -41,8 +43,8 @@ public class ShellUtils {
                 }
                 assert process != null;
                 process.destroy();
-            } catch (Exception ignored) {
-                //不再打印堆栈以提高性能
+            } catch (Exception e) {
+                new DebugLog(e, "isRoot", true);
             }
         }
     }
@@ -64,7 +66,7 @@ public class ShellUtils {
             ret = true;
         } catch (IOException ignored) {
         } finally {
-            new DebugLog("suCmdExec: cmd:" + command + " ret:" + ret);
+            new DebugLog("suCmdExec: cmd:" + command + " ret:" + ret, DebugLog.LogLevel.I);
         }
         return ret;
     }
@@ -75,9 +77,11 @@ public class ShellUtils {
      * @param command 一条所要执行的命令
      */
     public static void shCmdExec(String command) {
+        new DebugLog("shCmdExec: " + command, DebugLog.LogLevel.I);
         try {
             Runtime.getRuntime().exec(command).getErrorStream().close();
-        } catch (IOException ignored) {
+        } catch (IOException e) {
+            new DebugLog(e, "shCmdExec", false);
         }
     }
 
@@ -89,6 +93,7 @@ public class ShellUtils {
      * @param packageName 包名
      */
     public static void killShKillProcess(String packageName) {
+        new DebugLog("killShKillProcess: " + packageName);
         String processId = "";
         try {
             Process p = Runtime.getRuntime().exec("su");
@@ -117,7 +122,8 @@ public class ShellUtils {
             }
             //部分机型不支持su -c这样的写法
             suCmdExec("kill " + processId);
-        } catch (IOException ignored) {
+        } catch (IOException e) {
+            new DebugLog(e, "killShKillProcess", false);
         }
     }
 }

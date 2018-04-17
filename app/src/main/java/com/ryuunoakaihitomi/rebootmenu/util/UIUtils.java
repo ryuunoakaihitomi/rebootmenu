@@ -5,7 +5,6 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -55,6 +54,7 @@ public class UIUtils {
             else
                 themeCode = AlertDialog.THEME_DEVICE_DEFAULT_DARK;
         }
+        new DebugLog("LoadDialog: themeCode=" + themeCode, DebugLog.LogLevel.V);
         return new AlertDialog.Builder(activityThis, themeCode);
     }
 
@@ -83,8 +83,10 @@ public class UIUtils {
                 @SuppressLint("PrivateApi") Class<?> clazz = Class.forName("android.os.SystemProperties");
                 Method method = clazz.getMethod("get", String.class);
                 isLowRam = "true".equals(method.invoke(null, "ro.config.low_ram"));
-            } catch (Exception ignored) {
+            } catch (Exception e) {
+                new DebugLog(e, "alphaShow", true);
             }
+        new DebugLog("alphaShow: isLowRam=" + isLowRam, DebugLog.LogLevel.I);
         if (!isLowRam) {
             WindowManager.LayoutParams lp = window.getAttributes();
             lp.alpha = f;
@@ -95,44 +97,25 @@ public class UIUtils {
 
     //显示帮助对话框
     private static void helpDialog(final Activity activityThis, final AlertDialog.Builder returnTo, boolean cancelable, boolean isWhite) {
+        new DebugLog("helpDialog", DebugLog.LogLevel.V);
         new TextToast(activityThis, String.format(activityThis.getString(R.string.help_notice), getAppVersionName(activityThis), activityThis.getString(R.string.help_update_date)));
         AlertDialog.Builder h = LoadDialog(isWhite, activityThis);
         h.setTitle(activityThis.getString(R.string.help));
         String help = inputStream2String(activityThis.getResources().openRawResource(R.raw.help_body), null);
         h.setMessage(Html.fromHtml(help));
-        h.setOnCancelListener(new DialogInterface.OnCancelListener() {
-
-            @Override
-            public void onCancel(DialogInterface p1) {
-                alphaShow(returnTo.create(), TransparentLevel.NORMAL);
-            }
+        h.setOnCancelListener(p1 -> alphaShow(returnTo.create(), TransparentLevel.NORMAL));
+        h.setNeutralButton(activityThis.getString(R.string.offical_download_link), (p1, p2) -> {
+            Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/ryuunoakaihitomi/rebootmenu/releases"));
+            activityThis.startActivity(i);
+            System.exit(0);
         });
-        h.setNeutralButton(activityThis.getString(R.string.offical_download_link), new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface p1, int p2) {
-                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/ryuunoakaihitomi/rebootmenu/releases"));
-                activityThis.startActivity(i);
-                System.exit(0);
-            }
-        });
-        h.setNegativeButton(activityThis.getString(R.string.donate), new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface p1, int p2) {
-                activityThis.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://ryuunoakaihitomi.info/donate/")));
-                System.exit(0);
-            }
+        h.setNegativeButton(activityThis.getString(R.string.donate), (p1, p2) -> {
+            activityThis.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://ryuunoakaihitomi.info/donate/")));
+            System.exit(0);
         });
         //有意保留的bug:帮助对话框的退出方式与配置相反
         if (cancelable) {
-            h.setPositiveButton(activityThis.getString(R.string.exit), new AlertDialog.OnClickListener() {
-
-                @Override
-                public void onClick(DialogInterface p1, int p2) {
-                    alphaShow(returnTo.create(), TransparentLevel.NORMAL);
-                }
-            });
+            h.setPositiveButton(activityThis.getString(R.string.exit), (p1, p2) -> alphaShow(returnTo.create(), TransparentLevel.NORMAL));
             h.setCancelable(false);
         }
         alphaShow(h.create(), TransparentLevel.HELP);
@@ -146,6 +129,7 @@ public class UIUtils {
      */
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public static void transparentStatusBar(Activity activity) {
+        new DebugLog("transparentStatusBar", DebugLog.LogLevel.V);
         activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
@@ -154,30 +138,19 @@ public class UIUtils {
 
     //通过配置文件选择退出方式和设置帮助按钮
     public static void setExitStyleAndHelp(final Activity context, final AlertDialog.Builder builder) {
+        new DebugLog("setExitStyleAndHelp", DebugLog.LogLevel.V);
         //是否需要退出键
         if (!ConfigManager.get(ConfigManager.CANCELABLE))
-            builder.setPositiveButton(R.string.exit, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    context.finish();
-                }
-            });
+            builder.setPositiveButton(R.string.exit, (dialogInterface, i) -> context.finish());
         //不按退出的退出监听
         builder.setCancelable(ConfigManager.get(ConfigManager.CANCELABLE));
-        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface p1) {
-                new TextToast(context.getApplicationContext(), false, context.getString(R.string.exit_notice));
-                context.finish();
-            }
+        builder.setOnCancelListener(p1 -> {
+            new TextToast(context.getApplicationContext(), false, context.getString(R.string.exit_notice));
+            context.finish();
         });
         //帮助
-        builder.setNegativeButton(R.string.help, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                UIUtils.helpDialog(context, builder, ConfigManager.get(ConfigManager.CANCELABLE), ConfigManager.get(ConfigManager.WHITE_THEME));
-            }
-        });
+        builder.setNegativeButton(R.string.help, (dialogInterface, i) ->
+                UIUtils.helpDialog(context, builder, ConfigManager.get(ConfigManager.CANCELABLE), ConfigManager.get(ConfigManager.WHITE_THEME)));
     }
 
     /**
@@ -188,6 +161,7 @@ public class UIUtils {
      * @return vn
      */
     private static String getAppVersionName(Context context) {
+        new DebugLog("getAppVersionName: " + context, DebugLog.LogLevel.I);
         String versionName = "";
         try {
             PackageManager pm = context.getPackageManager();
@@ -195,7 +169,8 @@ public class UIUtils {
             versionName = pi.versionName;
             if (versionName == null || versionName.length() <= 0)
                 return "";
-        } catch (Exception ignored) {
+        } catch (Exception e) {
+            new DebugLog(e, "getAppVersionName", true);
         }
         return versionName;
     }
@@ -208,6 +183,7 @@ public class UIUtils {
      * @return 转换后的字符串
      */
     private static String inputStream2String(InputStream in, @SuppressWarnings("SameParameterValue") String encode) {
+        new DebugLog("inputStream2String", DebugLog.LogLevel.V);
         String str = "";
         try {
             if (encode == null || encode.equals(""))

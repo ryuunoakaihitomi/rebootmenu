@@ -6,9 +6,11 @@ import android.os.Build;
 import android.os.Bundle;
 
 import com.ryuunoakaihitomi.rebootmenu.util.ConfigManager;
+import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 import com.ryuunoakaihitomi.rebootmenu.util.ShellUtils;
 import com.ryuunoakaihitomi.rebootmenu.util.TextToast;
 import com.ryuunoakaihitomi.rebootmenu.util.UIUtils;
+import com.ryuunoakaihitomi.rebootmenu.util.URMUtils;
 
 /**
  * Root模式活动
@@ -22,6 +24,7 @@ public class RootMode extends MyActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        new DebugLog("RootMode.onCreate", DebugLog.LogLevel.V);
         //只有API Level 23或以上才需要做此妥协
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             UIUtils.transparentStatusBar(this);
@@ -75,72 +78,66 @@ public class RootMode extends MyActivity {
                 shellList[7]
         };
         //功能监听
-        final DialogInterface.OnClickListener mainListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, final int i) {
-                //锁屏就直接锁了，不需要确认。
-                if (i != 7 && !ConfigManager.get(ConfigManager.NO_NEED_TO_COMFIRM)) {
-                    //确认界面显示（？YN）
-                    final String[] confirmList = {
-                            getString(R.string.confirm_operation),
-                            getString(R.string.yes),
-                            getString(R.string.no)
-                    };
-                    //在后面显示刚刚选择的功能名称
-                    if (!isForceMode)
-                        mainDialog.setTitle(getString(R.string.confirm_operation) + " " + uiTextList[i]);
-                    else
-                        mainDialog.setTitle(getString(R.string.confirm_operation) + " " + uiTextListForce[i]);
-                    //点击是或者否的监听
-                    DialogInterface.OnClickListener confirmListener = new DialogInterface.OnClickListener() {
-                        @Override
-                        //iConfirm不和i混淆
-                        public void onClick(DialogInterface dialogInterface, int iConfirm) {
-                            //若否
-                            if (iConfirm == 1) {
-                                new TextToast(getApplicationContext(), getString(R.string.no_seleted_notice));
-                                finish();
-                            } else
-                                exeKernel(shellList, shellListForce, i);
-                        }
-                    };
-                    //YN
-                    String[] confirmSelect = {
-                            confirmList[1], confirmList[2]
-                    };
-                    mainDialog.setItems(confirmSelect, confirmListener);
-                    //取消之前设置的底部按钮
-                    mainDialog.setNeutralButton(null, null);
-                    mainDialog.setPositiveButton(null, null);
-                    mainDialog.setNegativeButton(null, null);
-                    UIUtils.alphaShow(mainDialog.create(), UIUtils.TransparentLevel.CONFIRM);
-                } else
-                    //直接执行（无需确认）
-                    exeKernel(shellList, shellListForce, i);
-            }
+        final DialogInterface.OnClickListener mainListener = (dialogInterface, i) -> {
+            new DebugLog("RootMode: i:" + i);
+            //锁屏就直接锁了，不需要确认。
+            if (i != 7 && !ConfigManager.get(ConfigManager.NO_NEED_TO_COMFIRM)) {
+                //确认界面显示（？YN）
+                final String[] confirmList = {
+                        getString(R.string.confirm_operation),
+                        getString(R.string.yes),
+                        getString(R.string.no)
+                };
+                //在后面显示刚刚选择的功能名称
+                if (!isForceMode)
+                    mainDialog.setTitle(getString(R.string.confirm_operation) + " " + uiTextList[i]);
+                else
+                    mainDialog.setTitle(getString(R.string.confirm_operation) + " " + uiTextListForce[i]);
+                //点击是或者否的监听
+                //iConfirm不和i混淆
+                DialogInterface.OnClickListener confirmListener = (dialogInterface1, iConfirm) -> {
+                    //若否
+                    if (iConfirm == 1) {
+                        new TextToast(getApplicationContext(), getString(R.string.no_seleted_notice));
+                        finish();
+                    } else
+                        exeKernel(shellList, shellListForce, i);
+                };
+                //YN
+                String[] confirmSelect = {
+                        confirmList[1], confirmList[2]
+                };
+                mainDialog.setItems(confirmSelect, confirmListener);
+                //取消之前设置的底部按钮
+                mainDialog.setNeutralButton(null, null);
+                mainDialog.setPositiveButton(null, null);
+                mainDialog.setNegativeButton(null, null);
+                UIUtils.alphaShow(mainDialog.create(), UIUtils.TransparentLevel.CONFIRM);
+            } else
+                //直接执行（无需确认）
+                exeKernel(shellList, shellListForce, i);
         };
         mainDialog.setItems(uiTextList, mainListener);
         /**
          * 经代码查阅对比，发现在Android4.3中加入了svc控制关机的功能。
          *
          * @see https://github.com/aosp-mirror/platform_frameworks_base/commit/62aad7f66fcd673831029eb96dd49c95f76b17bd
+         *
+         * 成为系统应用之后，没必要使用强制模式。
          */
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            mainDialog.setNeutralButton(R.string.mode_switch, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    //没问题就按照用户的选择
-                    if (!isForceMode) {
-                        mainDialog.setItems(uiTextListForce, mainListener);
-                        isForceMode = true;
-                        new TextToast(getApplicationContext(), getString(R.string.force_mode));
-                    } else {
-                        mainDialog.setItems(uiTextList, mainListener);
-                        isForceMode = false;
-                        new TextToast(getApplicationContext(), getString(R.string.normal_mode));
-                    }
-                    UIUtils.alphaShow(mainDialog.create(), UIUtils.TransparentLevel.NORMAL);
+            mainDialog.setNeutralButton(R.string.mode_switch, (dialogInterface, i) -> {
+                //没问题就按照用户的选择
+                if (!isForceMode) {
+                    mainDialog.setItems(uiTextListForce, mainListener);
+                    isForceMode = true;
+                    new TextToast(getApplicationContext(), getString(R.string.force_mode));
+                } else {
+                    mainDialog.setItems(uiTextList, mainListener);
+                    isForceMode = false;
+                    new TextToast(getApplicationContext(), getString(R.string.normal_mode));
                 }
+                UIUtils.alphaShow(mainDialog.create(), UIUtils.TransparentLevel.NORMAL);
             });
         } else {
             //不能兼容就只能选择强制
@@ -152,35 +149,45 @@ public class RootMode extends MyActivity {
     }
 
     private void exeKernel(String[] shellList, String[] shellListForce, int i) {
-        String command;
-        boolean isSucceed;
-        //模式选择
-        if (!isForceMode)
-            command = shellList[i];
-        else {
-            command = shellListForce[i];
-            //首先尝试普通权限shell，只在强制模式可能有效
-            ShellUtils.shCmdExec(command);
-        }
-        isSucceed = ShellUtils.suCmdExec(command);
-        //如果是安全模式，MIUI执行完不能立即重启，还得执行一次重启
-        //noinspection StringEquality
-        if (command == shellList[6])
+        new DebugLog("exeKernel: i:" + i + " isForceMode:" + isForceMode);
+        //是系统应用，且是reboot系，且不是关机
+        if (URMUtils.isSystemApp(this) && i != 1 && i < 4) {
+            final String[] rebootResList = {
+                    null, null, "recovery", "bootloader"
+            };
+            URMUtils.rebootedByPowerManager(this, rebootResList[i]);
+        } else {
+            String command;
+            boolean isSucceed;
+            //模式选择
             if (!isForceMode)
-                ShellUtils.suCmdExec(shellList[0]);
+                command = shellList[i];
             else {
-                ShellUtils.shCmdExec(shellListForce[0]);
-                ShellUtils.suCmdExec(shellListForce[0]);
+                command = shellListForce[i];
+                //首先尝试普通权限shell，只在强制模式可能有效
+                ShellUtils.shCmdExec(command);
             }
-            //重启UI：两套备选方案
-        else if (shellList[5].equals(command) && !isSucceed) {
-            rebootSystemUIAlternativeMethod();
+            isSucceed = ShellUtils.suCmdExec(command);
+            //如果是安全模式，MIUI执行完不能立即重启，还得执行一次重启
+            //noinspection StringEquality
+            if (command == shellList[6])
+                if (!isForceMode)
+                    ShellUtils.suCmdExec(shellList[0]);
+                else {
+                    ShellUtils.shCmdExec(shellListForce[0]);
+                    ShellUtils.suCmdExec(shellListForce[0]);
+                }
+                //重启UI：两套备选方案
+            else if (shellList[5].equals(command) && !isSucceed) {
+                rebootSystemUIAlternativeMethod();
+            }
         }
         new TextToast(getApplicationContext(), true, getString(R.string.cmd_send_notice));
         finish();
     }
 
     static void rebootSystemUIAlternativeMethod() {
+        new DebugLog("rebootSystemUIAlternativeMethod", DebugLog.LogLevel.V);
         ShellUtils.suCmdExec("killall com.android.systemui");
         ShellUtils.killShKillProcess("com.android.systemui");
     }

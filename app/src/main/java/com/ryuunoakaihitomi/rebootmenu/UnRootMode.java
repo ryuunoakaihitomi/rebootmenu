@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 
 import com.ryuunoakaihitomi.rebootmenu.util.ConfigManager;
+import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 import com.ryuunoakaihitomi.rebootmenu.util.TextToast;
 import com.ryuunoakaihitomi.rebootmenu.util.UIUtils;
 import com.ryuunoakaihitomi.rebootmenu.util.URMUtils;
@@ -29,6 +30,7 @@ public class UnRootMode extends MyActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        new DebugLog("UnRootMode.onCreate", DebugLog.LogLevel.V);
         devicePolicyManager = (DevicePolicyManager) getSystemService(DEVICE_POLICY_SERVICE);
         componentName = new ComponentName(this, AdminReceiver.class);
         URLockScrInit(false, requestCode, devicePolicyManager, componentName);
@@ -38,7 +40,7 @@ public class UnRootMode extends MyActivity {
         UIUtils.setExitStyleAndHelp(UnRootMode.this, mainDialog);
         mainDialog.setTitle(getString(R.string.unroot_title));
         String[] uiTextList;
-        DialogInterface.OnClickListener mainListener = new DialogInterface.OnClickListener() {
+        @SuppressWarnings("Convert2Lambda") DialogInterface.OnClickListener mainListener = new DialogInterface.OnClickListener() {
             @TargetApi(Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -53,14 +55,11 @@ public class UnRootMode extends MyActivity {
                     case 2:
                         if (!ConfigManager.get(ConfigManager.NO_NEED_TO_COMFIRM)) {
                             mainDialog.setTitle(getString(R.string.confirm_operation));
-                            mainDialog.setItems(new String[]{getString(R.string.yes), getString(R.string.no)}, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int iConfirm) {
-                                    if (iConfirm == 1)
-                                        finish();
-                                    else
-                                        URMUtils.reboot(devicePolicyManager, componentName, UnRootMode.this);
-                                }
+                            mainDialog.setItems(new String[]{getString(R.string.yes), getString(R.string.no)}, (dialogInterface1, iConfirm) -> {
+                                if (iConfirm == 1)
+                                    finish();
+                                else
+                                    URMUtils.reboot(devicePolicyManager, componentName, UnRootMode.this);
                             });
                             mainDialog.setNeutralButton(null, null);
                             mainDialog.setPositiveButton(null, null);
@@ -72,14 +71,11 @@ public class UnRootMode extends MyActivity {
                     case 3:
                         mainDialog.setTitle(getString(R.string.confirm_operation));
                         mainDialog.setItems(null, null);
-                        mainDialog.setNeutralButton(R.string.yes, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                //警告：在26中弃用，之后可能只能使用wipeData解除。在今后可能要移除重启功能。
-                                devicePolicyManager.clearDeviceOwnerApp(getPackageName());
-                                new TextToast(getApplicationContext(), getString(R.string.clear_owner_notice));
-                                finish();
-                            }
+                        mainDialog.setNeutralButton(R.string.yes, (dialog, which) -> {
+                            //警告：在26中弃用，之后可能只能使用wipeData解除。在今后可能要移除重启功能。
+                            devicePolicyManager.clearDeviceOwnerApp(getPackageName());
+                            new TextToast(getApplicationContext(), getString(R.string.clear_owner_notice));
+                            finish();
                         });
                         UIUtils.alphaShow(mainDialog.create(), UIUtils.TransparentLevel.CONFIRM);
                 }
@@ -105,15 +101,13 @@ public class UnRootMode extends MyActivity {
         }
         mainDialog.setItems(uiTextList, mainListener);
         //egg
-        mainDialog.setNeutralButton(" ", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                new TextToast(getApplicationContext(), true, "とまれかくもあはれ\nほたるほたるおいで");
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://music.163.com/#/song?id=22765874"));
-                startActivity(intent);
-                finish();
-            }
+        mainDialog.setNeutralButton(" ", (dialogInterface, i) -> {
+            new TextToast(getApplicationContext(), true, "とまれかくもあはれ\nほたるほたるおいで");
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://music.163.com/#/song?id=22765874"));
+            startActivity(intent);
+            finish();
         });
         UIUtils.alphaShow(mainDialog.create(), UIUtils.TransparentLevel.NORMAL);
+        new DebugLog("UnRootMode.onCreate -- END", DebugLog.LogLevel.V);
     }
 }

@@ -17,7 +17,6 @@ public class ConfigManager {
     public static final String CANCELABLE = "c";
     public static final String DO_NOT_CHECK_ROOT = "dncr";
     public static final String UNROOT_MODE = "urm";
-    static final String DEBUG_LOG = "dl";
 
     //父目录
     private static String path;
@@ -26,11 +25,14 @@ public class ConfigManager {
     @SuppressWarnings({"ConstantConditions", "ResultOfMethodCallIgnored"})
     public static void initDir(Context context) {
         path = context.getExternalFilesDir(null).getPath();
+        new DebugLog("initDir: path=" + path, DebugLog.LogLevel.I);
         //除了内置存储外，总是试图往外置存储创建目录，但貌似并无权限，因此总返回假
         context.getExternalFilesDir(null).mkdirs();
     }
 
     public static boolean get(String key) {
-        return new File(path + "/" + key).exists();
+        boolean isExists = new File(path + "/" + key).exists();
+        new DebugLog("ConfigManager.get: key:" + key + " isExists:" + isExists, DebugLog.LogLevel.I);
+        return isExists;
     }
 }
