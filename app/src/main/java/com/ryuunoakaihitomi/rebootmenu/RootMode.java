@@ -123,7 +123,6 @@ public class RootMode extends MyActivity {
          *
          * @see https://github.com/aosp-mirror/platform_frameworks_base/commit/62aad7f66fcd673831029eb96dd49c95f76b17bd
          *
-         * 成为系统应用之后，没必要使用强制模式。
          */
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             mainDialog.setNeutralButton(R.string.mode_switch, (dialogInterface, i) -> {

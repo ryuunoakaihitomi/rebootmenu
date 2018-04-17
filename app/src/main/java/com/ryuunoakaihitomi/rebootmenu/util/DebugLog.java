@@ -1,6 +1,5 @@
 package com.ryuunoakaihitomi.rebootmenu.util;
 
-import android.annotation.SuppressLint;
 import android.os.Environment;
 import android.util.Log;
 
@@ -23,7 +22,6 @@ import java.io.File;
  * @see android.util.Log
  */
 
-@SuppressLint("SdCardPath")
 public class DebugLog {
 
     //标签

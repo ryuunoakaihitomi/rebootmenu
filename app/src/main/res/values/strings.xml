@@ -10,7 +10,7 @@
     <string name="lockscreen">锁屏</string>
     <string name="force_mode">转换成强制模式</string>
     <string name="normal_mode">转换成默认模式</string>
-    <string name="normal_not_support">转换成强制模式,因为你的系统不支持或没必要使用默认模式</string>
+    <string name="normal_not_support">转换成强制模式,因为你的系统不支持使用默认模式</string>
     <string name="cmd_send_notice">命令已发送......\n如果这片烤面包片消失之后手机还是没有反应,应该是执行失败了.请到帮助那里查看解决方法</string>
     <string name="exit">退出</string>
     <string name="help">帮助</string>
