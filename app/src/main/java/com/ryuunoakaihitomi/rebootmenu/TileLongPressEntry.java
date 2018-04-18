@@ -6,6 +6,7 @@ import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
 
+import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 import com.ryuunoakaihitomi.rebootmenu.util.TextToast;
 
 /**
@@ -20,6 +21,7 @@ public class TileLongPressEntry extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        new DebugLog("TileLongPressEntry.onCreate", DebugLog.LogLevel.V);
         //Emoji:Volume Control
         new TextToast(this, true, "\uD83C\uDF9A");
         getSystemService(AudioManager.class)

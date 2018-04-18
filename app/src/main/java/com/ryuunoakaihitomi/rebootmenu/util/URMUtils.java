@@ -130,7 +130,7 @@ public class URMUtils {
      */
     @SuppressWarnings("ConstantConditions")
     public static void rebootedByPowerManager(Context context, String reason) {
-        new DebugLog("rebootByPowerManager", DebugLog.LogLevel.V);
+        new DebugLog("rebootedByPowerManager", DebugLog.LogLevel.V);
         ((PowerManager) context.getSystemService(Context.POWER_SERVICE)).reboot(reason);
     }
 
