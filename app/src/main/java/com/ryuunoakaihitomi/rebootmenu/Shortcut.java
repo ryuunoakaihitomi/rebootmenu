@@ -57,7 +57,7 @@ public class Shortcut extends MyActivity {
         final int UR_LOCKSCREEN = 6;
         final int UR_POWERDIALOG = 7;
 
-        isSysApp = URMUtils.isSystemApp(this);
+        isSysApp = MyApplication.isSystemApp;
         int param = getIntent().getIntExtra(extraTag, -1);
         new DebugLog("onCreate: param=" + param + " isSysApp=" + isSysApp, DebugLog.LogLevel.I);
         ShortcutManager shortcutManager = getSystemService(ShortcutManager.class);

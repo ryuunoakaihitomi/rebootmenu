@@ -6,8 +6,6 @@ import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.PowerManager;
 import android.provider.Settings;
@@ -31,7 +29,7 @@ public class URMUtils {
      * @param componentName       2
      * @param requestCode         3
      * @param devicePolicyManager 4
-     * @param needConfig          是否需要配置解锁管理员
+     * @param needConfig          是否需要 配置管理员
      */
 
     public static void lockscreen(Activity activity, ComponentName componentName, int requestCode, DevicePolicyManager devicePolicyManager, boolean needConfig) {
@@ -132,23 +130,5 @@ public class URMUtils {
     public static void rebootedByPowerManager(Context context, String reason) {
         new DebugLog("rebootedByPowerManager", DebugLog.LogLevel.V);
         ((PowerManager) context.getSystemService(Context.POWER_SERVICE)).reboot(reason);
-    }
-
-
-    /**
-     * 判断是否是系统应用
-     *
-     * @param context 1
-     * @return boolean
-     */
-    public static boolean isSystemApp(Context context) {
-        boolean ret = false;
-        try {
-            ret = (context.getPackageManager().getApplicationInfo(context.getPackageName(), 0).flags & ApplicationInfo.FLAG_SYSTEM) > 0;
-        } catch (PackageManager.NameNotFoundException e) {
-            new DebugLog(e, "isSystemApp", false);
-        }
-        new DebugLog("isSystemApp: " + ret, DebugLog.LogLevel.I);
-        return ret;
     }
 }

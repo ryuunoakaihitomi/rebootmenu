@@ -150,7 +150,7 @@ public class RootMode extends MyActivity {
     private void exeKernel(String[] shellList, String[] shellListForce, int i) {
         new DebugLog("exeKernel: i:" + i + " isForceMode:" + isForceMode);
         //是系统应用，且是reboot系，且不是关机
-        if (URMUtils.isSystemApp(this) && i != 1 && i < 4) {
+        if (MyApplication.isSystemApp && i != 1 && i < 4) {
             final String[] rebootResList = {
                     null, null, "recovery", "bootloader"
             };

@@ -12,11 +12,12 @@ import java.io.File;
 public class ConfigManager {
 
     //设置选项列表
-    public static final String WHITE_THEME = "wt";
-    public static final String NO_NEED_TO_COMFIRM = "nntc";
-    public static final String CANCELABLE = "c";
-    public static final String DO_NOT_CHECK_ROOT = "dncr";
-    public static final String UNROOT_MODE = "urm";
+    public static final String
+            WHITE_THEME = "wt",
+            NO_NEED_TO_COMFIRM = "nntc",
+            CANCELABLE = "c",
+            DO_NOT_CHECK_ROOT = "dncr",
+            UNROOT_MODE = "urm";
 
     //父目录
     private static String path;

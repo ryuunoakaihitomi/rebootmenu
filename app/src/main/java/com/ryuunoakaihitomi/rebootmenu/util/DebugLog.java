@@ -3,6 +3,8 @@ package com.ryuunoakaihitomi.rebootmenu.util;
 import android.os.Environment;
 import android.util.Log;
 
+import com.ryuunoakaihitomi.rebootmenu.MyApplication;
+
 import java.io.File;
 
 /**
@@ -18,7 +20,7 @@ import java.io.File;
  * 仅有一个不标注名称
  *
  * @author ZQY
- * @version 1.3
+ * @version 1.4
  * @see android.util.Log
  */
 
@@ -32,7 +34,9 @@ public class DebugLog {
 
     //用配置管理取不到值，所以在这里使用内置存储。而且卸载重装不用重新配置。
     static {
-        isLog = new File(Environment.getExternalStorageDirectory().getPath() + "/rebootmenuLog").exists();
+        boolean tokenExists = new File(Environment.getExternalStorageDirectory().getPath() + "/rebootmenuLog").exists();
+        isLog = MyApplication.isDebug || tokenExists;
+        Log.i(TAG, "DebugLog: isDebug:" + MyApplication.isDebug + " tokenExists:" + tokenExists);
     }
 
     /**
