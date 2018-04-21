@@ -104,6 +104,7 @@ public class UnRootMode extends MyActivity {
         mainDialog.setNeutralButton(" ", (dialogInterface, i) -> {
             new TextToast(getApplicationContext(), true, "とまれかくもあはれ\nほたるほたるおいで");
             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://music.163.com/#/song?id=22765874")));
+            finish();
         });
         UIUtils.alphaShow(mainDialog.create(), UIUtils.TransparentLevel.NORMAL);
         new DebugLog("UnRootMode.onCreate -- END", DebugLog.LogLevel.V);
