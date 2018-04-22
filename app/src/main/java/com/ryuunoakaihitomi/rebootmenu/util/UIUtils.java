@@ -16,6 +16,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.ryuunoakaihitomi.rebootmenu.R;
+import com.ryuunoakaihitomi.rebootmenu.Shortcut;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -151,6 +152,24 @@ public class UIUtils {
         //帮助
         builder.setNegativeButton(R.string.help, (dialogInterface, i) ->
                 UIUtils.helpDialog(context, builder, ConfigManager.get(ConfigManager.CANCELABLE), ConfigManager.get(ConfigManager.WHITE_THEME)));
+    }
+
+    /**
+     * 启动器添加快捷方式
+     *
+     * @param context     上下文
+     * @param titleRes    标题资源id
+     * @param iconRes     图标资源id
+     * @param shortcutAct Shortcut额外
+     * @see com.ryuunoakaihitomi.rebootmenu.Shortcut
+     */
+    public static void addLauncherShortcut(Context context, int titleRes, int iconRes, int shortcutAct) {
+        context.sendBroadcast(new Intent("com.android.launcher.action.INSTALL_SHORTCUT")
+                .putExtra("duplicate", false)
+                .putExtra(Intent.EXTRA_SHORTCUT_NAME, context.getString(titleRes))
+                .putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, Intent.ShortcutIconResource.fromContext(context, iconRes))
+                .putExtra(Intent.EXTRA_SHORTCUT_INTENT, new Intent(context, Shortcut.class)
+                        .putExtra(Shortcut.extraTag, shortcutAct)));
     }
 
     /**

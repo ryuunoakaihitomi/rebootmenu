@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+    <!-- Exclude specific shared preferences that contain GCM registration Id -->
+    <!--测试功能，先写一下看看有没有用，没有用也不删了，被警告弄得烦死-->
+    <include
+        domain="external"
+        path="." />
+</full-backup-content>

@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
+import android.widget.ListView;
 
 import com.ryuunoakaihitomi.rebootmenu.util.ConfigManager;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
@@ -144,7 +145,44 @@ public class RootMode extends MyActivity {
             isForceMode = true;
             new TextToast(getApplicationContext(), getString(R.string.normal_not_support));
         }
-        UIUtils.alphaShow(mainDialog.create(), UIUtils.TransparentLevel.NORMAL);
+        //长按监听 来自https://stackoverflow.com/questions/9145628/add-onlongclick-listener-to-an-alertdialog/14163293#14163293
+        AlertDialog mainDialogCreate = mainDialog.create();
+        mainDialogCreate.setOnShowListener(dialog -> {
+            ListView listView = mainDialogCreate.getListView();
+            //只有强制模式就不显示强制*号了，不用getString也能够使代码更简洁一点
+            listView.setOnItemLongClickListener((parent, view, position, id) -> {
+                switch (position) {
+                    case 0:
+                        UIUtils.addLauncherShortcut(this, R.string.reboot, android.R.drawable.ic_menu_rotate, Shortcut.REBOOT);
+                        break;
+                    case 1:
+                        UIUtils.addLauncherShortcut(this, R.string.shutdown, android.R.drawable.ic_menu_delete, Shortcut.SHUTDOWN);
+                        break;
+                    case 2:
+                        UIUtils.addLauncherShortcut(this, R.string.recovery_short, android.R.drawable.ic_menu_today, Shortcut.RECOVERY);
+                        break;
+                    case 3:
+                        UIUtils.addLauncherShortcut(this, R.string.fastboot_short, android.R.drawable.ic_menu_sort_by_size, Shortcut.FASTBOOT);
+                        break;
+                    case 4:
+                        //热重启是一种永远都不被推荐的重启方式，它造成系统不稳定的可能性很大，所以使用截图警示图标
+                        UIUtils.addLauncherShortcut(this, R.string.hot_reboot, android.R.drawable.ic_menu_report_image, Shortcut.HOT_REBOOT);
+                        break;
+                    case 5:
+                        UIUtils.addLauncherShortcut(this, R.string.rebootui_short, android.R.drawable.ic_menu_view, Shortcut.REBOOT_UI);
+                        break;
+                    case 6:
+                        //用于定点清除故障应用的安全模式，使用位置图标
+                        UIUtils.addLauncherShortcut(this, R.string.safety, android.R.drawable.ic_menu_mylocation, Shortcut.SAFEMODE);
+                        break;
+                    case 7:
+                        UIUtils.addLauncherShortcut(this, R.string.lockscreen, android.R.drawable.ic_menu_slideshow, Shortcut.LOCKSCREEN);
+                }
+                new TextToast(this, true, String.format(getString(R.string.launcher_shortcut_added), uiTextListForce[position]));
+                return true;
+            });
+        });
+        UIUtils.alphaShow(mainDialogCreate, UIUtils.TransparentLevel.NORMAL);
     }
 
     private void exeKernel(String[] shellList, String[] shellListForce, int i) {

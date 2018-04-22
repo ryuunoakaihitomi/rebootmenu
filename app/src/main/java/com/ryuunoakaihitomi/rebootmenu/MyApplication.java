@@ -24,11 +24,11 @@ public class MyApplication extends Application implements Thread.UncaughtExcepti
     @Override
     public void onCreate() {
         super.onCreate();
-        new DebugLog("MyApplication.onCreate: (尾北)", DebugLog.LogLevel.I);
         //初始化属性值
         isDebug = isDebuggable();
         isSystemApp = isSystemApp();
-        new DebugLog("isSystem:" + isSystemApp);
+        //应该等到isDebug初始化完了再log要不然查看到的isDebug值恒为假（又一个粗心造成的惨案）
+        new DebugLog("MyApplication.onCreate: (尾北) isSystem:" + isSystemApp, DebugLog.LogLevel.I);
         //捕捉异常
         Thread.setDefaultUncaughtExceptionHandler(this);
         ConfigManager.initDir(this);

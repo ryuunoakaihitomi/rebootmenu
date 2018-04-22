@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.widget.ListView;
 
 import com.ryuunoakaihitomi.rebootmenu.util.ConfigManager;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
@@ -106,7 +107,29 @@ public class UnRootMode extends MyActivity {
             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://music.163.com/#/song?id=22765874")));
             finish();
         });
-        UIUtils.alphaShow(mainDialog.create(), UIUtils.TransparentLevel.NORMAL);
+        AlertDialog mainDialogCreate = mainDialog.create();
+        mainDialogCreate.setOnShowListener(dialog -> {
+            ListView listView = mainDialogCreate.getListView();
+            listView.setOnItemLongClickListener((parent, view, position, id) -> {
+                switch (position) {
+                    case 0:
+                        UIUtils.addLauncherShortcut(this, R.string.lockscreen_unroot, android.R.drawable.ic_menu_slideshow, Shortcut.UR_LOCKSCREEN);
+                        break;
+                    case 1:
+                        UIUtils.addLauncherShortcut(this, R.string.tile_label, android.R.drawable.ic_menu_preferences, Shortcut.UR_POWERDIALOG);
+                        break;
+                    case 2:
+                        UIUtils.addLauncherShortcut(this, R.string.reboot_unroot, android.R.drawable.ic_menu_rotate, Shortcut.UR_REBOOT);
+                        break;
+                    case 3:
+                        //解除设备所有者不可轻易设置回，因此不予添加
+                        return false;
+                }
+                new TextToast(this, true, String.format(getString(R.string.launcher_shortcut_added), uiTextList[position]));
+                return true;
+            });
+        });
+        UIUtils.alphaShow(mainDialogCreate, UIUtils.TransparentLevel.NORMAL);
         new DebugLog("UnRootMode.onCreate -- END", DebugLog.LogLevel.V);
     }
 }

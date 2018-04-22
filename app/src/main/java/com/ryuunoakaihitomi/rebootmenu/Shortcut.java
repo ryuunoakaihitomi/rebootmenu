@@ -13,6 +13,7 @@ import android.os.Bundle;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 import com.ryuunoakaihitomi.rebootmenu.util.ShellUtils;
 import com.ryuunoakaihitomi.rebootmenu.util.TextToast;
+import com.ryuunoakaihitomi.rebootmenu.util.UIUtils;
 import com.ryuunoakaihitomi.rebootmenu.util.URMUtils;
 
 import java.util.Arrays;
@@ -28,13 +29,26 @@ public class Shortcut extends MyActivity {
 
     static final int ROOT = 0;
     static final int UNROOT = 1;
-    static final String extraTag = "shortcut";
+    public static final String extraTag = "shortcut";
     static final String action = "com.ryuunoakaihitomi.rebootmenu.SHORTCUT_ACTION";
-    boolean isSysApp;
+    private boolean isSysApp;
 
+    //shortcut功能选项
+    static final int REBOOT = 2,
+            SHUTDOWN = 3,
+            RECOVERY = 8,
+            FASTBOOT = 9,
+            HOT_REBOOT = 12,
+            REBOOT_UI = 4,
+            SAFEMODE = 11,
+            LOCKSCREEN = 5,
+            UR_LOCKSCREEN = 6,
+            UR_POWERDIALOG = 7,
+            UR_REBOOT = 10;
 
     //来自UnRootMode.java -- 结束
 
+    @SuppressWarnings("ConstantConditions")
     @TargetApi(Build.VERSION_CODES.N_MR1)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,23 +59,13 @@ public class Shortcut extends MyActivity {
         requestCode = 1729;
         assert devicePolicyManager != null;
         URLockScrInit(true, requestCode, devicePolicyManager, componentName);
-
-        //shortcut功能选项
-        final int REBOOT = 2;
-        final int SHUTDOWN = 3;
-        final int RECOVERY = 8;
-        final int FASTBOOT = 9;
-        final int REBOOT_UI = 4;
-        final int UR_REBOOT = 10;
-        final int LOCKSCREEN = 5;
-        final int UR_LOCKSCREEN = 6;
-        final int UR_POWERDIALOG = 7;
-
+        boolean isN_MR1 = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1;
         isSysApp = MyApplication.isSystemApp;
         int param = getIntent().getIntExtra(extraTag, -1);
         new DebugLog("onCreate: param=" + param + " isSysApp=" + isSysApp, DebugLog.LogLevel.I);
-        ShortcutManager shortcutManager = getSystemService(ShortcutManager.class);
-        assert shortcutManager != null;
+        ShortcutManager shortcutManager = null;
+        if (isN_MR1)
+            shortcutManager = getSystemService(ShortcutManager.class);
         switch (param) {
             //Root模式下的快捷方式
             case ROOT:
@@ -95,7 +99,7 @@ public class Shortcut extends MyActivity {
                         .setRank(2)
                         .build();
                 ShortcutInfo rebootui = new ShortcutInfo.Builder(this, "r_ru")
-                        .setShortLabel(getString(R.string.reboot_ui))
+                        .setShortLabel(getString(R.string.rebootui_short))
                         //眼睛（看见的就是UI）
                         .setIcon(Icon.createWithResource(this, android.R.drawable.ic_menu_view))
                         .setIntent(new Intent(action).putExtra(extraTag, REBOOT_UI))
@@ -133,7 +137,8 @@ public class Shortcut extends MyActivity {
                         .setRank(1)
                         .build();
                 ShortcutInfo ur_powerdialog = new ShortcutInfo.Builder(this, "ur_p")
-                        .setShortLabel(getString(R.string.system_power_dialog))
+                        //"电源菜单"
+                        .setShortLabel(getString(R.string.tile_label))
                         //扳手
                         .setIcon(Icon.createWithResource(this, android.R.drawable.ic_menu_preferences))
                         .setIntent(new Intent(action).putExtra(extraTag, UR_POWERDIALOG))
@@ -163,6 +168,16 @@ public class Shortcut extends MyActivity {
                     RootMode.rebootSystemUIAlternativeMethod();
                 finish();
                 break;
+            case HOT_REBOOT:
+                ShellUtils.suCmdExec("setprop ctl.restart zygote");
+                break;
+            case SAFEMODE:
+                //由于活动会短暂可见
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                    UIUtils.transparentStatusBar(this);
+                ShellUtils.suCmdExec("setprop persist.sys.safemode 1");
+                ShellUtils.suCmdExec("svc power reboot");
+                break;
             case LOCKSCREEN:
                 ShellUtils.suCmdExec("input keyevent 26");
                 finish();
@@ -178,7 +193,8 @@ public class Shortcut extends MyActivity {
                 if (devicePolicyManager.isDeviceOwnerApp(getPackageName()))
                     URMUtils.reboot(devicePolicyManager, componentName, this);
                 else {
-                    shortcutManager.removeDynamicShortcuts(Collections.singletonList("ur_r"));
+                    if (isN_MR1)
+                        shortcutManager.removeDynamicShortcuts(Collections.singletonList("ur_r"));
                     int random = new Random().nextInt(99);
                     new DebugLog("DEVICE_OWNER_DISABLED from SHORTCUT random " + random, DebugLog.LogLevel.V);
                     new TextToast(getApplicationContext(), random > 50, getString(R.string.device_owner_disabled));

@@ -41,7 +41,7 @@
     <string name="offical_download_link">官方下载链接</string>
     <string name="donate">捐赠…</string>
     <string name="help_notice">应用版本：%s\n帮助更新日期：%s</string>
-    <string name="help_update_date">20180418</string>
+    <string name="help_update_date">20180422</string>
     <string name="activity_onrestart_notice">注意：不要在最近任务卡片启动本应用,这有可能使应用出现问题</string>
     <string name="recovery_short">Recovery</string>
     <string name="tile_label">电源菜单</string>
@@ -53,4 +53,6 @@
     <string name="clear_owner_notice">已解除Device Owner,再次进入重启将禁用</string>
     <string name="lockscreen_unroot">锁屏免R</string>
     <string name="reboot_unroot">重启免R</string>
+    <string name="rebootui_short">重启UI</string>
+    <string name="launcher_shortcut_added">已经尝试添加了快捷方式,请自行在桌面中查看 (%s)</string>
 </resources>

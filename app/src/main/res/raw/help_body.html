@@ -18,9 +18,11 @@
         </p>
         <p>2.默认模式中的重启和关机：调用Android系统电源管理模块.速度慢,有一点执行失败的可能性(一直显示正在xx的对话),但是更加安全.</p>
         <p>3.recovery:恢复模式.</p>
-        <p>4.bootloader,亦称fastboot模式,线刷模式.</p>
+        <p>4.bootloader,亦称<strong>fastboot</strong>模式,线刷模式.
+        </p>
         <p>5.热重启,在保持设备硬件通电的情况下,关闭并重新加载系统.</p>
-        <p>6.重启用户界面,重启com.android.systemui,用于刷新桌面UI,重新加载桌面小部件或刷新图标显示.</p>
+        <p>6.重启用户界面,重启<strong>com.android.systemui</strong>,用于刷新桌面UI,重新加载桌面小部件或刷新图标显示.
+        </p>
         <p>7.安全模式：重启系统停用所有第三方应用,用于排查有问题的应用并恢复系统.</p>
         <p>(备注：<strong>强制模式</strong>下的<strong>安全模式</strong>在某些环境下可能会失效)
         </p>
@@ -54,7 +56,10 @@
                 后台卡片</strong>来启动本应用.
             只有Android5.0或以上才能使用调用系统电源菜单功能.
         </p>
-        <p>快捷方式：本应用在Android7.0和7.1及以上系统中分别增加了
+        <p>快捷方式：<strong>长按</strong>本应用的某个功能选项可以在启动器添加相应功能的快捷方式.只支持<strong>root</strong>模式<strong>
+            强制</strong>和免root模式所有功能.
+        </p>
+        <p>面向较高系统版本,本应用在Android7.0和7.1及以上系统中分别增加了
             <strong>状态栏下拉图块(Tile)</strong>
             和对支持的启动器增设了<strong>长按应用图标即可弹出的快捷方式菜单(App Shortcut)</strong>,该菜单
             <strong>
@@ -83,15 +88,22 @@
             <del>(有待研究)</del>.在长按图标菜单中只有reboot系(需要调用reboot命令的)功能可在此模式下使用.
         </p>
         <h1 id="-">实验性</h1>
-        <p>以下功能或特性可能随需求更改或删除，请不要过于依赖这些。</p>
+        <p>以下功能或特性可能随需求更改或删除,<del>请不要过于依赖这些</del>.
+        </p>
         <ul>
-            <li>在<strong>内置存储根目录</strong>中加
-                <strong>rebootmenuLog</strong>
-                文件名空文件，打印标签为rebootmenu的调试日志。可以在<strong>ADB Shell</strong>中用<strong>logcat -s
-                    rebootmenu</strong>命令查看。
+            <li>
+                <p>在<strong>内置存储根目录</strong>中加
+                    <strong>rebootmenuLog</strong>
+                    文件名空文件,打印标签为rebootmenu的调试日志.可以在<strong>ADB Shell</strong>中用
+                </p>
+                <p>
+                    <strong>logcat -s rebootmenu</strong>
+                </p>
+                <p>命令查看.(当本应用工作不正常,反馈时请携带此调试日志)</p>
             </li>
-            <li>长按图块弹出音量调节面板。</li>
-            <li>安装为<strong>系统应用</strong>后，使用一个系统API接口而不是用命令来实现重启。
+            <li><strong>长按</strong>图块弹出<strong>音量调节</strong>面板.
+            </li>
+            <li>安装为<strong>系统应用</strong>后,使用一个系统API接口而不是用命令来实现重启.通常这样做能够提高稳定性和安全性.
             </li>
         </ul>
         <h1 id="-">(≧∇≦)/</h1>
