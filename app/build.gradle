@@ -6,8 +6,8 @@ android {
         applicationId "com.ryuunoakaihitomi.rebootmenu"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 60
-        versionName "10_蛍夢_24"
+        versionCode 61
+        versionName "10_蛍夢_25"
     }
     //有病吧，不用Java 1.8时提示用拉姆达，编译时又出错要加Java 1.8。我还以为AS原生支持拉姆达表达式了。
     compileOptions {

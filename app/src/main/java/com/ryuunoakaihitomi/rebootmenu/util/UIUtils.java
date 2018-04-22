@@ -8,7 +8,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ShortcutInfo;
+import android.content.pm.ShortcutManager;
 import android.graphics.Color;
+import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Build;
 import android.text.Html;
@@ -163,13 +166,27 @@ public class UIUtils {
      * @param shortcutAct Shortcut额外
      * @see com.ryuunoakaihitomi.rebootmenu.Shortcut
      */
+    @SuppressWarnings("ConstantConditions")
     public static void addLauncherShortcut(Context context, int titleRes, int iconRes, int shortcutAct) {
-        context.sendBroadcast(new Intent("com.android.launcher.action.INSTALL_SHORTCUT")
-                .putExtra("duplicate", false)
-                .putExtra(Intent.EXTRA_SHORTCUT_NAME, context.getString(titleRes))
-                .putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, Intent.ShortcutIconResource.fromContext(context, iconRes))
-                .putExtra(Intent.EXTRA_SHORTCUT_INTENT, new Intent(context, Shortcut.class)
-                        .putExtra(Shortcut.extraTag, shortcutAct)));
+        new DebugLog("addLauncherShortcut", DebugLog.LogLevel.V);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
+            context.sendBroadcast(new Intent("com.android.launcher.action.INSTALL_SHORTCUT")
+                    .putExtra("duplicate", false)
+                    .putExtra(Intent.EXTRA_SHORTCUT_NAME, context.getString(titleRes))
+                    .putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, Intent.ShortcutIconResource.fromContext(context, iconRes))
+                    .putExtra(Intent.EXTRA_SHORTCUT_INTENT, new Intent(context, Shortcut.class)
+                            .putExtra(Shortcut.extraTag, shortcutAct)));
+        else {
+            ShortcutInfo shortcutInfo = new ShortcutInfo.Builder(context, "o_launcher_shortcut:" + shortcutAct)
+                    .setShortLabel(context.getString(titleRes))
+                    .setIcon(Icon.createWithResource(context, iconRes))
+                    .setIntent(new Intent(context, Shortcut.class)
+                            .putExtra(Shortcut.extraTag, shortcutAct)
+                            .setAction(Intent.ACTION_VIEW))
+                    .build();
+            new DebugLog("addLauncherShortcut: requestPinShortcut:"
+                    + context.getSystemService(ShortcutManager.class).requestPinShortcut(shortcutInfo, null));
+        }
     }
 
     /**
