@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.widget.ListView;
 
+import com.ryuunoakaihitomi.rebootmenu.util.Commands;
 import com.ryuunoakaihitomi.rebootmenu.util.ConfigManager;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 import com.ryuunoakaihitomi.rebootmenu.util.ShellUtils;
@@ -47,14 +48,14 @@ public class RootMode extends MyActivity {
         };
         //默认模式命令列表
         final String[] shellList = {
-                "svc power reboot",
-                "svc power shutdown",
-                "svc power reboot recovery",
-                "svc power reboot bootloader",
-                "setprop ctl.restart zygote",
-                "busybox pkill com.android.systemui",
-                "setprop persist.sys.safemode 1",
-                "input keyevent 26"
+                Commands.REBOOT,
+                Commands.SHUTDOWN,
+                Commands.RECOVERY,
+                Commands.BOOTLOADER,
+                Commands.HOT_REBOOT,
+                Commands.RESTART_SYSTEM_UI,
+                Commands.SAFE_MODE,
+                Commands.LOCK_SCREEN
         };
         //强制模式功能列表
         final String[] uiTextListForce = {
@@ -69,10 +70,10 @@ public class RootMode extends MyActivity {
         };
         //强制模式命令列表
         final String[] shellListForce = {
-                "reboot",
-                "reboot -p",
-                "reboot recovery",
-                "reboot bootloader",
+                Commands.REBOOT_F,
+                Commands.SHUTDOWN_F,
+                Commands.RECOVERY_F,
+                Commands.BOOTLOADER_F,
                 shellList[4],
                 shellList[5],
                 shellList[6],
@@ -149,36 +150,35 @@ public class RootMode extends MyActivity {
         AlertDialog mainDialogCreate = mainDialog.create();
         mainDialogCreate.setOnShowListener(dialog -> {
             ListView listView = mainDialogCreate.getListView();
-            //只有强制模式就不显示强制*号了，不用getString也能够使代码更简洁一点
             listView.setOnItemLongClickListener((parent, view, position, id) -> {
                 switch (position) {
                     case 0:
-                        UIUtils.addLauncherShortcut(this, R.string.reboot, android.R.drawable.ic_menu_rotate, Shortcut.REBOOT);
+                        UIUtils.addLauncherShortcut(this, R.string.reboot, android.R.drawable.ic_menu_rotate, Shortcut.REBOOT, true);
                         break;
                     case 1:
-                        UIUtils.addLauncherShortcut(this, R.string.shutdown, android.R.drawable.ic_menu_delete, Shortcut.SHUTDOWN);
+                        UIUtils.addLauncherShortcut(this, R.string.shutdown, android.R.drawable.ic_menu_delete, Shortcut.SHUTDOWN, true);
                         break;
                     case 2:
-                        UIUtils.addLauncherShortcut(this, R.string.recovery_short, android.R.drawable.ic_menu_today, Shortcut.RECOVERY);
+                        UIUtils.addLauncherShortcut(this, R.string.recovery_short, android.R.drawable.ic_menu_today, Shortcut.RECOVERY, true);
                         break;
                     case 3:
-                        UIUtils.addLauncherShortcut(this, R.string.fastboot_short, android.R.drawable.ic_menu_sort_by_size, Shortcut.FASTBOOT);
+                        UIUtils.addLauncherShortcut(this, R.string.fastboot_short, android.R.drawable.ic_menu_sort_by_size, Shortcut.FASTBOOT, true);
                         break;
                     case 4:
                         //热重启是一种永远都不被推荐的重启方式，它造成系统不稳定的可能性很大，所以使用截图警示图标
-                        UIUtils.addLauncherShortcut(this, R.string.hot_reboot, android.R.drawable.ic_menu_report_image, Shortcut.HOT_REBOOT);
+                        UIUtils.addLauncherShortcut(this, R.string.hot_reboot, android.R.drawable.ic_menu_report_image, Shortcut.HOT_REBOOT, false);
                         break;
                     case 5:
-                        UIUtils.addLauncherShortcut(this, R.string.rebootui_short, android.R.drawable.ic_menu_view, Shortcut.REBOOT_UI);
+                        UIUtils.addLauncherShortcut(this, R.string.rebootui_short, android.R.drawable.ic_menu_view, Shortcut.REBOOT_UI, false);
                         break;
                     case 6:
                         //用于定点清除故障应用的安全模式，使用位置图标
-                        UIUtils.addLauncherShortcut(this, R.string.safety, android.R.drawable.ic_menu_mylocation, Shortcut.SAFEMODE);
+                        UIUtils.addLauncherShortcut(this, R.string.safety, android.R.drawable.ic_menu_mylocation, Shortcut.SAFEMODE, false);
                         break;
                     case 7:
-                        UIUtils.addLauncherShortcut(this, R.string.lockscreen, android.R.drawable.ic_menu_slideshow, Shortcut.LOCKSCREEN);
+                        UIUtils.addLauncherShortcut(this, R.string.lockscreen, android.R.drawable.ic_menu_slideshow, Shortcut.LOCKSCREEN, false);
                 }
-                new TextToast(this, true, String.format(getString(R.string.launcher_shortcut_added), uiTextListForce[position]));
+                new TextToast(this, true, String.format(getString(R.string.launcher_shortcut_added), uiTextList[position]));
                 return true;
             });
         });
@@ -225,7 +225,7 @@ public class RootMode extends MyActivity {
 
     static void rebootSystemUIAlternativeMethod() {
         new DebugLog("rebootSystemUIAlternativeMethod", DebugLog.LogLevel.V);
-        ShellUtils.suCmdExec("killall com.android.systemui");
+        ShellUtils.suCmdExec(Commands.RESTART_SYSTEM_UI_ALTERNATIVE);
         ShellUtils.killShKillProcess("com.android.systemui");
     }
 }

@@ -10,6 +10,7 @@ import android.graphics.drawable.Icon;
 import android.os.Build;
 import android.os.Bundle;
 
+import com.ryuunoakaihitomi.rebootmenu.util.Commands;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 import com.ryuunoakaihitomi.rebootmenu.util.ShellUtils;
 import com.ryuunoakaihitomi.rebootmenu.util.TextToast;
@@ -152,34 +153,35 @@ public class Shortcut extends MyActivity {
                 break;
             //快捷方式使用强制执行
             case FASTBOOT:
-                rebootExec("bootloader");
+                rebootExec(Commands.BOOTLOADER_F);
                 break;
             case RECOVERY:
-                rebootExec("recovery");
+                rebootExec(Commands.RECOVERY_F);
                 break;
             case REBOOT:
-                rebootExec(null);
+                rebootExec(Commands.REBOOT_F);
                 break;
             case SHUTDOWN:
-                rebootExec("-p");
+                rebootExec(Commands.SHUTDOWN_F);
                 break;
             case REBOOT_UI:
-                if (!ShellUtils.suCmdExec("busybox pkill com.android.systemui"))
+                if (!ShellUtils.suCmdExec(Commands.RESTART_SYSTEM_UI))
                     RootMode.rebootSystemUIAlternativeMethod();
                 finish();
                 break;
             case HOT_REBOOT:
-                ShellUtils.suCmdExec("setprop ctl.restart zygote");
+                ShellUtils.suCmdExec(Commands.HOT_REBOOT);
                 break;
             case SAFEMODE:
                 //由于活动会短暂可见
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
                     UIUtils.transparentStatusBar(this);
-                ShellUtils.suCmdExec("setprop persist.sys.safemode 1");
-                ShellUtils.suCmdExec("svc power reboot");
+                ShellUtils.suCmdExec(Commands.SAFE_MODE);
+                //在部分系统下只能用svc重启安全模式的设定才不会失效
+                ShellUtils.suCmdExec(Commands.REBOOT);
                 break;
             case LOCKSCREEN:
-                ShellUtils.suCmdExec("input keyevent 26");
+                ShellUtils.suCmdExec(Commands.LOCK_SCREEN);
                 finish();
                 break;
             //免root模式
@@ -209,12 +211,14 @@ public class Shortcut extends MyActivity {
     @SuppressWarnings("StringEquality")
     private void rebootExec(String arg) {
         new DebugLog("rebootExec: arg:" + arg, DebugLog.LogLevel.V);
-        if (isSysApp && arg != "-p")
-            URMUtils.rebootedByPowerManager(this, arg);
+        if (isSysApp && arg != Commands.SHUTDOWN_F)
+            if (arg == Commands.REBOOT_F)
+                URMUtils.rebootedByPowerManager(this, null);
+            else
+                URMUtils.rebootedByPowerManager(this, arg.substring(7));
         else {
-            String cmd = arg == null ? "reboot" : "reboot " + arg;
-            ShellUtils.shCmdExec(cmd);
-            ShellUtils.suCmdExec(cmd);
+            ShellUtils.shCmdExec(arg);
+            ShellUtils.suCmdExec(arg);
         }
         finish();
     }

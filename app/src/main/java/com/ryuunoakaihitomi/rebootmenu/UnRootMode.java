@@ -113,13 +113,13 @@ public class UnRootMode extends MyActivity {
             listView.setOnItemLongClickListener((parent, view, position, id) -> {
                 switch (position) {
                     case 0:
-                        UIUtils.addLauncherShortcut(this, R.string.lockscreen_unroot, android.R.drawable.ic_menu_slideshow, Shortcut.UR_LOCKSCREEN);
+                        UIUtils.addLauncherShortcut(this, R.string.lockscreen_unroot, android.R.drawable.ic_menu_slideshow, Shortcut.UR_LOCKSCREEN, false);
                         break;
                     case 1:
-                        UIUtils.addLauncherShortcut(this, R.string.tile_label, android.R.drawable.ic_menu_preferences, Shortcut.UR_POWERDIALOG);
+                        UIUtils.addLauncherShortcut(this, R.string.tile_label, android.R.drawable.ic_menu_preferences, Shortcut.UR_POWERDIALOG, false);
                         break;
                     case 2:
-                        UIUtils.addLauncherShortcut(this, R.string.reboot_unroot, android.R.drawable.ic_menu_rotate, Shortcut.UR_REBOOT);
+                        UIUtils.addLauncherShortcut(this, R.string.reboot_unroot, android.R.drawable.ic_menu_rotate, Shortcut.UR_REBOOT, false);
                         break;
                     case 3:
                         //解除设备所有者不可轻易设置回，因此不予添加

@@ -5,6 +5,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -122,7 +123,12 @@ public class UIUtils {
             h.setPositiveButton(activityThis.getString(R.string.exit), (p1, p2) -> alphaShow(returnTo.create(), TransparentLevel.NORMAL));
             h.setCancelable(false);
         }
-        alphaShow(h.create(), TransparentLevel.HELP);
+        //检测调试环境用：测试异常
+        AlertDialog hc = h.create();
+        alphaShow(hc, TransparentLevel.HELP);
+        hc.getButton(DialogInterface.BUTTON_NEGATIVE).setOnLongClickListener(v -> {
+            throw new Error("test error");
+        });
     }
 
     /**
@@ -164,21 +170,23 @@ public class UIUtils {
      * @param titleRes    标题资源id
      * @param iconRes     图标资源id
      * @param shortcutAct Shortcut额外
+     * @param isForce     是否是root强制模式
      * @see com.ryuunoakaihitomi.rebootmenu.Shortcut
      */
     @SuppressWarnings("ConstantConditions")
-    public static void addLauncherShortcut(Context context, int titleRes, int iconRes, int shortcutAct) {
+    public static void addLauncherShortcut(Context context, int titleRes, int iconRes, int shortcutAct, boolean isForce) {
         new DebugLog("addLauncherShortcut", DebugLog.LogLevel.V);
+        String forceToken = isForce ? "*" : "";
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
             context.sendBroadcast(new Intent("com.android.launcher.action.INSTALL_SHORTCUT")
                     .putExtra("duplicate", false)
-                    .putExtra(Intent.EXTRA_SHORTCUT_NAME, context.getString(titleRes))
+                    .putExtra(Intent.EXTRA_SHORTCUT_NAME, forceToken + context.getString(titleRes))
                     .putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, Intent.ShortcutIconResource.fromContext(context, iconRes))
                     .putExtra(Intent.EXTRA_SHORTCUT_INTENT, new Intent(context, Shortcut.class)
                             .putExtra(Shortcut.extraTag, shortcutAct)));
         else {
             ShortcutInfo shortcutInfo = new ShortcutInfo.Builder(context, "o_launcher_shortcut:" + shortcutAct)
-                    .setShortLabel(context.getString(titleRes))
+                    .setShortLabel(forceToken + context.getString(titleRes))
                     .setIcon(Icon.createWithResource(context, iconRes))
                     .setIntent(new Intent(context, Shortcut.class)
                             .putExtra(Shortcut.extraTag, shortcutAct)
