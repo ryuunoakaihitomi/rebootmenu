@@ -128,9 +128,9 @@ public class UIUtils {
     //尝试打开URL
     private static void openURL(Context context, String link) {
         try {
-            context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://ryuunoakaihitomi.info/donate/")));
+            context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(link)));
         } catch (ActivityNotFoundException e) {
-            new TextToast(context, context.getString(R.string.url_open_failed_notice));
+            new TextToast(context, true, link + "\n" + context.getString(R.string.url_open_failed_notice));
         } finally {
             ((Activity) context).finish();
         }
