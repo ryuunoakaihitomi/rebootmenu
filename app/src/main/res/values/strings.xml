@@ -55,4 +55,5 @@
     <string name="reboot_unroot">重启免R</string>
     <string name="rebootui_short">重启UI</string>
     <string name="launcher_shortcut_added">已经尝试添加了快捷方式,请自行在桌面中查看 (%s)</string>
+    <string name="url_open_failed_notice">似乎没有可以打开的应用…</string>
 </resources>

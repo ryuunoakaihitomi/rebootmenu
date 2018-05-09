@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -109,15 +110,8 @@ public class UIUtils {
         String help = inputStream2String(activityThis.getResources().openRawResource(R.raw.help_body), null);
         h.setMessage(Html.fromHtml(help));
         h.setOnCancelListener(p1 -> alphaShow(returnTo.create(), TransparentLevel.NORMAL));
-        h.setNeutralButton(activityThis.getString(R.string.offical_download_link), (p1, p2) -> {
-            Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/ryuunoakaihitomi/rebootmenu/releases"));
-            activityThis.startActivity(i);
-            System.exit(0);
-        });
-        h.setNegativeButton(activityThis.getString(R.string.donate), (p1, p2) -> {
-            activityThis.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://ryuunoakaihitomi.info/donate/")));
-            System.exit(0);
-        });
+        h.setNeutralButton(activityThis.getString(R.string.offical_download_link), (p1, p2) -> openURL(activityThis, "https://github.com/ryuunoakaihitomi/rebootmenu/releases"));
+        h.setNegativeButton(activityThis.getString(R.string.donate), (p1, p2) -> openURL(activityThis, "http://ryuunoakaihitomi.info/donate/"));
         //有意保留的bug:帮助对话框的退出方式与配置相反
         if (cancelable) {
             h.setPositiveButton(activityThis.getString(R.string.exit), (p1, p2) -> alphaShow(returnTo.create(), TransparentLevel.NORMAL));
@@ -129,6 +123,17 @@ public class UIUtils {
         hc.getButton(DialogInterface.BUTTON_NEGATIVE).setOnLongClickListener(v -> {
             throw new Error("test error");
         });
+    }
+
+    //尝试打开URL
+    private static void openURL(Context context, String link) {
+        try {
+            context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://ryuunoakaihitomi.info/donate/")));
+        } catch (ActivityNotFoundException e) {
+            new TextToast(context, context.getString(R.string.url_open_failed_notice));
+        } finally {
+            ((Activity) context).finish();
+        }
     }
 
     /**
