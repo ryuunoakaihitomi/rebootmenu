@@ -19,6 +19,7 @@ import com.ryuunoakaihitomi.rebootmenu.util.TextToast;
 
 public class SystemPowerDialog extends AccessibilityService {
 
+    public static final String POWER_DIALOG_ACTION = "SPD.POWER_DIALOG_ACTION";
     private boolean isBroadcastRegistered;
     private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -38,7 +39,7 @@ public class SystemPowerDialog extends AccessibilityService {
         new DebugLog("");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             IntentFilter intentFilter = new IntentFilter();
-            intentFilter.addAction(getString(R.string.service_action_key));
+            intentFilter.addAction(POWER_DIALOG_ACTION);
             registerReceiver(broadcastReceiver, intentFilter);
             isBroadcastRegistered = true;
         } else {
@@ -59,6 +60,11 @@ public class SystemPowerDialog extends AccessibilityService {
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent accessibilityEvent) {
+        String className = accessibilityEvent.getClassName().toString();
+        new DebugLog("SystemPowerDialog.onAccessibilityEvent className:" + className, DebugLog.LogLevel.V);
+        //使用root模式就没有必要保留辅助服务
+        if (RootMode.class.getName().equals(className) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+            disableSelf();
     }
 
     @Override

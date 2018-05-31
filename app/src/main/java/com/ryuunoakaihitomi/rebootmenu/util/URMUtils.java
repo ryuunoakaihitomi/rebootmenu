@@ -65,7 +65,7 @@ public class URMUtils {
             Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
             activity.startActivity(intent);
         } else {
-            activity.sendBroadcast(new Intent(activity.getString(R.string.service_action_key)));
+            activity.sendBroadcast(new Intent(SystemPowerDialog.POWER_DIALOG_ACTION));
         }
         activity.finish();
     }
@@ -78,6 +78,9 @@ public class URMUtils {
      * @return boolean
      */
     private static boolean isAccessibilitySettingsOn(Context mContext) {
+        //注意：不要使用以下注释掉的代码取无障碍服务开启状态！disableSelf()之后仍返回true
+        //noinspection ConstantConditions
+        //return ((AccessibilityManager) mContext.getSystemService(Context.ACCESSIBILITY_SERVICE)).isEnabled();
         new DebugLog("isAccessibilitySettingsOn", DebugLog.LogLevel.V);
         int accessibilityEnabled = 0;
         final String service = mContext.getPackageName() + "/" + SystemPowerDialog.class.getCanonicalName();

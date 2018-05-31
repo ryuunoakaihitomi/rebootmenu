@@ -19,6 +19,7 @@ import android.os.Build;
 import android.text.Html;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 import com.ryuunoakaihitomi.rebootmenu.R;
 import com.ryuunoakaihitomi.rebootmenu.Shortcut;
@@ -26,6 +27,7 @@ import com.ryuunoakaihitomi.rebootmenu.Shortcut;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 /**
@@ -117,9 +119,24 @@ public class UIUtils {
             h.setPositiveButton(activityThis.getString(R.string.exit), (p1, p2) -> alphaShow(returnTo.create(), TransparentLevel.NORMAL));
             h.setCancelable(false);
         }
-        //检测调试环境用：测试异常
         AlertDialog hc = h.create();
         alphaShow(hc, TransparentLevel.HELP);
+        //通过反射取得AlertDialog的窗体对象
+        try {
+            @SuppressWarnings("JavaReflectionMemberAccess") Field mAlert = AlertDialog.class.getDeclaredField("mAlert");
+            mAlert.setAccessible(true);
+            Object mAlertController = mAlert.get(hc);
+            Field mMessageView = mAlertController.getClass().getDeclaredField("mMessageView");
+            mMessageView.setAccessible(true);
+            TextView textView = (TextView) mMessageView.get(mAlertController);
+            //修改文本颜色，因为我的诺基亚把默认文字颜色改成灰的了，看得不太清楚
+            textView.setTextColor(activityThis.getResources().getColor(R.color.fujimurasaki));
+            //可选择文本
+            textView.setTextIsSelectable(true);
+        } catch (Exception e) {
+            new DebugLog(e, "helpDialog", true);
+        }
+        //检测调试环境用：测试异常
         hc.getButton(DialogInterface.BUTTON_NEGATIVE).setOnLongClickListener(v -> {
             throw new Error("test error");
         });
