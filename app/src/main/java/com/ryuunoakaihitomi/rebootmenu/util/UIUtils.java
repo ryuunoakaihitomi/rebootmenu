@@ -87,6 +87,13 @@ public class UIUtils {
         //由于ActivityManager的isLowRamDevice方法非静态，因此只能使用反射来取系统属性了。（但在Android P(ill)上可能行不通）
         boolean isLowRam = false;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+            /*
+            警告：经查询
+            https://android.googlesource.com/platform/prebuilts/runtime/+/master/appcompat/hiddenapi-dark-greylist.txt
+            发现以下方法被明确添加进黑灰名单！
+            目前(2018.06.10 21:57)
+            50264行 Landroid/os/SystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+             */
             try {
                 @SuppressLint("PrivateApi") Class<?> clazz = Class.forName("android.os.SystemProperties");
                 Method method = clazz.getMethod("get", String.class);

@@ -57,7 +57,9 @@
             只有Android5.0或以上才能使用调用系统电源菜单功能,而且有极少可能会出现点击调用系统电源菜单功能无反应的情况,这时请自行
             <strong>重新打开</strong>
             辅助服务开关,如果你开启了辅助服务但进入了<strong>root</strong>模式,在Android 7.0或以上系统中辅助服务会<strong>
-                自动关闭</strong>.
+                自动关闭</strong>.(为了<strong>防止服务被停止</strong>,打开辅助服务后会显示出一条
+            <strong>常驻通知</strong>
+            ,点击可以进入主界面)
         </p>
         <p>快捷方式：<strong>长按</strong>本应用的某个功能选项可以在启动器添加相应功能的快捷方式.只支持<strong>root</strong>模式<strong>
             强制</strong>和免root模式所有功能.
@@ -92,9 +94,8 @@
             需要设置dncr不检查root权限再选择强制模式启用.支持的功能随环境差异可能有所不同
             <del>(有待研究)</del>.在长按图标菜单中只有reboot系(需要调用reboot命令的)功能可在此模式下使用.
         </p>
-        <h1 id="-">实验性</h1>
-        <p>以下功能或特性可能随需求更改或删除,<del>请不要过于依赖这些</del>.
-        </p>
+        <h1 id="-">附加功能</h1>
+        <p>以下功能出于某种原因,未融合进以上部分的说明中.但功能已渐趋稳定,可以长期使用.</p>
         <ul>
             <li>
                 <p>在<strong>内置存储根目录</strong>中加
@@ -109,6 +110,29 @@
             <li><strong>长按</strong>图块弹出<strong>音量调节</strong>面板.
             </li>
             <li>安装为<strong>系统应用</strong>后,使用一个系统API接口而不是用命令来实现重启.通常这样做能够提高稳定性和安全性.
+            </li>
+            <li>增加一个用来调用<strong>系统电源</strong>菜单的图块.
+            </li>
+        </ul>
+        <h2 id="-">对所有人公开，但针对一部分人的声明</h2>
+        <ul>
+            <li>你现在所使用的，是本应用的<strong>开源版本</strong>。如你所见，开发这个应用我
+                <strong>几乎不会</strong>
+                得到任何收益（捐赠的钱还不够广告的钱多）。相反还可能会<strong>侵害</strong>我的利益（不授权不署名二次闭源打包）。因此我不会在这里花费比维护本应用的
+                <strong>商业版本</strong>(目前在酷安上架的同名应用)更多的时间和精力去维护这个应用。并且由于
+                <strong>开源版本</strong>
+                没有包含统计SDK，如果不详细描述和截取日志，我也基本上不可能对bug做出改进。如果要报告bug和提出改进建议，请遵循在GitHub应有的礼仪，将我应该知道的详细地说出来。
+            </li>
+            <li>不允许在和我发行<strong>商业版本</strong>的渠道有所冲突的渠道<strong>酷安</strong>宣传
+                <strong>开源版本</strong>
+                的存在和传播其编译安装包及项目仓库内文件。
+            </li>
+            <li><strong>商业版本</strong>下载地址：
+                <a href="https://www.coolapk.com/apk/com.ryuunoakaihitomi.rebootmenu">
+                    https://www.coolapk.com/apk/com.ryuunoakaihitomi.rebootmenu
+                </a>
+                如果无法做到以上反馈要求的话，建议还是下载这个版本。所有危险权限全部可选，无需担心安全问题。而且我现在的主力机就在使用这个版本，有更多的机会发现改进的地方。
+                <del>(因为可以通过点击广告为自己增加收益)</del>
             </li>
         </ul>
         <h1 id="-">(≧∇≦)/</h1>

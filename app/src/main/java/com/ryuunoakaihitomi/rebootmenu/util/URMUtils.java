@@ -77,7 +77,8 @@ public class URMUtils {
      * @param mContext 1
      * @return boolean
      */
-    private static boolean isAccessibilitySettingsOn(Context mContext) {
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    public static boolean isAccessibilitySettingsOn(Context mContext) {
         //注意：不要使用以下注释掉的代码取无障碍服务开启状态！disableSelf()之后仍返回true
         //noinspection ConstantConditions
         //return ((AccessibilityManager) mContext.getSystemService(Context.ACCESSIBILITY_SERVICE)).isEnabled();
