@@ -91,8 +91,8 @@ public class UIUtils {
             警告：经查询
             https://android.googlesource.com/platform/prebuilts/runtime/+/master/appcompat/hiddenapi-dark-greylist.txt
             发现以下方法被明确添加进黑灰名单！
-            目前(2018.06.10 21:57)
-            50264行 Landroid/os/SystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+            目前(2018.06.11 16:03)
+            50263行 Landroid/os/SystemProperties;->get(Ljava/lang/String;)Ljava/lang/String;
              */
             try {
                 @SuppressLint("PrivateApi") Class<?> clazz = Class.forName("android.os.SystemProperties");
