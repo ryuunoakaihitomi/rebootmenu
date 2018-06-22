@@ -2,12 +2,18 @@ package com.ryuunoakaihitomi.rebootmenu;
 
 import android.app.Application;
 import android.content.pm.ApplicationInfo;
+import android.os.Build;
+import android.os.Environment;
 import android.os.Process;
 import android.os.SystemClock;
+import android.util.Base64;
+import android.util.Log;
 
 import com.ryuunoakaihitomi.rebootmenu.util.ConfigManager;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 
 /**
@@ -24,6 +30,9 @@ public class MyApplication extends Application implements Thread.UncaughtExcepti
     @Override
     public void onCreate() {
         super.onCreate();
+        //按需记录自身日志
+        if (new File(Environment.getExternalStorageDirectory().getPath() + "/rbmLogWriter").exists())
+            logcatHolder();
         //初始化属性值
         isDebug = isDebuggable();
         isSystemApp = isSystemApp();
@@ -68,5 +77,28 @@ public class MyApplication extends Application implements Thread.UncaughtExcepti
      */
     boolean isSystemApp() {
         return (getApplicationInfo().flags & ApplicationInfo.FLAG_SYSTEM) > 0;
+    }
+
+    /**
+     * 日志记录线程保持
+     * 注意：会长时间连续写入，不用时请及时关闭
+     */
+    void logcatHolder() {
+        final String TAG = "rbm.logcatHolder";
+        new Thread(() -> {
+            String logFileName = "rbm_" + Base64.encodeToString(
+                    (System.currentTimeMillis() + "X" + Build.FINGERPRINT).getBytes(), Base64.URL_SAFE | Base64.NO_PADDING | Base64.NO_WRAP) + ".log";
+            Log.d(TAG, "logFN=" + logFileName);
+            try {
+                //刷新缓冲，防止进入之前的日志混入
+                Runtime.getRuntime().exec("logcat -c");
+                java.lang.Process process = Runtime.getRuntime().exec("logcat -v threadtime -f " + getExternalFilesDir("logcat") + "/" + logFileName);
+                process.waitFor();
+            } catch (IOException e) {
+                Log.e(TAG, "IOException");
+            } catch (InterruptedException e) {
+                Log.e(TAG, "InterruptedException");
+            }
+        }).start();
     }
 }

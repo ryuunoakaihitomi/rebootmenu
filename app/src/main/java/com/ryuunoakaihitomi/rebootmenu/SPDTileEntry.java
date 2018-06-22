@@ -14,7 +14,22 @@ import com.ryuunoakaihitomi.rebootmenu.util.URMUtils;
 public class SPDTileEntry extends TileService {
     @Override
     public void onClick() {
-        //源URMUtils.accessbilityon(),针对Tile做了必要的修改
+        new DebugLog("SPDTileEntry isLocked:" + isLocked() + " isSecure:" + isSecure());
+        if (!isLocked()) {
+            accessbilityOnImpl();
+        } else {
+            if (isSecure())
+                //什么都不做只是弹出密码界面表示要先解锁，因为实际上无法在锁屏输入密码后调出电源菜单
+                unlockAndRun(() -> {
+                });
+            else
+                //如果在锁屏状态，但没有设置密码（不安全），则调出
+                accessbilityOnImpl();
+        }
+    }
+
+    //URMUtils.accessbilityon()的实现,针对Tile做了必要的修改
+    void accessbilityOnImpl() {
         new DebugLog("SPDTileEntry.onClick", DebugLog.LogLevel.V);
         if (!URMUtils.isAccessibilitySettingsOn(getApplicationContext())) {
             new TextToast(getApplicationContext(), getString(R.string.service_disabled));

@@ -1,13 +1,12 @@
 apply plugin: 'com.android.application'
-
 android {
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.ryuunoakaihitomi.rebootmenu"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 67
-        versionName "10_蛍夢_31_osc"
+        versionCode 68
+        versionName "10_蛍夢_32_osc"
     }
     //有病吧，不用Java 1.8时提示用拉姆达，编译时又出错要加Java 1.8。我还以为AS原生支持拉姆达表达式了。
     compileOptions {
@@ -20,4 +19,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+}
+
+dependencies {
 }
