@@ -86,14 +86,16 @@ public class MyApplication extends Application implements Thread.UncaughtExcepti
     void logcatHolder() {
         final String TAG = "rbm.logcatHolder";
         new Thread(() -> {
-            String logFileName = "rbm_" + Base64.encodeToString(
-                    (System.currentTimeMillis() + "X" + Build.FINGERPRINT).getBytes(), Base64.URL_SAFE | Base64.NO_PADDING | Base64.NO_WRAP) + ".log";
+            String logFileName = "rbm_" + System.currentTimeMillis() + Base64.encodeToString(
+                    (Build.FINGERPRINT).getBytes(), Base64.URL_SAFE | Base64.NO_PADDING | Base64.NO_WRAP) + ".log";
             Log.d(TAG, "logFN=" + logFileName);
             try {
                 //刷新缓冲，防止进入之前的日志混入
                 Runtime.getRuntime().exec("logcat -c");
                 java.lang.Process process = Runtime.getRuntime().exec("logcat -v threadtime -f " + getExternalFilesDir("logcat") + "/" + logFileName);
-                process.waitFor();
+                int code = process.waitFor();
+                //除了read: unexpected EOF!导致的一般不可能退出
+                Log.e(TAG, "exit! code:" + code);
             } catch (IOException e) {
                 Log.e(TAG, "IOException");
             } catch (InterruptedException e) {
