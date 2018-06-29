@@ -51,7 +51,7 @@ public class UnRootMode extends MyActivity {
                         break;
                     case 1:
                         //调用系统电源菜单无需二次确认
-                        URMUtils.accessbilityon(UnRootMode.this);
+                        URMUtils.accessibilityOn(UnRootMode.this);
                         break;
                     case 2:
                         if (!ConfigManager.get(ConfigManager.NO_NEED_TO_COMFIRM)) {

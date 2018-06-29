@@ -189,7 +189,7 @@ public class Shortcut extends MyActivity {
                 URMUtils.lockscreen(this, componentName, requestCode, devicePolicyManager, false);
                 break;
             case UR_POWERDIALOG:
-                URMUtils.accessbilityon(Shortcut.this);
+                URMUtils.accessibilityOn(Shortcut.this);
                 break;
             case UR_REBOOT:
                 if (devicePolicyManager.isDeviceOwnerApp(getPackageName()))

@@ -16,7 +16,7 @@ public class SPDTileEntry extends TileService {
     public void onClick() {
         new DebugLog("SPDTileEntry isLocked:" + isLocked() + " isSecure:" + isSecure());
         if (!isLocked()) {
-            accessbilityOnImpl();
+            accessibilityOnImpl();
         } else {
             if (isSecure())
                 //什么都不做只是弹出密码界面表示要先解锁，因为实际上无法在锁屏输入密码后调出电源菜单
@@ -24,12 +24,12 @@ public class SPDTileEntry extends TileService {
                 });
             else
                 //如果在锁屏状态，但没有设置密码（不安全），则调出
-                accessbilityOnImpl();
+                accessibilityOnImpl();
         }
     }
 
-    //URMUtils.accessbilityon()的实现,针对Tile做了必要的修改
-    void accessbilityOnImpl() {
+    //URMUtils.accessibilityOn()的实现,针对Tile做了必要的修改
+    void accessibilityOnImpl() {
         new DebugLog("SPDTileEntry.onClick", DebugLog.LogLevel.V);
         if (!URMUtils.isAccessibilitySettingsOn(getApplicationContext())) {
             new TextToast(getApplicationContext(), getString(R.string.service_disabled));

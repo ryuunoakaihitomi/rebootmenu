@@ -58,8 +58,8 @@ public class URMUtils {
      *
      * @param activity 1
      */
-    public static void accessbilityon(Activity activity) {
-        new DebugLog("accessbilityon", DebugLog.LogLevel.V);
+    public static void accessibilityOn(Activity activity) {
+        new DebugLog("accessibilityOn", DebugLog.LogLevel.V);
         if (!isAccessibilitySettingsOn(activity.getApplicationContext())) {
             new TextToast(activity.getApplicationContext(), activity.getString(R.string.service_disabled));
             Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
