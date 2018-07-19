@@ -19,7 +19,7 @@
 请到本仓库的[发布页面](https://github.com/ryuunoakaihitomi/rebootmenu/releases)下载本应用的官方发布版编译版本。
 
 ## License
-基于[MIT协议](https://choosealicense.com/licenses/mit/)发布，但此基础上追加了特殊规定，详情看应用帮助。
+基于[GNU GPLv3协议](https://choosealicense.com/licenses/gpl-3.0/)发布。
 
 ## 捐赠
 [捐赠地址](http://ryuunoakaihitomi.info/donate/)
