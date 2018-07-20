@@ -27,6 +27,7 @@ public class UnRootMode extends MyActivity {
     private AlertDialog.Builder mainDialog;
     private DevicePolicyManager devicePolicyManager;
     private ComponentName componentName;
+    private AlertDialog dialogInstance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +66,8 @@ public class UnRootMode extends MyActivity {
                             mainDialog.setNeutralButton(null, null);
                             mainDialog.setPositiveButton(null, null);
                             mainDialog.setNegativeButton(null, null);
-                            UIUtils.alphaShow(mainDialog.create(), UIUtils.TransparentLevel.CONFIRM);
+                            dialogInstance = mainDialog.create();
+                            UIUtils.alphaShow(dialogInstance, UIUtils.TransparentLevel.CONFIRM);
                         } else
                             URMUtils.reboot(devicePolicyManager, componentName, UnRootMode.this);
                         break;
@@ -78,7 +80,8 @@ public class UnRootMode extends MyActivity {
                             new TextToast(getApplicationContext(), getString(R.string.clear_owner_notice));
                             finish();
                         });
-                        UIUtils.alphaShow(mainDialog.create(), UIUtils.TransparentLevel.CONFIRM);
+                        dialogInstance = mainDialog.create();
+                        UIUtils.alphaShow(dialogInstance, UIUtils.TransparentLevel.CONFIRM);
                 }
             }
         };
@@ -107,9 +110,9 @@ public class UnRootMode extends MyActivity {
             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://music.163.com/#/song?id=22765874")));
             finish();
         });
-        AlertDialog mainDialogCreate = mainDialog.create();
-        mainDialogCreate.setOnShowListener(dialog -> {
-            ListView listView = mainDialogCreate.getListView();
+        dialogInstance = mainDialog.create();
+        dialogInstance.setOnShowListener(dialog -> {
+            ListView listView = dialogInstance.getListView();
             listView.setOnItemLongClickListener((parent, view, position, id) -> {
                 switch (position) {
                     case 0:
@@ -129,7 +132,17 @@ public class UnRootMode extends MyActivity {
                 return true;
             });
         });
-        UIUtils.alphaShow(mainDialogCreate, UIUtils.TransparentLevel.NORMAL);
+        UIUtils.alphaShow(dialogInstance, UIUtils.TransparentLevel.NORMAL);
         new DebugLog("UnRootMode.onCreate -- END", DebugLog.LogLevel.V);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //清掉dialog防止WindowLeaked
+        if (dialogInstance != null) {
+            dialogInstance.dismiss();
+            dialogInstance = null;
+        }
     }
 }

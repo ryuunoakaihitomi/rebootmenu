@@ -21,6 +21,7 @@ import com.ryuunoakaihitomi.rebootmenu.util.URMUtils;
 
 public class RootMode extends MyActivity {
     private boolean isForceMode;
+    private AlertDialog dialogInstance;
 
     @SuppressWarnings("DanglingJavadoc")
     @Override
@@ -114,7 +115,8 @@ public class RootMode extends MyActivity {
                 mainDialog.setNeutralButton(null, null);
                 mainDialog.setPositiveButton(null, null);
                 mainDialog.setNegativeButton(null, null);
-                UIUtils.alphaShow(mainDialog.create(), UIUtils.TransparentLevel.CONFIRM);
+                dialogInstance = mainDialog.create();
+                UIUtils.alphaShow(dialogInstance, UIUtils.TransparentLevel.CONFIRM);
             } else
                 //直接执行（无需确认）
                 exeKernel(shellList, shellListForce, i);
@@ -138,7 +140,8 @@ public class RootMode extends MyActivity {
                     isForceMode = false;
                     new TextToast(getApplicationContext(), getString(R.string.normal_mode));
                 }
-                UIUtils.alphaShow(mainDialog.create(), UIUtils.TransparentLevel.NORMAL);
+                dialogInstance = mainDialog.create();
+                UIUtils.alphaShow(dialogInstance, UIUtils.TransparentLevel.NORMAL);
             });
         } else {
             //不能兼容就只能选择强制
@@ -182,7 +185,8 @@ public class RootMode extends MyActivity {
                 return true;
             });
         });
-        UIUtils.alphaShow(mainDialogCreate, UIUtils.TransparentLevel.NORMAL);
+        dialogInstance = mainDialogCreate;
+        UIUtils.alphaShow(dialogInstance, UIUtils.TransparentLevel.NORMAL);
     }
 
     private void exeKernel(String[] shellList, String[] shellListForce, int i) {
@@ -227,5 +231,18 @@ public class RootMode extends MyActivity {
         new DebugLog("rebootSystemUIAlternativeMethod", DebugLog.LogLevel.V);
         ShellUtils.suCmdExec(Commands.RESTART_SYSTEM_UI_ALTERNATIVE);
         ShellUtils.killShKillProcess("com.android.systemui");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (dialogInstance != null) {
+            dialogInstance.dismiss();
+            //https://stackoverflow.com/questions/11590382/android-view-windowleaked
+            /*
+            Simply dismissing the dialog was not enough to get rid of the error for me. It turns out my code was holding onto a reference to the dialog even after it was dismissed. The key for me was to set that reference to null after dismissing the dialog.
+             */
+            dialogInstance = null;
+        }
     }
 }
