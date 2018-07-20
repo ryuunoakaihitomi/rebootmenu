@@ -9,7 +9,7 @@ import android.service.quicksettings.TileService;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 
 /**
- * Android N 磁贴入口
+ * Android N 磁贴入口（打开应用）
  * Created by ZQY on 2018/3/8.
  */
 

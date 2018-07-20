@@ -10,6 +10,10 @@ import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 import com.ryuunoakaihitomi.rebootmenu.util.TextToast;
 import com.ryuunoakaihitomi.rebootmenu.util.URMUtils;
 
+/**
+ * 直接调出系统电源菜单的磁贴入口
+ */
+
 @TargetApi(Build.VERSION_CODES.N)
 public class SPDTileEntry extends TileService {
     @Override
