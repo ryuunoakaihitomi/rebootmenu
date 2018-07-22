@@ -3,6 +3,7 @@ package com.ryuunoakaihitomi.rebootmenu.util;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -81,16 +82,22 @@ public class UIUtils {
      * @param f 透明度
      * @throws NullPointerException null.XXX();
      */
+    @SuppressWarnings("JavaReflectionMemberAccess")
     public static void alphaShow(AlertDialog w, Float f) {
         Window window = w.getWindow();
         assert window != null;
-        //由于ActivityManager的isLowRamDevice方法非静态，因此只能使用反射来取系统属性了。（但在Android P(ill)上可能行不通）
+        //使用反射来取系统属性（但在Android P(ill)上行不通）
+        /*因为RoSystemProperties的缓存，
+        在部分情况下（用magisk附带的resetprop设置键值，在热重启前）
+        会出现SystemProperties返回值
+        和isLowRamDevice()不同的情况，所以保留此法
+         */
         boolean isLowRam = false;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && Build.VERSION.SDK_INT <= Build.VERSION_CODES.O_MR1)
             /*
             警告：经查询
             https://android.googlesource.com/platform/prebuilts/runtime/+/master/appcompat/hiddenapi-dark-greylist.txt
-            发现以下方法被明确添加进黑灰名单！
+            发现以下方法被明确添加进深灰名单！
             目前(2018.06.11 16:03)
             50263行 Landroid/os/SystemProperties;->get(Ljava/lang/String;)Ljava/lang/String;
              */
@@ -101,6 +108,10 @@ public class UIUtils {
             } catch (Exception e) {
                 new DebugLog(e, "alphaShow", true);
             }
+            //TODO 替换SDK_INT判断标准为Build.VERSION_CODES.P 从此开始不允许反射
+        else if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O_MR1)
+            //noinspection ConstantConditions
+            isLowRam = ((ActivityManager) w.getContext().getSystemService(Context.ACTIVITY_SERVICE)).isLowRamDevice();
         new DebugLog("alphaShow: isLowRam=" + isLowRam, DebugLog.LogLevel.I);
         if (!isLowRam) {
             WindowManager.LayoutParams lp = window.getAttributes();
@@ -137,7 +148,8 @@ public class UIUtils {
             mMessageView.setAccessible(true);
             TextView textView = (TextView) mMessageView.get(mAlertController);
             //修改文本颜色，因为我的诺基亚把默认文字颜色改成灰的了，看得不太清楚
-            textView.setTextColor(activityThis.getResources().getColor(R.color.fujimurasaki));
+            textView.setTextColor(ConfigManager.get(ConfigManager.WHITE_THEME) ?
+                    activityThis.getResources().getColor(R.color.fujimurasaki) : activityThis.getResources().getColor(R.color.tohoh));
             //可选择文本
             textView.setTextIsSelectable(true);
         } catch (Exception e) {

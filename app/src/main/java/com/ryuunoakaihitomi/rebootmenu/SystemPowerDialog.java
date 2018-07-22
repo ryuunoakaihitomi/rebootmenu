@@ -41,7 +41,7 @@ public class SystemPowerDialog extends AccessibilityService {
         super.onServiceConnected();
         new DebugLog("SystemPowerDialog.onServiceConnected", DebugLog.LogLevel.V);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            startForeground(1, getNoticeBar());
+            loadNoticeBar();
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction(POWER_DIALOG_ACTION);
             registerReceiver(broadcastReceiver, intentFilter);
@@ -83,25 +83,35 @@ public class SystemPowerDialog extends AccessibilityService {
     }
 
     //常驻通知
-    private Notification getNoticeBar() {
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void loadNoticeBar() {
         Notification.Builder builder;
-        String CHANNAL_ID = "SPD";
-        //Oreo以上适配通知频道
+        final String CHANNEL_ID = "SPD";
+        final int NOTIFICATION_ID = 1;
+        //Oreo以上适配通知渠道
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel notificationChannel = new NotificationChannel(CHANNAL_ID, getString(R.string.service_name), NotificationManager.IMPORTANCE_LOW);
+            //尽管IMPORTANCE_MIN在26中无效...
+            NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, getString(R.string.service_name), NotificationManager.IMPORTANCE_MIN);
             //noinspection ConstantConditions
             getSystemService(NotificationManager.class).createNotificationChannel(notificationChannel);
-            builder = new Notification.Builder(this, CHANNAL_ID);
+            builder = new Notification.Builder(this, CHANNEL_ID);
+            //根据文档：如果非要用一个来代替的话，使用免root的锁屏
+            builder.setShortcutId("ur_l");
         } else
             builder = new Notification.Builder(this);
         builder
-                .setContentTitle(getString(R.string.service_name))
+                .setContentTitle(getString(R.string.service_simple_name))
                 .setContentText(getString(R.string.notification_notice))
                 .setContentIntent(PendingIntent.getActivity(this, 0, getPackageManager().getLaunchIntentForPackage(getPackageName()), 0))
                 .setOngoing(true)
+                //尽管在26上不能折叠通知（需要手动设置），但可以将其放置在较低的位置（已废弃）
+                .setPriority(Notification.PRIORITY_MIN)
                 .setSmallIcon(R.mipmap.ic_launcher)
+                //没有必要显示在锁屏上
+                .setVisibility(Notification.VISIBILITY_SECRET)
                 //秒表指示
                 .setUsesChronometer(true);
-        return builder.build();
+        Notification notification = builder.build();
+        startForeground(NOTIFICATION_ID, notification);
     }
 }

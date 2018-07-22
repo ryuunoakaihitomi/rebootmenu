@@ -57,4 +57,5 @@
     <string name="url_open_failed_notice">似乎没有可以打开的应用…</string>
     <string name="notification_notice">点击打开应用</string>
     <string name="spd_tile_label">系统电源</string>
+    <string name="service_simple_name">调用系统电源菜单服务(常驻)</string>
 </resources>

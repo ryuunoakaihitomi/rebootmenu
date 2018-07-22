@@ -3,4 +3,6 @@
     <!--http://nipponcolors.com/-->
     <color name="ginsyu">#C73E3A</color>
     <color name="fujimurasaki">#8A6BBE</color>
+    <!--藤黄（とうおう）-->
+    <color name="tohoh">#FFC408</color>
 </resources>
