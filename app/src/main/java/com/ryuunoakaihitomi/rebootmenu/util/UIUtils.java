@@ -140,21 +140,28 @@ public class UIUtils {
         AlertDialog hc = h.create();
         alphaShow(hc, TransparentLevel.HELP);
         //通过反射取得AlertDialog的窗体对象
-        try {
-            @SuppressWarnings("JavaReflectionMemberAccess") Field mAlert = AlertDialog.class.getDeclaredField("mAlert");
-            mAlert.setAccessible(true);
-            Object mAlertController = mAlert.get(hc);
-            Field mMessageView = mAlertController.getClass().getDeclaredField("mMessageView");
-            mMessageView.setAccessible(true);
-            TextView textView = (TextView) mMessageView.get(mAlertController);
-            //修改文本颜色，因为我的诺基亚把默认文字颜色改成灰的了，看得不太清楚
-            textView.setTextColor(ConfigManager.get(ConfigManager.WHITE_THEME) ?
-                    activityThis.getResources().getColor(R.color.fujimurasaki) : activityThis.getResources().getColor(R.color.tohoh));
-            //可选择文本
-            textView.setTextIsSelectable(true);
-        } catch (Exception e) {
-            new DebugLog(e, "helpDialog", true);
-        }
+        /*
+        Android P不开始允许反射AlertController，因此不予更改，
+        日志：
+        Accessing hidden field Landroid/app/AlertDialog;->mAlert:Lcom/android/internal/app/AlertController; (light greylist, reflection)
+        Accessing hidden field Lcom/android/internal/app/AlertController;->mMessageView:Landroid/widget/TextView; (dark greylist, reflection)
+         */
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.O_MR1)
+            try {
+                @SuppressWarnings("JavaReflectionMemberAccess") Field mAlert = AlertDialog.class.getDeclaredField("mAlert");
+                mAlert.setAccessible(true);
+                Object mAlertController = mAlert.get(hc);
+                Field mMessageView = mAlertController.getClass().getDeclaredField("mMessageView");
+                mMessageView.setAccessible(true);
+                TextView textView = (TextView) mMessageView.get(mAlertController);
+                //修改文本颜色，因为我的诺基亚把默认文字颜色改成灰的了，看得不太清楚
+                textView.setTextColor(ConfigManager.get(ConfigManager.WHITE_THEME) ?
+                        activityThis.getResources().getColor(R.color.fujimurasaki) : activityThis.getResources().getColor(R.color.tohoh));
+                //可选择文本
+                textView.setTextIsSelectable(true);
+            } catch (Exception e) {
+                new DebugLog(e, "helpDialog", true);
+            }
         //检测调试环境用：测试异常
         hc.getButton(DialogInterface.BUTTON_NEGATIVE).setOnLongClickListener(v -> {
             throw new Error("test error");

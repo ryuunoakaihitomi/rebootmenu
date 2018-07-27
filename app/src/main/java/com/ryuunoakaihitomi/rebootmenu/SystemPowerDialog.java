@@ -23,9 +23,12 @@ import com.ryuunoakaihitomi.rebootmenu.util.TextToast;
 
 public class SystemPowerDialog extends AccessibilityService {
 
-    public static final String POWER_DIALOG_ACTION = "SPD.POWER_DIALOG_ACTION";
+    public static final String
+            POWER_DIALOG_ACTION = "com.ryuunoakaihitomi.rebootmenu.POWER_DIALOG_ACTION",
+            LOCK_SCREEN_ACTION = "com.ryuunoakaihitomi.rebootmenu.LOCK_SCREEN_ACTION";
+
     private boolean isBroadcastRegistered;
-    private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver mPowerDialogBroadcastReceiver = new BroadcastReceiver() {
         @TargetApi(Build.VERSION_CODES.LOLLIPOP)
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -35,6 +38,12 @@ public class SystemPowerDialog extends AccessibilityService {
             new TextToast(getApplicationContext(), getString(R.string.spd_showed));
         }
     };
+    private final BroadcastReceiver mLockScreenBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            new DebugLog("GLOBAL_ACTION_LOCK_SCREEN -> " + performGlobalAction(AccessibilityService.GLOBAL_ACTION_LOCK_SCREEN));
+        }
+    };
 
     @Override
     protected void onServiceConnected() {
@@ -42,9 +51,11 @@ public class SystemPowerDialog extends AccessibilityService {
         new DebugLog("SystemPowerDialog.onServiceConnected", DebugLog.LogLevel.V);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             loadNoticeBar();
-            IntentFilter intentFilter = new IntentFilter();
-            intentFilter.addAction(POWER_DIALOG_ACTION);
-            registerReceiver(broadcastReceiver, intentFilter);
+            registerBroadcastReceiver(mPowerDialogBroadcastReceiver, POWER_DIALOG_ACTION);
+            //?? Build.VERSION_CODES.P=10000
+            //P尚在预览版，VERSION_CODE未定
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O_MR1)
+                registerBroadcastReceiver(mLockScreenBroadcastReceiver, LOCK_SCREEN_ACTION);
             isBroadcastRegistered = true;
         } else {
             new DebugLog("onServiceConnected: Build.VERSION_CODES.LOLLIPOP?", DebugLog.LogLevel.E);
@@ -58,7 +69,9 @@ public class SystemPowerDialog extends AccessibilityService {
         new DebugLog("SystemPowerDialog.onUnbind", DebugLog.LogLevel.V);
         if (isBroadcastRegistered) {
             isBroadcastRegistered = false;
-            unregisterReceiver(broadcastReceiver);
+            unregisterReceiver(mPowerDialogBroadcastReceiver);
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O_MR1)
+                unregisterReceiver(mLockScreenBroadcastReceiver);
         }
         return super.onUnbind(intent);
     }
@@ -96,7 +109,8 @@ public class SystemPowerDialog extends AccessibilityService {
             getSystemService(NotificationManager.class).createNotificationChannel(notificationChannel);
             builder = new Notification.Builder(this, CHANNEL_ID);
             //根据文档：如果非要用一个来代替的话，使用免root的锁屏
-            builder.setShortcutId("ur_l");
+            //理解错误，这个方法的作用是使用通知替代一个Shortcut，当通知出现时Shortcut一定会被隐藏
+            //builder.setShortcutId("ur_l");
         } else
             builder = new Notification.Builder(this);
         builder
@@ -113,5 +127,12 @@ public class SystemPowerDialog extends AccessibilityService {
                 .setUsesChronometer(true);
         Notification notification = builder.build();
         startForeground(NOTIFICATION_ID, notification);
+    }
+
+    //注册广播接收器
+    private void registerBroadcastReceiver(BroadcastReceiver broadcastReceiver, String action) {
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(action);
+        registerReceiver(broadcastReceiver, intentFilter);
     }
 }

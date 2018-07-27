@@ -36,21 +36,33 @@ public class URMUtils {
         new DebugLog("lockscreen", DebugLog.LogLevel.V);
         //设备管理器是否启用
         boolean active = devicePolicyManager.isAdminActive(componentName);
-        if (!active) {
-            //请求启用
-            Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
-            intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, componentName);
-            intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, activity.getString(R.string.service_explanation));
-            activity.startActivityForResult(intent, requestCode);
+        //Android P
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O_MR1) {
+            //自动移除不必要的管理员，避免在卸载时造成困扰
+            if (active) devicePolicyManager.removeActiveAdmin(componentName);
+            //请求打开辅助服务设置
+            if (!isAccessibilitySettingsOn(activity.getApplicationContext())) {
+                new TextToast(activity.getApplicationContext(), activity.getString(R.string.service_disabled));
+                activity.startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
+            } else
+                activity.sendBroadcast(new Intent(SystemPowerDialog.LOCK_SCREEN_ACTION));
         } else {
-            devicePolicyManager.lockNow();
-            if (needConfig)
-                //如果需要二次确认，禁用设备管理器。（这里的策略和root模式的锁屏无需确认不同）
-                if (!ConfigManager.get(ConfigManager.NO_NEED_TO_COMFIRM)) {
-                    devicePolicyManager.removeActiveAdmin(componentName);
-                }
-            activity.finish();
+            if (!active) {
+                //请求启用
+                Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
+                intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, componentName);
+                intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, activity.getString(R.string.service_explanation));
+                activity.startActivityForResult(intent, requestCode);
+            } else {
+                devicePolicyManager.lockNow();
+                if (needConfig)
+                    //如果需要二次确认，禁用设备管理器。（这里的策略和root模式的锁屏无需确认不同）
+                    if (!ConfigManager.get(ConfigManager.NO_NEED_TO_COMFIRM)) {
+                        devicePolicyManager.removeActiveAdmin(componentName);
+                    }
+            }
         }
+        activity.finish();
     }
 
     /**

@@ -33,7 +33,7 @@ public class SPDTileEntry extends TileService {
     }
 
     //URMUtils.accessibilityOn()的实现,针对Tile做了必要的修改
-    void accessibilityOnImpl() {
+    private void accessibilityOnImpl() {
         new DebugLog("SPDTileEntry.onClick", DebugLog.LogLevel.V);
         if (!URMUtils.isAccessibilitySettingsOn(getApplicationContext())) {
             new TextToast(getApplicationContext(), getString(R.string.service_disabled));
