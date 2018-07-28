@@ -46,6 +46,7 @@ public class URMUtils {
                 activity.startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
             } else
                 activity.sendBroadcast(new Intent(SystemPowerDialog.LOCK_SCREEN_ACTION));
+            activity.finish();
         } else {
             if (!active) {
                 //请求启用
@@ -60,9 +61,9 @@ public class URMUtils {
                     if (!ConfigManager.get(ConfigManager.NO_NEED_TO_COMFIRM)) {
                         devicePolicyManager.removeActiveAdmin(componentName);
                     }
+                activity.finish();
             }
         }
-        activity.finish();
     }
 
     /**
