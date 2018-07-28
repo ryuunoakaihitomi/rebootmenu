@@ -196,7 +196,7 @@ public class RootMode extends MyActivity {
             final String[] rebootResList = {
                     null, null, "recovery", "bootloader"
             };
-            URMUtils.rebootedByPowerManager(this, rebootResList[i]);
+            URMUtils.rebootWithPowerManager(this, rebootResList[i]);
         } else {
             String command;
             boolean isSucceed;

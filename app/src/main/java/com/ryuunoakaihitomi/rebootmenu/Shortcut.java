@@ -193,7 +193,7 @@ public class Shortcut extends MyActivity {
                 break;
             case UR_REBOOT:
                 if (devicePolicyManager.isDeviceOwnerApp(getPackageName()))
-                    URMUtils.reboot(devicePolicyManager, componentName, this);
+                    URMUtils.rebootWithDevicePolicyManager(devicePolicyManager, componentName, this);
                 else {
                     if (isN_MR1)
                         shortcutManager.removeDynamicShortcuts(Collections.singletonList("ur_r"));
@@ -213,9 +213,9 @@ public class Shortcut extends MyActivity {
         new DebugLog("rebootExec: arg:" + arg, DebugLog.LogLevel.V);
         if (isSysApp && arg != Commands.SHUTDOWN_F)
             if (arg == Commands.REBOOT_F)
-                URMUtils.rebootedByPowerManager(this, null);
+                URMUtils.rebootWithPowerManager(this, null);
             else
-                URMUtils.rebootedByPowerManager(this, arg.substring(7));
+                URMUtils.rebootWithPowerManager(this, arg.substring(7));
         else {
             ShellUtils.shCmdExec(arg);
             ShellUtils.suCmdExec(arg);

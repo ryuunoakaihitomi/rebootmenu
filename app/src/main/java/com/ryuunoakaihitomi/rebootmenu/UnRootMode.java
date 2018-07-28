@@ -61,7 +61,7 @@ public class UnRootMode extends MyActivity {
                                 if (iConfirm == 1)
                                     finish();
                                 else
-                                    URMUtils.reboot(devicePolicyManager, componentName, UnRootMode.this);
+                                    URMUtils.rebootWithDevicePolicyManager(devicePolicyManager, componentName, UnRootMode.this);
                             });
                             mainDialog.setNeutralButton(null, null);
                             mainDialog.setPositiveButton(null, null);
@@ -69,7 +69,7 @@ public class UnRootMode extends MyActivity {
                             dialogInstance = mainDialog.create();
                             UIUtils.alphaShow(dialogInstance, UIUtils.TransparentLevel.CONFIRM);
                         } else
-                            URMUtils.reboot(devicePolicyManager, componentName, UnRootMode.this);
+                            URMUtils.rebootWithDevicePolicyManager(devicePolicyManager, componentName, UnRootMode.this);
                         break;
                     case 3:
                         mainDialog.setTitle(getString(R.string.confirm_operation));

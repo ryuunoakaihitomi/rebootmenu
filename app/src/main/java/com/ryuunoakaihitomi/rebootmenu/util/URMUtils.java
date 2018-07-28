@@ -126,8 +126,8 @@ public class URMUtils {
      * @param activity            3
      */
     @TargetApi(Build.VERSION_CODES.N)
-    public static void reboot(DevicePolicyManager devicePolicyManager, ComponentName componentName, Activity activity) {
-        new DebugLog("reboot", DebugLog.LogLevel.V);
+    public static void rebootWithDevicePolicyManager(DevicePolicyManager devicePolicyManager, ComponentName componentName, Activity activity) {
+        new DebugLog("rebootWithDevicePolicyManager", DebugLog.LogLevel.V);
         try {
             devicePolicyManager.reboot(componentName);
         } catch (Throwable t) {
@@ -144,8 +144,8 @@ public class URMUtils {
      * @param reason  参数
      */
     @SuppressWarnings("ConstantConditions")
-    public static void rebootedByPowerManager(Context context, String reason) {
-        new DebugLog("rebootedByPowerManager: reason:" + reason, DebugLog.LogLevel.V);
+    public static void rebootWithPowerManager(Context context, String reason) {
+        new DebugLog("rebootWithPowerManager: reason:" + reason, DebugLog.LogLevel.V);
         ((PowerManager) context.getSystemService(Context.POWER_SERVICE)).reboot(reason);
     }
 }
