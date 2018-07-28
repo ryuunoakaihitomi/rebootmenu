@@ -48,7 +48,7 @@ public class UnRootMode extends MyActivity {
             public void onClick(DialogInterface dialogInterface, int i) {
                 switch (i) {
                     case 0:
-                        URMUtils.lockscreen(UnRootMode.this, componentName, requestCode, devicePolicyManager, true);
+                        URMUtils.lockScreen(UnRootMode.this, componentName, requestCode, devicePolicyManager, true);
                         break;
                     case 1:
                         //调用系统电源菜单无需二次确认

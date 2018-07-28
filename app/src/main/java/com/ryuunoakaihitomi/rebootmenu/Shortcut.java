@@ -186,7 +186,7 @@ public class Shortcut extends MyActivity {
                 break;
             //免root模式
             case UR_LOCKSCREEN:
-                URMUtils.lockscreen(this, componentName, requestCode, devicePolicyManager, false);
+                URMUtils.lockScreen(this, componentName, requestCode, devicePolicyManager, false);
                 break;
             case UR_POWERDIALOG:
                 URMUtils.accessibilityOn(Shortcut.this);

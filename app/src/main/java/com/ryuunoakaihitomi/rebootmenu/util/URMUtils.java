@@ -32,8 +32,8 @@ public class URMUtils {
      * @param needConfig          是否需要 配置管理员
      */
 
-    public static void lockscreen(Activity activity, ComponentName componentName, int requestCode, DevicePolicyManager devicePolicyManager, boolean needConfig) {
-        new DebugLog("lockscreen", DebugLog.LogLevel.V);
+    public static void lockScreen(Activity activity, ComponentName componentName, int requestCode, DevicePolicyManager devicePolicyManager, boolean needConfig) {
+        new DebugLog("lockScreen", DebugLog.LogLevel.V);
         //设备管理器是否启用
         boolean active = devicePolicyManager.isAdminActive(componentName);
         //Android P
