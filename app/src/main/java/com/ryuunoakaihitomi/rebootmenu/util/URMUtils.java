@@ -132,7 +132,7 @@ public class URMUtils {
             devicePolicyManager.reboot(componentName);
         } catch (Throwable t) {
             new TextToast(activity.getApplicationContext(), true, activity.getString(R.string.dpm_reboot_error));
-            new DebugLog(t, "reboot", true);
+            new DebugLog(t, "rebootWithDevicePolicyManager", true);
         }
         activity.finish();
     }
