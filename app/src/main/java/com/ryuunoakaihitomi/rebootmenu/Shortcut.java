@@ -55,11 +55,7 @@ public class Shortcut extends MyActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         new DebugLog("Shortcut.onCreate", DebugLog.LogLevel.V);
-        componentName = new ComponentName(this, AdminReceiver.class);
-        devicePolicyManager = (DevicePolicyManager) getSystemService(DEVICE_POLICY_SERVICE);
-        requestCode = 1729;
-        assert devicePolicyManager != null;
-        URLockScrInit(true, requestCode, devicePolicyManager, componentName);
+        URLockScrInit(true, 1729, (DevicePolicyManager) getSystemService(DEVICE_POLICY_SERVICE), new ComponentName(this, AdminReceiver.class));
         boolean isN_MR1 = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1;
         isSysApp = MyApplication.isSystemApp;
         int param = getIntent().getIntExtra(extraTag, -1);

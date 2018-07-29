@@ -23,19 +23,14 @@ import com.ryuunoakaihitomi.rebootmenu.util.URMUtils;
  */
 
 public class UnRootMode extends MyActivity {
-    private final int requestCode = 1989;
     private AlertDialog.Builder mainDialog;
-    private DevicePolicyManager devicePolicyManager;
-    private ComponentName componentName;
     private AlertDialog dialogInstance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         new DebugLog("UnRootMode.onCreate", DebugLog.LogLevel.V);
-        devicePolicyManager = (DevicePolicyManager) getSystemService(DEVICE_POLICY_SERVICE);
-        componentName = new ComponentName(this, AdminReceiver.class);
-        URLockScrInit(false, requestCode, devicePolicyManager, componentName);
+        URLockScrInit(false, 1989, (DevicePolicyManager) getSystemService(DEVICE_POLICY_SERVICE), new ComponentName(this, AdminReceiver.class));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             UIUtils.transparentStatusBar(this);
         mainDialog = UIUtils.LoadDialog(ConfigManager.get(ConfigManager.WHITE_THEME), this);

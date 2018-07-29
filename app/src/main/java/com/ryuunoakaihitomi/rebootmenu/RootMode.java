@@ -32,7 +32,6 @@ public class RootMode extends MyActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             UIUtils.transparentStatusBar(this);
         }
-
         final AlertDialog.Builder mainDialog = UIUtils.LoadDialog(ConfigManager.get(ConfigManager.WHITE_THEME), this);
         UIUtils.setExitStyleAndHelp(RootMode.this, mainDialog);
         mainDialog.setTitle(getString(R.string.root_title));
