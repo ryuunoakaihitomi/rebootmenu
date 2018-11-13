@@ -1,13 +1,16 @@
 package com.ryuunoakaihitomi.rebootmenu;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Process;
 import android.os.SystemClock;
 import android.util.Base64;
 import android.util.Log;
+import android.util.LogPrinter;
 
 import com.ryuunoakaihitomi.rebootmenu.util.ConfigManager;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
@@ -15,6 +18,7 @@ import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.Arrays;
 
 /**
  * 自定义Application：禁用xposed，异常捕捉，调试/系统属性
@@ -27,29 +31,15 @@ public class MyApplication extends Application implements Thread.UncaughtExcepti
 
     public static boolean isDebug, isSystemApp;
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        //按需记录自身日志
-        if (new File(Environment.getExternalStorageDirectory().getPath() + "/rbmLogWriter").exists())
-            logcatHolder();
-        //初始化属性值
-        isDebug = isDebuggable();
-        isSystemApp = isSystemApp();
-        //应该等到isDebug初始化完了再log要不然查看到的isDebug值恒为假（又一个粗心造成的惨案）
-        new DebugLog("MyApplication.onCreate: (尾北) isSystem:" + isSystemApp, DebugLog.LogLevel.I);
-        //捕捉异常
-        Thread.setDefaultUncaughtExceptionHandler(this);
-        ConfigManager.initDir(this);
-        //尝试禁用xposed
+    //笼子里面关着的灵魂是否已经发臭了呢？
+    static void coolapkOrMe(Context context) {
+        LogPrinter printer = new LogPrinter(Log.VERBOSE, "coolapkOrMe");
         try {
-            Field field = ClassLoader.getSystemClassLoader()
-                    .loadClass("de.robv.android.xposed.XposedBridge")
-                    .getDeclaredField("disableHooks");
-            field.setAccessible(true);
-            field.set(null, true);
-        } catch (Throwable t) {
-            new DebugLog(t, "disableXposed", false);
+            printer.println("Coolapk, gids:"
+                    + Arrays.toString(context.getPackageManager().getPackageInfo("com.coolapk.market", PackageManager.GET_GIDS).gids));
+            throw new Error("https://www.coolapk.com/apk/com.ryuunoakaihitomi.rebootmenu");
+        } catch (PackageManager.NameNotFoundException ignored) {
+            printer.println("Me");
         }
     }
 
@@ -102,5 +92,32 @@ public class MyApplication extends Application implements Thread.UncaughtExcepti
                 Log.e(TAG, "InterruptedException");
             }
         }).start();
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        coolapkOrMe(this);
+        //按需记录自身日志
+        if (new File(Environment.getExternalStorageDirectory().getPath() + "/rbmLogWriter").exists())
+            logcatHolder();
+        //初始化属性值
+        isDebug = isDebuggable();
+        isSystemApp = isSystemApp();
+        //应该等到isDebug初始化完了再log要不然查看到的isDebug值恒为假（又一个粗心造成的惨案）
+        new DebugLog("MyApplication.onCreate: (尾北) isSystem:" + isSystemApp, DebugLog.LogLevel.I);
+        //捕捉异常
+        Thread.setDefaultUncaughtExceptionHandler(this);
+        ConfigManager.initDir(this);
+        //尝试禁用xposed
+        try {
+            Field field = ClassLoader.getSystemClassLoader()
+                    .loadClass("de.robv.android.xposed.XposedBridge")
+                    .getDeclaredField("disableHooks");
+            field.setAccessible(true);
+            field.set(null, true);
+        } catch (Throwable t) {
+            new DebugLog(t, "disableXposed", false);
+        }
     }
 }
