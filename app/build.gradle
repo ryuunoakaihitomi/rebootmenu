@@ -21,5 +21,8 @@ android {
     }
 }
 
-dependencies {
+android.applicationVariants.all { variant ->
+    variant.outputs.all {
+        outputFileName = "${variant.applicationId}-${variant.versionName}_${variant.buildType.name}.apk"
+    }
 }
