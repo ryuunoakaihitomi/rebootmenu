@@ -2,6 +2,7 @@ package com.ryuunoakaihitomi.rebootmenu;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.widget.ListView;
@@ -23,7 +24,10 @@ public class RootMode extends MyActivity {
     private boolean isForceMode;
     private AlertDialog dialogInstance;
 
-    @SuppressWarnings("DanglingJavadoc")
+    private static boolean isAL18() {
+        return Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,11 +40,13 @@ public class RootMode extends MyActivity {
         UIUtils.setExitStyleAndHelp(RootMode.this, mainDialog);
         mainDialog.setTitle(getString(R.string.root_title));
         //默认模式功能列表
+        //虽然不能用am，但Android 4.3以下可以用am发送action的方式关机重启
         final String[] uiTextList = {
                 getString(R.string.reboot),
                 getString(R.string.shutdown),
-                getString(R.string.recovery),
-                getString(R.string.fastboot),
+                //只能够强制
+                (isAL18() ? "*" : "") + getString(R.string.recovery),
+                (isAL18() ? "*" : "") + getString(R.string.fastboot),
                 getString(R.string.hot_reboot),
                 getString(R.string.reboot_ui),
                 getString(R.string.safety),
@@ -61,8 +67,8 @@ public class RootMode extends MyActivity {
         final String[] uiTextListForce = {
                 "*" + uiTextList[0],
                 "*" + uiTextList[1],
-                "*" + uiTextList[2],
-                "*" + uiTextList[3],
+                (isAL18() ? "" : "*") + uiTextList[2],
+                (isAL18() ? "" : "*") + uiTextList[3],
                 uiTextList[4],
                 uiTextList[5],
                 "*" + uiTextList[6],
@@ -121,31 +127,28 @@ public class RootMode extends MyActivity {
                 exeKernel(shellList, shellListForce, i);
         };
         mainDialog.setItems(uiTextList, mainListener);
-        /**
+        /*
          * 经代码查阅对比，发现在Android4.3中加入了svc控制关机的功能。
          *
          * @see https://github.com/aosp-mirror/platform_frameworks_base/commit/62aad7f66fcd673831029eb96dd49c95f76b17bd
          *
          */
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            mainDialog.setNeutralButton(R.string.mode_switch, (dialogInterface, i) -> {
-                //没问题就按照用户的选择
-                if (!isForceMode) {
-                    mainDialog.setItems(uiTextListForce, mainListener);
-                    isForceMode = true;
-                    new TextToast(getApplicationContext(), getString(R.string.force_mode));
-                } else {
-                    mainDialog.setItems(uiTextList, mainListener);
-                    isForceMode = false;
-                    new TextToast(getApplicationContext(), getString(R.string.normal_mode));
-                }
-                dialogInstance = mainDialog.create();
-                UIUtils.alphaShow(dialogInstance, UIUtils.TransparentLevel.NORMAL);
-            });
-        } else {
+        mainDialog.setNeutralButton(R.string.mode_switch, (dialogInterface, i) -> {
+            //没问题就按照用户的选择
+            if (!isForceMode) {
+                mainDialog.setItems(uiTextListForce, mainListener);
+                isForceMode = true;
+                new TextToast(getApplicationContext(), getString(R.string.force_mode));
+            } else {
+                mainDialog.setItems(uiTextList, mainListener);
+                isForceMode = false;
+                new TextToast(getApplicationContext(), getString(R.string.normal_mode));
+            }
+            dialogInstance = mainDialog.create();
+            UIUtils.alphaShow(dialogInstance, UIUtils.TransparentLevel.NORMAL);
+        });
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
             //不能兼容就只能选择强制
-            mainDialog.setItems(uiTextListForce, mainListener);
-            isForceMode = true;
             new TextToast(getApplicationContext(), getString(R.string.normal_not_support));
         }
         //长按监听 来自https://stackoverflow.com/questions/9145628/add-onlongclick-listener-to-an-alertdialog/14163293#14163293
@@ -188,44 +191,6 @@ public class RootMode extends MyActivity {
         UIUtils.alphaShow(dialogInstance, UIUtils.TransparentLevel.NORMAL);
     }
 
-    private void exeKernel(String[] shellList, String[] shellListForce, int i) {
-        new DebugLog("exeKernel: i:" + i + " isForceMode:" + isForceMode);
-        //是系统应用，且是reboot系，且不是关机
-        if (MyApplication.isSystemApp && i != 1 && i < 4) {
-            final String[] rebootResList = {
-                    null, null, "recovery", "bootloader"
-            };
-            URMUtils.rebootWithPowerManager(this, rebootResList[i]);
-        } else {
-            String command;
-            boolean isSucceed;
-            //模式选择
-            if (!isForceMode)
-                command = shellList[i];
-            else {
-                command = shellListForce[i];
-                //首先尝试普通权限shell，只在强制模式可能有效
-                ShellUtils.shCmdExec(command);
-            }
-            isSucceed = ShellUtils.suCmdExec(command);
-            //如果是安全模式，MIUI执行完不能立即重启，还得执行一次重启
-            //noinspection StringEquality
-            if (command == shellList[6])
-                if (!isForceMode)
-                    ShellUtils.suCmdExec(shellList[0]);
-                else {
-                    ShellUtils.shCmdExec(shellListForce[0]);
-                    ShellUtils.suCmdExec(shellListForce[0]);
-                }
-                //重启UI：两套备选方案
-            else if (shellList[5].equals(command) && !isSucceed) {
-                rebootSystemUIAlternativeMethod();
-            }
-        }
-        new TextToast(getApplicationContext(), true, getString(R.string.cmd_send_notice));
-        finish();
-    }
-
     static void rebootSystemUIAlternativeMethod() {
         new DebugLog("rebootSystemUIAlternativeMethod", DebugLog.LogLevel.V);
         ShellUtils.suCmdExec(Commands.RESTART_SYSTEM_UI_ALTERNATIVE);
@@ -243,5 +208,52 @@ public class RootMode extends MyActivity {
              */
             dialogInstance = null;
         }
+    }
+
+    private void exeKernel(String[] shellList, String[] shellListForce, int i) {
+        new DebugLog("exeKernel: i:" + i + " isForceMode:" + isForceMode);
+        //是系统应用，且是reboot系，且不是关机
+        if (MyApplication.isSystemApp && i != 1 && i < 4) {
+            final String[] rebootResList = {
+                    null, null, "recovery", "bootloader"
+            };
+            URMUtils.rebootWithPowerManager(this, rebootResList[i]);
+        } else {
+            String command;
+            boolean isSucceed;
+            //模式选择
+            if (!isForceMode) {
+                if (isAL18()) {
+                    if (i == 0 || i == 1)
+                        command = String.format(Commands.START_BROADCAST_BY_ACTION, i == 0 ? Intent.ACTION_REBOOT : "android.intent.action.ACTION_REQUEST_SHUTDOWN");
+                    else
+                        command = shellListForce[i];
+                } else
+                    command = shellList[i];
+            } else {
+                command = shellListForce[i];
+                //首先尝试普通权限shell，只在强制模式可能有效
+                ShellUtils.shCmdExec(command);
+            }
+            isSucceed = ShellUtils.suCmdExec(command);
+            //如果是安全模式，MIUI执行完不能立即重启，还得执行一次重启
+            //noinspection StringEquality
+            if (command == shellList[6])
+                if (!isForceMode)
+                    if (!isAL18())
+                        ShellUtils.suCmdExec(shellList[0]);
+                    else
+                        ShellUtils.suCmdExec(String.format(Commands.START_BROADCAST_BY_ACTION, Intent.ACTION_REBOOT));
+                else {
+                    ShellUtils.shCmdExec(shellListForce[0]);
+                    ShellUtils.suCmdExec(shellListForce[0]);
+                }
+                //重启UI：两套备选方案
+            else if (shellList[5].equals(command) && !isSucceed) {
+                rebootSystemUIAlternativeMethod();
+            }
+        }
+        new TextToast(getApplicationContext(), true, getString(R.string.cmd_send_notice));
+        finish();
     }
 }

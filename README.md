@@ -6,7 +6,7 @@
 ![image](./app/src/main/res/mipmap/ic_launcher.png)
 
 ## 概要
-本**Android**应用程序是一个**简体中文**的**电源菜单**应用。
+本**Android**应用程序是一个**电源菜单**应用。
 
 使用本应用可以降低使用电源键的频率从而延长其寿命。
 

@@ -25,10 +25,14 @@ public class ShellUtils {
     public static synchronized boolean isRoot() {
         new DebugLog("isRoot", DebugLog.LogLevel.V);
         Process process = null;
-        DataOutputStream os = null;
         try {
             process = Runtime.getRuntime().exec("su");
-            os = new DataOutputStream(process.getOutputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (process == null)
+            return false;
+        try (DataOutputStream os = new DataOutputStream(process.getOutputStream())) {
             os.writeBytes("exit\n");
             os.flush();
             int exitValue = process.waitFor();
@@ -37,15 +41,10 @@ public class ShellUtils {
             new DebugLog(e, "isRoot", true);
             return false;
         } finally {
-            try {
-                if (os != null) {
-                    os.close();
-                }
-                assert process != null;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                process.destroyForcibly();
+            else
                 process.destroy();
-            } catch (Exception e) {
-                new DebugLog(e, "isRoot", true);
-            }
         }
     }
 

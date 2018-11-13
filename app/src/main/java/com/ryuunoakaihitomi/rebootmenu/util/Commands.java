@@ -7,24 +7,21 @@ package com.ryuunoakaihitomi.rebootmenu.util;
  */
 
 public class Commands {
-    private static final String _RECOVERY = " recovery",
-            _BOOTLOADER = " bootloader",
-            SVC_POWER_ = "svc power ",
-            SETPROP_ = "setprop ";
-    //明明需要public的，AS偏偏就给我个Access can be private.
-    @SuppressWarnings("WeakerAccess")
+    @SuppressWarnings("SpellCheckingInspection")
+    //保持可读性
     public static final String
-            REBOOT = SVC_POWER_ + "reboot",
+            REBOOT = "svc power reboot",
             REBOOT_F = "reboot",
-            SHUTDOWN = SVC_POWER_ + "shutdown",
-            SHUTDOWN_F = REBOOT_F + " -p",
-            RECOVERY = SVC_POWER_ + REBOOT_F + _RECOVERY,
-            RECOVERY_F = REBOOT_F + _RECOVERY,
-            BOOTLOADER = SVC_POWER_ + REBOOT_F + _BOOTLOADER,
-            BOOTLOADER_F = REBOOT_F + _BOOTLOADER,
-            HOT_REBOOT = SETPROP_ + "ctl.restart zygote",
+            SHUTDOWN = "svc power shutdown",
+            SHUTDOWN_F = "reboot -p",
+            RECOVERY = "svc power reboot recovery",
+            RECOVERY_F = "reboot recovery",
+            BOOTLOADER = "svc power reboot bootloader",
+            BOOTLOADER_F = "reboot bootloader",
+            HOT_REBOOT = "setprop ctl.restart zygote",
             RESTART_SYSTEM_UI = "busybox pkill com.android.systemui",
             RESTART_SYSTEM_UI_ALTERNATIVE = "killall com.android.systemui",
-            SAFE_MODE = SETPROP_ + "persist.sys.safemode 1",
-            LOCK_SCREEN = "input keyevent 26";
+            SAFE_MODE = "setprop persist.sys.safemode 1",
+            LOCK_SCREEN = "input keyevent KEYCODE_POWER",
+            START_BROADCAST_BY_ACTION = "am start -a %s";
 }

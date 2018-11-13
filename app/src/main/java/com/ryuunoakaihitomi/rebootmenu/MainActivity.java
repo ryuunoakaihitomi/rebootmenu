@@ -23,6 +23,8 @@ public class MainActivity extends Activity {
         new DebugLog("MainActivity.onCreate", DebugLog.LogLevel.V);
         //配置选项
         String configView = getString(R.string.loading);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT)
+            configView += getString(R.string.kitkat_compat);
         if (ConfigManager.get(ConfigManager.WHITE_THEME))
             configView += getString(R.string.r_whitetheme);
         if (ConfigManager.get(ConfigManager.CANCELABLE))

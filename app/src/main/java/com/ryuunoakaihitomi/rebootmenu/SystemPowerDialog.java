@@ -39,6 +39,7 @@ public class SystemPowerDialog extends AccessibilityService {
         }
     };
     private final BroadcastReceiver mLockScreenBroadcastReceiver = new BroadcastReceiver() {
+        @TargetApi(Build.VERSION_CODES.P)
         @Override
         public void onReceive(Context context, Intent intent) {
             new DebugLog("GLOBAL_ACTION_LOCK_SCREEN -> " + performGlobalAction(AccessibilityService.GLOBAL_ACTION_LOCK_SCREEN));
@@ -53,8 +54,7 @@ public class SystemPowerDialog extends AccessibilityService {
             loadNoticeBar();
             registerBroadcastReceiver(mPowerDialogBroadcastReceiver, POWER_DIALOG_ACTION);
             //?? Build.VERSION_CODES.P=10000
-            //P尚在预览版，VERSION_CODE未定
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O_MR1)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
                 registerBroadcastReceiver(mLockScreenBroadcastReceiver, LOCK_SCREEN_ACTION);
             isBroadcastRegistered = true;
         } else {

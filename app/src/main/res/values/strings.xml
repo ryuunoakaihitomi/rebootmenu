@@ -10,7 +10,7 @@
     <string name="lockscreen">锁屏</string>
     <string name="force_mode">转换成强制模式</string>
     <string name="normal_mode">转换成默认模式</string>
-    <string name="normal_not_support">转换成强制模式,因为你的系统不支持使用默认模式</string>
+    <string name="normal_not_support">Android4.3以下重启到recovery或者bootloader只能使用强制模式</string>
     <string name="cmd_send_notice">命令已发送......\n如果这片烤面包片消失之后手机还是没有反应,应该是执行失败了.请到帮助那里查看解决方法</string>
     <string name="exit">退出</string>
     <string name="help">帮助</string>
@@ -40,7 +40,7 @@
     <string name="offical_download_link">官方下载链接</string>
     <string name="donate">捐赠…</string>
     <string name="help_notice">应用版本：%s\n帮助更新日期：%s</string>
-    <string name="help_update_date">20180727o</string>
+    <string name="help_update_date">20181113o</string>
     <string name="activity_onrestart_notice">注意：不要在最近任务卡片启动本应用,这有可能使应用出现问题</string>
     <string name="recovery_short">Recovery</string>
     <string name="tile_label">电源菜单</string>
@@ -58,4 +58,6 @@
     <string name="notification_notice">点击打开应用</string>
     <string name="spd_tile_label">系统电源</string>
     <string name="service_simple_name">调用系统电源菜单服务(常驻)</string>
+    <string name="accessibility_summary">此服务用以支持本应用在没有根权限环境下可用的部分或全部功能。</string>
+    <string name="kitkat_compat">\n× 即将放弃支持Android4.4以下系统</string>
 </resources>
