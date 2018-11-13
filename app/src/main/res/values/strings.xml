@@ -58,6 +58,6 @@
     <string name="notification_notice">点击打开应用</string>
     <string name="spd_tile_label">系统电源</string>
     <string name="service_simple_name">调用系统电源菜单服务(常驻)</string>
-    <string name="accessibility_summary">此服务用以支持本应用在没有根权限环境下可用的部分或全部功能。</string>
+    <string name="accessibility_summary">此服务用以支持本应用在没有根权限环境下可用的部分或全部功能</string>
     <string name="kitkat_compat">\n× 即将放弃支持Android4.4以下系统</string>
 </resources>

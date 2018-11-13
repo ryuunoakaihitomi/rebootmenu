@@ -8,7 +8,6 @@ android {
         versionCode 74
         versionName "10_蛍夢_38_osc"
     }
-    //有病吧，不用Java 1.8时提示用拉姆达，编译时又出错要加Java 1.8。我还以为AS原生支持拉姆达表达式了。
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
