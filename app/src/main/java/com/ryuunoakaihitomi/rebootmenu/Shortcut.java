@@ -204,11 +204,10 @@ public class Shortcut extends MyActivity {
     }
 
     //只有rebooot系才有可能免root执行
-    @SuppressWarnings("StringEquality")
     private void rebootExec(String arg) {
         new DebugLog("rebootExec: arg:" + arg, DebugLog.LogLevel.V);
-        if (isSysApp && arg != Commands.SHUTDOWN_F)
-            if (arg == Commands.REBOOT_F)
+        if (isSysApp && !Commands.SHUTDOWN_F.equals(arg))
+            if (Commands.REBOOT_F.equals(arg))
                 URMUtils.rebootWithPowerManager(this, null);
             else
                 URMUtils.rebootWithPowerManager(this, arg.substring(7));

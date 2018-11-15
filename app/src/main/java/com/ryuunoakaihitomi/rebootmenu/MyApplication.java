@@ -2,8 +2,10 @@ package com.ryuunoakaihitomi.rebootmenu;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Process;
@@ -31,13 +33,20 @@ public class MyApplication extends Application implements Thread.UncaughtExcepti
 
     public static boolean isDebug, isSystemApp;
 
-    //笼子里面关着的灵魂是否已经发臭了呢？
+    //
     static void coolapkOrMe(Context context) {
+        final String CA_PKG_NAME = "com.coolapk.market";
         LogPrinter printer = new LogPrinter(Log.VERBOSE, "coolapkOrMe");
         try {
             printer.println("Coolapk, gids:"
-                    + Arrays.toString(context.getPackageManager().getPackageInfo("com.coolapk.market", PackageManager.GET_GIDS).gids));
-            throw new Error("https://www.coolapk.com/apk/com.ryuunoakaihitomi.rebootmenu");
+                    + Arrays.toString(context.getPackageManager().getPackageInfo(CA_PKG_NAME, PackageManager.GET_GIDS).gids));
+            Intent toCoolForum = new Intent()
+                    .setData(Uri.parse("market://details?id=" + context.getPackageName()))
+                    //按back键从这个任务返回的时候会回到home，防止返回重复进入
+                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME)
+                    .setPackage(CA_PKG_NAME);
+            context.startActivity(toCoolForum);
+            System.exit(0);
         } catch (PackageManager.NameNotFoundException ignored) {
             printer.println("Me");
         }
