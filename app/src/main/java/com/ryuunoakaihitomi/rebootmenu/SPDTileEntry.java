@@ -10,6 +10,8 @@ import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 import com.ryuunoakaihitomi.rebootmenu.util.TextToast;
 import com.ryuunoakaihitomi.rebootmenu.util.URMUtils;
 
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
 /**
  * 直接调出系统电源菜单的磁贴入口
  */
@@ -41,7 +43,7 @@ public class SPDTileEntry extends TileService {
             //收起状态栏
             startActivityAndCollapse(intent);
         } else {
-            sendBroadcast(new Intent(SystemPowerDialog.POWER_DIALOG_ACTION));
+            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(SystemPowerDialog.POWER_DIALOG_ACTION));
         }
     }
 }

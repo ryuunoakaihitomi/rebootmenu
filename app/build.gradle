@@ -5,8 +5,8 @@ android {
         applicationId "com.ryuunoakaihitomi.rebootmenu"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 76
-        versionName "10_蛍夢_40_osc"
+        versionCode 77
+        versionName "10_蛍夢_41_osc"
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -22,6 +22,6 @@ android {
 
 android.applicationVariants.all { variant ->
     variant.outputs.all {
-        outputFileName = "${variant.applicationId}-${variant.versionName}_${variant.buildType.name}.apk"
+        outputFileName = "${variant.applicationId}-${variant.versionCode}_${variant.buildType.name}.apk"
     }
 }
