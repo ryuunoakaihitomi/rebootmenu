@@ -14,6 +14,9 @@ import android.text.TextUtils;
 import com.ryuunoakaihitomi.rebootmenu.R;
 import com.ryuunoakaihitomi.rebootmenu.SystemPowerDialog;
 
+import androidx.annotation.NonNull;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
 /**
  * 本应用中免（无需）root模式的工具集合
  * Created by ZQY on 2018/4/15.
@@ -32,7 +35,7 @@ public class URMUtils {
      * @param needConfig          是否需要 配置管理员
      */
 
-    public static void lockScreen(Activity activity, ComponentName componentName, int requestCode, DevicePolicyManager devicePolicyManager, boolean needConfig) {
+    public static void lockScreen(@NonNull Activity activity, ComponentName componentName, int requestCode, DevicePolicyManager devicePolicyManager, boolean needConfig) {
         new DebugLog("lockScreen", DebugLog.LogLevel.V);
         //设备管理器是否启用
         boolean active = devicePolicyManager.isAdminActive(componentName);
@@ -45,7 +48,7 @@ public class URMUtils {
                 new TextToast(activity.getApplicationContext(), activity.getString(R.string.service_disabled));
                 activity.startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
             } else
-                activity.sendBroadcast(new Intent(SystemPowerDialog.LOCK_SCREEN_ACTION));
+                LocalBroadcastManager.getInstance(activity).sendBroadcast(new Intent(SystemPowerDialog.LOCK_SCREEN_ACTION));
             activity.finish();
         } else {
             if (!active) {
@@ -78,7 +81,7 @@ public class URMUtils {
             Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
             activity.startActivity(intent);
         } else {
-            activity.sendBroadcast(new Intent(SystemPowerDialog.POWER_DIALOG_ACTION));
+            LocalBroadcastManager.getInstance(activity).sendBroadcast(new Intent(SystemPowerDialog.POWER_DIALOG_ACTION));
         }
         activity.finish();
     }

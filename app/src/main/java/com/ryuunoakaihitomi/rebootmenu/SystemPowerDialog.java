@@ -16,6 +16,8 @@ import android.view.accessibility.AccessibilityEvent;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 import com.ryuunoakaihitomi.rebootmenu.util.TextToast;
 
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
 /**
  * 辅助服务
  * Created by ZQY on 2018/2/12.
@@ -45,6 +47,13 @@ public class SystemPowerDialog extends AccessibilityService {
             new DebugLog("GLOBAL_ACTION_LOCK_SCREEN -> " + performGlobalAction(AccessibilityService.GLOBAL_ACTION_LOCK_SCREEN));
         }
     };
+    private LocalBroadcastManager localBroadcastManager;
+
+    @Override
+    public void onCreate() {
+        localBroadcastManager = LocalBroadcastManager.getInstance(this);
+        super.onCreate();
+    }
 
     @Override
     protected void onServiceConnected() {
@@ -69,9 +78,9 @@ public class SystemPowerDialog extends AccessibilityService {
         new DebugLog("SystemPowerDialog.onUnbind", DebugLog.LogLevel.V);
         if (isBroadcastRegistered) {
             isBroadcastRegistered = false;
-            unregisterReceiver(mPowerDialogBroadcastReceiver);
+            localBroadcastManager.unregisterReceiver(mPowerDialogBroadcastReceiver);
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O_MR1)
-                unregisterReceiver(mLockScreenBroadcastReceiver);
+                localBroadcastManager.unregisterReceiver(mLockScreenBroadcastReceiver);
         }
         return super.onUnbind(intent);
     }
@@ -133,6 +142,6 @@ public class SystemPowerDialog extends AccessibilityService {
     private void registerBroadcastReceiver(BroadcastReceiver broadcastReceiver, String action) {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(action);
-        registerReceiver(broadcastReceiver, intentFilter);
+        localBroadcastManager.registerReceiver(broadcastReceiver, intentFilter);
     }
 }

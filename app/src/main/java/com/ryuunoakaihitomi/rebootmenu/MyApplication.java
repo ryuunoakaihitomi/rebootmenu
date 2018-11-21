@@ -1,7 +1,7 @@
 package com.ryuunoakaihitomi.rebootmenu;
 
 import android.app.Application;
-import android.content.Context;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -20,7 +20,6 @@ import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.Arrays;
 
 /**
  * 自定义Application：禁用xposed，异常捕捉，调试/系统属性
@@ -34,21 +33,33 @@ public class MyApplication extends Application implements Thread.UncaughtExcepti
     public static boolean isDebug, isSystemApp;
 
     //
-    static void coolapkOrMe(Context context) {
+    void coolapkOrMe() {
         final String CA_PKG_NAME = "com.coolapk.market";
+        final String CA_URL = "https://www.coolapk.com/apk/com.ryuunoakaihitomi.rebootmenu";
         LogPrinter printer = new LogPrinter(Log.VERBOSE, "coolapkOrMe");
         try {
-            printer.println("Coolapk, gids:"
-                    + Arrays.toString(context.getPackageManager().getPackageInfo(CA_PKG_NAME, PackageManager.GET_GIDS).gids));
+            printer.println("Coolapk, versionName:"
+                    + getPackageManager().getPackageInfo(CA_PKG_NAME, 0).versionName);
             Intent toCoolForum = new Intent()
-                    .setData(Uri.parse("market://details?id=" + context.getPackageName()))
+                    .setData(Uri.parse("market://details?id=" + getPackageName()))
                     //按back键从这个任务返回的时候会回到home，防止返回重复进入
                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME)
                     .setPackage(CA_PKG_NAME);
-            context.startActivity(toCoolForum);
+            startActivity(toCoolForum);
             System.exit(0);
         } catch (PackageManager.NameNotFoundException ignored) {
             printer.println("Me");
+        } catch (ActivityNotFoundException ignored) {
+            printer.println("ActivityNotFoundException,CA is still here but frozen.");
+            try {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(CA_URL))
+                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                System.exit(0);
+            } catch (ActivityNotFoundException ignore) {
+                printer.println(CA_URL);
+                startActivity(new Intent(Intent.ACTION_UNINSTALL_PACKAGE, Uri.fromParts("package", getPackageName(), null))
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            }
         }
     }
 
@@ -106,7 +117,7 @@ public class MyApplication extends Application implements Thread.UncaughtExcepti
     @Override
     public void onCreate() {
         super.onCreate();
-        coolapkOrMe(this);
+        coolapkOrMe();
         //按需记录自身日志
         if (new File(Environment.getExternalStorageDirectory().getPath() + "/rbmLogWriter").exists())
             logcatHolder();

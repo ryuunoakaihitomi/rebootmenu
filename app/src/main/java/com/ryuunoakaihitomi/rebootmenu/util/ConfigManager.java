@@ -4,6 +4,8 @@ import android.content.Context;
 
 import java.io.File;
 
+import androidx.annotation.NonNull;
+
 /**
  * 配置管理器
  * Created by ZQY on 2018/2/8.
@@ -24,7 +26,7 @@ public class ConfigManager {
 
     //初始化外部files目录
     @SuppressWarnings({"ConstantConditions", "ResultOfMethodCallIgnored"})
-    public static void initDir(Context context) {
+    public static void initDir(@NonNull Context context) {
         path = context.getExternalFilesDir(null).getPath();
         new DebugLog("initDir: path=" + path, DebugLog.LogLevel.I);
         //除了内置存储外，总是试图往外置存储创建目录，但貌似并无权限，因此总返回假

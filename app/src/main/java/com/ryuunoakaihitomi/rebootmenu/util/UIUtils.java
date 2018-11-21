@@ -31,6 +31,8 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
+import androidx.annotation.NonNull;
+
 /**
  * 本应用关于界面操作的工具集合
  * Created by ZQY on 2018/2/10.
@@ -83,7 +85,7 @@ public class UIUtils {
      * @throws NullPointerException null.XXX();
      */
     @SuppressWarnings("JavaReflectionMemberAccess")
-    public static void alphaShow(AlertDialog w, Float f) {
+    public static void alphaShow(@NonNull AlertDialog w, Float f) {
         Window window = w.getWindow();
         assert window != null;
         //使用反射来取系统属性（但在Android P(ill)上行不通）
@@ -122,7 +124,7 @@ public class UIUtils {
     }
 
     //显示帮助对话框
-    private static void helpDialog(final Activity activityThis, final AlertDialog.Builder returnTo, boolean cancelable, boolean isWhite) {
+    private static void helpDialog(@NonNull final Activity activityThis, @NonNull final AlertDialog.Builder returnTo, boolean cancelable, boolean isWhite) {
         new DebugLog("helpDialog", DebugLog.LogLevel.V);
         new TextToast(activityThis, String.format(activityThis.getString(R.string.help_notice), getAppVersionName(activityThis), activityThis.getString(R.string.help_update_date)));
         AlertDialog.Builder h = LoadDialog(isWhite, activityThis);
@@ -169,7 +171,7 @@ public class UIUtils {
     }
 
     //尝试打开URL
-    private static void openURL(Context context, String link) {
+    private static void openURL(@NonNull Context context, String link) {
         try {
             context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(link)));
         } catch (ActivityNotFoundException e) {
@@ -186,16 +188,17 @@ public class UIUtils {
      * @param activity 要渲染的活动
      */
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public static void transparentStatusBar(Activity activity) {
+    public static void transparentStatusBar(@NonNull Activity activity) {
         new DebugLog("transparentStatusBar", DebugLog.LogLevel.V);
-        activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-        activity.getWindow().setStatusBarColor(Color.TRANSPARENT);
+        Window window = activity.getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        window.setStatusBarColor(Color.TRANSPARENT);
     }
 
     //通过配置文件选择退出方式和设置帮助按钮
-    public static void setExitStyleAndHelp(final Activity context, final AlertDialog.Builder builder) {
+    public static void setExitStyleAndHelp(@NonNull final Activity context, @NonNull final AlertDialog.Builder builder) {
         new DebugLog("setExitStyleAndHelp", DebugLog.LogLevel.V);
         //是否需要退出键
         if (!ConfigManager.get(ConfigManager.CANCELABLE))
@@ -222,7 +225,7 @@ public class UIUtils {
      * @see com.ryuunoakaihitomi.rebootmenu.Shortcut
      */
     @SuppressWarnings("ConstantConditions")
-    public static void addLauncherShortcut(Context context, int titleRes, int iconRes, int shortcutAct, boolean isForce) {
+    public static void addLauncherShortcut(@NonNull Context context, int titleRes, int iconRes, int shortcutAct, boolean isForce) {
         new DebugLog("addLauncherShortcut", DebugLog.LogLevel.V);
         String forceToken = isForce ? "*" : "";
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
@@ -252,7 +255,7 @@ public class UIUtils {
      * @param context c
      * @return vn
      */
-    private static String getAppVersionName(Context context) {
+    private static String getAppVersionName(@NonNull Context context) {
         new DebugLog("getAppVersionName: " + context, DebugLog.LogLevel.I);
         String versionName = "";
         try {
