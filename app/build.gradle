@@ -5,8 +5,8 @@ android {
         applicationId "com.ryuunoakaihitomi.rebootmenu"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 77
-        versionName "10_蛍夢_41_osc"
+        versionCode 78
+        versionName "10_蛍夢_42_osc"
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8

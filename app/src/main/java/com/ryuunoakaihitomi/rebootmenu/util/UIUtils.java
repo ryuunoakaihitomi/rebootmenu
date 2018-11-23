@@ -73,6 +73,7 @@ public class UIUtils {
     public class TransparentLevel {
         public static final float NORMAL = 0.75f;
         public static final float CONFIRM = 0.9f;
+        public static final float PREFERENCES = 0.6f;
         static final float HELP = 0.8f;
     }
 

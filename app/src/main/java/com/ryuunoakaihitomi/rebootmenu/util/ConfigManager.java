@@ -38,4 +38,14 @@ public class ConfigManager {
         new DebugLog("ConfigManager.get: key:" + key + " isExists:" + isExists, DebugLog.LogLevel.I);
         return isExists;
     }
+
+    /**
+     * @param key   键
+     * @param value 值
+     * @return 是否成功
+     */
+    public static boolean set(String key, boolean value) {
+        File f = new File(path + "/" + key);
+        return value ? f.mkdirs() : f.delete();
+    }
 }
