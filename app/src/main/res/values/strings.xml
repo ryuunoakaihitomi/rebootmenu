@@ -40,7 +40,7 @@
     <string name="offical_download_link">官方下载链接</string>
     <string name="donate">捐赠…</string>
     <string name="help_notice">应用版本：%s\n帮助更新日期：%s</string>
-    <string name="help_update_date">20181124o</string>
+    <string name="help_update_date">20181126o</string>
     <string name="activity_onrestart_notice">注意：不要在最近任务卡片启动本应用,这有可能使应用出现问题</string>
     <string name="recovery_short">Recovery</string>
     <string name="tile_label">电源菜单</string>
@@ -62,4 +62,5 @@
     <string name="kitkat_compat">\n× 即将放弃支持Android4.4以下系统</string>
     <string name="disable_device_admin_warning">在Android P以下(不含P),禁用设备管理应用功能会失去免root锁屏的权限!如果你的目的不是卸载,你确定吗要这样做吗?</string>
     <string name="preference_title">设置选项</string>
+    <string name="quick_lock_screen">快捷锁屏</string>
 </resources>

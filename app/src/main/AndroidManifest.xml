@@ -71,6 +71,16 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".LockScreenAssist"
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/quick_lock_screen">
+            <intent-filter>
+                <action android:name="android.intent.action.ASSIST" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
         <receiver
             android:name=".AdminReceiver"
             android:description="@string/description"

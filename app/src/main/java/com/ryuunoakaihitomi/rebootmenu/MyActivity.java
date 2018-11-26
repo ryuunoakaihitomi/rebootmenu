@@ -43,6 +43,8 @@ public class MyActivity extends Activity {
     protected void onStart() {
         super.onStart();
         new DebugLog("MyActivity.onStart", DebugLog.LogLevel.V);
+        if (checkScreenOnListenerUnnecessary())
+            return;
         if (!isShortcut && !isBroadcastRegistered) {
             //亮屏监听，防止在应用开启熄屏又亮屏时显示警告toast
             IntentFilter intentFilter = new IntentFilter();
@@ -56,6 +58,8 @@ public class MyActivity extends Activity {
     @Override
     protected void onRestart() {
         new DebugLog("MyActivity.onRestart", DebugLog.LogLevel.V);
+        if (checkScreenOnListenerUnnecessary())
+            return;
         if (!isShortcut)
             //由于onRestart比SCREEN_ON更早执行，因此在此设置延迟
             new Handler().postDelayed(() -> {
@@ -69,6 +73,8 @@ public class MyActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (checkScreenOnListenerUnnecessary())
+            return;
         new DebugLog("MyActivity.onDestroy", DebugLog.LogLevel.V);
         if (!isShortcut)
             unregisterReceiver(broadcastReceiver);
@@ -100,5 +106,15 @@ public class MyActivity extends Activity {
         this.componentName = componentName;
         this.devicePolicyManager = devicePolicyManager;
         this.requestCode = requestCode;
+    }
+
+    private boolean checkScreenOnListenerUnnecessary() {
+        Class[] shortTermSurvivalActivities = new Class[]{Shortcut.class, LockScreenAssist.class};
+        for (Class c : shortTermSurvivalActivities)
+            if (this.getClass().equals(c)) {
+                new DebugLog("checkScreenOnListenerUnnecessary: " + c);
+                return true;
+            }
+        return false;
     }
 }

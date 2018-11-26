@@ -31,12 +31,13 @@ import java.lang.reflect.Field;
 public class MyApplication extends Application implements Thread.UncaughtExceptionHandler {
 
     public static boolean isDebug, isSystemApp;
+    private static final String TAG = "MyApplication";
 
     //
     void coolapkOrMe() {
         final String CA_PKG_NAME = "com.coolapk.market";
         final String CA_URL = "https://www.coolapk.com/apk/com.ryuunoakaihitomi.rebootmenu";
-        LogPrinter printer = new LogPrinter(Log.VERBOSE, "coolapkOrMe");
+        LogPrinter printer = new LogPrinter(Log.VERBOSE, TAG);
         try {
             printer.println("Coolapk, versionName:"
                     + getPackageManager().getPackageInfo(CA_PKG_NAME, 0).versionName);
@@ -94,7 +95,6 @@ public class MyApplication extends Application implements Thread.UncaughtExcepti
      * 注意：会长时间连续写入，不用时请及时关闭
      */
     void logcatHolder() {
-        final String TAG = "rbm.logcatHolder";
         new Thread(() -> {
             String logFileName = "rbm_" + System.currentTimeMillis() + Base64.encodeToString(
                     (Build.FINGERPRINT).getBytes(), Base64.URL_SAFE | Base64.NO_PADDING | Base64.NO_WRAP) + ".log";
@@ -126,6 +126,8 @@ public class MyApplication extends Application implements Thread.UncaughtExcepti
         isSystemApp = isSystemApp();
         //应该等到isDebug初始化完了再log要不然查看到的isDebug值恒为假（又一个粗心造成的惨案）
         new DebugLog("MyApplication.onCreate: (尾北) isSystem:" + isSystemApp, DebugLog.LogLevel.I);
+        //包检测
+        Log.i(TAG, "APK_PACK_INFO: " + BuildConfig.APK_PACK_TIME + ' ' + (isDebug ? "dbg" : "rls"));
         //捕捉异常
         Thread.setDefaultUncaughtExceptionHandler(this);
         ConfigManager.initDir(this);
