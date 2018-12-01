@@ -13,7 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package androidx.localbroadcastmanager.content;
+
+/*
+ * The source code has been changed.
+ * Original source:https://android.googlesource.com/platform/frameworks/support.git/+/androidx-master-dev/localbroadcastmanager/src/main/java/androidx/localbroadcastmanager/content/LocalBroadcastManager.java
+ */
+package com.ryuunoakaihitomi.rebootmenu.util;
+
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -21,11 +28,13 @@ import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
-import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
+
+import androidx.annotation.NonNull;
+
 /**
  * Helper to register for and send broadcasts of Intents to local objects
  * within your process.  This has a number of advantages over sending
@@ -40,64 +49,24 @@ import java.util.Set;
  * system.
  * </ul>
  *
- * @deprecated LocalBroadcastManager is an application-wide event bus and embraces layer violations
+ * //@deprecated LocalBroadcastManager is an application-wide event bus and embraces layer violations
  * in your app: any component may listen events from any other. You can replace usage of
  * {@code LocalBroadcastManager} with other implementation of observable pattern, depending on your
- * usecase suitable options may be {@link androidx.lifecycle.LiveData} or reactive streams.
+ * usecase suitable options may be /@link androidx.lifecycle.LiveData/ or reactive streams.
  */
-@Deprecated
+//@Deprecated
 public final class LocalBroadcastManager {
-    private static final class ReceiverRecord {
-        final IntentFilter filter;
-        final BroadcastReceiver receiver;
-        boolean broadcasting;
-        boolean dead;
-        ReceiverRecord(IntentFilter _filter, BroadcastReceiver _receiver) {
-            filter = _filter;
-            receiver = _receiver;
-        }
-        @Override
-        public String toString() {
-            StringBuilder builder = new StringBuilder(128);
-            builder.append("Receiver{");
-            builder.append(receiver);
-            builder.append(" filter=");
-            builder.append(filter);
-            if (dead) {
-                builder.append(" DEAD");
-            }
-            builder.append("}");
-            return builder.toString();
-        }
-    }
-    private static final class BroadcastRecord {
-        final Intent intent;
-        final ArrayList<ReceiverRecord> receivers;
-        BroadcastRecord(Intent _intent, ArrayList<ReceiverRecord> _receivers) {
-            intent = _intent;
-            receivers = _receivers;
-        }
-    }
-    private static final String TAG = "LocalBroadcastManager";
-    private static final boolean DEBUG = false;
+    private static final int MSG_EXEC_PENDING_BROADCASTS = 1;
+    private static final Object mLock = new Object();
+    @SuppressLint("StaticFieldLeak")
+    private static LocalBroadcastManager mInstance;
     private final Context mAppContext;
     private final HashMap<BroadcastReceiver, ArrayList<ReceiverRecord>> mReceivers
             = new HashMap<>();
     private final HashMap<String, ArrayList<ReceiverRecord>> mActions = new HashMap<>();
     private final ArrayList<BroadcastRecord> mPendingBroadcasts = new ArrayList<>();
-    static final int MSG_EXEC_PENDING_BROADCASTS = 1;
     private final Handler mHandler;
-    private static final Object mLock = new Object();
-    private static LocalBroadcastManager mInstance;
-    @NonNull
-    public static LocalBroadcastManager getInstance(@NonNull Context context) {
-        synchronized (mLock) {
-            if (mInstance == null) {
-                mInstance = new LocalBroadcastManager(context.getApplicationContext());
-            }
-            return mInstance;
-        }
-    }
+
     private LocalBroadcastManager(Context context) {
         mAppContext = context;
         mHandler = new Handler(context.getMainLooper()) {
@@ -113,12 +82,22 @@ public final class LocalBroadcastManager {
             }
         };
     }
+
+    @NonNull
+    public static LocalBroadcastManager getInstance(@NonNull Context context) {
+        synchronized (mLock) {
+            if (mInstance == null) {
+                mInstance = new LocalBroadcastManager(context.getApplicationContext());
+            }
+            return mInstance;
+        }
+    }
+
     /**
      * Register a receive for any local broadcasts that match the given IntentFilter.
      *
      * @param receiver The BroadcastReceiver to handle the broadcast.
-     * @param filter Selects the Intent broadcasts to be received.
-     *
+     * @param filter   Selects the Intent broadcasts to be received.
      * @see #unregisterReceiver
      */
     public void registerReceiver(@NonNull BroadcastReceiver receiver,
@@ -131,24 +110,24 @@ public final class LocalBroadcastManager {
                 mReceivers.put(receiver, filters);
             }
             filters.add(entry);
-            for (int i=0; i<filter.countActions(); i++) {
+            for (int i = 0; i < filter.countActions(); i++) {
                 String action = filter.getAction(i);
                 ArrayList<ReceiverRecord> entries = mActions.get(action);
                 if (entries == null) {
-                    entries = new ArrayList<ReceiverRecord>(1);
+                    entries = new ArrayList<>(1);
                     mActions.put(action, entries);
                 }
                 entries.add(entry);
             }
         }
     }
+
     /**
      * Unregister a previously registered BroadcastReceiver.  <em>All</em>
      * filters that have been registered for this BroadcastReceiver will be
      * removed.
      *
      * @param receiver The BroadcastReceiver to unregister.
-     *
      * @see #registerReceiver
      */
     public void unregisterReceiver(@NonNull BroadcastReceiver receiver) {
@@ -157,14 +136,14 @@ public final class LocalBroadcastManager {
             if (filters == null) {
                 return;
             }
-            for (int i=filters.size()-1; i>=0; i--) {
+            for (int i = filters.size() - 1; i >= 0; i--) {
                 final ReceiverRecord filter = filters.get(i);
                 filter.dead = true;
-                for (int j=0; j<filter.filter.countActions(); j++) {
+                for (int j = 0; j < filter.filter.countActions(); j++) {
                     final String action = filter.filter.getAction(j);
                     final ArrayList<ReceiverRecord> receivers = mActions.get(action);
                     if (receivers != null) {
-                        for (int k=receivers.size()-1; k>=0; k--) {
+                        for (int k = receivers.size() - 1; k >= 0; k--) {
                             final ReceiverRecord rec = receivers.get(k);
                             if (rec.receiver == receiver) {
                                 rec.dead = true;
@@ -179,19 +158,18 @@ public final class LocalBroadcastManager {
             }
         }
     }
+
     /**
      * Broadcast the given intent to all interested BroadcastReceivers.  This
      * call is asynchronous; it returns immediately, and you will continue
      * executing while the receivers are run.
      *
      * @param intent The Intent to broadcast; all receivers matching this
-     *     Intent will receive the broadcast.
-     *
-     * @see #registerReceiver
-     *
+     *               Intent will receive the broadcast.
      * @return Returns true if the intent has been scheduled for delivery to one or more
      * broadcast receivers.  (Note tha delivery may not ultimately take place if one of those
      * receivers is unregistered before it is dispatched.)
+     * @see #registerReceiver
      */
     public boolean sendBroadcast(@NonNull Intent intent) {
         synchronized (mReceivers) {
@@ -201,50 +179,26 @@ public final class LocalBroadcastManager {
             final Uri data = intent.getData();
             final String scheme = intent.getScheme();
             final Set<String> categories = intent.getCategories();
-            final boolean debug = DEBUG ||
-                    ((intent.getFlags() & Intent.FLAG_DEBUG_LOG_RESOLUTION) != 0);
-            if (debug) Log.v(
-                    TAG, "Resolving type " + type + " scheme " + scheme
-                            + " of intent " + intent);
             ArrayList<ReceiverRecord> entries = mActions.get(intent.getAction());
             if (entries != null) {
-                if (debug) Log.v(TAG, "Action list: " + entries);
                 ArrayList<ReceiverRecord> receivers = null;
-                for (int i=0; i<entries.size(); i++) {
+                for (int i = 0; i < entries.size(); i++) {
                     ReceiverRecord receiver = entries.get(i);
-                    if (debug) Log.v(TAG, "Matching against filter " + receiver.filter);
                     if (receiver.broadcasting) {
-                        if (debug) {
-                            Log.v(TAG, "  Filter's target already added");
-                        }
                         continue;
                     }
                     int match = receiver.filter.match(action, type, scheme, data,
                             categories, "LocalBroadcastManager");
                     if (match >= 0) {
-                        if (debug) Log.v(TAG, "  Filter matched!  match=0x" +
-                                Integer.toHexString(match));
                         if (receivers == null) {
-                            receivers = new ArrayList<ReceiverRecord>();
+                            receivers = new ArrayList<>();
                         }
                         receivers.add(receiver);
                         receiver.broadcasting = true;
-                    } else {
-                        if (debug) {
-                            String reason;
-                            switch (match) {
-                                case IntentFilter.NO_MATCH_ACTION: reason = "action"; break;
-                                case IntentFilter.NO_MATCH_CATEGORY: reason = "category"; break;
-                                case IntentFilter.NO_MATCH_DATA: reason = "data"; break;
-                                case IntentFilter.NO_MATCH_TYPE: reason = "type"; break;
-                                default: reason = "unknown reason"; break;
-                            }
-                            Log.v(TAG, "  Filter did not match: " + reason);
-                        }
                     }
                 }
                 if (receivers != null) {
-                    for (int i=0; i<receivers.size(); i++) {
+                    for (int i = 0; i < receivers.size(); i++) {
                         receivers.get(i).broadcasting = false;
                     }
                     mPendingBroadcasts.add(new BroadcastRecord(intent, receivers));
@@ -257,16 +211,7 @@ public final class LocalBroadcastManager {
         }
         return false;
     }
-    /**
-     * Like {@link #sendBroadcast(Intent)}, but if there are any receivers for
-     * the Intent this function will block and immediately dispatch them before
-     * returning.
-     */
-    public void sendBroadcastSync(@NonNull Intent intent) {
-        if (sendBroadcast(intent)) {
-            executePendingBroadcasts();
-        }
-    }
+
     @SuppressWarnings("WeakerAccess") /* synthetic access */
     void executePendingBroadcasts() {
         while (true) {
@@ -280,16 +225,51 @@ public final class LocalBroadcastManager {
                 mPendingBroadcasts.toArray(brs);
                 mPendingBroadcasts.clear();
             }
-            for (int i=0; i<brs.length; i++) {
-                final BroadcastRecord br = brs[i];
+            for (final BroadcastRecord br : brs) {
                 final int nbr = br.receivers.size();
-                for (int j=0; j<nbr; j++) {
+                for (int j = 0; j < nbr; j++) {
                     final ReceiverRecord rec = br.receivers.get(j);
                     if (!rec.dead) {
                         rec.receiver.onReceive(mAppContext, br.intent);
                     }
                 }
             }
+        }
+    }
+
+    private static final class ReceiverRecord {
+        final IntentFilter filter;
+        final BroadcastReceiver receiver;
+        boolean broadcasting;
+        boolean dead;
+
+        ReceiverRecord(IntentFilter _filter, BroadcastReceiver _receiver) {
+            filter = _filter;
+            receiver = _receiver;
+        }
+
+        @Override
+        public String toString() {
+            StringBuilder builder = new StringBuilder(128);
+            builder.append("Receiver{");
+            builder.append(receiver);
+            builder.append(" filter=");
+            builder.append(filter);
+            if (dead) {
+                builder.append(" DEAD");
+            }
+            builder.append("}");
+            return builder.toString();
+        }
+    }
+
+    private static final class BroadcastRecord {
+        final Intent intent;
+        final ArrayList<ReceiverRecord> receivers;
+
+        BroadcastRecord(Intent _intent, ArrayList<ReceiverRecord> _receivers) {
+            intent = _intent;
+            receivers = _receivers;
         }
     }
 }
