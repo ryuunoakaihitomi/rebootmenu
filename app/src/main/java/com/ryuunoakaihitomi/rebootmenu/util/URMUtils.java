@@ -15,7 +15,6 @@ import com.ryuunoakaihitomi.rebootmenu.R;
 import com.ryuunoakaihitomi.rebootmenu.SystemPowerDialog;
 
 import androidx.annotation.NonNull;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 /**
  * 本应用中免（无需）root模式的工具集合
@@ -81,7 +80,8 @@ public class URMUtils {
             Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
             activity.startActivity(intent);
         } else {
-            LocalBroadcastManager.getInstance(activity).sendBroadcast(new Intent(SystemPowerDialog.POWER_DIALOG_ACTION));
+            boolean isSucceed = LocalBroadcastManager.getInstance(activity).sendBroadcast(new Intent(SystemPowerDialog.POWER_DIALOG_ACTION));
+            new DebugLog("sendBroadcast POWER_DIALOG_ACTION : " + isSucceed);
         }
         activity.finish();
     }

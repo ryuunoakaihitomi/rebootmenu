@@ -7,10 +7,10 @@ import android.provider.Settings;
 import android.service.quicksettings.TileService;
 
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
+import com.ryuunoakaihitomi.rebootmenu.util.LocalBroadcastManager;
 import com.ryuunoakaihitomi.rebootmenu.util.TextToast;
 import com.ryuunoakaihitomi.rebootmenu.util.URMUtils;
 
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 /**
  * 直接调出系统电源菜单的磁贴入口

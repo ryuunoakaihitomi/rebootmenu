@@ -14,9 +14,8 @@ import android.os.Build;
 import android.view.accessibility.AccessibilityEvent;
 
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
+import com.ryuunoakaihitomi.rebootmenu.util.LocalBroadcastManager;
 import com.ryuunoakaihitomi.rebootmenu.util.TextToast;
-
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 /**
  * 辅助服务
