@@ -7,7 +7,6 @@ import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -111,8 +110,7 @@ public class UIUtils {
             } catch (Exception e) {
                 new DebugLog(e, "alphaShow", true);
             }
-            //TODO 替换SDK_INT判断标准为Build.VERSION_CODES.P 从此开始不允许反射
-        else if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O_MR1)
+        else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
             //noinspection ConstantConditions
             isLowRam = ((ActivityManager) w.getContext().getSystemService(Context.ACTIVITY_SERVICE)).isLowRamDevice();
         new DebugLog("alphaShow: isLowRam=" + isLowRam, DebugLog.LogLevel.I);
@@ -121,6 +119,7 @@ public class UIUtils {
             lp.alpha = f;
             window.setAttributes(lp);
         }
+        //helpDialog的WindowLeaked怎么破呢
         w.show();
     }
 
@@ -165,10 +164,6 @@ public class UIUtils {
             } catch (Exception e) {
                 new DebugLog(e, "helpDialog", true);
             }
-        //检测调试环境用：测试异常
-        hc.getButton(DialogInterface.BUTTON_NEGATIVE).setOnLongClickListener(v -> {
-            throw new Error("test error");
-        });
     }
 
     //尝试打开URL

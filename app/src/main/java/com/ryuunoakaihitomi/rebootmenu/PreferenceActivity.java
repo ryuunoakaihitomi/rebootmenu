@@ -24,6 +24,7 @@ import static com.ryuunoakaihitomi.rebootmenu.util.ConfigManager.WHITE_THEME;
 public class PreferenceActivity extends MyActivity {
 
     private static final String TAG = "PreferenceActivity";
+    private AlertDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +67,23 @@ public class PreferenceActivity extends MyActivity {
                             }
                             new DebugLog(TAG + " ret=" + ret + i, DebugLog.LogLevel.V);
                         })
-                .setOnCancelListener(dialogInterface -> finish());
-        UIUtils.alphaShow(builder.create(), UIUtils.TransparentLevel.PREFERENCES);
+                .setOnCancelListener(dialogInterface -> {
+                    dialog.dismiss();
+                    finish();
+                });
+        dialog = builder.create();
+        UIUtils.alphaShow(dialog, UIUtils.TransparentLevel.PREFERENCES);
+    }
+
+    @Override
+    protected void onPause() {
+        dialog.dismiss();
+        super.onPause();
+    }
+
+    @Override
+    protected void onRestart() {
+        dialog.show();
+        super.onRestart();
     }
 }

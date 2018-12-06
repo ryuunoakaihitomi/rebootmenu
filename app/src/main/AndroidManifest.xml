@@ -64,6 +64,7 @@
 
         <activity
             android:name=".PreferenceActivity"
+            android:excludeFromRecents="true"
             android:exported="false"
             android:permission="android.permission.WRITE_SECURE_SETTINGS">
             <intent-filter>
