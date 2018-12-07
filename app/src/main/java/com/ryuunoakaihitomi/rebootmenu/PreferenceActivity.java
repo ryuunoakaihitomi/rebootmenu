@@ -67,10 +67,7 @@ public class PreferenceActivity extends MyActivity {
                             }
                             new DebugLog(TAG + " ret=" + ret + i, DebugLog.LogLevel.V);
                         })
-                .setOnCancelListener(dialogInterface -> {
-                    dialog.dismiss();
-                    finish();
-                });
+                .setOnCancelListener(dialogInterface -> finish());
         dialog = builder.create();
         UIUtils.alphaShow(dialog, UIUtils.TransparentLevel.PREFERENCES);
     }
