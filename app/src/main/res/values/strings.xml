@@ -63,4 +63,5 @@
     <string name="disable_device_admin_warning">在Android P以下(不含P),禁用设备管理应用功能会失去免root锁屏的权限!如果你的目的不是卸载,你确定吗要这样做吗?</string>
     <string name="preference_title">设置选项</string>
     <string name="quick_lock_screen">快捷锁屏</string>
+    <string name="monkey_test_notice">\"猴子\"不能打开本应用主UI</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.ryuunoakaihitomi.rebootmenu;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,6 +22,13 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         new DebugLog("MainActivity.onCreate", DebugLog.LogLevel.V);
+        //对于本应用的性质而言，Monkey Test没有必要，而且也容易造成测试机器电源状态改变
+        if (ActivityManager.isUserAMonkey()) {
+            new TextToast(this, true, getString(R.string.monkey_test_notice));
+            ShellUtils.killShKillProcess("monkey");
+            finish();
+            return;
+        }
         //配置选项
         String configView = getString(R.string.loading);
         final String PREFIX = "\n√ ";
