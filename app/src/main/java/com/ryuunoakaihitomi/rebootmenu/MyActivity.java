@@ -2,6 +2,7 @@ package com.ryuunoakaihitomi.rebootmenu;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.admin.DevicePolicyManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -25,6 +26,8 @@ public class MyActivity extends Activity {
     private boolean isBroadcastRegistered;
     //若是Shortcut就不用监听亮屏
     private boolean isShortcut;
+    //防止helpDialog造成的WindowLeaked
+    public static AlertDialog helpDialogReference;
     ComponentName componentName;
     DevicePolicyManager devicePolicyManager;
     int requestCode;
@@ -78,6 +81,11 @@ public class MyActivity extends Activity {
         new DebugLog("MyActivity.onDestroy", DebugLog.LogLevel.V);
         if (!isShortcut)
             unregisterReceiver(broadcastReceiver);
+        if (helpDialogReference != null && helpDialogReference.isShowing()) {
+            new DebugLog(getClass().getSimpleName(), "helpDialogReference*", DebugLog.LogLevel.V);
+            helpDialogReference.dismiss();
+            helpDialogReference = null;
+        }
     }
 
     //辅助服务申请回调

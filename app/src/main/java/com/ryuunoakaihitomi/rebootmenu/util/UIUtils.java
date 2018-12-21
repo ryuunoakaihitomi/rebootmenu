@@ -21,6 +21,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.ryuunoakaihitomi.rebootmenu.MyActivity;
 import com.ryuunoakaihitomi.rebootmenu.R;
 import com.ryuunoakaihitomi.rebootmenu.Shortcut;
 
@@ -119,7 +120,6 @@ public class UIUtils {
             lp.alpha = f;
             window.setAttributes(lp);
         }
-        //helpDialog的WindowLeaked怎么破呢
         w.show();
     }
 
@@ -131,7 +131,10 @@ public class UIUtils {
         h.setTitle(activityThis.getString(R.string.help));
         String help = inputStream2String(activityThis.getResources().openRawResource(R.raw.help_body), null);
         h.setMessage(Html.fromHtml(help));
-        h.setOnCancelListener(p1 -> alphaShow(returnTo.create(), TransparentLevel.NORMAL));
+        h.setOnCancelListener(p1 -> {
+            MyActivity.helpDialogReference = null;
+            alphaShow(returnTo.create(), TransparentLevel.NORMAL);
+        });
         h.setNeutralButton(activityThis.getString(R.string.offical_download_link), (p1, p2) -> openURL(activityThis, "https://github.com/ryuunoakaihitomi/rebootmenu/releases"));
         h.setNegativeButton(activityThis.getString(R.string.donate), (p1, p2) -> openURL(activityThis, "http://ryuunoakaihitomi.info/donate/"));
         //有意保留的bug:帮助对话框的退出方式与配置相反
@@ -140,6 +143,7 @@ public class UIUtils {
             h.setCancelable(false);
         }
         AlertDialog hc = h.create();
+        MyActivity.helpDialogReference = hc;
         alphaShow(hc, TransparentLevel.HELP);
         //通过反射取得AlertDialog的窗体对象
         /*

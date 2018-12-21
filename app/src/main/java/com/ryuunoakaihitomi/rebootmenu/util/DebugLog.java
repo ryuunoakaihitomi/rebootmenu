@@ -1,6 +1,7 @@
 package com.ryuunoakaihitomi.rebootmenu.util;
 
 import android.os.Environment;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.ryuunoakaihitomi.rebootmenu.MyApplication;
@@ -20,7 +21,7 @@ import java.io.File;
  * 仅有一个不标注名称
  *
  * @author ZQY
- * @version 1.4
+ * @version 1.5
  * @see android.util.Log
  */
 
@@ -79,6 +80,18 @@ public class DebugLog {
                 default:
                     Log.w(TAG, "(level?)" + msg);
             }
+    }
+
+    /**
+     * 带标签的日志输出
+     *
+     * @param subTag   子标签
+     * @param msg      输出内容
+     * @param logLevel 日志等级
+     */
+    public DebugLog(String subTag, String msg, LogLevel logLevel) {
+        if (TextUtils.isEmpty(subTag)) new DebugLog(msg, logLevel);
+        else new DebugLog(String.format("%s:[%s]", subTag, msg), logLevel);
     }
 
     /**

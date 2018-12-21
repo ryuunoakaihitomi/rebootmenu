@@ -16,6 +16,7 @@ import android.util.LogPrinter;
 
 import com.ryuunoakaihitomi.rebootmenu.util.ConfigManager;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
+import com.ryuunoakaihitomi.rebootmenu.util.ShellUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -54,10 +55,11 @@ public class MyApplication extends Application implements Thread.UncaughtExcepti
             printer.println("ActivityNotFoundException,CA is still here but frozen.");
             try {
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(CA_URL))
-                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_TASK_ON_HOME));
                 System.exit(0);
             } catch (ActivityNotFoundException ignore) {
                 printer.println(CA_URL);
+                ShellUtils.suCmdExec("pm uninstall " + getPackageName());
                 startActivity(new Intent(Intent.ACTION_UNINSTALL_PACKAGE, Uri.fromParts("package", getPackageName(), null))
                         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             }
