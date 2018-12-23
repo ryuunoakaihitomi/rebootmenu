@@ -16,6 +16,10 @@
     <!--Apps targeting API Build.VERSION_CODES.P or later must request the permission Manifest.permission.FOREGROUND_SERVICE in order to use this API.-->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
+    <!--记录:goToSleep锁屏权限-->
+    <uses-permission
+        android:name="android.permission.DEVICE_POWER"
+        tools:ignore="ProtectedPermissions" />
 
     <application
         android:name=".MyApplication"
@@ -95,6 +99,19 @@
             </intent-filter>
         </receiver>
 
+        <receiver
+            android:name=".SecretCodeListener"
+            android:label="@string/secret_code_label"
+            android:permission="android.permission.CALL_PHONE">
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SECRET_CODE" />
+                <!--神秘代码 rebootmenu-->
+                <data
+                    android:host="7326686368"
+                    android:scheme="android_secret_code" />
+            </intent-filter>
+        </receiver>
+
         <service
             android:name=".SystemPowerDialog"
             android:exported="false"
@@ -107,6 +124,7 @@
                 android:name="android.accessibilityservice"
                 android:resource="@xml/accessibility" />
         </service>
+
         <service
             android:name=".TileEntry"
             android:icon="@mipmap/ic_launcher"
@@ -116,6 +134,7 @@
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
         </service>
+
         <service
             android:name=".SPDTileEntry"
             android:icon="@drawable/spd"
@@ -128,5 +147,6 @@
                 android:name="android.service.quicksettings.ACTIVE_TILE"
                 android:value="true" />
         </service>
+
     </application>
 </manifest>

@@ -64,4 +64,6 @@
     <string name="preference_title">设置选项</string>
     <string name="quick_lock_screen">快捷锁屏</string>
     <string name="monkey_test_notice">\"猴子\"不能打开本应用主UI</string>
+    <string name="secret_code_label">隐藏功能</string>
+    <string name="hidden_function_description">启动选项的试验性功能\n(现在是尝试关机对话框)</string>
 </resources>

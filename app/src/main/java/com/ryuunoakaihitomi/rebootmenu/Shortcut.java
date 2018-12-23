@@ -57,7 +57,7 @@ public class Shortcut extends MyActivity {
             LOCK_SCREEN_ID = "r_l",
             UR_REBOOT_ID = "ur_r",
             UR_LOCK_SCREEN_ID = "ur_l",
-            UR_POWER_DIALOG = "ur_p";
+            UR_POWER_DIALOG_ID = "ur_p";
 
     //来自UnRootMode.java -- 结束
 
@@ -145,7 +145,7 @@ public class Shortcut extends MyActivity {
                         .setIntent(new Intent(action).putExtra(extraTag, UR_LOCKSCREEN))
                         .setRank(1)
                         .build();
-                ShortcutInfo ur_powerdialog = new ShortcutInfo.Builder(this, UR_POWER_DIALOG)
+                ShortcutInfo ur_powerdialog = new ShortcutInfo.Builder(this, UR_POWER_DIALOG_ID)
                         //"电源菜单"
                         .setShortLabel(getString(R.string.tile_label))
                         //扳手
@@ -189,7 +189,9 @@ public class Shortcut extends MyActivity {
                 ShellUtils.suCmdExec(Commands.REBOOT);
                 break;
             case LOCKSCREEN:
-                ShellUtils.suCmdExec(Commands.LOCK_SCREEN);
+                RootMode.lockScreen(this);
+                //原先的锁屏方法兼容性最好,注释保留
+                //ShellUtils.suCmdExec(Commands.LOCK_SCREEN);
                 finish();
                 break;
             //免root模式

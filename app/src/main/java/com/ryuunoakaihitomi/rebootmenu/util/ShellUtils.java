@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 /**
@@ -123,6 +124,36 @@ public class ShellUtils {
             suCmdExec("kill " + processId);
         } catch (IOException e) {
             new DebugLog(e, "killShKillProcess", false);
+        }
+    }
+
+    /**
+     * 用app_process执行带root权限的Java命令
+     *
+     * @param packageResourcePath context.getPackageResourcePath()
+     * @param className           完整类名
+     * @param args                传入参数
+     */
+    public static void runSuJavaWithAppProcess(String packageResourcePath, String className, String[] args) {
+        try {
+            String argLine = "";
+            if (args != null)
+                for (String s : args)
+                    //noinspection StringConcatenationInLoop
+                    argLine += s + " ";
+            else
+                return;
+            Process process = Runtime.getRuntime().exec("su");
+            DataOutputStream outputStream = new DataOutputStream(process.getOutputStream());
+            outputStream.writeBytes("export CLASSPATH=" + packageResourcePath + "\n");
+            outputStream.writeBytes("exec app_process /system/bin " + className + " " + argLine + "\n");
+            outputStream.writeBytes("exit\n");
+            outputStream.flush();
+            process.getErrorStream().close();
+        } catch (IOException ignored) {
+        } finally {
+            new DebugLog("runSuJavaWithAppProcess: packageResourcePath:" + packageResourcePath +
+                    " className:" + className + " args:" + Arrays.toString(args));
         }
     }
 }
