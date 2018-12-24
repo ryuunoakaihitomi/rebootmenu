@@ -11,7 +11,7 @@ import com.ryuunoakaihitomi.rebootmenu.util.TextToast;
 /**
  * 神秘代码调用试验性功能，不开放在帮助文档
  * <p>
- * Created by ZQY on 2018/2/15.
+ * Created by ZQY on 2018/12/24.
  */
 
 public class SecretCodeListener extends BroadcastReceiver {
