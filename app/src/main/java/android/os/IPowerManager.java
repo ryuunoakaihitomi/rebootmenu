@@ -9,6 +9,8 @@ import static android.os.Build.VERSION_CODES.N;
 
 /**
  * Android 隐藏私有API 存根
+ * <p>
+ * -> 28
  */
 
 public interface IPowerManager extends IInterface {
@@ -21,7 +23,7 @@ public interface IPowerManager extends IInterface {
     @TargetApi(JELLY_BEAN_MR1)
     void goToSleep(long time, int reason) throws RemoteException;
 
-    //21 -> 28+
+    //21+
     @TargetApi(LOLLIPOP)
     void goToSleep(long time, int reason, int flags) throws RemoteException;
 
@@ -33,7 +35,7 @@ public interface IPowerManager extends IInterface {
     @TargetApi(N)
     void shutdown(boolean confirm, String reason, boolean wait);
 
-    @SuppressWarnings("UnnecessaryInterfaceModifier")
+    @SuppressWarnings({"UnnecessaryInterfaceModifier", "unused"})
     public abstract static class Stub extends Binder implements IPowerManager {
 
         public static IPowerManager asInterface(IBinder var0) {

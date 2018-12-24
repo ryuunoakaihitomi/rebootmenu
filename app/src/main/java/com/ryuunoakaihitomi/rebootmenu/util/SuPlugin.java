@@ -25,13 +25,15 @@ import java.io.IOException;
 
 public class SuPlugin {
     /**
-     * 参数锁屏
+     * 参数 锁屏
      */
     public static final String ARG_LOCK_SCREEN = "ls";
+
     /**
-     * 参数关机确认菜单
+     * 参数 关机确认菜单
      */
     public static final String ARG_LOCK_SHUT_DOWN_DIALOG = "sdd";
+
     private static final String TAG = "SuPlugin";
 
     //main入口
@@ -49,9 +51,10 @@ public class SuPlugin {
                     }
                     break;
                 case ARG_LOCK_SHUT_DOWN_DIALOG:
-                    //"userrequested"待研究 (@param reason code to pass to android_reboot() (e.g. "userrequested"), or null.)
-                    shutdownWithIPowerManager(true, "userrequested", false);
+                    shutdownWithIPowerManager(true, false);
+                    break;
                 default:
+                    throw new IllegalArgumentException("unknown arg[0]:" + args[0]);
             }
         } else {
             Log.w(TAG, "main: arg?");
@@ -62,22 +65,27 @@ public class SuPlugin {
     private static void lockScreenWithIPowerManager() throws RemoteException {
         Log.v(TAG, "lockScreenWithIPowerManager()");
         IPowerManager iPowerManager = IPowerManager.Stub.asInterface(ServiceManager.getService(Context.POWER_SERVICE));
+        //Go to sleep reason code: Going to sleep due by application request.
+        final int GO_TO_SLEEP_REASON_APPLICATION = 0;
         long uptimeMillis = SystemClock.uptimeMillis();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            iPowerManager.goToSleep(uptimeMillis, 0, 0);
+            iPowerManager.goToSleep(uptimeMillis, GO_TO_SLEEP_REASON_APPLICATION, 0);
         else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
-            iPowerManager.goToSleep(uptimeMillis, 0);
+            iPowerManager.goToSleep(uptimeMillis, GO_TO_SLEEP_REASON_APPLICATION);
         else
             iPowerManager.goToSleep(uptimeMillis);
     }
 
     @SuppressWarnings("SameParameterValue")
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
-    private static void shutdownWithIPowerManager(boolean confirm, String reason, boolean wait) {
-        Log.v(TAG, "lockScreenWithIPowerManager(...)");
+    private static void shutdownWithIPowerManager(boolean confirm, boolean wait) {
+        Log.v(TAG, "shutdownWithIPowerManager(...)");
         IPowerManager iPowerManager = IPowerManager.Stub.asInterface(ServiceManager.getService(Context.POWER_SERVICE));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            iPowerManager.shutdown(confirm, reason, wait);
+            // @param reason code to pass to android_reboot() (e.g. "userrequested"), or null.
+            // @hide The value to pass as the 'reason' argument to android_reboot().
+            @SuppressWarnings("SpellCheckingInspection") final String SHUTDOWN_USER_REQUESTED = "userrequested";
+            iPowerManager.shutdown(confirm, SHUTDOWN_USER_REQUESTED, wait);
             return;
         }
         iPowerManager.shutdown(confirm, wait);

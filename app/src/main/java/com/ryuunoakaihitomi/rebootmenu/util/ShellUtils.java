@@ -1,5 +1,6 @@
 package com.ryuunoakaihitomi.rebootmenu.util;
 
+import android.content.Context;
 import android.os.Build;
 
 import java.io.BufferedReader;
@@ -8,6 +9,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.StringTokenizer;
+
+import androidx.annotation.NonNull;
 
 /**
  * 本应用中关于shell操作的工具集合
@@ -130,19 +133,17 @@ public class ShellUtils {
     /**
      * 用app_process执行带root权限的Java命令
      *
-     * @param packageResourcePath context.getPackageResourcePath()
-     * @param className           完整类名
-     * @param args                传入参数
+     * @param context   context.getPackageResourcePath()所需
+     * @param className 完整类名
+     * @param args      传入参数
      */
-    public static void runSuJavaWithAppProcess(String packageResourcePath, String className, String[] args) {
+    public static void runSuJavaWithAppProcess(Context context, String className, @NonNull String... args) {
+        String packageResourcePath = context.getPackageResourcePath();
         try {
             String argLine = "";
-            if (args != null)
-                for (String s : args)
-                    //noinspection StringConcatenationInLoop
-                    argLine += s + " ";
-            else
-                return;
+            for (String s : args)
+                //noinspection StringConcatenationInLoop
+                argLine += s + " ";
             Process process = Runtime.getRuntime().exec("su");
             DataOutputStream outputStream = new DataOutputStream(process.getOutputStream());
             outputStream.writeBytes("export CLASSPATH=" + packageResourcePath + "\n");

@@ -200,7 +200,7 @@ public class RootMode extends MyActivity {
     }
 
     static void lockScreen(Context context) {
-        ShellUtils.runSuJavaWithAppProcess(context.getPackageResourcePath(), SuPlugin.class.getName(), new String[]{SuPlugin.ARG_LOCK_SCREEN});
+        ShellUtils.runSuJavaWithAppProcess(context, SuPlugin.class.getName(), SuPlugin.ARG_LOCK_SCREEN);
     }
 
     @Override

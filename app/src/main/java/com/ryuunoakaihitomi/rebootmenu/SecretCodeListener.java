@@ -20,7 +20,7 @@ public class SecretCodeListener extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if ("android.provider.Telephony.SECRET_CODE".equals(intent.getAction())) {
             new TextToast(context, true, context.getString(R.string.hidden_function_description));
-            ShellUtils.runSuJavaWithAppProcess(context.getPackageResourcePath(), SuPlugin.class.getName(), new String[]{SuPlugin.ARG_LOCK_SHUT_DOWN_DIALOG});
+            ShellUtils.runSuJavaWithAppProcess(context, SuPlugin.class.getName(), SuPlugin.ARG_LOCK_SHUT_DOWN_DIALOG);
         }
     }
 }
