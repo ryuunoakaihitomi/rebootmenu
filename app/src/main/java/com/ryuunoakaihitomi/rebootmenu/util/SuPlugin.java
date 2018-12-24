@@ -32,7 +32,7 @@ public class SuPlugin {
     /**
      * 参数 关机确认菜单
      */
-    public static final String ARG_LOCK_SHUT_DOWN_DIALOG = "sdd";
+    public static final String ARG_SHUT_DOWN_DIALOG = "sdd";
 
     private static final String TAG = "SuPlugin";
 
@@ -50,7 +50,7 @@ public class SuPlugin {
                         shell(CMD_LOCK_SCREEN);
                     }
                     break;
-                case ARG_LOCK_SHUT_DOWN_DIALOG:
+                case ARG_SHUT_DOWN_DIALOG:
                     shutdownWithIPowerManager(true, false);
                     break;
                 default:
