@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.StringTokenizer;
 
@@ -21,13 +22,29 @@ import androidx.annotation.NonNull;
 
 public class ShellUtils {
 
+    private static final String TAG = "ShellUtils";
+
+    //试验性
+    //将root shell输出流缓存起来,减轻su为了等待权限认证造成的延迟
+    private static OutputStream suOCache;
+
+    //把初始化的步骤提前,虽然会延长初始化的时间,但后面的root验证也许会快一些
+    static {
+        //初始化root shell输出流
+        try {
+            suOCache = Runtime.getRuntime().exec("su").getOutputStream();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * 检查是否获得root权限
      *
      * @return 如已获得root权限，返回为真，反之为假
      */
     public static synchronized boolean isRoot() {
-        new DebugLog("isRoot", DebugLog.LogLevel.V);
+        new DebugLog(TAG, "isRoot", DebugLog.LogLevel.V);
         Process process = null;
         try {
             process = Runtime.getRuntime().exec("su");
@@ -80,7 +97,7 @@ public class ShellUtils {
      * @param command 一条所要执行的命令
      */
     public static void shCmdExec(String command) {
-        new DebugLog("shCmdExec: " + command, DebugLog.LogLevel.I);
+        new DebugLog(TAG, "shCmdExec: " + command, DebugLog.LogLevel.I);
         try {
             Runtime.getRuntime().exec(command).getErrorStream().close();
         } catch (IOException e) {
@@ -144,13 +161,15 @@ public class ShellUtils {
             for (String s : args)
                 //noinspection StringConcatenationInLoop
                 argLine += s + " ";
-            Process process = Runtime.getRuntime().exec("su");
-            DataOutputStream outputStream = new DataOutputStream(process.getOutputStream());
-            outputStream.writeBytes("export CLASSPATH=" + packageResourcePath + "\n");
-            outputStream.writeBytes("exec app_process /system/bin " + className + " " + argLine + "\n");
-            outputStream.writeBytes("exit\n");
-            outputStream.flush();
-            process.getErrorStream().close();
+            //假设在进程运行期间流不会被关闭
+            if (suOCache == null)
+                suOCache = Runtime.getRuntime().exec("su").getOutputStream();
+            suOCache.write(("export CLASSPATH=" + packageResourcePath + "\n").getBytes());
+            suOCache.write(("exec app_process /system/bin " + className + " " + argLine + '\n').getBytes());
+            suOCache.flush();
+            //没办法直接检测输出流关闭有点棘手，只能用一次
+            suOCache.close();
+            suOCache = null;
         } catch (IOException ignored) {
         } finally {
             new DebugLog("runSuJavaWithAppProcess: packageResourcePath:" + packageResourcePath +
