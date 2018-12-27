@@ -190,8 +190,6 @@ public class Shortcut extends MyActivity {
                 break;
             case LOCKSCREEN:
                 RootMode.lockScreen(this);
-                //原先的锁屏方法兼容性最好,注释保留
-                //ShellUtils.suCmdExec(Commands.LOCK_SCREEN);
                 finish();
                 break;
             //免root模式

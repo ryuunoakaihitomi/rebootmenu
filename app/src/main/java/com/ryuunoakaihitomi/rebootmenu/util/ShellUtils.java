@@ -7,7 +7,6 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.StringTokenizer;
 
@@ -23,20 +22,6 @@ import androidx.annotation.NonNull;
 public class ShellUtils {
 
     private static final String TAG = "ShellUtils";
-
-    //试验性
-    //将root shell输出流缓存起来,减轻su为了等待权限认证造成的延迟
-    private static OutputStream suOCache;
-
-    //把初始化的步骤提前,虽然会延长初始化的时间,但后面的root验证也许会快一些
-    static {
-        //初始化root shell输出流
-        try {
-            suOCache = Runtime.getRuntime().exec("su").getOutputStream();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     /**
      * 检查是否获得root权限
@@ -161,15 +146,11 @@ public class ShellUtils {
             for (String s : args)
                 //noinspection StringConcatenationInLoop
                 argLine += s + " ";
-            //假设在进程运行期间流不会被关闭
-            if (suOCache == null)
-                suOCache = Runtime.getRuntime().exec("su").getOutputStream();
-            suOCache.write(("export CLASSPATH=" + packageResourcePath + "\n").getBytes());
-            suOCache.write(("exec app_process /system/bin " + className + " " + argLine + '\n').getBytes());
-            suOCache.flush();
-            //没办法直接检测输出流关闭有点棘手，只能用一次
-            suOCache.close();
-            suOCache = null;
+            Process process = Runtime.getRuntime().exec("su");
+            DataOutputStream stream = new DataOutputStream(process.getOutputStream());
+            stream.writeBytes("export CLASSPATH=" + packageResourcePath + '\n');
+            stream.writeBytes("exec app_process /system/bin " + className + " " + argLine + '\n');
+            stream.flush();
         } catch (IOException ignored) {
         } finally {
             new DebugLog("runSuJavaWithAppProcess: packageResourcePath:" + packageResourcePath +

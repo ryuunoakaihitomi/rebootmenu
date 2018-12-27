@@ -123,7 +123,6 @@ public class SystemPowerDialog extends AccessibilityService {
             builder = new Notification.Builder(this);
         builder
                 .setContentTitle(getString(R.string.service_simple_name))
-                .setContentText(getString(R.string.notification_notice))
                 .setContentIntent(PendingIntent.getActivity(this, 0, getPackageManager().getLaunchIntentForPackage(getPackageName()), 0))
                 .setOngoing(true)
                 //尽管在26上不能折叠通知（需要手动设置），但可以将其放置在较低的位置（已废弃）
@@ -133,6 +132,12 @@ public class SystemPowerDialog extends AccessibilityService {
                 .setVisibility(Notification.VISIBILITY_SECRET)
                 //秒表指示
                 .setUsesChronometer(true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+            //启用自动折叠
+            builder.setStyle(new Notification.BigTextStyle().bigText(getString(R.string.notification_notice)));
+        else
+            //在Android5.1中BigTextStyle的方法可能无法显示，作为兼容
+            builder.setContentText(getString(R.string.notification_notice));
         Notification notification = builder.build();
         startForeground(NOTIFICATION_ID, notification);
     }

@@ -24,14 +24,12 @@ import java.io.IOException;
  */
 
 public class SuPlugin {
+
     /**
      * 参数 锁屏
      */
     public static final String ARG_LOCK_SCREEN = "ls";
 
-    /**
-     * 参数 关机确认菜单
-     */
     public static final String ARG_SHUT_DOWN_DIALOG = "sdd";
 
     private static final String TAG = "SuPlugin";
@@ -46,8 +44,7 @@ public class SuPlugin {
                         lockScreenWithIPowerManager();
                     } catch (Throwable e) {
                         Log.e(TAG, "main: lockScreenWithIPowerManager()", e);
-                        String CMD_LOCK_SCREEN = "input keyevent 26";
-                        shell(CMD_LOCK_SCREEN);
+                        shell(Commands.LOCK_SCREEN);
                     }
                     break;
                 case ARG_SHUT_DOWN_DIALOG:
@@ -91,7 +88,7 @@ public class SuPlugin {
         iPowerManager.shutdown(confirm, wait);
     }
 
-    private static void shell(String command) {
+    private static void shell(@SuppressWarnings("SameParameterValue") String command) {
         try {
             Runtime.getRuntime().exec(command);
         } catch (IOException e) {

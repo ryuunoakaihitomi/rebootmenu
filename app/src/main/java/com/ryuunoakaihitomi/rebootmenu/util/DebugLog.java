@@ -8,6 +8,8 @@ import com.ryuunoakaihitomi.rebootmenu.MyApplication;
 
 import java.io.File;
 
+import androidx.annotation.Nullable;
+
 /**
  * 日志输出调试工具
  * Created by ZQY on 2018/2/11.
@@ -89,9 +91,10 @@ public class DebugLog {
      * @param msg      输出内容
      * @param logLevel 日志等级
      */
-    public DebugLog(String subTag, String msg, LogLevel logLevel) {
-        if (TextUtils.isEmpty(subTag)) new DebugLog(msg, logLevel);
-        else new DebugLog(String.format("%s:[%s]", subTag, msg), logLevel);
+    public DebugLog(String subTag, String msg, @Nullable LogLevel logLevel) {
+        if (TextUtils.isEmpty(subTag)) new DebugLog(msg, logLevel == null ? LogLevel.D : logLevel);
+        else
+            new DebugLog(String.format("%s:[%s]", subTag, msg), logLevel != null ? logLevel : LogLevel.D);
     }
 
     /**
