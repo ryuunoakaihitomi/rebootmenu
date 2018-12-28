@@ -80,9 +80,9 @@ public class MyActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        new DebugLog("MyActivity.onDestroy", DebugLog.LogLevel.V);
         if (checkScreenOnListenerUnnecessary())
             return;
-        new DebugLog("MyActivity.onDestroy", DebugLog.LogLevel.V);
         if (!isShortcut)
             unregisterReceiver(broadcastReceiver);
         //清掉dialog防止WindowLeaked

@@ -7,8 +7,8 @@ android {
         applicationId "com.ryuunoakaihitomi.rebootmenu"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 86
-        versionName "10_蛍夢_50_osc"
+        versionCode 87
+        versionName "10_蛍夢_51_osc"
         buildConfigField("String", "APK_PACK_TIME", "\"" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS").format(new Date()) + "\"")
     }
     compileOptions {
@@ -17,6 +17,7 @@ android {
     }
     buildTypes {
         release {
+            shrinkResources true
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
