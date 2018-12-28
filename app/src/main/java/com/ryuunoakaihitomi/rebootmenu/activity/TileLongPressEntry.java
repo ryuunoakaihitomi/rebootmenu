@@ -1,4 +1,4 @@
-package com.ryuunoakaihitomi.rebootmenu;
+package com.ryuunoakaihitomi.rebootmenu.activity;
 
 import android.annotation.TargetApi;
 import android.app.Activity;

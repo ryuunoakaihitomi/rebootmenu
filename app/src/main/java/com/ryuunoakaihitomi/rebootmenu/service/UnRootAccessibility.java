@@ -1,4 +1,4 @@
-package com.ryuunoakaihitomi.rebootmenu;
+package com.ryuunoakaihitomi.rebootmenu.service;
 
 import android.accessibilityservice.AccessibilityService;
 import android.annotation.TargetApi;
@@ -13,6 +13,8 @@ import android.content.IntentFilter;
 import android.os.Build;
 import android.view.accessibility.AccessibilityEvent;
 
+import com.ryuunoakaihitomi.rebootmenu.R;
+import com.ryuunoakaihitomi.rebootmenu.activity.RootMode;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 import com.ryuunoakaihitomi.rebootmenu.util.LocalBroadcastManager;
 import com.ryuunoakaihitomi.rebootmenu.util.TextToast;
@@ -22,13 +24,11 @@ import com.ryuunoakaihitomi.rebootmenu.util.TextToast;
  * Created by ZQY on 2018/2/12.
  */
 
-public class SystemPowerDialog extends AccessibilityService {
+public class UnRootAccessibility extends AccessibilityService {
 
     public static final String
             POWER_DIALOG_ACTION = "com.ryuunoakaihitomi.rebootmenu.POWER_DIALOG_ACTION",
             LOCK_SCREEN_ACTION = "com.ryuunoakaihitomi.rebootmenu.LOCK_SCREEN_ACTION";
-
-    private boolean isBroadcastRegistered;
     private final BroadcastReceiver mPowerDialogBroadcastReceiver = new BroadcastReceiver() {
         @TargetApi(Build.VERSION_CODES.LOLLIPOP)
         @Override
@@ -46,6 +46,7 @@ public class SystemPowerDialog extends AccessibilityService {
             new DebugLog("GLOBAL_ACTION_LOCK_SCREEN -> " + performGlobalAction(AccessibilityService.GLOBAL_ACTION_LOCK_SCREEN));
         }
     };
+    private boolean isBroadcastRegistered;
     private LocalBroadcastManager localBroadcastManager;
 
     @Override
@@ -107,7 +108,7 @@ public class SystemPowerDialog extends AccessibilityService {
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void loadNoticeBar() {
         Notification.Builder builder;
-        final String CHANNEL_ID = "SPD";
+        final String CHANNEL_ID = "URA";
         final int NOTIFICATION_ID = 1;
         //Oreo以上适配通知渠道
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

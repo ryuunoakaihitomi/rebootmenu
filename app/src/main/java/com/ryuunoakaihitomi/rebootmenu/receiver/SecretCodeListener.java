@@ -1,9 +1,10 @@
-package com.ryuunoakaihitomi.rebootmenu;
+package com.ryuunoakaihitomi.rebootmenu.receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import com.ryuunoakaihitomi.rebootmenu.R;
 import com.ryuunoakaihitomi.rebootmenu.util.ShellUtils;
 import com.ryuunoakaihitomi.rebootmenu.util.SuPlugin;
 import com.ryuunoakaihitomi.rebootmenu.util.TextToast;

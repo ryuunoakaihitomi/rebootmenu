@@ -1,4 +1,4 @@
-package com.ryuunoakaihitomi.rebootmenu;
+package com.ryuunoakaihitomi.rebootmenu.service;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
@@ -6,6 +6,7 @@ import android.os.Build;
 import android.provider.Settings;
 import android.service.quicksettings.TileService;
 
+import com.ryuunoakaihitomi.rebootmenu.R;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 import com.ryuunoakaihitomi.rebootmenu.util.LocalBroadcastManager;
 import com.ryuunoakaihitomi.rebootmenu.util.TextToast;
@@ -43,7 +44,7 @@ public class SPDTileEntry extends TileService {
             //收起状态栏
             startActivityAndCollapse(intent);
         } else {
-            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(SystemPowerDialog.POWER_DIALOG_ACTION));
+            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(UnRootAccessibility.POWER_DIALOG_ACTION));
         }
     }
 }

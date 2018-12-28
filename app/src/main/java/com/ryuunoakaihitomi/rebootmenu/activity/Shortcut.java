@@ -1,4 +1,4 @@
-package com.ryuunoakaihitomi.rebootmenu;
+package com.ryuunoakaihitomi.rebootmenu.activity;
 
 import android.annotation.TargetApi;
 import android.app.admin.DevicePolicyManager;
@@ -10,6 +10,11 @@ import android.graphics.drawable.Icon;
 import android.os.Build;
 import android.os.Bundle;
 
+import com.ryuunoakaihitomi.rebootmenu.MyApplication;
+import com.ryuunoakaihitomi.rebootmenu.R;
+import com.ryuunoakaihitomi.rebootmenu.activity.base.Constants;
+import com.ryuunoakaihitomi.rebootmenu.activity.base.MyActivity;
+import com.ryuunoakaihitomi.rebootmenu.receiver.AdminReceiver;
 import com.ryuunoakaihitomi.rebootmenu.util.Commands;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 import com.ryuunoakaihitomi.rebootmenu.util.ShellUtils;
@@ -28,12 +33,10 @@ import java.util.Random;
 
 public class Shortcut extends MyActivity {
 
+    public static final String extraTag = "shortcut";
     static final int ROOT = 0;
     static final int UNROOT = 1;
-    public static final String extraTag = "shortcut";
     static final String action = "com.ryuunoakaihitomi.rebootmenu.SHORTCUT_ACTION";
-    private boolean isSysApp;
-
     //shortcut功能选项
     static final int REBOOT = 2,
             SHUTDOWN = 3,
@@ -46,7 +49,6 @@ public class Shortcut extends MyActivity {
             UR_LOCKSCREEN = 6,
             UR_POWERDIALOG = 7,
             UR_REBOOT = 10;
-
     //Shortcut ID
     @SuppressWarnings("FieldCanBeLocal")
     private final String FAST_BOOT_ID = "r_ffb",
@@ -58,8 +60,7 @@ public class Shortcut extends MyActivity {
             UR_REBOOT_ID = "ur_r",
             UR_LOCK_SCREEN_ID = "ur_l",
             UR_POWER_DIALOG_ID = "ur_p";
-
-    //来自UnRootMode.java -- 结束
+    private boolean isSysApp;
 
     @SuppressWarnings("ConstantConditions")
     @TargetApi(Build.VERSION_CODES.N_MR1)
@@ -67,7 +68,7 @@ public class Shortcut extends MyActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         new DebugLog("Shortcut.onCreate", DebugLog.LogLevel.V);
-        URLockScrInit(true, 1729, (DevicePolicyManager) getSystemService(DEVICE_POLICY_SERVICE), new ComponentName(this, AdminReceiver.class));
+        URLockScrInit(true, Constants.SHORTCUT_LOCK_SCREEN_REQUEST_CODE, (DevicePolicyManager) getSystemService(DEVICE_POLICY_SERVICE), new ComponentName(this, AdminReceiver.class));
         boolean isN_MR1 = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1;
         isSysApp = MyApplication.isSystemApp;
         int param = getIntent().getIntExtra(extraTag, -1);
@@ -215,7 +216,7 @@ public class Shortcut extends MyActivity {
         }
     }
 
-    //只有rebooot系才有可能免root执行
+    //只有reboot系才有可能免root执行
     private void rebootExec(String arg) {
         new DebugLog("rebootExec: arg:" + arg, DebugLog.LogLevel.V);
         if (isSysApp && !Commands.SHUTDOWN_F.equals(arg))

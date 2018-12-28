@@ -28,7 +28,6 @@ import java.lang.reflect.Field;
  */
 
 
-@SuppressWarnings("WeakerAccess")
 public class MyApplication extends Application implements Thread.UncaughtExceptionHandler {
 
     public static boolean isDebug, isSystemApp;
@@ -79,7 +78,7 @@ public class MyApplication extends Application implements Thread.UncaughtExcepti
      *
      * @return boolean
      */
-    boolean isDebuggable() {
+    private boolean isDebuggable() {
         return (getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
     }
 
@@ -88,7 +87,7 @@ public class MyApplication extends Application implements Thread.UncaughtExcepti
      *
      * @return boolean
      */
-    boolean isSystemApp() {
+    private boolean isSystemApp() {
         return (getApplicationInfo().flags & ApplicationInfo.FLAG_SYSTEM) > 0;
     }
 

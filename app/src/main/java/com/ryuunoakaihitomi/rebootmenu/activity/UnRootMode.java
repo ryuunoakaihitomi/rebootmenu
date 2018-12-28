@@ -1,4 +1,4 @@
-package com.ryuunoakaihitomi.rebootmenu;
+package com.ryuunoakaihitomi.rebootmenu.activity;
 
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
@@ -11,6 +11,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.widget.ListView;
 
+import com.ryuunoakaihitomi.rebootmenu.R;
+import com.ryuunoakaihitomi.rebootmenu.activity.base.Constants;
+import com.ryuunoakaihitomi.rebootmenu.activity.base.MyActivity;
+import com.ryuunoakaihitomi.rebootmenu.receiver.AdminReceiver;
 import com.ryuunoakaihitomi.rebootmenu.util.ConfigManager;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 import com.ryuunoakaihitomi.rebootmenu.util.TextToast;
@@ -23,14 +27,14 @@ import com.ryuunoakaihitomi.rebootmenu.util.URMUtils;
  */
 
 public class UnRootMode extends MyActivity {
+
     private AlertDialog.Builder mainDialog;
-    private AlertDialog dialogInstance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         new DebugLog("UnRootMode.onCreate", DebugLog.LogLevel.V);
-        URLockScrInit(false, 1989, (DevicePolicyManager) getSystemService(DEVICE_POLICY_SERVICE), new ComponentName(this, AdminReceiver.class));
+        URLockScrInit(false, Constants.UN_ROOT_MODE_LOCK_SCREEN_REQUEST_CODE, (DevicePolicyManager) getSystemService(DEVICE_POLICY_SERVICE), new ComponentName(this, AdminReceiver.class));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             UIUtils.transparentStatusBar(this);
         mainDialog = UIUtils.LoadDialog(ConfigManager.get(ConfigManager.WHITE_THEME), this);
@@ -129,15 +133,5 @@ public class UnRootMode extends MyActivity {
         });
         UIUtils.alphaShow(dialogInstance, UIUtils.TransparentLevel.NORMAL);
         new DebugLog("UnRootMode.onCreate -- END", DebugLog.LogLevel.V);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        //清掉dialog防止WindowLeaked
-        if (dialogInstance != null) {
-            dialogInstance.dismiss();
-            dialogInstance = null;
-        }
     }
 }

@@ -1,8 +1,9 @@
-package com.ryuunoakaihitomi.rebootmenu;
+package com.ryuunoakaihitomi.rebootmenu.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.ryuunoakaihitomi.rebootmenu.activity.base.MyActivity;
 import com.ryuunoakaihitomi.rebootmenu.util.ShellUtils;
 
 /**

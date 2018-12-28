@@ -1,4 +1,4 @@
-package com.ryuunoakaihitomi.rebootmenu;
+package com.ryuunoakaihitomi.rebootmenu.service;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
@@ -6,6 +6,7 @@ import android.os.Build;
 import android.service.quicksettings.Tile;
 import android.service.quicksettings.TileService;
 
+import com.ryuunoakaihitomi.rebootmenu.activity.MainActivity;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 
 /**
@@ -14,11 +15,11 @@ import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
  */
 
 @TargetApi(Build.VERSION_CODES.N)
-public class TileEntry extends TileService {
+public class MainTileEntry extends TileService {
     @Override
     public void onClick() {
         boolean isLocked = isLocked();
-        new DebugLog("TileEntry.onClick: isLocked=" + isLocked, DebugLog.LogLevel.V);
+        new DebugLog("MainTileEntry.onClick: isLocked=" + isLocked, DebugLog.LogLevel.V);
         if (!isLocked)
             startActivityAndCollapse(new Intent(this, MainActivity.class)
                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
@@ -33,7 +34,7 @@ public class TileEntry extends TileService {
     public void onStartListening() {
         boolean isLocked = isLocked();
         int qsTileState = getQsTile().getState();
-        new DebugLog("TileEntry.onStartListening: isLocked=" + isLocked + " qsTileState=" + qsTileState, DebugLog.LogLevel.I);
+        new DebugLog("MainTileEntry.onStartListening: isLocked=" + isLocked + " qsTileState=" + qsTileState, DebugLog.LogLevel.I);
         if (!isLocked && qsTileState != Tile.STATE_ACTIVE) {
             getQsTile().setState(Tile.STATE_ACTIVE);
             getQsTile().updateTile();

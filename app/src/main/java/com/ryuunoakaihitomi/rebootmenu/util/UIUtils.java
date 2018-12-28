@@ -21,9 +21,9 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
-import com.ryuunoakaihitomi.rebootmenu.MyActivity;
 import com.ryuunoakaihitomi.rebootmenu.R;
-import com.ryuunoakaihitomi.rebootmenu.Shortcut;
+import com.ryuunoakaihitomi.rebootmenu.activity.Shortcut;
+import com.ryuunoakaihitomi.rebootmenu.activity.base.MyActivity;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -222,7 +222,7 @@ public class UIUtils {
      * @param iconRes     图标资源id
      * @param shortcutAct Shortcut额外
      * @param isForce     是否是root强制模式
-     * @see com.ryuunoakaihitomi.rebootmenu.Shortcut
+     * @see com.ryuunoakaihitomi.rebootmenu.activity.Shortcut
      */
     @SuppressWarnings("ConstantConditions")
     public static void addLauncherShortcut(@NonNull Context context, int titleRes, int iconRes, int shortcutAct, boolean isForce) {

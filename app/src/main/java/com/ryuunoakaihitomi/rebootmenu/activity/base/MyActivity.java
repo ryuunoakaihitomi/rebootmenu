@@ -1,4 +1,4 @@
-package com.ryuunoakaihitomi.rebootmenu;
+package com.ryuunoakaihitomi.rebootmenu.activity.base;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -11,6 +11,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Handler;
 
+import com.ryuunoakaihitomi.rebootmenu.R;
+import com.ryuunoakaihitomi.rebootmenu.activity.LockScreenAssist;
+import com.ryuunoakaihitomi.rebootmenu.activity.Shortcut;
 import com.ryuunoakaihitomi.rebootmenu.util.ConfigManager;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 import com.ryuunoakaihitomi.rebootmenu.util.TextToast;
@@ -23,15 +26,16 @@ import com.ryuunoakaihitomi.rebootmenu.util.TextToast;
 @SuppressLint("Registered")
 public class MyActivity extends Activity {
 
+    //防止helpDialog造成的WindowLeaked
+    public static AlertDialog helpDialogReference;
+    //主要Dialog防止WindowLeaked
+    public AlertDialog dialogInstance;
+    public ComponentName componentName;
+    public DevicePolicyManager devicePolicyManager;
+    public int requestCode;
     private boolean isBroadcastRegistered;
     //若是Shortcut就不用监听亮屏
     private boolean isShortcut;
-    //防止helpDialog造成的WindowLeaked
-    public static AlertDialog helpDialogReference;
-    ComponentName componentName;
-    DevicePolicyManager devicePolicyManager;
-    int requestCode;
-
     //亮屏监听用变量和接收器
     private boolean isScreenOn;
     private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
@@ -81,10 +85,19 @@ public class MyActivity extends Activity {
         new DebugLog("MyActivity.onDestroy", DebugLog.LogLevel.V);
         if (!isShortcut)
             unregisterReceiver(broadcastReceiver);
+        //清掉dialog防止WindowLeaked
         if (helpDialogReference != null && helpDialogReference.isShowing()) {
             new DebugLog(getClass().getSimpleName(), "helpDialogReference*", DebugLog.LogLevel.V);
             helpDialogReference.dismiss();
             helpDialogReference = null;
+        }
+        if (dialogInstance != null) {
+            dialogInstance.dismiss();
+            //https://stackoverflow.com/questions/11590382/android-view-windowleaked
+            /*
+            Simply dismissing the dialog was not enough to get rid of the error for me. It turns out my code was holding onto a reference to the dialog even after it was dismissed. The key for me was to set that reference to null after dismissing the dialog.
+             */
+            dialogInstance = null;
         }
     }
 
@@ -108,7 +121,7 @@ public class MyActivity extends Activity {
     }
 
     //免root模式下锁屏重启的初始化
-    void URLockScrInit(boolean isShortcut, int requestCode, DevicePolicyManager devicePolicyManager, ComponentName componentName) {
+    public void URLockScrInit(boolean isShortcut, int requestCode, DevicePolicyManager devicePolicyManager, ComponentName componentName) {
         new DebugLog("URLockScrInit: isShortcut:" + isShortcut + " requestCode:" + requestCode + " ..", DebugLog.LogLevel.V);
         this.isShortcut = isShortcut;
         this.componentName = componentName;

@@ -1,4 +1,4 @@
-package com.ryuunoakaihitomi.rebootmenu;
+package com.ryuunoakaihitomi.rebootmenu.activity;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -8,6 +8,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.widget.ListView;
 
+import com.ryuunoakaihitomi.rebootmenu.MyApplication;
+import com.ryuunoakaihitomi.rebootmenu.R;
+import com.ryuunoakaihitomi.rebootmenu.activity.base.MyActivity;
 import com.ryuunoakaihitomi.rebootmenu.util.Commands;
 import com.ryuunoakaihitomi.rebootmenu.util.ConfigManager;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
@@ -24,10 +27,21 @@ import com.ryuunoakaihitomi.rebootmenu.util.URMUtils;
 
 public class RootMode extends MyActivity {
     private boolean isForceMode;
-    private AlertDialog dialogInstance;
 
     private static boolean isAL18() {
         return Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2;
+    }
+
+    //root util
+    static void rebootSystemUIAlternativeMethod() {
+        new DebugLog("rebootSystemUIAlternativeMethod", DebugLog.LogLevel.V);
+        ShellUtils.suCmdExec(Commands.RESTART_SYSTEM_UI_ALTERNATIVE);
+        ShellUtils.killShKillProcess("com.android.systemui");
+    }
+
+    //root util
+    static void lockScreen(Context context) {
+        ShellUtils.runSuJavaWithAppProcess(context, SuPlugin.class.getName(), SuPlugin.ARG_LOCK_SCREEN);
     }
 
     @Override
@@ -191,29 +205,6 @@ public class RootMode extends MyActivity {
         });
         dialogInstance = mainDialogCreate;
         UIUtils.alphaShow(dialogInstance, UIUtils.TransparentLevel.NORMAL);
-    }
-
-    static void rebootSystemUIAlternativeMethod() {
-        new DebugLog("rebootSystemUIAlternativeMethod", DebugLog.LogLevel.V);
-        ShellUtils.suCmdExec(Commands.RESTART_SYSTEM_UI_ALTERNATIVE);
-        ShellUtils.killShKillProcess("com.android.systemui");
-    }
-
-    static void lockScreen(Context context) {
-        ShellUtils.runSuJavaWithAppProcess(context, SuPlugin.class.getName(), SuPlugin.ARG_LOCK_SCREEN);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (dialogInstance != null) {
-            dialogInstance.dismiss();
-            //https://stackoverflow.com/questions/11590382/android-view-windowleaked
-            /*
-            Simply dismissing the dialog was not enough to get rid of the error for me. It turns out my code was holding onto a reference to the dialog even after it was dismissed. The key for me was to set that reference to null after dismissing the dialog.
-             */
-            dialogInstance = null;
-        }
     }
 
     private void exeKernel(String[] shellList, String[] shellListForce, int i) {

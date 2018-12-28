@@ -12,7 +12,7 @@ import android.provider.Settings;
 import android.text.TextUtils;
 
 import com.ryuunoakaihitomi.rebootmenu.R;
-import com.ryuunoakaihitomi.rebootmenu.SystemPowerDialog;
+import com.ryuunoakaihitomi.rebootmenu.service.UnRootAccessibility;
 
 import androidx.annotation.NonNull;
 
@@ -47,7 +47,7 @@ public class URMUtils {
                 new TextToast(activity.getApplicationContext(), activity.getString(R.string.service_disabled));
                 activity.startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
             } else
-                LocalBroadcastManager.getInstance(activity).sendBroadcast(new Intent(SystemPowerDialog.LOCK_SCREEN_ACTION));
+                LocalBroadcastManager.getInstance(activity).sendBroadcast(new Intent(UnRootAccessibility.LOCK_SCREEN_ACTION));
             activity.finish();
         } else {
             if (!active) {
@@ -80,7 +80,7 @@ public class URMUtils {
             Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
             activity.startActivity(intent);
         } else {
-            boolean isSucceed = LocalBroadcastManager.getInstance(activity).sendBroadcast(new Intent(SystemPowerDialog.POWER_DIALOG_ACTION));
+            boolean isSucceed = LocalBroadcastManager.getInstance(activity).sendBroadcast(new Intent(UnRootAccessibility.POWER_DIALOG_ACTION));
             new DebugLog("sendBroadcast POWER_DIALOG_ACTION : " + isSucceed);
         }
         activity.finish();
@@ -100,7 +100,7 @@ public class URMUtils {
         //return ((AccessibilityManager) mContext.getSystemService(Context.ACCESSIBILITY_SERVICE)).isEnabled();
         new DebugLog("isAccessibilitySettingsOn", DebugLog.LogLevel.V);
         int accessibilityEnabled = 0;
-        final String service = mContext.getPackageName() + "/" + SystemPowerDialog.class.getCanonicalName();
+        final String service = mContext.getPackageName() + "/" + UnRootAccessibility.class.getCanonicalName();
         try {
             accessibilityEnabled = Settings.Secure.getInt(mContext.getApplicationContext().getContentResolver(), Settings.Secure.ACCESSIBILITY_ENABLED);
         } catch (Settings.SettingNotFoundException ignored) {

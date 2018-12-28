@@ -34,7 +34,7 @@
         tools:ignore="AllowBackup,GoogleAppIndexingWarning"
         tools:targetApi="o">
         <activity
-            android:name=".MainActivity"
+            android:name=".activity.MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleInstance">
             <intent-filter>
@@ -43,14 +43,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".RootMode"
+            android:name=".activity.RootMode"
             android:label="@string/app_name" />
         <activity
-            android:name=".UnRootMode"
+            android:name=".activity.UnRootMode"
             android:label="@string/app_name" />
 
         <activity
-            android:name=".Shortcut"
+            android:name=".activity.Shortcut"
             android:excludeFromRecents="true"
             android:label="@string/app_name">
             <intent-filter>
@@ -60,7 +60,7 @@
         </activity>
 
         <activity
-            android:name=".TileLongPressEntry"
+            android:name=".activity.TileLongPressEntry"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE_PREFERENCES" />
@@ -68,7 +68,7 @@
         </activity>
 
         <activity
-            android:name=".PreferenceActivity"
+            android:name=".activity.PreferenceActivity"
             android:excludeFromRecents="true"
             android:exported="false"
             android:permission="android.permission.WRITE_SECURE_SETTINGS">
@@ -78,7 +78,7 @@
         </activity>
 
         <activity
-            android:name=".LockScreenAssist"
+            android:name=".activity.LockScreenAssist"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/quick_lock_screen">
             <intent-filter>
@@ -88,7 +88,7 @@
         </activity>
 
         <receiver
-            android:name=".AdminReceiver"
+            android:name=".receiver.AdminReceiver"
             android:description="@string/description"
             android:label="@string/app_name"
             android:permission="android.permission.BIND_DEVICE_ADMIN">
@@ -101,7 +101,7 @@
         </receiver>
 
         <receiver
-            android:name=".SecretCodeListener"
+            android:name=".receiver.SecretCodeListener"
             android:label="@string/secret_code_label"
             android:permission="android.permission.CALL_PHONE">
             <intent-filter>
@@ -114,7 +114,7 @@
         </receiver>
 
         <service
-            android:name=".SystemPowerDialog"
+            android:name=".service.UnRootAccessibility"
             android:exported="false"
             android:label="@string/service_name"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
@@ -127,7 +127,7 @@
         </service>
 
         <service
-            android:name=".TileEntry"
+            android:name=".service.MainTileEntry"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/tile_label"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
@@ -137,7 +137,7 @@
         </service>
 
         <service
-            android:name=".SPDTileEntry"
+            android:name=".service.SPDTileEntry"
             android:icon="@drawable/spd"
             android:label="@string/spd_tile_label"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
