@@ -1,7 +1,6 @@
 package com.ryuunoakaihitomi.rebootmenu.activity;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
@@ -14,8 +13,8 @@ import com.ryuunoakaihitomi.rebootmenu.activity.base.MyActivity;
 import com.ryuunoakaihitomi.rebootmenu.util.Commands;
 import com.ryuunoakaihitomi.rebootmenu.util.ConfigManager;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
+import com.ryuunoakaihitomi.rebootmenu.util.RootModeUtils;
 import com.ryuunoakaihitomi.rebootmenu.util.ShellUtils;
-import com.ryuunoakaihitomi.rebootmenu.util.SuPlugin;
 import com.ryuunoakaihitomi.rebootmenu.util.TextToast;
 import com.ryuunoakaihitomi.rebootmenu.util.UIUtils;
 import com.ryuunoakaihitomi.rebootmenu.util.URMUtils;
@@ -30,18 +29,6 @@ public class RootMode extends MyActivity {
 
     private static boolean isAL18() {
         return Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2;
-    }
-
-    //root util
-    static void rebootSystemUIAlternativeMethod() {
-        new DebugLog("rebootSystemUIAlternativeMethod", DebugLog.LogLevel.V);
-        ShellUtils.suCmdExec(Commands.RESTART_SYSTEM_UI_ALTERNATIVE);
-        ShellUtils.killShKillProcess("com.android.systemui");
-    }
-
-    //root util
-    static void lockScreen(Context context) {
-        ShellUtils.runSuJavaWithAppProcess(context, SuPlugin.class.getName(), SuPlugin.ARG_LOCK_SCREEN);
     }
 
     @Override
@@ -210,7 +197,7 @@ public class RootMode extends MyActivity {
     private void exeKernel(String[] shellList, String[] shellListForce, int i) {
         new DebugLog("exeKernel: i:" + i + " isForceMode:" + isForceMode);
         if (i == 7) {
-            lockScreen(this);
+            RootModeUtils.lockScreen(this);
         }
         //是系统应用，且是reboot系，且不是关机
         else if (MyApplication.isSystemApp && i != 1 && i < 4) {
@@ -250,7 +237,7 @@ public class RootMode extends MyActivity {
                 }
                 //重启UI：两套备选方案
             else if (shellList[5].equals(command) && !isSucceed) {
-                rebootSystemUIAlternativeMethod();
+                RootModeUtils.rebootSystemUIAlternativeMethod();
             }
         }
         new TextToast(getApplicationContext(), true, getString(R.string.cmd_send_notice));

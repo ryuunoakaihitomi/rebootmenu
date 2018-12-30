@@ -1,4 +1,4 @@
-package com.ryuunoakaihitomi.rebootmenu.util;
+package com.ryuunoakaihitomi.rebootmenu.util.hook;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -12,7 +12,8 @@ import android.system.Os;
 import android.text.TextUtils;
 import android.util.Log;
 
-import java.io.IOException;
+import com.android.internal.os.Zygote;
+import com.ryuunoakaihitomi.rebootmenu.util.Commands;
 
 /**
  * 本应用中可以root权限执行的Java代码
@@ -23,7 +24,7 @@ import java.io.IOException;
  * @author ZQY
  */
 
-public class SuPlugin {
+public class SuJavaPlugin {
 
     /**
      * 参数 锁屏
@@ -32,7 +33,7 @@ public class SuPlugin {
 
     public static final String ARG_SHUT_DOWN_DIALOG = "sdd";
 
-    private static final String TAG = "SuPlugin";
+    private static final String TAG = "SuJavaPlugin";
 
     //main入口
     public static void main(String[] args) {
@@ -44,7 +45,7 @@ public class SuPlugin {
                         lockScreenWithIPowerManager();
                     } catch (Throwable e) {
                         Log.e(TAG, "main: lockScreenWithIPowerManager()", e);
-                        shell(Commands.LOCK_SCREEN);
+                        Zygote.execShell(Commands.LOCK_SCREEN);
                     }
                     break;
                 case ARG_SHUT_DOWN_DIALOG:
@@ -55,7 +56,7 @@ public class SuPlugin {
             }
         } else {
             Log.w(TAG, "main: arg?");
-            System.exit(-1);
+            throw new IllegalArgumentException("arg == null");
         }
     }
 
@@ -86,13 +87,5 @@ public class SuPlugin {
             return;
         }
         iPowerManager.shutdown(confirm, wait);
-    }
-
-    private static void shell(@SuppressWarnings("SameParameterValue") String command) {
-        try {
-            Runtime.getRuntime().exec(command);
-        } catch (IOException e) {
-            Log.w(TAG, "shell: ", e);
-        }
     }
 }

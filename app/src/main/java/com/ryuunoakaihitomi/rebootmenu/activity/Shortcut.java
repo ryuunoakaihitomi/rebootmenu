@@ -17,6 +17,7 @@ import com.ryuunoakaihitomi.rebootmenu.activity.base.MyActivity;
 import com.ryuunoakaihitomi.rebootmenu.receiver.AdminReceiver;
 import com.ryuunoakaihitomi.rebootmenu.util.Commands;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
+import com.ryuunoakaihitomi.rebootmenu.util.RootModeUtils;
 import com.ryuunoakaihitomi.rebootmenu.util.ShellUtils;
 import com.ryuunoakaihitomi.rebootmenu.util.TextToast;
 import com.ryuunoakaihitomi.rebootmenu.util.UIUtils;
@@ -175,7 +176,7 @@ public class Shortcut extends MyActivity {
                 break;
             case REBOOT_UI:
                 if (!ShellUtils.suCmdExec(Commands.RESTART_SYSTEM_UI))
-                    RootMode.rebootSystemUIAlternativeMethod();
+                    RootModeUtils.rebootSystemUIAlternativeMethod();
                 finish();
                 break;
             case HOT_REBOOT:
@@ -190,7 +191,7 @@ public class Shortcut extends MyActivity {
                 ShellUtils.suCmdExec(Commands.REBOOT);
                 break;
             case LOCKSCREEN:
-                RootMode.lockScreen(this);
+                RootModeUtils.lockScreen(this);
                 finish();
                 break;
             //免root模式

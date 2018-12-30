@@ -6,8 +6,8 @@ import android.content.Intent;
 
 import com.ryuunoakaihitomi.rebootmenu.R;
 import com.ryuunoakaihitomi.rebootmenu.util.ShellUtils;
-import com.ryuunoakaihitomi.rebootmenu.util.SuPlugin;
 import com.ryuunoakaihitomi.rebootmenu.util.TextToast;
+import com.ryuunoakaihitomi.rebootmenu.util.hook.SuJavaPlugin;
 
 /**
  * 神秘代码调用试验性功能，不开放在帮助文档
@@ -21,7 +21,7 @@ public class SecretCodeListener extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if ("android.provider.Telephony.SECRET_CODE".equals(intent.getAction())) {
             new TextToast(context, true, context.getString(R.string.hidden_function_description));
-            ShellUtils.runSuJavaWithAppProcess(context, SuPlugin.class.getName(), SuPlugin.ARG_SHUT_DOWN_DIALOG);
+            ShellUtils.runSuJavaWithAppProcess(context, SuJavaPlugin.class.getName(), SuJavaPlugin.ARG_SHUT_DOWN_DIALOG);
         }
     }
 }

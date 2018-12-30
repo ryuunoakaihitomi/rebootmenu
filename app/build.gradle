@@ -24,6 +24,10 @@ android {
     }
 }
 
+dependencies {
+    compileOnly 'de.robv.android.xposed:api:82'
+}
+
 android.applicationVariants.all { variant ->
     variant.outputs.all {
         outputFileName = "${variant.applicationId}-${variant.versionCode}_${variant.buildType.name}.apk"

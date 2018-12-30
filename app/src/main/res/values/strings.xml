@@ -66,4 +66,5 @@
     <string name="monkey_test_notice">\"猴子\"不能打开本应用主UI</string>
     <string name="secret_code_label">隐藏的测试</string>
     <string name="hidden_function_description">启动选项的试验性功能</string>
+    <string name="xposed_description">む</string>
 </resources>
