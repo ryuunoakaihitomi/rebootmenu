@@ -29,8 +29,8 @@
     <string name="no">否</string>
     <string name="root_title">启动选项↓</string>
     <string name="unroot_title">启动选项↓(免root模式)</string>
-    <string name="description">锁屏依赖,卸载时请关闭(Android P无用)</string>
-    <string name="accessibility_service_description">只有开启本服务才能调用系统电源菜单和在Android P及以上使用免root锁屏,这并不会泄露你的任何隐私\n\n注意：Android 5.0以下或root模式中该开关并无用处,请保持关闭状态</string>
+    <string name="description">锁屏依赖,卸载时请关闭(Android P和Wear OS H无用)</string>
+    <string name="accessibility_service_description">只有开启本服务才能调用系统电源菜单和在Android P及以上使用免root锁屏,这并不会泄露你的任何隐私\n\n注意：Android 5.0以下或root模式中该开关并无用处,请保持关闭状态.Wear OS除非是版本H(API Level=28)以上,否则也没有必要开启此项.</string>
     <string name="service_name">启动选项 - 调用系统电源菜单服务</string>
     <string name="lockscreen_failed">未开启设备管理器,锁屏失败！</string>
     <string name="service_disabled">你未开启辅助服务或服务已失效…请开启或重新开启辅助服务之后再打开菜单选择此选项</string>

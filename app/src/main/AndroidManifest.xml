@@ -48,9 +48,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.RootMode" />
+
+        <!--W/DeviceAdminAdd: Cannot start ADD_DEVICE_ADMIN as a new task-->
         <activity
             android:name=".activity.UnRootMode"
-            android:launchMode="singleInstance" />
+            android:launchMode="singleTask" />
 
         <activity
             android:name=".activity.Shortcut"

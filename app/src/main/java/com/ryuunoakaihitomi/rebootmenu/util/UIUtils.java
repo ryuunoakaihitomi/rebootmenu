@@ -178,9 +178,8 @@ public class UIUtils {
             new TextToast(context, true, link + "\n" + context.getString(R.string.url_open_failed_notice));
         } catch (SecurityException e) {
             e.printStackTrace();
-            if (SpecialSupport.isAndroidWearOS(context)) {
+            if (SpecialSupport.isAndroidWearOS(context))
                 new TextToast(context, true, context.getString(R.string.android_waer_cannot_open_url, link));
-            }
         } finally {
             ((Activity) context).finish();
         }

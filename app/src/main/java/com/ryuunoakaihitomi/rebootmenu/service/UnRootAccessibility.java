@@ -63,7 +63,6 @@ public class UnRootAccessibility extends AccessibilityService {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             loadNoticeBar();
             registerBroadcastReceiver(mPowerDialogBroadcastReceiver, POWER_DIALOG_ACTION);
-            //?? Build.VERSION_CODES.P=10000
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
                 registerBroadcastReceiver(mLockScreenBroadcastReceiver, LOCK_SCREEN_ACTION);
             isBroadcastRegistered = true;
@@ -90,9 +89,13 @@ public class UnRootAccessibility extends AccessibilityService {
     public void onAccessibilityEvent(AccessibilityEvent accessibilityEvent) {
         String className = accessibilityEvent.getClassName().toString();
         new DebugLog("SystemPowerDialog.onAccessibilityEvent className:" + className, DebugLog.LogLevel.V);
-        //使用root模式就没有必要保留辅助服务
-        if (RootMode.class.getName().equals(className) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-            disableSelf();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+            //使用root模式就没有必要保留辅助服务
+            if (RootMode.class.getName().equals(className))
+                disableSelf();
+                //Wear OS H 以下也没有必要
+            else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P && SpecialSupport.isAndroidWearOS(this))
+                disableSelf();
     }
 
     @Override
