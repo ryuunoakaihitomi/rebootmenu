@@ -5,8 +5,6 @@ import android.app.AlertDialog;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.widget.ListView;
@@ -17,6 +15,7 @@ import com.ryuunoakaihitomi.rebootmenu.activity.base.MyActivity;
 import com.ryuunoakaihitomi.rebootmenu.receiver.AdminReceiver;
 import com.ryuunoakaihitomi.rebootmenu.util.ConfigManager;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
+import com.ryuunoakaihitomi.rebootmenu.util.SpecialSupport;
 import com.ryuunoakaihitomi.rebootmenu.util.TextToast;
 import com.ryuunoakaihitomi.rebootmenu.util.UIUtils;
 import com.ryuunoakaihitomi.rebootmenu.util.URMUtils;
@@ -103,12 +102,14 @@ public class UnRootMode extends MyActivity {
             new TextToast(getApplicationContext(), getString(R.string.lollipop_notice));
         }
         mainDialog.setItems(uiTextList, mainListener);
-        //egg
-        mainDialog.setNeutralButton(" ", (dialogInterface, i) -> {
-            new TextToast(getApplicationContext(), true, "とまれかくもあはれ\nほたるほたるおいで");
-            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://music.163.com/#/song?id=22765874")));
-            finish();
-        });
+        //节省手表屏幕空间，而且因为容易看出，这也不算是一个彩蛋了
+        if (!SpecialSupport.isAndroidWearOS(this))
+            //egg
+            mainDialog.setNeutralButton(" ", (dialogInterface, i) -> {
+                new TextToast(getApplicationContext(), true, "とまれかくもあはれ\nほたるほたるおいで");
+                UIUtils.openURL(this, "https://music.163.com/#/song?id=22765874");
+                finish();
+            });
         dialogInstance = mainDialog.create();
         dialogInstance.setOnShowListener(dialog -> {
             ListView listView = dialogInstance.getListView();

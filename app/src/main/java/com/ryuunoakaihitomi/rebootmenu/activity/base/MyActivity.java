@@ -29,10 +29,10 @@ public class MyActivity extends Activity {
     //防止helpDialog造成的WindowLeaked
     public static AlertDialog helpDialogReference;
     //主要Dialog防止WindowLeaked
-    public AlertDialog dialogInstance;
-    public ComponentName componentName;
-    public DevicePolicyManager devicePolicyManager;
-    public int requestCode;
+    protected AlertDialog dialogInstance;
+    protected ComponentName componentName;
+    protected DevicePolicyManager devicePolicyManager;
+    protected int requestCode;
     private boolean isBroadcastRegistered;
     //若是Shortcut就不用监听亮屏
     private boolean isShortcut;

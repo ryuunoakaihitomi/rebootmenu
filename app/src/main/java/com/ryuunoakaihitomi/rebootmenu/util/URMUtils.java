@@ -24,6 +24,7 @@ import androidx.annotation.NonNull;
  */
 
 public class URMUtils {
+
     /**
      * 用辅助功能锁屏
      *
@@ -75,13 +76,18 @@ public class URMUtils {
      */
     public static void accessibilityOn(Activity activity) {
         new DebugLog("accessibilityOn", DebugLog.LogLevel.V);
-        if (!isAccessibilitySettingsOn(activity.getApplicationContext())) {
-            new TextToast(activity.getApplicationContext(), activity.getString(R.string.service_disabled));
-            Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
-            activity.startActivity(intent);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P && SpecialSupport.isAndroidWearOS(activity)) {
+            activity.startActivity(new Intent(Settings.ACTION_SETTINGS));
+            new TextToast(activity, activity.getString(R.string.android_wear_power_menu_in_sys_settings));
         } else {
-            boolean isSucceed = LocalBroadcastManager.getInstance(activity).sendBroadcast(new Intent(UnRootAccessibility.POWER_DIALOG_ACTION));
-            new DebugLog("sendBroadcast POWER_DIALOG_ACTION : " + isSucceed);
+            if (!isAccessibilitySettingsOn(activity.getApplicationContext())) {
+                new TextToast(activity.getApplicationContext(), activity.getString(R.string.service_disabled));
+                Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+                activity.startActivity(intent);
+            } else {
+                boolean isSucceed = LocalBroadcastManager.getInstance(activity).sendBroadcast(new Intent(UnRootAccessibility.POWER_DIALOG_ACTION));
+                new DebugLog("sendBroadcast POWER_DIALOG_ACTION : " + isSucceed);
+            }
         }
         activity.finish();
     }

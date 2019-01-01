@@ -17,6 +17,7 @@ import com.ryuunoakaihitomi.rebootmenu.R;
 import com.ryuunoakaihitomi.rebootmenu.activity.RootMode;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 import com.ryuunoakaihitomi.rebootmenu.util.LocalBroadcastManager;
+import com.ryuunoakaihitomi.rebootmenu.util.SpecialSupport;
 import com.ryuunoakaihitomi.rebootmenu.util.TextToast;
 
 /**
@@ -123,22 +124,36 @@ public class UnRootAccessibility extends AccessibilityService {
         } else
             builder = new Notification.Builder(this);
         builder
-                .setContentTitle(getString(R.string.service_simple_name))
                 .setContentIntent(PendingIntent.getActivity(this, 0, getPackageManager().getLaunchIntentForPackage(getPackageName()), 0))
                 .setOngoing(true)
                 //尽管在26上不能折叠通知（需要手动设置），但可以将其放置在较低的位置（已废弃）
                 .setPriority(Notification.PRIORITY_MIN)
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.drawable.small_icon)
                 //没有必要显示在锁屏上
                 .setVisibility(Notification.VISIBILITY_SECRET)
                 //秒表指示
                 .setUsesChronometer(true);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             //启用自动折叠
-            builder.setStyle(new Notification.BigTextStyle().bigText(getString(R.string.notification_notice)));
-        else
+            builder.setStyle(new Notification.BigTextStyle()
+                    .bigText(getString(R.string.notification_notice))
+                    .setSummaryText(getString(R.string.accessibility_service_sunnary_hint))
+                    .setBigContentTitle(getString(R.string.service_simple_name)));
+        } else {
             //在Android5.1中BigTextStyle的方法可能无法显示，作为兼容
-            builder.setContentText(getString(R.string.notification_notice));
+            builder.setContentText(getString(R.string.notification_notice))
+                    .setContentTitle(getString(R.string.service_simple_name));
+        }
+        //Wear OS不需要太复杂的通知
+        if (SpecialSupport.isAndroidWearOS(this)) {
+            builder.setUsesChronometer(false)
+                    .setStyle(null)
+                    .setContentText(getString(R.string.accessibility_service_sunnary_hint));
+        }
+        if (SpecialSupport.isMIUI()) {
+            //MIUI会把秒表和发出时间一同显示
+            builder.setShowWhen(false);
+        }
         Notification notification = builder.build();
         startForeground(NOTIFICATION_ID, notification);
     }

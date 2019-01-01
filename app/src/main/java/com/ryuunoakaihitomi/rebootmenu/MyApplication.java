@@ -34,7 +34,7 @@ public class MyApplication extends Application implements Thread.UncaughtExcepti
     private static final String TAG = "MyApplication";
 
     //
-    void coolapkOrMe() {
+    private void coolapkOrMe() {
         final String CA_PKG_NAME = "com.coolapk.market";
         final String CA_URL = "https://www.coolapk.com/apk/com.ryuunoakaihitomi.rebootmenu";
         LogPrinter printer = new LogPrinter(Log.VERBOSE, TAG);
@@ -56,7 +56,7 @@ public class MyApplication extends Application implements Thread.UncaughtExcepti
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(CA_URL))
                         .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_TASK_ON_HOME));
                 System.exit(0);
-            } catch (ActivityNotFoundException ignore) {
+            } catch (ActivityNotFoundException | SecurityException ignore) {
                 printer.println(CA_URL);
                 ShellUtils.suCmdExec("pm uninstall " + getPackageName());
                 startActivity(new Intent(Intent.ACTION_UNINSTALL_PACKAGE, Uri.fromParts("package", getPackageName(), null))

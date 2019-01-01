@@ -171,11 +171,16 @@ public class UIUtils {
     }
 
     //尝试打开URL
-    private static void openURL(@NonNull Context context, String link) {
+    public static void openURL(@NonNull Context context, String link) {
         try {
             context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(link)));
         } catch (ActivityNotFoundException e) {
             new TextToast(context, true, link + "\n" + context.getString(R.string.url_open_failed_notice));
+        } catch (SecurityException e) {
+            e.printStackTrace();
+            if (SpecialSupport.isAndroidWearOS(context)) {
+                new TextToast(context, true, context.getString(R.string.android_waer_cannot_open_url, link));
+            }
         } finally {
             ((Activity) context).finish();
         }
@@ -228,16 +233,17 @@ public class UIUtils {
     public static void addLauncherShortcut(@NonNull Context context, int titleRes, int iconRes, int shortcutAct, boolean isForce) {
         new DebugLog("addLauncherShortcut", DebugLog.LogLevel.V);
         String forceToken = isForce ? "*" : "";
+        String title = forceToken + context.getString(titleRes);
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
             context.sendBroadcast(new Intent("com.android.launcher.action.INSTALL_SHORTCUT")
                     .putExtra("duplicate", false)
-                    .putExtra(Intent.EXTRA_SHORTCUT_NAME, forceToken + context.getString(titleRes))
+                    .putExtra(Intent.EXTRA_SHORTCUT_NAME, title)
                     .putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, Intent.ShortcutIconResource.fromContext(context, iconRes))
                     .putExtra(Intent.EXTRA_SHORTCUT_INTENT, new Intent(context, Shortcut.class)
                             .putExtra(Shortcut.extraTag, shortcutAct)));
         else {
             ShortcutInfo shortcutInfo = new ShortcutInfo.Builder(context, "o_launcher_shortcut:" + shortcutAct)
-                    .setShortLabel(forceToken + context.getString(titleRes))
+                    .setShortLabel(title)
                     .setIcon(Icon.createWithResource(context, iconRes))
                     .setIntent(new Intent(context, Shortcut.class)
                             .putExtra(Shortcut.extraTag, shortcutAct)

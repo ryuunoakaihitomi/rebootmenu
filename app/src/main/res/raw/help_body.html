@@ -137,6 +137,23 @@
         <ul>
             <li>从16到28的跨度实在是太大了...</li>
         </ul>
+        <h2 id="-wear-os-android-wear-">关于Wear OS(旧称Android Wear)</h2>
+        <ul>
+            <li>本应用检测环境是否为Wear OS的方法是检测是否安装<strong>com.google.android.wearable.app</strong>并且为
+                <strong>系统</strong>应用,一般来说不会判断出错.
+            </li>
+            <li>其实,直到<strong>版本H</strong>的Wear OS才提供了直接弹出的电源菜单.并且Wear OS在
+                <strong>版本H</strong>
+                时才不会导致本应用的使用逻辑错乱.
+            </li>
+            <li>Wear OS没有root模式.</li>
+            <li>Wear OS不能打开网页链接.</li>
+            <li>目前可以通过<strong>ADB调试</strong>(adb install
+                <apk路径>)在智能手表上安装本应用,但这不是建议的做法.
+                    <strong>因为目前对Wear OS的适配还是试验性的</strong>
+                    ,开发者不负责从应用崩溃到设备爆炸的后果的所有责任.
+            </li>
+        </ul>
         <h1 id="-">(≧∇≦)/</h1>
         <p>开发者：</p>
         <p>@ryuunoakaihitomi github.com</p>

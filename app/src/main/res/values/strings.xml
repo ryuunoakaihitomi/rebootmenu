@@ -40,7 +40,7 @@
     <string name="offical_download_link">官方下载链接</string>
     <string name="donate">捐赠…</string>
     <string name="help_notice">应用版本：%s\n帮助更新日期：%s</string>
-    <string name="help_update_date">20181126o</string>
+    <string name="help_update_date">20190101o</string>
     <string name="activity_onrestart_notice">注意：不要在最近任务卡片启动本应用,这有可能使应用出现问题</string>
     <string name="recovery_short">Recovery</string>
     <string name="tile_label">电源菜单</string>
@@ -67,4 +67,7 @@
     <string name="secret_code_label">隐藏的测试</string>
     <string name="hidden_function_description">启动选项的试验性功能</string>
     <string name="xposed_description">む</string>
+    <string name="accessibility_service_sunnary_hint">服务保活用通知</string>
+    <string name="android_wear_power_menu_in_sys_settings">打开\"系统\"选项后,往下翻…</string>
+    <string name="android_waer_cannot_open_url">Wear OS无法打开网络链接\n%s</string>
 </resources>
