@@ -1,4 +1,4 @@
-package com.ryuunoakaihitomi.rebootmenu.util;
+package com.ryuunoakaihitomi.rebootmenu.util.ui;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
@@ -24,6 +24,9 @@ import android.widget.TextView;
 import com.ryuunoakaihitomi.rebootmenu.R;
 import com.ryuunoakaihitomi.rebootmenu.activity.Shortcut;
 import com.ryuunoakaihitomi.rebootmenu.activity.base.MyActivity;
+import com.ryuunoakaihitomi.rebootmenu.util.ConfigManager;
+import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
+import com.ryuunoakaihitomi.rebootmenu.util.SpecialSupport;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -67,14 +70,6 @@ public class UIUtils {
         }
         new DebugLog("LoadDialog: themeCode=" + themeCode, DebugLog.LogLevel.V);
         return new AlertDialog.Builder(activityThis, themeCode);
-    }
-
-    //半透明级别(alphaShow参数)
-    public class TransparentLevel {
-        public static final float NORMAL = 0.75f;
-        public static final float CONFIRM = 0.9f;
-        public static final float PREFERENCES = 0.6f;
-        static final float HELP = 0.8f;
     }
 
     /**
@@ -296,5 +291,13 @@ public class UIUtils {
         } catch (Exception ignored) {
         }
         return str;
+    }
+
+    //半透明级别(alphaShow参数)
+    public class TransparentLevel {
+        public static final float NORMAL = 0.75f;
+        public static final float CONFIRM = 0.9f;
+        public static final float PREFERENCES = 0.6f;
+        static final float HELP = 0.8f;
     }
 }

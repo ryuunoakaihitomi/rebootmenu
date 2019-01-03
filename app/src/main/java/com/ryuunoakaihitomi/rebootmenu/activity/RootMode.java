@@ -15,9 +15,9 @@ import com.ryuunoakaihitomi.rebootmenu.util.ConfigManager;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 import com.ryuunoakaihitomi.rebootmenu.util.RootModeUtils;
 import com.ryuunoakaihitomi.rebootmenu.util.ShellUtils;
-import com.ryuunoakaihitomi.rebootmenu.util.TextToast;
-import com.ryuunoakaihitomi.rebootmenu.util.UIUtils;
 import com.ryuunoakaihitomi.rebootmenu.util.URMUtils;
+import com.ryuunoakaihitomi.rebootmenu.util.ui.TextToast;
+import com.ryuunoakaihitomi.rebootmenu.util.ui.UIUtils;
 
 /**
  * Root模式活动

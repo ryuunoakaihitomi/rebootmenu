@@ -7,7 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
-import com.ryuunoakaihitomi.rebootmenu.util.TextToast;
+import com.ryuunoakaihitomi.rebootmenu.util.ui.TextToast;
 
 /**
  * To set the volume.(Hidden feature)

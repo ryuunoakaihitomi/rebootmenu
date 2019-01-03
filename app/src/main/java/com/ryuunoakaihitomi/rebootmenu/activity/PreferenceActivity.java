@@ -9,7 +9,7 @@ import com.ryuunoakaihitomi.rebootmenu.R;
 import com.ryuunoakaihitomi.rebootmenu.activity.base.MyActivity;
 import com.ryuunoakaihitomi.rebootmenu.util.ConfigManager;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
-import com.ryuunoakaihitomi.rebootmenu.util.UIUtils;
+import com.ryuunoakaihitomi.rebootmenu.util.ui.UIUtils;
 
 import static com.ryuunoakaihitomi.rebootmenu.util.ConfigManager.CANCELABLE;
 import static com.ryuunoakaihitomi.rebootmenu.util.ConfigManager.DO_NOT_CHECK_ROOT;

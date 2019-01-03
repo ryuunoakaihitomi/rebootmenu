@@ -6,8 +6,8 @@ import android.content.Intent;
 
 import com.ryuunoakaihitomi.rebootmenu.R;
 import com.ryuunoakaihitomi.rebootmenu.util.ShellUtils;
-import com.ryuunoakaihitomi.rebootmenu.util.TextToast;
 import com.ryuunoakaihitomi.rebootmenu.util.hook.SuJavaPlugin;
+import com.ryuunoakaihitomi.rebootmenu.util.ui.TextToast;
 
 /**
  * 神秘代码调用试验性功能，不开放在帮助文档

@@ -10,7 +10,7 @@ import com.ryuunoakaihitomi.rebootmenu.R;
 import com.ryuunoakaihitomi.rebootmenu.util.ConfigManager;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 import com.ryuunoakaihitomi.rebootmenu.util.ShellUtils;
-import com.ryuunoakaihitomi.rebootmenu.util.TextToast;
+import com.ryuunoakaihitomi.rebootmenu.util.ui.TextToast;
 
 /**
  * 主活动，(免)Root模式的加载

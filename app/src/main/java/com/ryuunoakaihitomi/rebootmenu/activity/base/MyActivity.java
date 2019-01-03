@@ -16,7 +16,7 @@ import com.ryuunoakaihitomi.rebootmenu.activity.LockScreenAssist;
 import com.ryuunoakaihitomi.rebootmenu.activity.Shortcut;
 import com.ryuunoakaihitomi.rebootmenu.util.ConfigManager;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
-import com.ryuunoakaihitomi.rebootmenu.util.TextToast;
+import com.ryuunoakaihitomi.rebootmenu.util.ui.TextToast;
 
 /**
  * 自定义Activity：亮屏监听，设备管理员申请回调

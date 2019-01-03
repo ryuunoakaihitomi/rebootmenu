@@ -13,6 +13,7 @@ import android.text.TextUtils;
 
 import com.ryuunoakaihitomi.rebootmenu.R;
 import com.ryuunoakaihitomi.rebootmenu.service.UnRootAccessibility;
+import com.ryuunoakaihitomi.rebootmenu.util.ui.TextToast;
 
 import androidx.annotation.NonNull;
 

@@ -16,9 +16,9 @@ import com.ryuunoakaihitomi.rebootmenu.receiver.AdminReceiver;
 import com.ryuunoakaihitomi.rebootmenu.util.ConfigManager;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 import com.ryuunoakaihitomi.rebootmenu.util.SpecialSupport;
-import com.ryuunoakaihitomi.rebootmenu.util.TextToast;
-import com.ryuunoakaihitomi.rebootmenu.util.UIUtils;
 import com.ryuunoakaihitomi.rebootmenu.util.URMUtils;
+import com.ryuunoakaihitomi.rebootmenu.util.ui.TextToast;
+import com.ryuunoakaihitomi.rebootmenu.util.ui.UIUtils;
 
 /**
  * 免root模式活动

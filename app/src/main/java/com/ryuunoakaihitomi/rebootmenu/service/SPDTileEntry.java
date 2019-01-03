@@ -9,8 +9,8 @@ import android.service.quicksettings.TileService;
 import com.ryuunoakaihitomi.rebootmenu.R;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 import com.ryuunoakaihitomi.rebootmenu.util.LocalBroadcastManager;
-import com.ryuunoakaihitomi.rebootmenu.util.TextToast;
 import com.ryuunoakaihitomi.rebootmenu.util.URMUtils;
+import com.ryuunoakaihitomi.rebootmenu.util.ui.TextToast;
 
 
 /**

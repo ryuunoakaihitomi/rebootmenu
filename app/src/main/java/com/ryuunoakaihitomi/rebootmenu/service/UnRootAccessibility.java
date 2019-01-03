@@ -18,7 +18,7 @@ import com.ryuunoakaihitomi.rebootmenu.activity.RootMode;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 import com.ryuunoakaihitomi.rebootmenu.util.LocalBroadcastManager;
 import com.ryuunoakaihitomi.rebootmenu.util.SpecialSupport;
-import com.ryuunoakaihitomi.rebootmenu.util.TextToast;
+import com.ryuunoakaihitomi.rebootmenu.util.ui.TextToast;
 
 /**
  * 辅助服务

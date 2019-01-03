@@ -66,7 +66,7 @@
     <string name="monkey_test_notice">\"猴子\"不能打开本应用主UI</string>
     <string name="secret_code_label">隐藏的测试</string>
     <string name="hidden_function_description">启动选项的试验性功能</string>
-    <string name="xposed_description">む</string>
+    <string name="xposed_description">实验性：极速锁屏\n(Android 8.0开始与TvInputService冲突)</string>
     <string name="accessibility_service_sunnary_hint">服务保活用通知</string>
     <string name="android_wear_power_menu_in_sys_settings">打开\"系统\"选项后,往下翻…</string>
     <string name="android_waer_cannot_open_url">Wear OS无法打开网络链接\n%s</string>

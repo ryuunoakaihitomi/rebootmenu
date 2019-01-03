@@ -1,4 +1,4 @@
-package com.ryuunoakaihitomi.rebootmenu.util;
+package com.ryuunoakaihitomi.rebootmenu.util.ui;
 
 import android.content.Context;
 import android.widget.Toast;

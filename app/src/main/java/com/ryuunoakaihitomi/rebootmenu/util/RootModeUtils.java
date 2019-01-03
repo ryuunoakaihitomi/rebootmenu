@@ -2,6 +2,7 @@ package com.ryuunoakaihitomi.rebootmenu.util;
 
 import android.content.Context;
 
+import com.ryuunoakaihitomi.rebootmenu.util.hook.RMPowerActionManager;
 import com.ryuunoakaihitomi.rebootmenu.util.hook.SuJavaPlugin;
 
 /**
@@ -20,6 +21,11 @@ public class RootModeUtils {
     }
 
     public static void lockScreen(Context context) {
-        ShellUtils.runSuJavaWithAppProcess(context, SuJavaPlugin.class.getName(), SuJavaPlugin.ARG_LOCK_SCREEN);
+        try {
+            RMPowerActionManager.getInstance().lockScreen();
+        } catch (Throwable throwable) {
+            ShellUtils.runSuJavaWithAppProcess(context, SuJavaPlugin.class.getName(), SuJavaPlugin.ARG_LOCK_SCREEN);
+            throwable.printStackTrace();
+        }
     }
 }
