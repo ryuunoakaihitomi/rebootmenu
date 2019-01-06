@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Process;
+import android.os.SELinux;
 import android.os.SystemClock;
 import android.util.Base64;
 import android.util.Log;
@@ -17,6 +18,7 @@ import android.util.LogPrinter;
 import com.ryuunoakaihitomi.rebootmenu.util.ConfigManager;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 import com.ryuunoakaihitomi.rebootmenu.util.ShellUtils;
+import com.ryuunoakaihitomi.rebootmenu.util.SpecialSupport;
 
 import java.io.File;
 import java.io.IOException;
@@ -115,9 +117,24 @@ public class MyApplication extends Application implements Thread.UncaughtExcepti
         }).start();
     }
 
+    //keep reference
+    private static void checkSELinuxStatus() {
+        String context = null;
+        boolean isEnabled = false, isEnforced = false;
+        try {
+            context = SELinux.getContext();
+            isEnabled = SELinux.isSELinuxEnabled();
+            isEnforced = SELinux.isSELinuxEnforced();
+        } catch (Throwable throwable) {
+            Log.w(TAG, "checkSELinuxStatus: ", throwable);
+        }
+        Log.i(TAG, "checkSELinuxStatus: Security Context:" + context + " is(Enabled/Enforced):" + SpecialSupport.varArgsToString(isEnabled, isEnforced));
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
+        checkSELinuxStatus();
         coolapkOrMe();
         //按需记录自身日志
         if (new File(Environment.getExternalStorageDirectory().getPath() + "/rbmLogWriter").exists())

@@ -20,6 +20,7 @@
     <uses-permission
         android:name="android.permission.DEVICE_POWER"
         tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <!--AS不让常规和穿戴APK共存(do not embed a watch APK in a phone APK)，在调试Wear OS时将required项改为true.-->
     <uses-feature
@@ -111,8 +112,15 @@
                 <action android:name="android.provider.Telephony.SECRET_CODE" />
                 <!--神秘代码 rebootmenu-->
                 <data
+                    android:pathPattern=".*"
                     android:host="7326686368"
                     android:scheme="android_secret_code" />
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name=".receiver.BootReceiver">
+            <intent-filter android:priority="2147483647">
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
 
@@ -160,7 +168,7 @@
             android:value="@string/xposed_description" />
         <meta-data
             android:name="xposedminversion"
-            android:value="54" />
+            android:value="82" />
 
         <meta-data
             android:name="com.google.android.wearable.standalone"

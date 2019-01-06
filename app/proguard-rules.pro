@@ -11,3 +11,8 @@
 
 # 保护Xposed入口
 -keep public class com.ryuunoakaihitomi.rebootmenu.util.hook.XposedMain
+
+# 保存Xposed检测开关
+-keep public class com.ryuunoakaihitomi.rebootmenu.util.hook.XposedUtils {
+    public static boolean isActive;
+}

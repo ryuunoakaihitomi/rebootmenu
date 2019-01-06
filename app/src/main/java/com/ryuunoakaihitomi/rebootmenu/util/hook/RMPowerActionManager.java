@@ -1,9 +1,8 @@
 package com.ryuunoakaihitomi.rebootmenu.util.hook;
 
-import android.content.Context;
-import android.os.Build;
 import android.os.RemoteException;
 import android.os.ServiceManager;
+import android.util.Log;
 
 import com.ryuunoakaihitomi.rebootmenu.IRMPowerActionService;
 
@@ -13,16 +12,13 @@ import com.ryuunoakaihitomi.rebootmenu.IRMPowerActionService;
  */
 
 public class RMPowerActionManager {
+    private static final String TAG = "RMPowerActionManager";
 
     private static RMPowerActionManager mInstance;
     private static IRMPowerActionService mService;
 
-    //getServiceName
-    private static String SERVICE_NAME = Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP ? RMPowerActionService.TAG :
-            (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ? Context.TV_INPUT_SERVICE : "user." + RMPowerActionService.TAG);
-
     private RMPowerActionManager() {
-        mService = IRMPowerActionService.Stub.asInterface(ServiceManager.getService(SERVICE_NAME));
+        mService = IRMPowerActionService.Stub.asInterface(ServiceManager.getService(XposedUtils.getServiceName(RMPowerActionService.TAG)));
     }
 
     /**
@@ -46,6 +42,15 @@ public class RMPowerActionManager {
             mService.lockScreen();
         } catch (RemoteException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void testPrint() {
+        Log.i(TAG, "testPrint: Test Service ");
+        try {
+            mService.ping();
+        } catch (Throwable t) {
+            Log.e(TAG, "testPrint: ", t);
         }
     }
 }
