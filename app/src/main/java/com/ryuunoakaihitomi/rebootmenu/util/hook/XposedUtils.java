@@ -1,10 +1,17 @@
 package com.ryuunoakaihitomi.rebootmenu.util.hook;
 
-import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.SELinux;
 import android.util.Log;
+
+import de.robv.android.xposed.SELinuxHelper;
+
+/**
+ * 在Xposed内外部都使用的一些工具
+ * <p>
+ * Created by ZQY on 2019/1/6.
+ */
 
 public class XposedUtils {
     private static final String TAG = "XposedUtils";
@@ -27,21 +34,42 @@ public class XposedUtils {
     @SuppressWarnings("SameParameterValue")
     static String getServiceName(String baseName) {
         String ret;
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
+        if (!isSELinuxPatrolling()) {
             ret = baseName;
-        else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-                ret = Context.TV_INPUT_SERVICE;
-            else
-                ret = "user." + baseName;
+        } else {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
+                ret = baseName;
+            else {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                    ret = Context.TV_INPUT_SERVICE;
+                else
+                    ret = "user." + baseName;
+            }
         }
         Log.d(TAG, "getServiceName: " + ret);
         return ret;
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public static boolean hasTvFeature(Context context) {
-        PackageManager pm = context.getPackageManager();
-        return pm.hasSystemFeature(PackageManager.FEATURE_LIVE_TV);
+    /**
+     * 检查SELinux是否启用或者处于Enforce模式
+     * 使用两套API，一套来自Xposed，一套来自隐私API。
+     * SELinux必须完全禁用才能保证自由（或者API工作可能不稳定）
+     *
+     * @return boolean
+     */
+    public static boolean isSELinuxPatrolling() {
+        //安全起见，假设为真
+        @SuppressWarnings("UnusedAssignment") boolean ret = true;
+        try {
+            ret = SELinuxHelper.isSELinuxEnabled() || SELinuxHelper.isSELinuxEnforced();
+        } catch (Throwable t) {
+            if (!(t instanceof NoClassDefFoundError))
+                t.printStackTrace();
+            try {
+                ret = SELinux.isSELinuxEnabled() || SELinux.isSELinuxEnforced();
+            } catch (Throwable ignored) {
+            }
+        }
+        return ret;
     }
 }

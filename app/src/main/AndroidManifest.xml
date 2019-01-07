@@ -91,6 +91,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity android:name=".activity.XposedWarning" />
 
         <receiver
             android:name=".receiver.AdminReceiver"
@@ -112,7 +113,6 @@
                 <action android:name="android.provider.Telephony.SECRET_CODE" />
                 <!--神秘代码 rebootmenu-->
                 <data
-                    android:pathPattern=".*"
                     android:host="7326686368"
                     android:scheme="android_secret_code" />
             </intent-filter>

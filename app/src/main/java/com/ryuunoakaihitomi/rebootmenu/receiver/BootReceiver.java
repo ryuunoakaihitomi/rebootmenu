@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.ryuunoakaihitomi.rebootmenu.activity.XposedWarning;
 import com.ryuunoakaihitomi.rebootmenu.util.hook.RMPowerActionManager;
 import com.ryuunoakaihitomi.rebootmenu.util.hook.XposedUtils;
 
@@ -22,8 +23,9 @@ public class BootReceiver extends BroadcastReceiver {
         if (!Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction()))
             return;
         Log.v(TAG, "onReceive: ");
-        if (XposedUtils.isActive) {
+        //Xposed警告
+        context.startActivity(new Intent(context, XposedWarning.class));
+        if (XposedUtils.isActive)
             RMPowerActionManager.getInstance().testPrint();
-        }
     }
 }

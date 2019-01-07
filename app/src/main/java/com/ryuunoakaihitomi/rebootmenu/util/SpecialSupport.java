@@ -1,9 +1,11 @@
 package com.ryuunoakaihitomi.rebootmenu.util;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.SystemProperties;
 import android.text.TextUtils;
 import android.util.Log;
@@ -70,5 +72,17 @@ public class SpecialSupport {
      */
     public static String varArgsToString(Object... objects) {
         return Arrays.toString(objects);
+    }
+
+    /**
+     * 检测是不是Android TV设备
+     *
+     * @param context {@link PackageManager}
+     * @return boolean
+     */
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public static boolean hasTvFeature(Context context) {
+        return context.getPackageManager()
+                .hasSystemFeature(PackageManager.FEATURE_LIVE_TV);
     }
 }

@@ -26,6 +26,7 @@ android {
 
 dependencies {
     compileOnly 'de.robv.android.xposed:api:82'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
 }
 
 android.applicationVariants.all { variant ->
