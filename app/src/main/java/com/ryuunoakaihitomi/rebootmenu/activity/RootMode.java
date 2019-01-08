@@ -16,6 +16,8 @@ import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 import com.ryuunoakaihitomi.rebootmenu.util.RootModeUtils;
 import com.ryuunoakaihitomi.rebootmenu.util.ShellUtils;
 import com.ryuunoakaihitomi.rebootmenu.util.URMUtils;
+import com.ryuunoakaihitomi.rebootmenu.util.hook.RMPowerActionManager;
+import com.ryuunoakaihitomi.rebootmenu.util.hook.XposedUtils;
 import com.ryuunoakaihitomi.rebootmenu.util.ui.TextToast;
 import com.ryuunoakaihitomi.rebootmenu.util.ui.UIUtils;
 
@@ -196,15 +198,18 @@ public class RootMode extends MyActivity {
 
     private void exeKernel(String[] shellList, String[] shellListForce, int i) {
         new DebugLog("exeKernel: i:" + i + " isForceMode:" + isForceMode);
+        boolean itemCanBeExecByPMRebootMethod = i != 1 && i < 4;
+        final String[] rebootResList = {
+                null, null, "recovery", "bootloader"
+        };
         if (i == 7) {
             RootModeUtils.lockScreen(this);
         }
         //是系统应用，且是reboot系，且不是关机
-        else if (MyApplication.isSystemApp && i != 1 && i < 4) {
-            final String[] rebootResList = {
-                    null, null, "recovery", "bootloader"
-            };
+        else if (MyApplication.isSystemApp && itemCanBeExecByPMRebootMethod) {
             URMUtils.rebootWithPowerManager(this, rebootResList[i]);
+        } /*Xposed*/ else if (XposedUtils.isActive && itemCanBeExecByPMRebootMethod) {
+            RMPowerActionManager.getInstance().reboot(rebootResList[i]);
         } else {
             String command;
             boolean isSucceed;

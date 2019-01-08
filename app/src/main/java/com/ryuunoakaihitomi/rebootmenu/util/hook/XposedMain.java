@@ -3,6 +3,7 @@ package com.ryuunoakaihitomi.rebootmenu.util.hook;
 import android.annotation.SuppressLint;
 import android.app.ActivityThread;
 import android.content.Context;
+import android.os.Build;
 import android.os.Process;
 import android.os.ServiceManager;
 import android.util.Log;
@@ -31,6 +32,10 @@ public class XposedMain implements IXposedHookZygoteInit, IXposedHookLoadPackage
 
     @Override
     public void initZygote(StartupParam startupParam) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+            XposedBridge.log("rebootmenu:Not support for Android 7.0-");
+            return;
+        }
         XposedBridge.hookAllMethods(ActivityThread.class, "systemMain", new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) {
@@ -55,8 +60,8 @@ public class XposedMain implements IXposedHookZygoteInit, IXposedHookLoadPackage
             }
         });
         //...
-        XposedBridge.log("rebootmenu enabled...");
-        Log.d(TAG, "initZygote: zygote " + SpecialSupport.varArgsToString(Process.myPid(), Process.myUid(), Process.myTid()));
+        XposedBridge.log("rebootmenu:enabled...");
+        Log.d(TAG, "initZygote: zygote " + SpecialSupport.varArgsToString(Build.VERSION.SDK_INT, Process.myPid(), Process.myUid(), Process.myTid()));
     }
 
     @Override

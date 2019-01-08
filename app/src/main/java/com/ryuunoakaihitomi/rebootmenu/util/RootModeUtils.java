@@ -24,7 +24,7 @@ public class RootModeUtils {
         try {
             RMPowerActionManager.getInstance().lockScreen();
         } catch (Throwable throwable) {
-            ShellUtils.runSuJavaWithAppProcess(context, SuJavaPlugin.class.getName(), SuJavaPlugin.ARG_LOCK_SCREEN);
+            ShellUtils.runSuJavaWithAppProcess(context, SuJavaPlugin.class, SuJavaPlugin.ARG_LOCK_SCREEN);
             throwable.printStackTrace();
         }
     }

@@ -45,6 +45,35 @@ public class RMPowerActionManager {
         }
     }
 
+    /**
+     * 重启
+     *
+     * @param reason 内核参数
+     */
+    public void reboot(String reason) {
+        try {
+            mService.reboot(reason);
+        } catch (RemoteException | NullPointerException ignored) {
+        }
+    }
+
+    /**
+     * 安全模式
+     */
+    public void safeMode() {
+        if (mService == null)
+            return;
+        try {
+            mService.safeMode();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 测试服务
+     * Note:这个方法绝对不能抛出异常
+     */
     public void testPrint() {
         Log.i(TAG, "testPrint: Test Service ");
         try {

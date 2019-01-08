@@ -135,12 +135,13 @@ public class ShellUtils {
     /**
      * 用app_process执行带root权限的Java命令
      *
-     * @param context   context.getPackageResourcePath()所需
-     * @param className 完整类名
-     * @param args      传入参数
+     * @param context context.getPackageResourcePath()所需
+     * @param cls     class.getName()
+     * @param args    传入参数
      */
-    public static void runSuJavaWithAppProcess(Context context, String className, @NonNull String... args) {
-        String packageResourcePath = context.getPackageResourcePath();
+    public static void runSuJavaWithAppProcess(Context context, Class cls, @NonNull String... args) {
+        final String packageResourcePath = context.getPackageResourcePath();
+        final String className = cls.getName();
         try {
             String argLine = "";
             for (String s : args)

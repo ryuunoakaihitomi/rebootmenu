@@ -45,6 +45,10 @@ public class SuJavaPlugin {
                         lockScreenWithIPowerManager();
                     } catch (Throwable e) {
                         Log.e(TAG, "main: lockScreenWithIPowerManager()", e);
+                        //Zygote.execShell()必须在root权限下使用！system_server权限都不行。否则会出现如下错误导致热重启！
+                        //E/JavaBinder: *** Uncaught remote exception!  (Exceptions are not yet supported across processes.)
+                        //android.system.ErrnoException: execv failed: EACCES (Permission denied)
+                        //Zygote.execShell(shell);
                         Zygote.execShell(Commands.LOCK_SCREEN);
                     }
                     break;

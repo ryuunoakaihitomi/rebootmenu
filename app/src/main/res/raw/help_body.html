@@ -151,6 +151,30 @@
                     <strong>因为目前对Wear OS的适配还是试验性的.</strong>
             </li>
         </ul>
+        <h2 id="-xposed-">关于本应用的Xposed插件</h2>
+        <h3 id="-">作用</h3>
+        <ul>
+            <li>
+                一般的root权限管理程序在动作时总有或多或少的延迟,这为本应用的操作带来了粘滞感.通过Xposed注册一个系统服务代替root来进行电源操作,可为本应用的执行操作成功的延迟大为降低.
+            </li>
+            <li>目前仅支持部分root选项,<del>计划之后支持更多</del>.免root的选项本身不需要优化速度.
+            </li>
+        </ul>
+        <h3 id="-">警告</h3>
+        <ul>
+            <li>本模块仅支持<strong>Android 7.0以上</strong>,不要在之前的系统启用模块!有可能造成本应用失效.
+            </li>
+            <li>受SELinux的限制,Android 8.0开始不允许添加外部的系统服务.所以本应用把应用频率较少的
+                <strong>TvInputService</strong>
+                替换成了自己的服务.
+                <strong>Android TV</strong>
+                (电视设备)不能使用,否则会引发功能异常,其他调用的电视输入相关API的应用也有可能会出现异常.如果有其他Xposed模块也通过相同方式注入服务,<strong>
+                    只能有一个应用的服务可以正常工作</strong>.
+            </li>
+            <li>除以上帮助文本外,开机启动后还会显示相关警告的通知.
+                <strong>因为目前本功能还是实验性的,在启用之前请确保自己已经掌握救灾措施.</strong>
+            </li>
+        </ul>
         <h1 id="-">(≧∇≦)/</h1>
         <p>开发者：</p>
         <p>@ryuunoakaihitomi github.com</p>

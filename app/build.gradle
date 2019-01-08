@@ -7,8 +7,8 @@ android {
         applicationId "com.ryuunoakaihitomi.rebootmenu"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 90
-        versionName "10_蛍夢_54_osc"
+        versionCode 91
+        versionName "10_蛍夢_55_osc"
         buildConfigField("String", "APK_PACK_TIME", "\"" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS").format(new Date()) + "\"")
     }
     compileOptions {
@@ -26,7 +26,6 @@ android {
 
 dependencies {
     compileOnly 'de.robv.android.xposed:api:82'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
 }
 
 android.applicationVariants.all { variant ->

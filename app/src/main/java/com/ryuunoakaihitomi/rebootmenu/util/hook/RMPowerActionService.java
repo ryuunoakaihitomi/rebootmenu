@@ -51,12 +51,14 @@ class RMPowerActionService extends IRMPowerActionService.Stub {
 
     @Override
     public void reboot(String reason) {
+        Log.d(TAG, "reboot: reason=" + reason);
         injectSystemThread(() -> mPowerManager.reboot(reason));
     }
 
     @TargetApi(Build.VERSION_CODES.N)
     @Override
     public void safeMode() {
+        Log.d(TAG, "safeMode");
         injectSystemThread(() -> {
             try {
                 @SuppressWarnings("JavaReflectionMemberAccess") Method rebootSafeMode =
@@ -71,7 +73,9 @@ class RMPowerActionService extends IRMPowerActionService.Stub {
     //测试服务状态
     @Override
     public void ping() {
-        Log.i(TAG, "ping: " + SpecialSupport.varArgsToString(mPowerManager, mContext, Process.myUid(), getCallingPid(), getCallingUid()));
+        Log.i(TAG, "ping:1 " + SpecialSupport.varArgsToString(mPowerManager, mContext, Process.myUid(), getCallingPid(), getCallingUid()));
+        injectSystemThread(() ->
+                Log.i(TAG, "ping:2 " + SpecialSupport.varArgsToString(pingBinder(), getCallingPid(), getCallingUid())));
     }
 
     //插入到系统线程才有系统权限
@@ -80,8 +84,9 @@ class RMPowerActionService extends IRMPowerActionService.Stub {
     }
 
     //所有的系统服务都已经初始化完成
+    @TargetApi(Build.VERSION_CODES.M)
     void allServicesInitialised() {
         Log.d(TAG, "allServicesInitialised");
-        mPowerManager = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
+        mPowerManager = mContext.getSystemService(PowerManager.class);
     }
 }

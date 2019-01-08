@@ -40,6 +40,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning"
         tools:targetApi="o">
+
         <activity
             android:name=".activity.MainActivity"
             android:launchMode="singleInstance">
@@ -48,6 +49,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name=".activity.RootMode" />
 
         <!--W/DeviceAdminAdd: Cannot start ADD_DEVICE_ADMIN as a new task-->
@@ -91,6 +93,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
         <activity android:name=".activity.XposedWarning" />
 
         <receiver

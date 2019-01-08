@@ -24,7 +24,8 @@ public class BootReceiver extends BroadcastReceiver {
             return;
         Log.v(TAG, "onReceive: ");
         //Xposed警告
-        context.startActivity(new Intent(context, XposedWarning.class));
+        context.startActivity(new Intent(context, XposedWarning.class)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         if (XposedUtils.isActive)
             RMPowerActionManager.getInstance().testPrint();
     }
