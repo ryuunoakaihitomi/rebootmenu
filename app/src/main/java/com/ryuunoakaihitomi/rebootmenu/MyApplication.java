@@ -18,7 +18,7 @@ import android.util.LogPrinter;
 import com.ryuunoakaihitomi.rebootmenu.util.ConfigManager;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 import com.ryuunoakaihitomi.rebootmenu.util.ShellUtils;
-import com.ryuunoakaihitomi.rebootmenu.util.SpecialSupport;
+import com.ryuunoakaihitomi.rebootmenu.util.hook.XposedUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -128,7 +128,7 @@ public class MyApplication extends Application implements Thread.UncaughtExcepti
         } catch (Throwable throwable) {
             Log.w(TAG, "checkSELinuxStatus: ", throwable);
         }
-        Log.i(TAG, "checkSELinuxStatus: Security Context:" + context + " is(Enabled/Enforced):" + SpecialSupport.varArgsToString(isEnabled, isEnforced));
+        Log.i(TAG, "checkSELinuxStatus: Security Context:" + context + " is(Enabled/Enforced):" + XposedUtils.varArgsToString(isEnabled, isEnforced));
     }
 
     @Override

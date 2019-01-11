@@ -198,7 +198,6 @@ public class RootMode extends MyActivity {
 
     private void exeKernel(String[] shellList, String[] shellListForce, int i) {
         new DebugLog("exeKernel: i:" + i + " isForceMode:" + isForceMode);
-        boolean itemCanBeExecByPMRebootMethod = i != 1 && i < 4;
         final String[] rebootResList = {
                 null, null, "recovery", "bootloader"
         };
@@ -206,10 +205,23 @@ public class RootMode extends MyActivity {
             RootModeUtils.lockScreen(this);
         }
         //是系统应用，且是reboot系，且不是关机
-        else if (MyApplication.isSystemApp && itemCanBeExecByPMRebootMethod) {
+        else if (!isForceMode && MyApplication.isSystemApp && i != 1 && i < 4) {
             URMUtils.rebootWithPowerManager(this, rebootResList[i]);
-        } /*Xposed*/ else if (XposedUtils.isActive && itemCanBeExecByPMRebootMethod) {
-            RMPowerActionManager.getInstance().reboot(rebootResList[i]);
+        } /*Xposed，且不是强制模式*/ else if (!isForceMode && XposedUtils.isActive && i != 5) {
+            RMPowerActionManager manager = RMPowerActionManager.getInstance();
+            switch (i) {
+                case 1:
+                    manager.shutdown();
+                    break;
+                case 4:
+                    manager.hotReboot();
+                    break;
+                case 6:
+                    manager.safeMode();
+                    break;
+                default:
+                    manager.reboot(rebootResList[i]);
+            }
         } else {
             String command;
             boolean isSucceed;

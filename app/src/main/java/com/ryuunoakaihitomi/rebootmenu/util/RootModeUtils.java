@@ -13,6 +13,7 @@ import com.ryuunoakaihitomi.rebootmenu.util.hook.SuJavaPlugin;
  */
 
 public class RootModeUtils {
+    private static final String TAG = "RootModeUtils";
 
     public static void rebootSystemUIAlternativeMethod() {
         new DebugLog("rebootSystemUIAlternativeMethod", DebugLog.LogLevel.V);
@@ -25,7 +26,7 @@ public class RootModeUtils {
             RMPowerActionManager.getInstance().lockScreen();
         } catch (Throwable throwable) {
             ShellUtils.runSuJavaWithAppProcess(context, SuJavaPlugin.class, SuJavaPlugin.ARG_LOCK_SCREEN);
-            throwable.printStackTrace();
+            new DebugLog(TAG, "lockScreen: " + throwable.getLocalizedMessage(), null);
         }
     }
 }

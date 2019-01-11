@@ -8,8 +8,6 @@ import android.os.Process;
 import android.os.ServiceManager;
 import android.util.Log;
 
-import com.ryuunoakaihitomi.rebootmenu.util.SpecialSupport;
-
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.IXposedHookZygoteInit;
 import de.robv.android.xposed.XC_MethodHook;
@@ -51,7 +49,6 @@ public class XposedMain implements IXposedHookZygoteInit, IXposedHookLoadPackage
                     }
                 });
                 XposedBridge.hookAllMethods(amsClass, "systemReady", new XC_MethodHook() {
-
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) {
                         rmPowerActionService.allServicesInitialised();
@@ -61,7 +58,7 @@ public class XposedMain implements IXposedHookZygoteInit, IXposedHookLoadPackage
         });
         //...
         XposedBridge.log("rebootmenu:enabled...");
-        Log.d(TAG, "initZygote: zygote " + SpecialSupport.varArgsToString(Build.VERSION.SDK_INT, Process.myPid(), Process.myUid(), Process.myTid()));
+        Log.d(TAG, "initZygote: zygote " + XposedUtils.varArgsToString(Build.VERSION.SDK_INT, Process.myPid(), Process.myUid(), Process.myTid()));
     }
 
     @Override

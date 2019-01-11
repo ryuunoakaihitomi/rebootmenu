@@ -1,5 +1,6 @@
 package com.ryuunoakaihitomi.rebootmenu.util.hook;
 
+
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.util.Log;
@@ -37,12 +38,8 @@ public class RMPowerActionManager {
     /**
      * 锁屏
      */
-    public void lockScreen() {
-        try {
-            mService.lockScreen();
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
+    public void lockScreen() throws Throwable {
+        mService.lockScreen();
     }
 
     /**
@@ -66,6 +63,28 @@ public class RMPowerActionManager {
         try {
             mService.safeMode();
         } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 关机
+     */
+    public void shutdown() {
+        try {
+            mService.shutdown();
+        } catch (Throwable t) {
+            t.printStackTrace();
+        }
+    }
+
+    /**
+     * 热重启
+     */
+    public void hotReboot() {
+        try {
+            mService.hotReboot();
+        } catch (RemoteException | NullPointerException e) {
             e.printStackTrace();
         }
     }

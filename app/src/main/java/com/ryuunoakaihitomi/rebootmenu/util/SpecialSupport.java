@@ -10,11 +10,8 @@ import android.os.SystemProperties;
 import android.text.TextUtils;
 import android.util.Log;
 
-import java.util.Arrays;
-
 /**
  * 为特殊的Android环境提供支持
- * 顺便放一些杂项工具
  * Created by ZQY on 2018/12/31.
  *
  * @author ZQY
@@ -62,16 +59,6 @@ public class SpecialSupport {
         }
         Log.d(TAG, "isMIUI: miuiVersionName:" + miuiVersionName);
         return !TextUtils.isEmpty(miuiVersionName);
-    }
-
-    /**
-     * 可变长参数转字符串
-     *
-     * @param objects Arrays.toString
-     * @return {@link String}
-     */
-    public static String varArgsToString(Object... objects) {
-        return Arrays.toString(objects);
     }
 
     /**

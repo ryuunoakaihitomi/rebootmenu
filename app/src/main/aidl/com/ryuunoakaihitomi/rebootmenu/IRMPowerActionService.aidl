@@ -5,5 +5,7 @@ interface IRMPowerActionService {
     void lockScreen();
     void reboot(String reason);
     void safeMode();
+    void shutdown();
+    void hotReboot();
     void ping();
 }
