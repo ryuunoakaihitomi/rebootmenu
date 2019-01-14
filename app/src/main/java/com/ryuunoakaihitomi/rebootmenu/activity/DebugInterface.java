@@ -27,7 +27,7 @@ public class DebugInterface extends Activity {
 
     /**
      * 系统权限锁屏
-     * 警告：priv-app权限也不会生效
+     * 警告：priv_app权限也不会生效
      *
      * @param context {@link "android.permission.DEVICE_POWER"}
      */
