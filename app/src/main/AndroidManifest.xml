@@ -16,7 +16,7 @@
     <!--Apps targeting API Build.VERSION_CODES.P or later must request the permission Manifest.permission.FOREGROUND_SERVICE in order to use this API.-->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
-    <!--记录:goToSleep锁屏权限.现在还用不上,因为比起以root权限执行命令,将本应用作为系统应用或以系统签名打包的概率可以忽略不计-->
+    <!--记录:goToSleep锁屏权限.现在还用不上,因为比起以root权限执行命令,将本应用以系统签名打包的概率可以忽略不计,priv_app权限也不会有效-->
     <uses-permission
         android:name="android.permission.DEVICE_POWER"
         tools:ignore="ProtectedPermissions" />
@@ -96,6 +96,11 @@
 
         <activity android:name=".activity.XposedWarning" />
 
+        <activity
+            android:name=".activity.DebugInterface"
+            android:excludeFromRecents="true"
+            android:exported="false" />
+
         <receiver
             android:name=".receiver.AdminReceiver"
             android:description="@string/description"
@@ -117,6 +122,10 @@
                 <!--神秘代码 rebootmenu-->
                 <data
                     android:host="7326686368"
+                    android:scheme="android_secret_code" />
+                <!--rebootmenu+m-->
+                <data
+                    android:host="73266863686"
                     android:scheme="android_secret_code" />
             </intent-filter>
         </receiver>

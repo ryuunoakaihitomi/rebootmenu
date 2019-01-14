@@ -56,6 +56,7 @@ public class XposedUtils {
      * 检查SELinux是否启用或者处于Enforce模式
      * 使用两套API，一套来自Xposed，一套来自隐私API。
      * SELinux必须完全禁用才能保证自由（或者API工作可能不稳定）
+     * Note:目前还不知道为什么SELinux.isSELinuxEnforced在untrusted_app权限下enforce状态下仍返回false
      *
      * @return boolean
      */

@@ -207,7 +207,7 @@ public class RootMode extends MyActivity {
         //是系统应用，且是reboot系，且不是关机
         else if (!isForceMode && MyApplication.isSystemApp && i != 1 && i < 4) {
             URMUtils.rebootWithPowerManager(this, rebootResList[i]);
-        } /*Xposed，且不是强制模式*/ else if (!isForceMode && XposedUtils.isActive && i != 5) {
+        } /*Xposed，且不是强制模式 放弃尝试重启系统UI*/ else if (!isForceMode && XposedUtils.isActive && i != 5) {
             RMPowerActionManager manager = RMPowerActionManager.getInstance();
             switch (i) {
                 case 1:

@@ -28,10 +28,22 @@ public class XposedMain implements IXposedHookZygoteInit, IXposedHookLoadPackage
     @SuppressLint("StaticFieldLeak")
     private static RMPowerActionService rmPowerActionService;
 
+    private static void xLog(String text) {
+        XposedBridge.log("rebootmenu:" + text);
+    }
+
+    @Override
+    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) {
+        if (lpparam.packageName.equals("com.ryuunoakaihitomi.rebootmenu")) {
+            Class<?> utilsClass = XposedHelpers.findClass("com.ryuunoakaihitomi.rebootmenu.util.hook.XposedUtils", lpparam.classLoader);
+            XposedHelpers.setStaticBooleanField(utilsClass, "isActive", true);
+        }
+    }
+
     @Override
     public void initZygote(StartupParam startupParam) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-            XposedBridge.log("rebootmenu:Not support for Android 7.0-");
+            xLog("Not support for Android 7.0-");
             return;
         }
         XposedBridge.hookAllMethods(ActivityThread.class, "systemMain", new XC_MethodHook() {
@@ -57,15 +69,7 @@ public class XposedMain implements IXposedHookZygoteInit, IXposedHookLoadPackage
             }
         });
         //...
-        XposedBridge.log("rebootmenu:enabled...");
+        xLog("enabled...");
         Log.d(TAG, "initZygote: zygote " + XposedUtils.varArgsToString(Build.VERSION.SDK_INT, Process.myPid(), Process.myUid(), Process.myTid()));
-    }
-
-    @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) {
-        if (lpparam.packageName.equals("com.ryuunoakaihitomi.rebootmenu")) {
-            Class<?> utilsClass = XposedHelpers.findClass("com.ryuunoakaihitomi.rebootmenu.util.hook.XposedUtils", lpparam.classLoader);
-            XposedHelpers.setStaticBooleanField(utilsClass, "isActive", true);
-        }
     }
 }
