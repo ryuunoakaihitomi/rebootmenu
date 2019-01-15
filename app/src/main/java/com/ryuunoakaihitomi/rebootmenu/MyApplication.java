@@ -2,6 +2,7 @@ package com.ryuunoakaihitomi.rebootmenu;
 
 import android.app.Application;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -18,6 +19,7 @@ import android.util.LogPrinter;
 import com.ryuunoakaihitomi.rebootmenu.util.ConfigManager;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 import com.ryuunoakaihitomi.rebootmenu.util.ShellUtils;
+import com.ryuunoakaihitomi.rebootmenu.util.hook.ReflectionOnPie;
 import com.ryuunoakaihitomi.rebootmenu.util.hook.XposedUtils;
 
 import java.io.File;
@@ -159,5 +161,11 @@ public class MyApplication extends Application implements Thread.UncaughtExcepti
         } catch (Throwable t) {
             new DebugLog(t, "disableXposed", false);
         }
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        ReflectionOnPie.zeroHAEP(base);
     }
 }
