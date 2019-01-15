@@ -17,6 +17,8 @@ import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Build;
 import android.text.Html;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Magnifier;
@@ -163,10 +165,6 @@ public class UIUtils {
                     activityThis.getResources().getColor(R.color.fujimurasaki) : activityThis.getResources().getColor(R.color.tohoh));
             //可选择文本
             textView.setTextIsSelectable(true);
-            //放大镜
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
-                new Magnifier(textView).show(0, 0);
-            }
         } catch (Exception e) {
             new DebugLog(e, "helpDialog", true);
         }
@@ -298,6 +296,38 @@ public class UIUtils {
         } catch (Exception ignored) {
         }
         return str;
+    }
+
+    /**
+     * 添加放大镜🔍
+     * 参照https://developer.android.google.cn/guide/topics/text/magnifier#java的Magnify on user interaction章节
+     * {@link android.widget.Magnifier}
+     *
+     * @param baseView 基底View
+     */
+    @SuppressLint("ClickableViewAccessibility")
+    @TargetApi(Build.VERSION_CODES.P)
+    public static void addMagnifier(View baseView) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            Magnifier magnifier = new Magnifier(baseView);
+            baseView.setOnTouchListener((v, event) -> {
+                switch (event.getActionMasked()) {
+                    case MotionEvent.ACTION_DOWN:
+                    case MotionEvent.ACTION_MOVE: {
+                        final int[] viewPosition = new int[2];
+                        v.getLocationOnScreen(viewPosition);
+                        magnifier.show(event.getRawX() - viewPosition[0],
+                                event.getRawY() - viewPosition[1]);
+                        break;
+                    }
+                    case MotionEvent.ACTION_CANCEL:
+                    case MotionEvent.ACTION_UP:
+                        magnifier.dismiss();
+                }
+                //不覆盖其他交互操作
+                return false;
+            });
+        }
     }
 
     //半透明级别(alphaShow参数)

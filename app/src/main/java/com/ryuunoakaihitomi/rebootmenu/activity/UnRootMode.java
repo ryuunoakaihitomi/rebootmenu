@@ -131,6 +131,7 @@ public class UnRootMode extends MyActivity {
                 new TextToast(this, true, String.format(getString(R.string.launcher_shortcut_added), uiTextList[position]));
                 return true;
             });
+            UIUtils.addMagnifier(listView);
         });
         UIUtils.alphaShow(dialogInstance, UIUtils.TransparentLevel.NORMAL);
         new DebugLog("UnRootMode.onCreate -- END", DebugLog.LogLevel.V);

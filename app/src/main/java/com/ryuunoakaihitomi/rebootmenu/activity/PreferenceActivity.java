@@ -71,6 +71,7 @@ public class PreferenceActivity extends MyActivity {
                         })
                 .setOnCancelListener(dialogInterface -> finish());
         dialog = builder.create();
+        UIUtils.addMagnifier(dialog.getListView());
         UIUtils.alphaShow(dialog, UIUtils.TransparentLevel.PREFERENCES);
     }
 

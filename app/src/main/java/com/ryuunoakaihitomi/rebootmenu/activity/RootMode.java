@@ -160,6 +160,7 @@ public class RootMode extends MyActivity {
         AlertDialog mainDialogCreate = mainDialog.create();
         mainDialogCreate.setOnShowListener(dialog -> {
             ListView listView = mainDialogCreate.getListView();
+            UIUtils.addMagnifier(listView);
             listView.setOnItemLongClickListener((parent, view, position, id) -> {
                 switch (position) {
                     case 0:
