@@ -16,6 +16,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Process;
 import android.text.Html;
 import android.view.MotionEvent;
 import android.view.View;
@@ -123,7 +124,7 @@ public class UIUtils {
     }
 
     //显示帮助对话框
-    private static void helpDialog(@NonNull final Activity activityThis, @NonNull final AlertDialog.Builder returnTo, boolean cancelable, boolean isWhite) {
+    private static void helpDialog(@NonNull final Activity activityThis, boolean cancelable, boolean isWhite) {
         new DebugLog("helpDialog", DebugLog.LogLevel.V);
         new TextToast(activityThis, String.format(activityThis.getString(R.string.help_notice), getAppVersionName(activityThis), activityThis.getString(R.string.help_update_date)));
         AlertDialog.Builder h = LoadDialog(isWhite, activityThis);
@@ -132,13 +133,13 @@ public class UIUtils {
         h.setMessage(Html.fromHtml(help));
         h.setOnCancelListener(p1 -> {
             MyActivity.helpDialogReference = null;
-            alphaShow(returnTo.create(), TransparentLevel.NORMAL);
+            restartApp(activityThis);
         });
         h.setNeutralButton(activityThis.getString(R.string.offical_download_link), (p1, p2) -> openURL(activityThis, "https://github.com/ryuunoakaihitomi/rebootmenu/releases"));
         h.setNegativeButton(activityThis.getString(R.string.donate), (p1, p2) -> openURL(activityThis, "http://ryuunoakaihitomi.info/donate/"));
         //有意保留的bug:帮助对话框的退出方式与配置相反
         if (cancelable) {
-            h.setPositiveButton(activityThis.getString(R.string.exit), (p1, p2) -> alphaShow(returnTo.create(), TransparentLevel.NORMAL));
+            h.setPositiveButton(activityThis.getString(R.string.exit), (dialogInterface, i) -> restartApp(activityThis));
             h.setCancelable(false);
         }
         AlertDialog hc = h.create();
@@ -215,7 +216,7 @@ public class UIUtils {
         });
         //帮助
         builder.setNegativeButton(R.string.help, (dialogInterface, i) ->
-                UIUtils.helpDialog(context, builder, ConfigManager.get(ConfigManager.CANCELABLE), ConfigManager.get(ConfigManager.WHITE_THEME)));
+                UIUtils.helpDialog(context, ConfigManager.get(ConfigManager.CANCELABLE), ConfigManager.get(ConfigManager.WHITE_THEME)));
     }
 
     /**
@@ -328,6 +329,13 @@ public class UIUtils {
                 return false;
             });
         }
+    }
+
+    private static void restartApp(Context context) {
+        //noinspection ConstantConditions
+        context.startActivity(context.getPackageManager().getLaunchIntentForPackage(context.getPackageName())
+                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+        Process.killProcess(Process.myPid());
     }
 
     //半透明级别(alphaShow参数)
