@@ -5,10 +5,14 @@ import android.app.AlertDialog;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.res.AssetManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.widget.ListView;
 
+import com.ryuunoakaihitomi.rebootmenu.BuildConfig;
 import com.ryuunoakaihitomi.rebootmenu.R;
 import com.ryuunoakaihitomi.rebootmenu.activity.base.Constants;
 import com.ryuunoakaihitomi.rebootmenu.activity.base.MyActivity;
@@ -20,12 +24,19 @@ import com.ryuunoakaihitomi.rebootmenu.util.URMUtils;
 import com.ryuunoakaihitomi.rebootmenu.util.ui.TextToast;
 import com.ryuunoakaihitomi.rebootmenu.util.ui.UIUtils;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+
+import androidx.core.content.FileProvider;
+
 /**
  * 免root模式活动
  * Created by ZQY on 2018/2/8.
  */
 
 public class UnRootMode extends MyActivity {
+    private static final String TAG = "UnRootMode";
 
     private AlertDialog.Builder mainDialog;
 
@@ -106,8 +117,36 @@ public class UnRootMode extends MyActivity {
         if (!SpecialSupport.isAndroidWearOS(this))
             //egg
             mainDialog.setNeutralButton(" ", (dialogInterface, i) -> {
-                new TextToast(getApplicationContext(), true, "とまれかくもあはれ\nほたるほたるおいで");
-                UIUtils.openURL(this, "https://music.163.com/#/song?id=22765874");
+                new TextToast(getApplicationContext(), true, "はなび");
+                try {
+                    //准备
+                    //noinspection ConstantConditions
+                    final String fileName = "fluid.html",
+                            path = getExternalFilesDir(null).getAbsolutePath() + "/" + fileName;
+                    File f = new File(path);
+                    //释放
+                    new DebugLog(TAG, String.valueOf(f.exists() ? f.delete() : f.createNewFile()), null);
+                    InputStream is = getAssets().open(fileName, AssetManager.ACCESS_BUFFER);
+                    FileOutputStream fos = new FileOutputStream(f);
+                    byte[] buffer = new byte[1 << 10];
+                    int byteCount;
+                    while ((byteCount = is.read(buffer)) != -1) {
+                        fos.write(buffer, 0, byteCount);
+                    }
+                    fos.flush();
+                    is.close();
+                    fos.close();
+                    //打开
+                    Uri uri;
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N)
+                        uri = Uri.fromFile(f);
+                    else
+                        uri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".file_provider", f);
+                    startActivity(new Intent(Intent.ACTION_VIEW).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                            .setDataAndType(uri, "text/html"));
+                } catch (Throwable t) {
+                    new DebugLog(t, TAG, true);
+                }
                 finish();
             });
         dialogInstance = mainDialog.create();

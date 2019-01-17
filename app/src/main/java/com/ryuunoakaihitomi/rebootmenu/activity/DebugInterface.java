@@ -6,9 +6,12 @@ import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.SELinux;
 import android.os.SystemClock;
+import android.util.ArraySet;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.android.server.SystemConfig;
 import com.ryuunoakaihitomi.rebootmenu.R;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 import com.ryuunoakaihitomi.rebootmenu.util.ui.TextToast;
@@ -24,6 +27,7 @@ import androidx.annotation.Nullable;
  */
 
 public class DebugInterface extends Activity {
+    private static final String TAG = "DebugInterface";
 
     /**
      * 系统权限锁屏
@@ -65,6 +69,17 @@ public class DebugInterface extends Activity {
                     break;
                 case '2':
                     lockScreenPM(this);
+                    break;
+                case '3':
+                    try {
+                        print("logcat");
+                        //保留
+                        ArraySet<String> arraySet = SystemConfig.getInstance().getHiddenApiWhitelistedApps();
+                        for (Object s : arraySet.toArray())
+                            Log.d(TAG, "onCreate: getHiddenApiWhitelistedApps:" + s);
+                    } catch (Throwable t) {
+                        t.printStackTrace();
+                    }
                     break;
                 default:
                     print(param);

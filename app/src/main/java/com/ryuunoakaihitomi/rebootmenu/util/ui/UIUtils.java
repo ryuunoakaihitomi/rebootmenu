@@ -16,7 +16,6 @@ import android.graphics.Color;
 import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Process;
 import android.text.Html;
 import android.view.MotionEvent;
 import android.view.View;
@@ -172,7 +171,7 @@ public class UIUtils {
     }
 
     //尝试打开URL
-    public static void openURL(@NonNull Context context, String link) {
+    private static void openURL(@NonNull Context context, String link) {
         try {
             context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(link)));
         } catch (ActivityNotFoundException e) {
@@ -331,11 +330,11 @@ public class UIUtils {
         }
     }
 
-    private static void restartApp(Context context) {
+    private static void restartApp(Activity activity) {
         //noinspection ConstantConditions
-        context.startActivity(context.getPackageManager().getLaunchIntentForPackage(context.getPackageName())
+        activity.startActivity(activity.getPackageManager().getLaunchIntentForPackage(activity.getPackageName())
                 .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-        Process.killProcess(Process.myPid());
+        activity.finish();
     }
 
     //半透明级别(alphaShow参数)
