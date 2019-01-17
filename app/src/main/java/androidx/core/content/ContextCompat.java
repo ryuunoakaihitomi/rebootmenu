@@ -27,7 +27,7 @@ import androidx.annotation.Nullable;
 /**
  * Helper for accessing features in {@link android.content.Context}.
  */
-public class ContextCompat {
+/*public*/ class ContextCompat {
 
     /**
      * Returns absolute paths to application-specific directories on all
@@ -74,7 +74,7 @@ public class ContextCompat {
      * @see EnvironmentCompat#getStorageState(File)
      */
     @NonNull
-    public static File[] getExternalFilesDirs(@NonNull Context context, @Nullable String type) {
+    /*public*/ static File[] getExternalFilesDirs(@NonNull Context context, @Nullable String type) {
         if (Build.VERSION.SDK_INT >= 19) {
             return context.getExternalFilesDirs(type);
         } else {
@@ -127,7 +127,7 @@ public class ContextCompat {
      * @see EnvironmentCompat#getStorageState(File)
      */
     @NonNull
-    public static File[] getExternalCacheDirs(@NonNull Context context) {
+    /*public*/ static File[] getExternalCacheDirs(@NonNull Context context) {
         if (Build.VERSION.SDK_INT >= 19) {
             return context.getExternalCacheDirs();
         } else {
