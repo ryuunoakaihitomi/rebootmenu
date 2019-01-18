@@ -38,6 +38,7 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
+import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 
 /**
@@ -229,7 +230,7 @@ public class UIUtils {
      * @see com.ryuunoakaihitomi.rebootmenu.activity.Shortcut
      */
     @SuppressWarnings("ConstantConditions")
-    public static void addLauncherShortcut(@NonNull Context context, int titleRes, int iconRes, int shortcutAct, boolean isForce) {
+    public static void addLauncherShortcut(@NonNull Context context, int titleRes, @DrawableRes int iconRes, int shortcutAct, boolean isForce) {
         new DebugLog("addLauncherShortcut", DebugLog.LogLevel.V);
         String forceToken = isForce ? "*" : "";
         String title = forceToken + context.getString(titleRes);
@@ -307,7 +308,7 @@ public class UIUtils {
      */
     @SuppressLint("ClickableViewAccessibility")
     @TargetApi(Build.VERSION_CODES.P)
-    public static void addMagnifier(View baseView) {
+    public static void addMagnifier(@NonNull View baseView) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             Magnifier magnifier = new Magnifier(baseView);
             baseView.setOnTouchListener((v, event) -> {
@@ -330,7 +331,7 @@ public class UIUtils {
         }
     }
 
-    private static void restartApp(Activity activity) {
+    private static void restartApp(@NonNull Activity activity) {
         //noinspection ConstantConditions
         activity.startActivity(activity.getPackageManager().getLaunchIntentForPackage(activity.getPackageName())
                 .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
