@@ -24,6 +24,7 @@ public class XposedUtils {
      * Note:
      * 使用Method不仅代码赘余，而且可能会hook失败
      */
+    @SuppressWarnings("CanBeFinal")
     public static boolean isActive = false;
 
     /**

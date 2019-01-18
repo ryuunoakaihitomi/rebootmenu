@@ -121,7 +121,7 @@ public class MyActivity extends Activity {
     }
 
     //免root模式下锁屏重启的初始化
-    public void URLockScrInit(boolean isShortcut, int requestCode, DevicePolicyManager devicePolicyManager, ComponentName componentName) {
+    protected void URLockScrInit(boolean isShortcut, int requestCode, DevicePolicyManager devicePolicyManager, ComponentName componentName) {
         new DebugLog("URLockScrInit: isShortcut:" + isShortcut + " requestCode:" + requestCode + " ..", DebugLog.LogLevel.V);
         this.isShortcut = isShortcut;
         this.componentName = componentName;

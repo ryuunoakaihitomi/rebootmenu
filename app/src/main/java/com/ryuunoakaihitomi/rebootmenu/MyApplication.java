@@ -99,7 +99,7 @@ public class MyApplication extends Application implements Thread.UncaughtExcepti
      * 日志记录线程保持
      * 注意：会长时间连续写入，不用时请及时关闭
      */
-    void logcatHolder() {
+    private void logcatHolder() {
         new Thread(() -> {
             String logFileName = "rbm_" + System.currentTimeMillis() + Base64.encodeToString(
                     (Build.FINGERPRINT).getBytes(), Base64.URL_SAFE | Base64.NO_PADDING | Base64.NO_WRAP) + ".log";
