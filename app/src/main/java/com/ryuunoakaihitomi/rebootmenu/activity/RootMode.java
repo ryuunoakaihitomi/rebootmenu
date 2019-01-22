@@ -28,6 +28,7 @@ import com.ryuunoakaihitomi.rebootmenu.util.ui.UIUtils;
 
 public class RootMode extends MyActivity {
     private boolean isForceMode;
+    private transient String[] uiTextList, shellList, uiTextListForce, shellListForce;
 
     private static boolean isAL18() {
         return Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2;
@@ -46,7 +47,7 @@ public class RootMode extends MyActivity {
         mainDialog.setTitle(getString(R.string.root_title));
         //默认模式功能列表
         //虽然不能用am，但Android 4.3以下可以用am发送action的方式关机重启
-        final String[] uiTextList = {
+        uiTextList = new String[]{
                 getString(R.string.reboot),
                 getString(R.string.shutdown),
                 //只能够强制
@@ -58,7 +59,7 @@ public class RootMode extends MyActivity {
                 getString(R.string.lockscreen)
         };
         //默认模式命令列表
-        final String[] shellList = {
+        shellList = new String[]{
                 Commands.REBOOT,
                 Commands.SHUTDOWN,
                 Commands.RECOVERY,
@@ -69,7 +70,7 @@ public class RootMode extends MyActivity {
                 Commands.LOCK_SCREEN
         };
         //强制模式功能列表
-        final String[] uiTextListForce = {
+        uiTextListForce = new String[]{
                 "*" + uiTextList[0],
                 "*" + uiTextList[1],
                 (isAL18() ? "" : "*") + uiTextList[2],
@@ -80,7 +81,7 @@ public class RootMode extends MyActivity {
                 uiTextList[7]
         };
         //强制模式命令列表
-        final String[] shellListForce = {
+        shellListForce = new String[]{
                 Commands.REBOOT_F,
                 Commands.SHUTDOWN_F,
                 Commands.RECOVERY_F,
@@ -114,7 +115,7 @@ public class RootMode extends MyActivity {
                         new TextToast(getApplicationContext(), getString(R.string.no_seleted_notice));
                         finish();
                     } else
-                        exeKernel(shellList, shellListForce, i);
+                        exeKernel(i);
                 };
                 //YN
                 String[] confirmSelect = {
@@ -129,7 +130,7 @@ public class RootMode extends MyActivity {
                 UIUtils.alphaShow(dialogInstance, UIUtils.TransparentLevel.CONFIRM);
             } else
                 //直接执行（无需确认）
-                exeKernel(shellList, shellListForce, i);
+                exeKernel(i);
         };
         mainDialog.setItems(uiTextList, mainListener);
         /*
@@ -150,6 +151,7 @@ public class RootMode extends MyActivity {
                 new TextToast(getApplicationContext(), getString(R.string.normal_mode));
             }
             dialogInstance = mainDialog.create();
+            parcelOtherUIAction(dialogInstance);
             UIUtils.alphaShow(dialogInstance, UIUtils.TransparentLevel.NORMAL);
         });
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
@@ -158,46 +160,12 @@ public class RootMode extends MyActivity {
         }
         //长按监听 来自https://stackoverflow.com/questions/9145628/add-onlongclick-listener-to-an-alertdialog/14163293#14163293
         AlertDialog mainDialogCreate = mainDialog.create();
-        mainDialogCreate.setOnShowListener(dialog -> {
-            ListView listView = mainDialogCreate.getListView();
-            UIUtils.addMagnifier(listView);
-            listView.setOnItemLongClickListener((parent, view, position, id) -> {
-                switch (position) {
-                    case 0:
-                        UIUtils.addLauncherShortcut(this, R.string.reboot, android.R.drawable.ic_menu_rotate, Shortcut.REBOOT, true);
-                        break;
-                    case 1:
-                        UIUtils.addLauncherShortcut(this, R.string.shutdown, android.R.drawable.ic_menu_delete, Shortcut.SHUTDOWN, true);
-                        break;
-                    case 2:
-                        UIUtils.addLauncherShortcut(this, R.string.recovery_short, android.R.drawable.ic_menu_today, Shortcut.RECOVERY, true);
-                        break;
-                    case 3:
-                        UIUtils.addLauncherShortcut(this, R.string.fastboot_short, android.R.drawable.ic_menu_sort_by_size, Shortcut.FASTBOOT, true);
-                        break;
-                    case 4:
-                        //热重启是一种永远都不被推荐的重启方式，它造成系统不稳定的可能性很大，所以使用截图警示图标
-                        UIUtils.addLauncherShortcut(this, R.string.hot_reboot, android.R.drawable.ic_menu_report_image, Shortcut.HOT_REBOOT, false);
-                        break;
-                    case 5:
-                        UIUtils.addLauncherShortcut(this, R.string.rebootui_short, android.R.drawable.ic_menu_view, Shortcut.REBOOT_UI, false);
-                        break;
-                    case 6:
-                        //用于定点清除故障应用的安全模式，使用位置图标
-                        UIUtils.addLauncherShortcut(this, R.string.safety, android.R.drawable.ic_menu_mylocation, Shortcut.SAFEMODE, false);
-                        break;
-                    case 7:
-                        UIUtils.addLauncherShortcut(this, R.string.lockscreen, android.R.drawable.ic_menu_slideshow, Shortcut.LOCKSCREEN, false);
-                }
-                new TextToast(this, true, String.format(getString(R.string.launcher_shortcut_added), uiTextList[position]));
-                return true;
-            });
-        });
+        mainDialogCreate.setOnShowListener(dialog -> parcelOtherUIAction(mainDialogCreate));
         dialogInstance = mainDialogCreate;
         UIUtils.alphaShow(dialogInstance, UIUtils.TransparentLevel.NORMAL);
     }
 
-    private void exeKernel(String[] shellList, String[] shellListForce, int i) {
+    private void exeKernel(int i) {
         new DebugLog("exeKernel: i:" + i + " isForceMode:" + isForceMode);
         final String[] rebootResList = {
                 null, null, "recovery", "bootloader"
@@ -260,5 +228,41 @@ public class RootMode extends MyActivity {
         }
         new TextToast(getApplicationContext(), true, getString(R.string.cmd_send_notice));
         finish();
+    }
+
+    private void parcelOtherUIAction(AlertDialog dialog) {
+        ListView listView = dialog.getListView();
+        UIUtils.addMagnifier(listView);
+        listView.setOnItemLongClickListener((parent, view, position, id) -> {
+            switch (position) {
+                case 0:
+                    UIUtils.addLauncherShortcut(this, R.string.reboot, android.R.drawable.ic_menu_rotate, Shortcut.REBOOT, true);
+                    break;
+                case 1:
+                    UIUtils.addLauncherShortcut(this, R.string.shutdown, android.R.drawable.ic_menu_delete, Shortcut.SHUTDOWN, true);
+                    break;
+                case 2:
+                    UIUtils.addLauncherShortcut(this, R.string.recovery_short, android.R.drawable.ic_menu_today, Shortcut.RECOVERY, true);
+                    break;
+                case 3:
+                    UIUtils.addLauncherShortcut(this, R.string.fastboot_short, android.R.drawable.ic_menu_sort_by_size, Shortcut.FASTBOOT, true);
+                    break;
+                case 4:
+                    //热重启是一种永远都不被推荐的重启方式，它造成系统不稳定的可能性很大，所以使用截图警示图标
+                    UIUtils.addLauncherShortcut(this, R.string.hot_reboot, android.R.drawable.ic_menu_report_image, Shortcut.HOT_REBOOT, false);
+                    break;
+                case 5:
+                    UIUtils.addLauncherShortcut(this, R.string.rebootui_short, android.R.drawable.ic_menu_view, Shortcut.REBOOT_UI, false);
+                    break;
+                case 6:
+                    //用于定点清除故障应用的安全模式，使用位置图标
+                    UIUtils.addLauncherShortcut(this, R.string.safety, android.R.drawable.ic_menu_mylocation, Shortcut.SAFEMODE, false);
+                    break;
+                case 7:
+                    UIUtils.addLauncherShortcut(this, R.string.lockscreen, android.R.drawable.ic_menu_slideshow, Shortcut.LOCKSCREEN, false);
+            }
+            new TextToast(this, true, String.format(getString(R.string.launcher_shortcut_added), uiTextList[position]));
+            return true;
+        });
     }
 }
