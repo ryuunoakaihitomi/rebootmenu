@@ -8,6 +8,8 @@ import android.os.Process;
 import android.os.ServiceManager;
 import android.util.Log;
 
+import com.ryuunoakaihitomi.rebootmenu.BuildConfig;
+
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.IXposedHookZygoteInit;
 import de.robv.android.xposed.XC_MethodHook;
@@ -34,16 +36,16 @@ public class XposedMain implements IXposedHookZygoteInit, IXposedHookLoadPackage
 
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) {
-        if (lpparam.packageName.equals("com.ryuunoakaihitomi.rebootmenu")) {
-            Class<?> utilsClass = XposedHelpers.findClass("com.ryuunoakaihitomi.rebootmenu.util.hook.XposedUtils", lpparam.classLoader);
+        if (lpparam.packageName.equals(BuildConfig.APPLICATION_ID)) {
+            Class<?> utilsClass = XposedHelpers.findClass(BuildConfig.APPLICATION_ID + ".util.hook.XposedUtils", lpparam.classLoader);
             XposedHelpers.setStaticBooleanField(utilsClass, "isActive", true);
         }
     }
 
     @Override
     public void initZygote(StartupParam startupParam) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-            xLog("Not support for Android 7.0-");
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            xLog("Not support for Android Marshmallow-");
             return;
         }
         XposedBridge.hookAllMethods(ActivityThread.class, "systemMain", new XC_MethodHook() {

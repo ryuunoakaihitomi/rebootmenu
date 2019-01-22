@@ -27,4 +27,14 @@ public class SystemProperties {
     public static String get(@NonNull String key, @Nullable String def) {
         throw new RuntimeException("Stub!");
     }
+
+    /**
+     * Set the value for the given {@code key} to {@code val}.
+     *
+     * @throws IllegalArgumentException if the {@code val} exceeds 91 characters
+     * @hide
+     */
+    public static void set(@NonNull String key, @Nullable String val) {
+        throw new RuntimeException("Stub!");
+    }
 }

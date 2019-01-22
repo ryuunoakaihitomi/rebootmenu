@@ -48,8 +48,8 @@ public class XposedWarning extends Activity {
                     //TvInputService冲突
                     builder.setContentText(getString(R.string.xposed_conflict_with_tv_ser))
                             .setColor(Color.YELLOW);
-            }//不兼容（未经测试）
-            else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+            }//不兼容（没有设备无法测试）
+            else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
                 builder = new Notification.Builder(this);
                 builder.setSmallIcon(android.R.drawable.ic_delete);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

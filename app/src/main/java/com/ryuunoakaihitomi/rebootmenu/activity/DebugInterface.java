@@ -12,8 +12,11 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.android.server.SystemConfig;
+import com.ryuunoakaihitomi.rebootmenu.BuildConfig;
+import com.ryuunoakaihitomi.rebootmenu.MyApplication;
 import com.ryuunoakaihitomi.rebootmenu.R;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
+import com.ryuunoakaihitomi.rebootmenu.util.hook.XposedUtils;
 import com.ryuunoakaihitomi.rebootmenu.util.ui.TextToast;
 
 import java.lang.reflect.InvocationTargetException;
@@ -80,6 +83,14 @@ public class DebugInterface extends Activity {
                     } catch (Throwable t) {
                         t.printStackTrace();
                     }
+                    break;
+                case '4':
+                    print(XposedUtils.isActive);
+                    break;
+                //版本检查
+                case 'V':
+                case 'v':
+                    print(BuildConfig.APK_PACK_TIME + MyApplication.isDebug);
                     break;
                 default:
                     print(param);

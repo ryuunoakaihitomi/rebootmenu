@@ -137,11 +137,9 @@ public class UnRootMode extends MyActivity {
                     is.close();
                     fos.close();
                     //打开
-                    Uri uri;
-                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N)
-                        uri = Uri.fromFile(f);
-                    else
-                        uri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".file_provider", f);
+                    Uri uri = Build.VERSION.SDK_INT < Build.VERSION_CODES.N
+                            ? Uri.fromFile(f)
+                            : FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".file_provider", f);
                     startActivity(new Intent(Intent.ACTION_VIEW).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_GRANT_READ_URI_PERMISSION)
                             .setDataAndType(uri, "text/html"));
                 } catch (Throwable t) {
