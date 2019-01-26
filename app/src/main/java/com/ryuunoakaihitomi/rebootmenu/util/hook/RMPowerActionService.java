@@ -17,7 +17,6 @@ import android.util.Log;
 
 import com.ryuunoakaihitomi.rebootmenu.IRMPowerActionService;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import androidx.annotation.NonNull;
@@ -51,13 +50,7 @@ class RMPowerActionService extends IRMPowerActionService.Stub {
     @Override
     public void lockScreen() {
         Log.i(TAG, "lockScreen");
-        injectSystemThread(() -> {
-            try {
-                goToSleep.invoke(mPowerManager, SystemClock.uptimeMillis());
-            } catch (Throwable throwable) {
-                Log.e(TAG, "run: ", throwable);
-            }
-        });
+        injectSystemThread(() -> invokeNoThrowAndReturn(goToSleep, mPowerManager, SystemClock.uptimeMillis()));
     }
 
     @Override
@@ -79,11 +72,7 @@ class RMPowerActionService extends IRMPowerActionService.Stub {
                 mPowerManager.reboot(null);
                 return;
             }
-            try {
-                rebootSafeMode.invoke(mPowerManager);
-            } catch (Throwable throwable) {
-                Log.e(TAG, "run: ", throwable);
-            }
+            invokeNoThrowAndReturn(rebootSafeMode, mPowerManager);
         });
     }
 
@@ -92,13 +81,9 @@ class RMPowerActionService extends IRMPowerActionService.Stub {
     public void shutdown() {
         Log.i(TAG, "shutdown");
         injectSystemThread(() -> {
-            try {
-                Object[] params = SDK_INT >= N ?
-                        new Object[]{false, null, false} : new Object[]{false, false};
-                shutdown.invoke(mPowerManager, params);
-            } catch (IllegalAccessException | InvocationTargetException | NullPointerException e) {
-                Log.e(TAG, "run: ", e);
-            }
+            Object[] params = SDK_INT >= N ?
+                    new Object[]{false, null, false} : new Object[]{false, false};
+            invokeNoThrowAndReturn(shutdown, mPowerManager, params);
         });
     }
 
@@ -231,5 +216,14 @@ class RMPowerActionService extends IRMPowerActionService.Stub {
             Log.e(TAG, "getMethodNoThrow: ", e);
         }
         return null;
+    }
+
+    private void invokeNoThrowAndReturn(@NonNull Method method, Object instance, Object... args) {
+        try {
+            method.invoke(instance, args);
+        } catch (Throwable throwable) {
+            //IllegalAccessException|IllegalArgumentException|InvocationTargetException|NullPointerException
+            Log.e(TAG, "invokeNoThrowAndReturn: ", throwable);
+        }
     }
 }
