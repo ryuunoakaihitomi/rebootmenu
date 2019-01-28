@@ -34,7 +34,7 @@ public class MainActivity extends Activity {
         String configView = getString(R.string.loading);
         final String PREFIX = "\n√ ";
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT)
-            configView += PREFIX + getString(R.string.kitkat_compat);
+            configView += getString(R.string.kitkat_compat);
         if (ConfigManager.get(ConfigManager.WHITE_THEME))
             configView += PREFIX + getString(R.string.r_whitetheme);
         if (ConfigManager.get(ConfigManager.CANCELABLE))

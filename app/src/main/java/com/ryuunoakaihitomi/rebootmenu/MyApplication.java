@@ -21,6 +21,7 @@ import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 import com.ryuunoakaihitomi.rebootmenu.util.ShellUtils;
 import com.ryuunoakaihitomi.rebootmenu.util.hook.ReflectionOnPie;
 import com.ryuunoakaihitomi.rebootmenu.util.hook.XposedUtils;
+import com.ryuunoakaihitomi.rebootmenu.util.ui.TextToast;
 
 import java.io.File;
 import java.io.IOException;
@@ -161,6 +162,8 @@ public class MyApplication extends Application implements Thread.UncaughtExcepti
         } catch (Throwable t) {
             new DebugLog(t, "disableXposed", false);
         }
+        //无障碍服务的保活用通知只能让系统屏蔽，所以要特别注意让Toast不会因此消失
+        TextToast.defineSystemToast();
     }
 
     @Override
