@@ -74,4 +74,5 @@
     <string name="xposed_not_support">本应用的Xposed模块不支持此环境</string>
     <string name="xposed_conflict_with_tv_ser">TvInputService冲突!</string>
     <string name="disabled_xposed_module_notice">必须手动禁用并重启以免影响设备正常使用</string>
+    <string name="only_for_dev">本界面仅面向开发人员,使用前请查看代码实现</string>
 </resources>

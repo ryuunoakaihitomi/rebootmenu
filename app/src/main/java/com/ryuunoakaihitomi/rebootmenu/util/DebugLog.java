@@ -23,13 +23,19 @@ import androidx.annotation.Nullable;
  * 仅有一个不标注名称
  *
  * @author ZQY
- * @version 1.5
+ * @version 1.6
  * @see android.util.Log
  */
 
 public class DebugLog {
 
-    //标签
+    /**
+     * 外置存储根目录用以打印调试日志的识别标记
+     */
+    public static final String TOKEN_TAG = "rebootmenuLog";
+    /**
+     * 全局日志标签
+     */
     private static final String TAG = "rebootmenu";
 
     //总输出开关
@@ -37,8 +43,8 @@ public class DebugLog {
 
     //用配置管理取不到值，所以在这里使用内置存储。而且卸载重装不用重新配置。
     static {
-        boolean tokenExists = new File(Environment.getExternalStorageDirectory().getPath() + "/rebootmenuLog").exists();
-        isLog = MyApplication.isDebug || tokenExists;
+        boolean tokenExists = new File(Environment.getExternalStorageDirectory().getPath() + "/" + TOKEN_TAG).exists();
+        isLog =/* MyApplication.isDebug || */tokenExists;
         Log.i(TAG, "DebugLog: isDebug:" + MyApplication.isDebug + " tokenExists:" + tokenExists);
     }
 
