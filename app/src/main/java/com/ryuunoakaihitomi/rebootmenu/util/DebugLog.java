@@ -44,7 +44,7 @@ public class DebugLog {
     //用配置管理取不到值，所以在这里使用内置存储。而且卸载重装不用重新配置。
     static {
         boolean tokenExists = new File(Environment.getExternalStorageDirectory().getPath() + "/" + TOKEN_TAG).exists();
-        isLog =/* MyApplication.isDebug || */tokenExists;
+        isLog = MyApplication.isDebug || tokenExists;
         Log.i(TAG, "DebugLog: isDebug:" + MyApplication.isDebug + " tokenExists:" + tokenExists);
     }
 
