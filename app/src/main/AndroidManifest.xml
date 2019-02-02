@@ -3,7 +3,7 @@
     package="com.ryuunoakaihitomi.rebootmenu">
     <!--此权限在Android5.0之后已被弃用-->
     <uses-permission android:name="android.permission.ACCESS_SUPERUSER" />
-    <!--为Android4.4和部分特殊系统以前准备-->
+    <!--为Android4.4以前和部分特殊系统准备-->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <!--为系统应用身份准备-->
     <uses-permission
