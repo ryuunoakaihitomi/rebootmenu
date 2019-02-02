@@ -11,6 +11,7 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
+import com.ryuunoakaihitomi.rebootmenu.util.SpecialSupport;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -26,7 +27,7 @@ import static com.ryuunoakaihitomi.rebootmenu.util.DebugLog.LogLevel.I;
  * Created by ZQY on 2018/2/8.
  *
  * @author ZQY
- * @version 1.1
+ * @version 1.2
  * @see android.widget.Toast
  */
 
@@ -43,7 +44,7 @@ public class TextToast {
      * @param message 显示的文本内容
      */
     public TextToast(Context context, boolean isLong, String message) {
-        toastCompat(context, Toast.makeText(context, message, isLong ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT));
+        toastCompat(context, message, isLong ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT);
     }
 
     /**
@@ -53,24 +54,28 @@ public class TextToast {
      * @param message 文本内容
      */
     public TextToast(Context context, String message) {
-        toastCompat(context, Toast.makeText(context, message, Toast.LENGTH_SHORT));
+        toastCompat(context, message, Toast.LENGTH_SHORT);
     }
 
     /**
      * toast兼容适配
      *
-     * @param context {@link Context}
-     * @param toast   {@link Toast}
+     * @param context  {@link Context}
+     * @param text     文本信息
+     * @param duration 持续时间
      */
-    private static void toastCompat(Context context, Toast toast) {
+    private static void toastCompat(Context context, CharSequence text, int duration) {
+        boolean isMI = SpecialSupport.isMIUI();
+        //MIUI的Toast在文本前面添加应用名称很不合理，因为Toast显示时间有限，需要尽快让用户注意最重要的内容
+        Toast toast = Toast.makeText(context.getApplicationContext(), isMI ? null : text, duration);
+        if (isMI) toast.setText(text);
         fixBadTokenException(context, toast);
         toast.show();
     }
 
     /**
      * https://blog.csdn.net/qq331710168/article/details/85320098
-     * 伪装成系统Toast以躲避通知权限检查，
-     * 经检查在EMUI,Flyme和原生Android6.0中发现此问题。
+     * 伪装成系统Toast以躲避通知权限检查...
      * 调用影响全局
      */
     @SuppressLint("PrivateApi")

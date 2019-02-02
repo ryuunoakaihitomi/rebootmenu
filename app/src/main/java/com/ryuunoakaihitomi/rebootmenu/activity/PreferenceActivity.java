@@ -1,15 +1,23 @@
 package com.ryuunoakaihitomi.rebootmenu.activity;
 
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
+import android.app.AppOpsManager;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Process;
 
 import com.ryuunoakaihitomi.rebootmenu.R;
+import com.ryuunoakaihitomi.rebootmenu.activity.base.Constants;
 import com.ryuunoakaihitomi.rebootmenu.activity.base.MyActivity;
 import com.ryuunoakaihitomi.rebootmenu.util.ConfigManager;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
+import com.ryuunoakaihitomi.rebootmenu.util.ui.TextToast;
 import com.ryuunoakaihitomi.rebootmenu.util.ui.UIUtils;
+
+import androidx.annotation.NonNull;
 
 import static com.ryuunoakaihitomi.rebootmenu.util.ConfigManager.CANCELABLE;
 import static com.ryuunoakaihitomi.rebootmenu.util.ConfigManager.DO_NOT_CHECK_ROOT;
@@ -72,7 +80,13 @@ public class PreferenceActivity extends MyActivity {
                 .setOnCancelListener(dialogInterface -> finish());
         dialog = builder.create();
         UIUtils.addMagnifier(dialog.getListView());
-        UIUtils.alphaShow(dialog, UIUtils.TransparentLevel.PREFERENCES);
+        //权限检查
+        if (hasWriteExternalStoragePermission())
+            UIUtils.alphaShow(dialog, UIUtils.TransparentLevel.PREFERENCES);
+        else {
+            requestCode = Constants.PREFERENCE_WRITE_EXTERNAL_STORAGE_REQUEST_CODE;
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, requestCode);
+        }
     }
 
     @Override
@@ -82,8 +96,41 @@ public class PreferenceActivity extends MyActivity {
     }
 
     @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (Constants.PREFERENCE_WRITE_EXTERNAL_STORAGE_REQUEST_CODE == requestCode) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                UIUtils.alphaShow(dialog, UIUtils.TransparentLevel.PREFERENCES);
+                //AppOps?
+                if (!hasWriteExternalStoragePermission())
+                    new TextToast(this, getString(R.string.pref_wes_perm_denied));
+            } else {
+                if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE))
+                    requestPermissions(permissions, requestCode);
+                    //不再询问
+                else {
+                    new TextToast(this, true, getString(R.string.pref_wes_perm_denied));
+                    UIUtils.alphaShow(dialog, UIUtils.TransparentLevel.PREFERENCES);
+                }
+            }
+        }
+    }
+
+    @Override
     protected void onRestart() {
         dialog.show();
         super.onRestart();
+    }
+
+    private boolean hasWriteExternalStoragePermission() {
+        try {
+            boolean fromCtx = PackageManager.PERMISSION_GRANTED ==
+                    checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            @SuppressWarnings("ConstantConditions")
+            boolean fromAppOps = AppOpsManager.MODE_ALLOWED == getSystemService(AppOpsManager.class)
+                    .checkOpNoThrow(AppOpsManager.OPSTR_WRITE_EXTERNAL_STORAGE, Process.myUid(), getPackageName());
+            return fromCtx && fromAppOps;
+        } catch (NullPointerException ignored) {
+            return false;
+        }
     }
 }

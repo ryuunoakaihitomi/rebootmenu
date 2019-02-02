@@ -19,6 +19,7 @@ import android.util.LogPrinter;
 import com.ryuunoakaihitomi.rebootmenu.util.ConfigManager;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 import com.ryuunoakaihitomi.rebootmenu.util.ShellUtils;
+import com.ryuunoakaihitomi.rebootmenu.util.SpecialSupport;
 import com.ryuunoakaihitomi.rebootmenu.util.hook.ReflectionOnPie;
 import com.ryuunoakaihitomi.rebootmenu.util.hook.XposedUtils;
 import com.ryuunoakaihitomi.rebootmenu.util.ui.TextToast;
@@ -131,6 +132,7 @@ public class MyApplication extends Application implements Thread.UncaughtExcepti
         } catch (Throwable throwable) {
             Log.w(TAG, "checkSELinuxStatus: ", throwable);
         }
+        //noinspection ConstantConditions
         Log.i(TAG, "checkSELinuxStatus: Security Context:" + context + " is(Enabled/Enforced):" + XposedUtils.varArgsToString(isEnabled, isEnforced));
     }
 
@@ -163,7 +165,9 @@ public class MyApplication extends Application implements Thread.UncaughtExcepti
             new DebugLog(t, "disableXposed", false);
         }
         //无障碍服务的保活用通知只能让系统屏蔽，所以要特别注意让Toast不会因此消失
-        TextToast.defineSystemToast();
+        //只有MIUI已经修复了这个问题
+        if (!SpecialSupport.isMIUI())
+            TextToast.defineSystemToast();
     }
 
     @Override
