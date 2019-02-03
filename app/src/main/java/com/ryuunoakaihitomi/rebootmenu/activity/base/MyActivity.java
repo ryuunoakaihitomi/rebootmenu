@@ -9,6 +9,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Bundle;
 import android.os.Handler;
 
 import com.ryuunoakaihitomi.rebootmenu.R;
@@ -18,6 +19,8 @@ import com.ryuunoakaihitomi.rebootmenu.util.ConfigManager;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 import com.ryuunoakaihitomi.rebootmenu.util.ui.TextToast;
 
+import androidx.annotation.Nullable;
+
 /**
  * 自定义Activity：亮屏监听，设备管理员申请回调
  * Created by ZQY on 2018/4/15.
@@ -25,6 +28,7 @@ import com.ryuunoakaihitomi.rebootmenu.util.ui.TextToast;
 
 @SuppressLint("Registered")
 public class MyActivity extends Activity {
+    private static final String TAG = "MyActivity";
 
     //防止helpDialog造成的WindowLeaked
     public static AlertDialog helpDialogReference;
@@ -47,12 +51,20 @@ public class MyActivity extends Activity {
     };
 
     @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        //分割线，有些环境在onCreate时log过多
+        new DebugLog(TAG, "onPostCreate() -- START", DebugLog.LogLevel.W);
+        super.onPostCreate(savedInstanceState);
+        new DebugLog(TAG, "onPostCreate() -- END", DebugLog.LogLevel.W);
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
         new DebugLog("MyActivity.onStart", DebugLog.LogLevel.V);
         if (checkScreenOnListenerUnnecessary())
             return;
-        if (!isShortcut && !isBroadcastRegistered) {
+        if (!isBroadcastRegistered) {
             //亮屏监听，防止在应用开启熄屏又亮屏时显示警告toast
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction(Intent.ACTION_SCREEN_ON);
@@ -62,18 +74,20 @@ public class MyActivity extends Activity {
     }
 
     //目前已知的问题有启动失败和主题应用失败
+    //由于没有重建Dialog,主题应用问题可以忽视.启用失败可能是Android 7.1中Toast的原因而非后台原因
     @Override
     protected void onRestart() {
         new DebugLog("MyActivity.onRestart", DebugLog.LogLevel.V);
         if (checkScreenOnListenerUnnecessary())
             return;
-        if (!isShortcut)
-            //由于onRestart比SCREEN_ON更早执行，因此在此设置延迟
-            new Handler().postDelayed(() -> {
-                if (!isScreenOn)
-                    new TextToast(getApplicationContext(), getString(R.string.activity_onrestart_notice));
-                isScreenOn = false;
-            }, 1000);
+        //由于onRestart比SCREEN_ON更早执行，因此在此设置延迟
+        //不确定哪个更早调用，所以Toast的显示时机也会出现问题
+        //综上两条，不再显示Toast，但为了调试仍保留相关代码
+        new Handler().postDelayed(() -> {
+            if (!isScreenOn)
+                new DebugLog(TAG, "activity_onRestart_notice", DebugLog.LogLevel.I);
+            isScreenOn = false;
+        }, 1000);
         super.onRestart();
     }
 
@@ -83,8 +97,7 @@ public class MyActivity extends Activity {
         new DebugLog("MyActivity.onDestroy", DebugLog.LogLevel.V);
         if (checkScreenOnListenerUnnecessary())
             return;
-        if (!isShortcut)
-            unregisterReceiver(broadcastReceiver);
+        unregisterReceiver(broadcastReceiver);
         //清掉dialog防止WindowLeaked
         if (helpDialogReference != null && helpDialogReference.isShowing()) {
             new DebugLog(getClass().getSimpleName(), "helpDialogReference*", DebugLog.LogLevel.V);
@@ -130,6 +143,7 @@ public class MyActivity extends Activity {
     }
 
     private boolean checkScreenOnListenerUnnecessary() {
+        //若是Shortcut或者LockScreenAssist等存活时间极短的活动就不用监听亮屏
         Class[] shortTermSurvivalActivities = new Class[]{Shortcut.class, LockScreenAssist.class};
         for (Class c : shortTermSurvivalActivities)
             if (this.getClass().equals(c)) {
