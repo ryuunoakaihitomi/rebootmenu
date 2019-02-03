@@ -50,10 +50,17 @@ public class MyActivity extends Activity {
         }
     };
 
+    // ---
+    //分割线，有些环境在onCreate时log过多
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        new DebugLog(TAG, "onCreate() -- START", DebugLog.LogLevel.W);
+        super.onCreate(savedInstanceState);
+    }
+
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
-        //分割线，有些环境在onCreate时log过多
-        new DebugLog(TAG, "onPostCreate() -- START", DebugLog.LogLevel.W);
         super.onPostCreate(savedInstanceState);
         new DebugLog(TAG, "onPostCreate() -- END", DebugLog.LogLevel.W);
     }

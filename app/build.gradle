@@ -7,8 +7,8 @@ android {
         applicationId "com.ryuunoakaihitomi.rebootmenu"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 101
-        versionName "10.65_osc"
+        versionCode 102
+        versionName "10.66_osc"
         buildConfigField("String", "APK_PACK_TIME", "\"" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS").format(new Date()) + "\"")
     }
     compileOptions {
