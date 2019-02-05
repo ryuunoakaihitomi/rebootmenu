@@ -154,7 +154,7 @@ public class RootMode extends MyActivity {
             parcelOtherUIAction(dialogInstance);
             UIUtils.alphaShow(dialogInstance, UIUtils.TransparentLevel.NORMAL);
         });
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
+        if (isAL18()) {
             //不能兼容就只能选择强制
             new TextToast(getApplicationContext(), getString(R.string.normal_not_support));
         }

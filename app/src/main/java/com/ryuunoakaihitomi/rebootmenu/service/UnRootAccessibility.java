@@ -10,10 +10,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.drawable.Icon;
 import android.os.Build;
 import android.view.accessibility.AccessibilityEvent;
 
 import com.ryuunoakaihitomi.rebootmenu.R;
+import com.ryuunoakaihitomi.rebootmenu.activity.LockScreenAssist;
 import com.ryuunoakaihitomi.rebootmenu.activity.RootMode;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 import com.ryuunoakaihitomi.rebootmenu.util.LocalBroadcastManager;
@@ -151,7 +153,16 @@ public class UnRootAccessibility extends AccessibilityService {
         if (SpecialSupport.isAndroidWearOS(this)) {
             builder.setUsesChronometer(false)
                     .setStyle(null)
-                    .setContentText(getString(R.string.accessibility_service_sunnary_hint));
+                    .setContentText(getString(R.string.accessibility_service_sunnary_hint))
+                    //---
+                    //快捷操作
+                    .addAction(new Notification.Action(android.R.drawable.ic_menu_slideshow, getString(R.string.lockscreen)
+                            , PendingIntent.getActivity(this, 0, new Intent(this, LockScreenAssist.class).setAction(Intent.ACTION_ASSIST), 0)));
+            //SPDTileEntry防crash
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+                builder.addAction(new Notification.Action.Builder(Icon.createWithResource(this, android.R.drawable.ic_menu_preferences)
+                        , getString(R.string.sys_power_dialog_tile_label)
+                        , PendingIntent.getService(this, 0, new Intent(this, SPDTileEntry.class), 0)).build());
         }
         if (SpecialSupport.isMIUI()) {
             //MIUI会把秒表和发出时间一同显示

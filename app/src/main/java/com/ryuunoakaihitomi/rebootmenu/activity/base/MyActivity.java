@@ -55,14 +55,14 @@ public class MyActivity extends Activity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        new DebugLog(TAG, "onCreate() -- START", DebugLog.LogLevel.W);
+        new DebugLog(TAG, getClass().getSimpleName() + ".onCreate() -- START", DebugLog.LogLevel.W);
         super.onCreate(savedInstanceState);
     }
 
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        new DebugLog(TAG, "onPostCreate() -- END", DebugLog.LogLevel.W);
+        new DebugLog(TAG, getClass().getSimpleName() + ".onPostCreate() -- END", DebugLog.LogLevel.W);
     }
 
     @Override
@@ -149,6 +149,8 @@ public class MyActivity extends Activity {
         this.requestCode = requestCode;
     }
 
+    @Deprecated
+    @SuppressWarnings("DeprecatedIsStillUsed")
     private boolean checkScreenOnListenerUnnecessary() {
         //若是Shortcut或者LockScreenAssist等存活时间极短的活动就不用监听亮屏
         Class[] shortTermSurvivalActivities = new Class[]{Shortcut.class, LockScreenAssist.class};

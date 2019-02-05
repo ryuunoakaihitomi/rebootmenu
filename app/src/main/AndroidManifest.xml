@@ -21,6 +21,7 @@
         android:name="android.permission.DEVICE_POWER"
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
 
     <!--AS不让常规和穿戴APK共存(do not embed a watch APK in a phone APK)，在调试Wear OS时将required项改为true.-->
     <uses-feature
@@ -100,7 +101,7 @@
             android:name=".activity.DebugInterface"
             android:excludeFromRecents="true"
             android:exported="false" />
-        
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.file_provider"
@@ -162,7 +163,7 @@
         <service
             android:name=".service.MainTileEntry"
             android:icon="@mipmap/ic_launcher"
-            android:label="@string/tile_label"
+            android:label="@string/sys_power_dialog_tile_label"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE" />

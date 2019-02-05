@@ -149,7 +149,7 @@ public class Shortcut extends MyActivity {
                         .build();
                 ShortcutInfo ur_powerdialog = new ShortcutInfo.Builder(this, UR_POWER_DIALOG_ID)
                         //"电源菜单"
-                        .setShortLabel(getString(R.string.tile_label))
+                        .setShortLabel(getString(R.string.sys_power_dialog_tile_label))
                         //扳手
                         .setIcon(Icon.createWithResource(this, android.R.drawable.ic_menu_preferences))
                         .setIntent(new Intent(action).putExtra(extraTag, UR_POWERDIALOG))

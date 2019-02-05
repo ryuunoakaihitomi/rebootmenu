@@ -309,7 +309,9 @@ public class UIUtils {
     @SuppressLint("ClickableViewAccessibility")
     @TargetApi(Build.VERSION_CODES.P)
     public static void addMagnifier(@NonNull View baseView) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P
+                //可穿戴设备屏幕太小，选项会和放大镜一起滚动，很碍眼
+                && !SpecialSupport.isAndroidWearOS(baseView.getContext())) {
             Magnifier magnifier = new Magnifier(baseView);
             baseView.setOnTouchListener((v, event) -> {
                 switch (event.getActionMasked()) {

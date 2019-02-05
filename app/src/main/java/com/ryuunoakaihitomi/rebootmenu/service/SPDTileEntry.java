@@ -9,6 +9,7 @@ import android.service.quicksettings.TileService;
 import com.ryuunoakaihitomi.rebootmenu.R;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 import com.ryuunoakaihitomi.rebootmenu.util.LocalBroadcastManager;
+import com.ryuunoakaihitomi.rebootmenu.util.SpecialSupport;
 import com.ryuunoakaihitomi.rebootmenu.util.URMUtils;
 import com.ryuunoakaihitomi.rebootmenu.util.ui.TextToast;
 
@@ -19,6 +20,19 @@ import com.ryuunoakaihitomi.rebootmenu.util.ui.TextToast;
 
 @TargetApi(Build.VERSION_CODES.N)
 public class SPDTileEntry extends TileService {
+
+    @Override
+    public void onCreate() {
+        new DebugLog("SPDTileEntry.onCreate");
+        super.onCreate();
+        //Wear OS没有自定义Tile，所以用来执行通知Action
+        if (SpecialSupport.isAndroidWearOS(this)) {
+            new DebugLog(getClass().getSimpleName(), "Executing WearOS Action...", null);
+            accessibilityOnImpl();
+            stopSelf();
+        }
+    }
+
     @Override
     public void onClick() {
         new DebugLog("SPDTileEntry isLocked:" + isLocked() + " isSecure:" + isSecure());
@@ -37,7 +51,7 @@ public class SPDTileEntry extends TileService {
 
     //URMUtils.accessibilityOn()的实现,针对Tile做了必要的修改
     private void accessibilityOnImpl() {
-        new DebugLog("SPDTileEntry.onClick", DebugLog.LogLevel.V);
+        new DebugLog("accessibilityOnImpl", DebugLog.LogLevel.V);
         if (!URMUtils.isAccessibilitySettingsOn(getApplicationContext())) {
             new TextToast(getApplicationContext(), getString(R.string.service_disabled));
             Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);

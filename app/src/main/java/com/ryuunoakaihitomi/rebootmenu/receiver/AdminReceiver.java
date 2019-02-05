@@ -15,6 +15,7 @@ import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 
 //componentName = new ComponentName(this, AdminReceiver.class);
 public class AdminReceiver extends DeviceAdminReceiver {
+
     @Override
     public void onDisabled(Context context, Intent intent) {
         new DebugLog("AdminReceiver:onDisabled", DebugLog.LogLevel.V);

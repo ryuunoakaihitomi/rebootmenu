@@ -100,7 +100,10 @@ public class UnRootMode extends MyActivity {
                 uiTextList = new String[]{getString(R.string.lockscreen), getString(R.string.system_power_dialog), getString(R.string.reboot), getString(R.string.clear_owner)};
             else {
                 uiTextList = new String[]{getString(R.string.lockscreen), getString(R.string.system_power_dialog)};
-                new TextToast(getApplicationContext(), true, getString(R.string.device_owner_disabled));
+                //WearOS可能不支持Device Owner
+                //java.lang.UnsupportedOperationException: The operation is not supported on Wear.
+                if (!SpecialSupport.isAndroidWearOS(this))
+                    new TextToast(getApplicationContext(), true, getString(R.string.device_owner_disabled));
             }
         }
         //Android7.0以下不支持设备管理器重启
@@ -156,7 +159,7 @@ public class UnRootMode extends MyActivity {
                         UIUtils.addLauncherShortcut(this, R.string.lockscreen_unroot, android.R.drawable.ic_menu_slideshow, Shortcut.UR_LOCKSCREEN, false);
                         break;
                     case 1:
-                        UIUtils.addLauncherShortcut(this, R.string.tile_label, android.R.drawable.ic_menu_preferences, Shortcut.UR_POWERDIALOG, false);
+                        UIUtils.addLauncherShortcut(this, R.string.sys_power_dialog_tile_label, android.R.drawable.ic_menu_preferences, Shortcut.UR_POWERDIALOG, false);
                         break;
                     case 2:
                         UIUtils.addLauncherShortcut(this, R.string.reboot_unroot, android.R.drawable.ic_menu_rotate, Shortcut.UR_REBOOT, false);

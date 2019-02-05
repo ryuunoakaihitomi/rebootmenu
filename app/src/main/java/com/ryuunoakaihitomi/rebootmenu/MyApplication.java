@@ -166,8 +166,7 @@ public class MyApplication extends Application implements Thread.UncaughtExcepti
         }
         //无障碍服务的保活用通知只能让系统屏蔽，所以要特别注意让Toast不会因此消失
         //只有MIUI已经修复了这个问题
-        if (!SpecialSupport.isMIUI())
-            TextToast.defineSystemToast();
+        if (!SpecialSupport.isMIUI()) TextToast.defineSystemToast();
     }
 
     @Override

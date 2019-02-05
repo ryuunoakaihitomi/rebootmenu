@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.app.AppOpsManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.hardware.biometrics.BiometricPrompt;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CancellationSignal;
 import android.os.Environment;
 import android.os.PowerManager;
 import android.os.Process;
@@ -30,6 +32,8 @@ import com.ryuunoakaihitomi.rebootmenu.util.ui.TextToast;
 import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -61,6 +65,47 @@ public class DebugInterface extends Activity {
                     .invoke(context.getSystemService(Context.POWER_SERVICE), SystemClock.uptimeMillis());
         } catch (Throwable t) {
             t.printStackTrace();
+        }
+    }
+
+    private void biometricPromptTest() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
+            BiometricPrompt bp = new BiometricPrompt.Builder(this)
+                    .setTitle("Authenticate Test")
+                    .setDescription("setDescription")
+                    .setNegativeButton(getString(android.R.string.cancel), getMainExecutor(), (dialogInterface, i) -> print("canceled"))
+                    .setSubtitle("setSubtitle")
+                    .build();
+            CancellationSignal signal = new CancellationSignal();
+            signal.setOnCancelListener(() -> print("canceled from CancellationSignal"));
+            bp.authenticate(signal, getMainExecutor(), new BiometricPrompt.AuthenticationCallback() {
+                @Override
+                public void onAuthenticationError(int errorCode, CharSequence errString) {
+                    print("onAuthenticationError:" + varArgsToString(errorCode, errString));
+                }
+
+                @Override
+                public void onAuthenticationFailed() {
+                    print("onAuthenticationFailed");
+                    finish();
+                }
+
+                @Override
+                public void onAuthenticationSucceeded(BiometricPrompt.AuthenticationResult result) {
+                    print("onAuthenticationSucceeded");
+                }
+
+                @Override
+                public void onAuthenticationHelp(int helpCode, CharSequence helpString) {
+                    print("onAuthenticationHelp:" + varArgsToString(helpCode, helpString));
+                }
+            });
+            new Timer().schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    runOnUiThread(signal::cancel);
+                }
+            }, 5000);
         }
     }
 
@@ -152,9 +197,11 @@ public class DebugInterface extends Activity {
                     print(param);
             }
         });
+        biometricPromptTest();
     }
 
     private void print(Object text) {
+        new DebugLog(TAG, "print: " + text, DebugLog.LogLevel.I);
         new TextToast(this, String.valueOf(text));
     }
 
