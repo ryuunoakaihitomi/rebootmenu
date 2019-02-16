@@ -16,17 +16,21 @@ import android.util.Base64;
 import android.util.Log;
 import android.util.LogPrinter;
 
+import com.ryuunoakaihitomi.rebootmenu.activity.SendBugFeedback;
 import com.ryuunoakaihitomi.rebootmenu.util.ConfigManager;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 import com.ryuunoakaihitomi.rebootmenu.util.ShellUtils;
 import com.ryuunoakaihitomi.rebootmenu.util.SpecialSupport;
+import com.ryuunoakaihitomi.rebootmenu.util.StringUtils;
 import com.ryuunoakaihitomi.rebootmenu.util.hook.ReflectionOnPie;
-import com.ryuunoakaihitomi.rebootmenu.util.hook.XposedUtils;
 import com.ryuunoakaihitomi.rebootmenu.util.ui.TextToast;
 
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * 自定义Application：禁用xposed，异常捕捉，调试/系统属性
@@ -71,12 +75,19 @@ public class MyApplication extends Application implements Thread.UncaughtExcepti
         }
     }
 
-    @Override
-    public void uncaughtException(Thread thread, Throwable throwable) {
-        new DebugLog(throwable, "FATAL:uncaughtException tid:" + thread.getId(), true);
-        //用户友好：阻止弹出已停止运行窗口
-        SystemClock.sleep(1000);
-        Process.killProcess(Process.myPid());
+    //keep reference
+    private static void checkSELinuxStatus() {
+        String context = null;
+        boolean isEnabled = false, isEnforced = false;
+        try {
+            context = SELinux.getContext();
+            isEnabled = SELinux.isSELinuxEnabled();
+            isEnforced = SELinux.isSELinuxEnforced();
+        } catch (Throwable throwable) {
+            Log.w(TAG, "checkSELinuxStatus: ", throwable);
+        }
+        //noinspection ConstantConditions
+        Log.i(TAG, "checkSELinuxStatus: Security Context:" + context + " is(Enabled/Enforced):" + StringUtils.varArgsToString(isEnabled, isEnforced));
     }
 
     /**
@@ -121,19 +132,15 @@ public class MyApplication extends Application implements Thread.UncaughtExcepti
         }).start();
     }
 
-    //keep reference
-    private static void checkSELinuxStatus() {
-        String context = null;
-        boolean isEnabled = false, isEnforced = false;
-        try {
-            context = SELinux.getContext();
-            isEnabled = SELinux.isSELinuxEnabled();
-            isEnforced = SELinux.isSELinuxEnforced();
-        } catch (Throwable throwable) {
-            Log.w(TAG, "checkSELinuxStatus: ", throwable);
-        }
-        //noinspection ConstantConditions
-        Log.i(TAG, "checkSELinuxStatus: Security Context:" + context + " is(Enabled/Enforced):" + XposedUtils.varArgsToString(isEnabled, isEnforced));
+    @Override
+    public void uncaughtException(Thread thread, Throwable throwable) {
+        new DebugLog(throwable, "FATAL:uncaughtException tid:" + thread.getId(), true);
+        SendBugFeedback.actionStart(getApplicationContext()
+                , new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS"
+                        , Locale.getDefault()).format(new Date()), StringUtils.printStackTraceToString(throwable));
+        //用户友好：阻止弹出已停止运行窗口
+        SystemClock.sleep(1000);
+        Process.killProcess(Process.myPid());
     }
 
     @Override

@@ -171,19 +171,7 @@ public class UIUtils {
         }
     }
 
-    //尝试打开URL
-    private static void openURL(@NonNull Context context, String link) {
-        try {
-            context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(link)));
-        } catch (ActivityNotFoundException e) {
-            new TextToast(context, true, link + "\n" + context.getString(R.string.url_open_failed_notice));
-        } catch (SecurityException e) {
-            e.printStackTrace();
-            if (SpecialSupport.isAndroidWearOS(context))
-                new TextToast(context, true, context.getString(R.string.android_waer_cannot_open_url, link));
-        } finally {
-            ((Activity) context).finish();
-        }
+    private UIUtils() {
     }
 
     /**
@@ -333,7 +321,33 @@ public class UIUtils {
         }
     }
 
-    private static void restartApp(@NonNull Activity activity) {
+    //尝试打开URL
+    private static void openURL(@NonNull Context context, String link) {
+        try {
+            context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(link)));
+        } catch (ActivityNotFoundException e) {
+            new TextToast(context, true, link + "\n" + context.getString(R.string.url_open_failed_notice));
+        } catch (SecurityException e) {
+            e.printStackTrace();
+            if (SpecialSupport.isAndroidWearOS(context)) {
+                // 很有趣的一点就是，zxing的BarcodeScanner应用在Wear OS直接打开是会崩溃的，
+                // 但是调用生成二维码这个是没问题的。而且大小位置正好能够让手机扫描。
+                boolean isZxAppLaunchSucceeded = SpecialSupport.showQRCodeWithZxingApp(context, link, false);
+                new TextToast(context, !isZxAppLaunchSucceeded, isZxAppLaunchSucceeded
+                        ? context.getString(R.string.android_wear_show_qr_code_zxing_tips)
+                        : context.getString(R.string.android_waer_cannot_open_url, link));
+            }
+        } finally {
+            ((Activity) context).finish();
+        }
+    }
+
+    /**
+     * 重启应用
+     *
+     * @param activity {@link Activity#startActivity(Intent)}
+     */
+    public static void restartApp(@NonNull Activity activity) {
         //noinspection ConstantConditions
         activity.startActivity(activity.getPackageManager().getLaunchIntentForPackage(activity.getPackageName())
                 .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
@@ -341,10 +355,13 @@ public class UIUtils {
     }
 
     //半透明级别(alphaShow参数)
-    public class TransparentLevel {
+    public static class TransparentLevel {
         public static final float NORMAL = 0.75f;
         public static final float CONFIRM = 0.9f;
         public static final float PREFERENCES = 0.6f;
         static final float HELP = 0.8f;
+
+        private TransparentLevel() {
+        }
     }
 }

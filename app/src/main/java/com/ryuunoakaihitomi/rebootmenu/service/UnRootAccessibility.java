@@ -22,6 +22,9 @@ import com.ryuunoakaihitomi.rebootmenu.util.LocalBroadcastManager;
 import com.ryuunoakaihitomi.rebootmenu.util.SpecialSupport;
 import com.ryuunoakaihitomi.rebootmenu.util.ui.TextToast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 辅助服务
  * Created by ZQY on 2018/2/12.
@@ -153,17 +156,36 @@ public class UnRootAccessibility extends AccessibilityService {
         if (SpecialSupport.isAndroidWearOS(this)) {
             builder.setUsesChronometer(false)
                     .setStyle(null)
-                    .setContentText(getString(R.string.accessibility_service_sunnary_hint))
-                    //---
-                    //快捷操作
-                    .addAction(new Notification.Action(android.R.drawable.ic_menu_slideshow, getString(R.string.lockscreen)
-                            , PendingIntent.getActivity(this, 0, new Intent(this, LockScreenAssist.class).setAction(Intent.ACTION_ASSIST), 0)));
-            //SPDTileEntry防crash
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-                builder.addAction(new Notification.Action.Builder(Icon.createWithResource(this, android.R.drawable.ic_menu_preferences)
-                        , getString(R.string.sys_power_dialog_tile_label)
-                        , PendingIntent.getService(this, 0, new Intent(this, SPDTileEntry.class), 0)).build());
+                    .setContentText(getString(R.string.accessibility_service_sunnary_hint));
         }
+        //Wear OS快捷操作
+        //---
+        List<Notification.Action> wearActions = new ArrayList<>();
+        //锁屏
+        Notification.Action.Builder lockScreenActionBuilder = new Notification.Action.Builder(android.R.drawable.ic_menu_slideshow, getString(R.string.lockscreen)
+                , PendingIntent.getActivity(this, 0, new Intent(this, LockScreenAssist.class)
+                .setAction(Intent.ACTION_ASSIST)
+                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK), 0));
+        Notification.Action.WearableExtender lockScreenWearableExtender = new Notification.Action.WearableExtender();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            lockScreenActionBuilder.extend(lockScreenWearableExtender.setHintLaunchesActivity(true));
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+            //setHintDisplayActionInline在P中没有明显作用，在N和O中可以给通知卡片加action，仅支持一个
+            lockScreenActionBuilder.extend(lockScreenWearableExtender.setHintDisplayActionInline(true));
+        }
+        wearActions.add(lockScreenActionBuilder.build());
+        //电源菜单
+        //Wear OS没有24的API Level
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1)
+            wearActions.add(new Notification.Action.Builder(Icon.createWithResource(this, android.R.drawable.ic_menu_preferences)
+                    , getString(R.string.sys_power_dialog_tile_label)
+                    , PendingIntent.getService(this, 0, new Intent(this, SPDTileEntry.class), 0))
+                    .extend(new Notification.Action.WearableExtender().setHintDisplayActionInline(true))
+                    .build());
+        builder.extend(new Notification.WearableExtender()
+                .addActions(wearActions));
+        //---
         if (SpecialSupport.isMIUI()) {
             //MIUI会把秒表和发出时间一同显示
             builder.setShowWhen(false);

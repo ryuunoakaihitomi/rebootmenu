@@ -90,7 +90,7 @@ public class TextToast {
                 if ("enqueueToast".equals(method.getName())
                         || "enqueueToastEx".equals(method.getName())) {  //华为p20 pro上为enqueueToastEx
                     //enqueueToastEx确认用，暂时没有以上设备
-                    new DebugLog(TAG, "method: " + method.getName(), null);
+                    new DebugLog(TAG, "methodName:" + method.getName() + " D" + args[2], null);
                     args[0] = "android";
                 }
                 return method.invoke(iNotificationManagerObj, args);

@@ -155,7 +155,7 @@ public class MyActivity extends Activity {
         //若是Shortcut或者LockScreenAssist等存活时间极短的活动就不用监听亮屏
         Class[] shortTermSurvivalActivities = new Class[]{Shortcut.class, LockScreenAssist.class};
         for (Class c : shortTermSurvivalActivities)
-            if (this.getClass().equals(c)) {
+            if (getClass().equals(c)) {
                 new DebugLog("checkScreenOnListenerUnnecessary: " + c);
                 return true;
             }

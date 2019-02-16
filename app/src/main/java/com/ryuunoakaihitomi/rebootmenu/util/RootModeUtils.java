@@ -29,4 +29,7 @@ public class RootModeUtils {
             new DebugLog(TAG, "lockScreen: " + throwable.getLocalizedMessage(), null);
         }
     }
+
+    private RootModeUtils() {
+    }
 }

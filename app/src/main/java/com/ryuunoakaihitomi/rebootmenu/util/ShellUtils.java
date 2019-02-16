@@ -158,4 +158,7 @@ public class ShellUtils {
                     " className:" + className + " args:" + Arrays.toString(args));
         }
     }
+
+    private ShellUtils() {
+    }
 }

@@ -16,3 +16,7 @@
 -keep public class com.ryuunoakaihitomi.rebootmenu.util.hook.XposedUtils {
     public static boolean isActive;
 }
+
+# 保留行号并且隐藏类名
+-renamesourcefileattribute SourceFile
+-keepattributes SourceFile,LineNumberTable

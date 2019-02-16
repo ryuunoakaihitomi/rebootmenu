@@ -18,15 +18,15 @@ public interface IPowerManager extends IInterface {
 
     //16
     @TargetApi(JELLY_BEAN)
-    void goToSleep(long time) throws RemoteException;
+    void goToSleep(long time);
 
     //17 -> 20
     @TargetApi(JELLY_BEAN_MR1)
-    void goToSleep(long time, int reason) throws RemoteException;
+    void goToSleep(long time, int reason);
 
     //21+
     @TargetApi(LOLLIPOP)
-    void goToSleep(long time, int reason, int flags) throws RemoteException;
+    void goToSleep(long time, int reason, int flags);
 
     //17 -> 23
     @TargetApi(JELLY_BEAN_MR1)

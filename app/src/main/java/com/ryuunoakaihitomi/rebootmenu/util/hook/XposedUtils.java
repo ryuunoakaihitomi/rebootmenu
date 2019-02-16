@@ -5,8 +5,6 @@ import android.os.Build;
 import android.os.SELinux;
 import android.util.Log;
 
-import java.util.Arrays;
-
 import de.robv.android.xposed.SELinuxHelper;
 
 /**
@@ -61,6 +59,7 @@ public class XposedUtils {
      *
      * @return boolean
      */
+    @SuppressWarnings("ConstantConditions")
     public static boolean isSELinuxPatrolling() {
         //安全起见，假设为真
         @SuppressWarnings("UnusedAssignment") boolean ret = true;
@@ -75,15 +74,5 @@ public class XposedUtils {
             }
         }
         return ret;
-    }
-
-    /**
-     * 可变长参数转字符串
-     *
-     * @param objects Arrays.toString
-     * @return {@link String}
-     */
-    public static String varArgsToString(Object... objects) {
-        return Arrays.toString(objects);
     }
 }

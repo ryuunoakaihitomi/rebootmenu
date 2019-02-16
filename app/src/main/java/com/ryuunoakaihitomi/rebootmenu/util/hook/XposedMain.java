@@ -9,6 +9,7 @@ import android.os.ServiceManager;
 import android.util.Log;
 
 import com.ryuunoakaihitomi.rebootmenu.BuildConfig;
+import com.ryuunoakaihitomi.rebootmenu.util.StringUtils;
 
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.IXposedHookZygoteInit;
@@ -72,6 +73,6 @@ public class XposedMain implements IXposedHookZygoteInit, IXposedHookLoadPackage
         });
         //...
         xLog("enabled...");
-        Log.d(TAG, "initZygote: zygote " + XposedUtils.varArgsToString(Build.VERSION.SDK_INT, Process.myPid(), Process.myUid(), Process.myTid()));
+        Log.d(TAG, "initZygote: zygote " + StringUtils.varArgsToString(Build.VERSION.SDK_INT, Process.myPid(), Process.myUid(), Process.myTid()));
     }
 }

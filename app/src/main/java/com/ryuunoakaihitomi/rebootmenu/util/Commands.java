@@ -7,8 +7,8 @@ package com.ryuunoakaihitomi.rebootmenu.util;
  */
 
 public class Commands {
-    @SuppressWarnings("SpellCheckingInspection")
-    //保持可读性
+    @SuppressWarnings({"SpellCheckingInspection", "WeakerAccess"})
+    //WeakerAccess:保持可读性
     public static final String
             REBOOT = "svc power reboot",
             REBOOT_F = "reboot",
@@ -24,4 +24,7 @@ public class Commands {
             SAFE_MODE = "setprop persist.sys.safemode 1",
             LOCK_SCREEN = "input keyevent KEYCODE_POWER",
             START_BROADCAST_BY_ACTION = "am start -a %s";
+
+    private Commands() {
+    }
 }

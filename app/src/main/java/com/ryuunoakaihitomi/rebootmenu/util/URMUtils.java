@@ -158,4 +158,7 @@ public class URMUtils {
         new DebugLog("rebootWithPowerManager: reason:" + reason, DebugLog.LogLevel.V);
         ((PowerManager) context.getSystemService(Context.POWER_SERVICE)).reboot(reason);
     }
+
+    private URMUtils() {
+    }
 }

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Build;
 import android.os.IPowerManager;
 import android.os.Process;
-import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.SystemClock;
 import android.system.Os;
@@ -64,7 +63,7 @@ public class SuJavaPlugin {
         }
     }
 
-    private static void lockScreenWithIPowerManager() throws RemoteException {
+    private static void lockScreenWithIPowerManager() {
         Log.v(TAG, "lockScreenWithIPowerManager()");
         IPowerManager iPowerManager = IPowerManager.Stub.asInterface(ServiceManager.getService(Context.POWER_SERVICE));
         //Go to sleep reason code: Going to sleep due by application request.

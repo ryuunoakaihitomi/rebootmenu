@@ -12,7 +12,7 @@ import com.ryuunoakaihitomi.rebootmenu.IRMPowerActionService;
  * Created by ZQY on 2019/1/3.
  */
 
-public class RMPowerActionManager {
+public final class RMPowerActionManager {
     private static final String TAG = "RMPowerActionManager";
 
     private static RMPowerActionManager mInstance;

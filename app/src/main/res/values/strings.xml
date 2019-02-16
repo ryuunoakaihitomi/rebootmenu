@@ -40,7 +40,7 @@
     <string name="offical_download_link">官方下载链接</string>
     <string name="donate">捐赠…</string>
     <string name="help_notice">应用版本：%s\n帮助更新日期：%s</string>
-    <string name="help_update_date">20190202o</string>
+    <string name="help_update_date">20190216o</string>
     <string name="recovery_short">Recovery</string>
     <string name="sys_power_dialog_tile_label">电源菜单</string>
     <string name="fastboot_short">Fastboot</string>
@@ -68,11 +68,22 @@
     <string name="xposed_description">加快Root默认模式的项目执行速度(实验性)</string>
     <string name="accessibility_service_sunnary_hint">服务保活用通知</string>
     <string name="android_wear_power_menu_in_sys_settings">打开\"系统\"选项后,往下翻…</string>
-    <string name="android_waer_cannot_open_url">Wear OS无法打开网络链接\n%s</string>
+    <string name="android_waer_cannot_open_url">zxing应用缺失,无法打开网址\n%s</string>
     <string name="xposed_warning">Xposed插件警告</string>
     <string name="xposed_not_support">本应用的Xposed模块不支持此环境</string>
     <string name="xposed_conflict_with_tv_ser">TvInputService冲突!</string>
     <string name="disabled_xposed_module_notice">必须手动禁用并重启以免影响设备正常使用</string>
     <string name="only_for_dev">本界面仅面向开发人员,使用前请查看代码实现</string>
     <string name="pref_wes_perm_denied">保存配置可能需要存储权限\n如果配置不能保存,请检查相关权限设置</string>
+    <string name="username">用户名:</string>
+    <string name="password">密码:</string>
+    <string name="send">发送</string>
+    <string name="see_err_info">查看错误描述内容…</string>
+    <string name="android_wear_show_qr_code_zxing_tips">请用手机扫描二维码打开网址</string>
+    <string name="crash_ui_tips">之所以会出现这个界面,是因为本应用出现了崩溃异常.需要使用你的Github账户向本应用的开源仓库发送包含错误描述信息和环境特征信息的issue以便开发者解决此问题.</string>
+    <string name="more_des_hint">细节描述补充(可选,限制容量1KiB):</string>
+    <string name="contact_request">允许开发者与你在Github上关于此bug进行进一步沟通</string>
+    <string name="send_bug_report_succeeded">报告发送成功,开发者将会查看并处理它,感谢提交\n接下来尝试重新启动本应用…</string>
+    <string name="send_bug_report_failed">报告发送失败,请检查网络连接是否正常,账户信息和系统时间是否正确…</string>
+    <string name="sending">发送中……</string>
 </resources>

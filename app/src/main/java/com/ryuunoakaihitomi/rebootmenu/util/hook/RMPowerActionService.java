@@ -16,6 +16,7 @@ import android.os.SystemService;
 import android.util.Log;
 
 import com.ryuunoakaihitomi.rebootmenu.IRMPowerActionService;
+import com.ryuunoakaihitomi.rebootmenu.util.StringUtils;
 
 import java.lang.reflect.Method;
 
@@ -99,9 +100,9 @@ class RMPowerActionService extends IRMPowerActionService.Stub {
     //测试服务状态
     @Override
     public void ping() {
-        Log.i(TAG, "ping: " + XposedUtils.varArgsToString(mPowerManager, mPackageManager, mContext, Process.myUid(), getCallingPid(), getCallingUid()));
+        Log.i(TAG, "ping: " + StringUtils.varArgsToString(mPowerManager, mPackageManager, mContext, Process.myUid(), getCallingPid(), getCallingUid()));
         injectSystemThread(() ->
-                Log.i(TAG, "ping: " + XposedUtils.varArgsToString(pingBinder(), getCallingPid(), getCallingUid())));
+                Log.i(TAG, "ping: " + StringUtils.varArgsToString(pingBinder(), getCallingPid(), getCallingUid())));
     }
 
     //插入到系统线程才有系统权限
@@ -174,7 +175,7 @@ class RMPowerActionService extends IRMPowerActionService.Stub {
                  */
                 getMethodNoThrow(pmCls, "shutdown", boolean.class, boolean.class);
 
-        Log.d(TAG, "allServicesInitialised: Methods:" + XposedUtils.varArgsToString(goToSleep, rebootSafeMode, shutdown));
+        Log.d(TAG, "allServicesInitialised: Methods:" + StringUtils.varArgsToString(goToSleep, rebootSafeMode, shutdown));
     }
 
 

@@ -17,6 +17,7 @@ import android.util.ArraySet;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.view.ViewDebug;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -26,6 +27,7 @@ import com.ryuunoakaihitomi.rebootmenu.MyApplication;
 import com.ryuunoakaihitomi.rebootmenu.R;
 import com.ryuunoakaihitomi.rebootmenu.activity.base.Constants;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
+import com.ryuunoakaihitomi.rebootmenu.util.SpecialSupport;
 import com.ryuunoakaihitomi.rebootmenu.util.hook.XposedUtils;
 import com.ryuunoakaihitomi.rebootmenu.util.ui.TextToast;
 
@@ -40,7 +42,7 @@ import androidx.annotation.Nullable;
 
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.os.Build.VERSION_CODES.M;
-import static com.ryuunoakaihitomi.rebootmenu.util.hook.XposedUtils.varArgsToString;
+import static com.ryuunoakaihitomi.rebootmenu.util.StringUtils.varArgsToString;
 
 /**
  * 调试界面
@@ -125,6 +127,7 @@ public class DebugInterface extends Activity {
                     execBtn.getLocationOnScreen(pos);
                     float x = pos[0], y = pos[1];
                     Log.d(TAG, "onCreate: execBtn pos=" + varArgsToString(x, y));
+                    ViewDebug.dumpCapturedView(TAG, execBtn);
                     MotionEvent beforeClickEvent = MotionEvent.obtain(now, now, MotionEvent.ACTION_DOWN, x, y, 0);
                     now++;
                     MotionEvent afterClickEvent = MotionEvent.obtain(now, now, MotionEvent.ACTION_UP, x, y, 0);
@@ -163,6 +166,9 @@ public class DebugInterface extends Activity {
                 case '4':
                     print(XposedUtils.isActive);
                     break;
+                case 'b':
+                    biometricPromptTest();
+                    break;
                 //调试日志标记
                 case 'd':
                     File tokenFile = new File(Environment.getExternalStorageDirectory().getPath() + "/" + DebugLog.TOKEN_TAG);
@@ -191,13 +197,20 @@ public class DebugInterface extends Activity {
                 //版本检查
                 case 'V':
                 case 'v':
-                    print(BuildConfig.APK_PACK_TIME + MyApplication.isDebug);
+                    print(BuildConfig.APK_PACK_TIME + "\ndebug:" + MyApplication.isDebug);
+                    break;
+                //测试异常
+                case 'c':
+                    throw new IllegalStateException("Test Exception");
+                case 'Q':
+                case 'q':
+                    SpecialSupport.showQRCodeWithZxingApp(this, param.substring(1), Character.isUpperCase(param.charAt(0)));
                     break;
                 default:
                     print(param);
             }
         });
-        biometricPromptTest();
+        ViewDebug.dumpCapturedView(TAG, getWindow().getDecorView());
     }
 
     private void print(Object text) {
