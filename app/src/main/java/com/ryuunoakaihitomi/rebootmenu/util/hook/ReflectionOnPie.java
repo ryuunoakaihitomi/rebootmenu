@@ -98,7 +98,10 @@ public class ReflectionOnPie {
                 Log.w(TAG, "restoreLoaderInClass: classloader is null!");
                 // 已经阅读过相关源码（Java 10）。class.getClassLoader()
                 // 除了途径SecurityManager的权限检查（Android上不适用）,返回的就是classLoader对象
-                classLoaderField.set(cls, classClass.getClassLoader());
+                // 不要使用上述方法！可能会和当前线程所运行的类加载器不一致（JVM本身就是多线程的），
+                // 导致仅能够完整显示错误堆栈但仍无法找到包内的类。用getContextClassLoader加载外部资源
+                // ClassLoader.getSystemClassLoader():AppClassLoader
+                classLoaderField.set(cls, Thread.currentThread().getContextClassLoader());
             }
         } catch (Exception e) {
             Log.e(TAG, "restoreLoaderInClass: ", e);
