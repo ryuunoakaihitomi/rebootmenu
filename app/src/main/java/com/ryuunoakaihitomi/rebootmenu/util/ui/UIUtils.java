@@ -1,5 +1,6 @@
 package com.ryuunoakaihitomi.rebootmenu.util.ui;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -7,8 +8,8 @@ import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
@@ -21,18 +22,23 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.webkit.MimeTypeMap;
 import android.widget.Magnifier;
 import android.widget.TextView;
 
+import com.ryuunoakaihitomi.rebootmenu.BuildConfig;
 import com.ryuunoakaihitomi.rebootmenu.R;
 import com.ryuunoakaihitomi.rebootmenu.activity.Shortcut;
 import com.ryuunoakaihitomi.rebootmenu.activity.base.MyActivity;
+import com.ryuunoakaihitomi.rebootmenu.service.ReleaseDownloadService;
 import com.ryuunoakaihitomi.rebootmenu.util.ConfigManager;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
+import com.ryuunoakaihitomi.rebootmenu.util.NetUtils;
 import com.ryuunoakaihitomi.rebootmenu.util.SpecialSupport;
 import com.ryuunoakaihitomi.rebootmenu.util.hook.ReflectionOnPie;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Field;
@@ -40,6 +46,7 @@ import java.lang.reflect.Method;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
+import androidx.core.content.FileProvider;
 
 /**
  * 本应用关于界面操作的工具集合
@@ -49,6 +56,7 @@ import androidx.annotation.NonNull;
  */
 
 public class UIUtils {
+    private static final String TAG = "UIUtils";
 
     /**
      * 加载特定主题颜色的AlertDialog
@@ -126,7 +134,7 @@ public class UIUtils {
     //显示帮助对话框
     private static void helpDialog(@NonNull final Activity activityThis, boolean cancelable, boolean isWhite) {
         new DebugLog("helpDialog", DebugLog.LogLevel.V);
-        new TextToast(activityThis, String.format(activityThis.getString(R.string.help_notice), getAppVersionName(activityThis), activityThis.getString(R.string.help_update_date)));
+        new TextToast(activityThis, String.format(activityThis.getString(R.string.help_notice), BuildConfig.VERSION_NAME, activityThis.getString(R.string.help_update_date)));
         AlertDialog.Builder h = LoadDialog(isWhite, activityThis);
         h.setTitle(activityThis.getString(R.string.help));
         String help = inputStream2String(activityThis.getResources().openRawResource(R.raw.help_body), null);
@@ -135,7 +143,20 @@ public class UIUtils {
             MyActivity.helpDialogReference = null;
             restartApp(activityThis);
         });
-        h.setNeutralButton(activityThis.getString(R.string.offical_download_link), (p1, p2) -> openURL(activityThis, "https://github.com/ryuunoakaihitomi/rebootmenu/releases"));
+        h.setNeutralButton(activityThis.getString(R.string.offical_download_link), (dialogInterface, i) -> {
+            if (SpecialSupport.isAndroidWearOS(activityThis))
+                openURL(activityThis, NetUtils.GITHUB_RELEASE_WEB_LINK);
+            else {
+                if (activityThis.checkCallingOrSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+                    openURL(activityThis, NetUtils.GITHUB_RELEASE_WEB_LINK);
+                else {
+                    //启用下载服务
+                    new TextToast(activityThis, true, activityThis.getString(R.string.auto_download_hint));
+                    activityThis.startService(new Intent(activityThis, ReleaseDownloadService.class));
+                    activityThis.finish();
+                }
+            }
+        });
         h.setNegativeButton(activityThis.getString(R.string.donate), (p1, p2) -> openURL(activityThis, "http://ryuunoakaihitomi.info/donate/"));
         //有意保留的bug:帮助对话框的退出方式与配置相反
         if (cancelable) {
@@ -145,6 +166,11 @@ public class UIUtils {
         AlertDialog hc = h.create();
         MyActivity.helpDialogReference = hc;
         alphaShow(hc, TransparentLevel.HELP);
+        //不这么自作聪明的下载方式因为兼容性高当作备用
+        hc.getButton(DialogInterface.BUTTON_NEUTRAL).setOnLongClickListener(view -> {
+            openURL(activityThis, NetUtils.GITHUB_RELEASE_WEB_LINK);
+            return true;
+        });
         //通过反射取得AlertDialog的窗体对象
         /*
         Android P不开始允许反射AlertController
@@ -243,28 +269,6 @@ public class UIUtils {
     }
 
     /**
-     * 取应用VersionName
-     * （姑且放在这里）
-     *
-     * @param context c
-     * @return vn
-     */
-    private static String getAppVersionName(@NonNull Context context) {
-        new DebugLog("getAppVersionName: " + context, DebugLog.LogLevel.I);
-        String versionName = "";
-        try {
-            PackageManager pm = context.getPackageManager();
-            PackageInfo pi = pm.getPackageInfo(context.getPackageName(), 0);
-            versionName = pi.versionName;
-            if (versionName == null || versionName.length() <= 0)
-                return "";
-        } catch (Exception e) {
-            new DebugLog(e, "getAppVersionName", true);
-        }
-        return versionName;
-    }
-
-    /**
      * 将输入流转为字符串
      *
      * @param in     待转换的输入流
@@ -338,8 +342,41 @@ public class UIUtils {
                         : context.getString(R.string.android_waer_cannot_open_url, link));
             }
         } finally {
-            ((Activity) context).finish();
+            if (context instanceof Activity) ((Activity) context).finish();
         }
+    }
+
+    /**
+     * 打开文件（字面意思）
+     *
+     * @param context  {@link Context}
+     * @param filePath 文件完整路径
+     * @return 是否成功打开
+     */
+    public static boolean openFile(Context context, String filePath) {
+        File f = new File(filePath);
+        Uri uri = Build.VERSION.SDK_INT < Build.VERSION_CODES.N
+                ? Uri.fromFile(f)
+                : FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".file_provider", f);
+        try {
+            context.startActivity(new Intent(Intent.ACTION_VIEW).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    .setDataAndType(uri, getMimeTypeFromUrl(filePath)));
+            return true;
+        } catch (ActivityNotFoundException ignored) {
+            return false;
+        }
+    }
+
+    /**
+     * 从url中取mime type
+     *
+     * @param url url
+     * @return mime type
+     */
+    private static String getMimeTypeFromUrl(String url) {
+        String ret = MimeTypeMap.getSingleton().getMimeTypeFromExtension(MimeTypeMap.getFileExtensionFromUrl(url));
+        DebugLog.i(TAG, "getMimeTypeFromUrl: " + url + " -> " + ret);
+        return ret;
     }
 
     /**

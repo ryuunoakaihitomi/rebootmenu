@@ -1,6 +1,7 @@
 package com.ryuunoakaihitomi.rebootmenu.util;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import java.io.File;
 
@@ -19,7 +20,8 @@ public class ConfigManager {
             NO_NEED_TO_COMFIRM = "nntc",
             CANCELABLE = "c",
             DO_NOT_CHECK_ROOT = "dncr",
-            UNROOT_MODE = "urm";
+            UNROOT_MODE = "urm",
+            LASTEST_RELEASE_DOWNLOAD_ID = "lrdi";
 
     //父目录
     private static String path;
@@ -47,5 +49,17 @@ public class ConfigManager {
     public static boolean set(String key, boolean value) {
         File f = new File(path + "/" + key);
         return value ? f.mkdirs() : f.delete();
+    }
+
+    private ConfigManager() {
+    }
+
+    public static long getPrivateLong(Context context, String key, long def) {
+        SharedPreferences pref = context.getSharedPreferences(null, Context.MODE_PRIVATE);
+        return pref.getLong(key, def);
+    }
+
+    public static void setPrivateLong(Context context, String key, long val) {
+        context.getSharedPreferences(null, Context.MODE_PRIVATE).edit().putLong(key, val).apply();
     }
 }

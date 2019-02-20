@@ -37,7 +37,7 @@
     <string name="service_explanation">这里是启动选项的锁屏确认界面(可以这么理解吧),打开设备管理器锁定屏幕.</string>
     <string name="lollipop_notice">你的Android版本在5.0以下,在免root模式中只能使用锁屏功能</string>
     <string name="spd_showed">已经调出系统电源菜单…</string>
-    <string name="offical_download_link">官方下载链接</string>
+    <string name="offical_download_link">官方下载(链接)</string>
     <string name="donate">捐赠…</string>
     <string name="help_notice">应用版本：%s\n帮助更新日期：%s</string>
     <string name="help_update_date">20190216o</string>
@@ -86,4 +86,8 @@
     <string name="send_bug_report_succeeded">报告发送成功,开发者将会查看并处理它,感谢提交\n接下来尝试重新启动本应用…</string>
     <string name="send_bug_report_failed">报告发送失败,请检查网络连接是否正常,账户信息和系统时间是否正确…</string>
     <string name="sending">发送中……</string>
+    <string name="auto_download_hint">具备存储权限,准备自动下载…\n如果下载管理器不能工作,长按本按钮跳转至下载页面</string>
+    <string name="dl_serv_hint_link_analyse_success">链接解析成功,准备调用下载管理器下载,请注意通知栏或者\"下载\"应用…</string>
+    <string name="dl_serv_hint_link_auto_dl_failed">出现错误,自动下载失败,通过浏览器打开下载页面链接…</string>
+    <string name="dl_info_description">版本:%s,总下载次数:%d,发布版本数:%d</string>
 </resources>

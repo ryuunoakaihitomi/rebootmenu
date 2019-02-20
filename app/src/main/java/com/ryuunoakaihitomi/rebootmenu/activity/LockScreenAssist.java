@@ -2,6 +2,7 @@ package com.ryuunoakaihitomi.rebootmenu.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.ryuunoakaihitomi.rebootmenu.activity.base.MyActivity;
 import com.ryuunoakaihitomi.rebootmenu.util.ShellUtils;
@@ -12,12 +13,16 @@ import com.ryuunoakaihitomi.rebootmenu.util.ShellUtils;
  */
 
 public class LockScreenAssist extends MyActivity {
+    private static final String TAG = "LockScreenAssist";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (!Intent.ACTION_ASSIST.equals(getIntent().getAction()))
-            throw new IllegalAccessError("Activity for Intent.ACTION_ASSIST!");
+        if (!Intent.ACTION_ASSIST.equals(getIntent().getAction())) {
+            //避免故意抛出的异常
+            Log.e(TAG, "onCreate: ", new IllegalAccessError("Activity for Intent.ACTION_ASSIST!"));
+            return;
+        }
         int flag = ShellUtils.isRoot() ? Shortcut.LOCKSCREEN : Shortcut.UR_LOCKSCREEN;
         startActivity(new Intent(Shortcut.action).putExtra(Shortcut.extraTag, flag));
         finish();

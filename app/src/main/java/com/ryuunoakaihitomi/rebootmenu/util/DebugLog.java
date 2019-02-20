@@ -23,7 +23,7 @@ import androidx.annotation.Nullable;
  * 仅有一个不标注名称
  *
  * @author ZQY
- * @version 1.6
+ * @version 1.7
  * @see android.util.Log
  */
 
@@ -92,6 +92,17 @@ public class DebugLog {
 
     /**
      * 带标签的日志输出
+     * {@link Log#DEBUG}
+     *
+     * @param subTag 子标签
+     * @param msg    输出内容
+     */
+    public DebugLog(String subTag, String msg) {
+        new DebugLog(subTag, msg, null);
+    }
+
+    /**
+     * 带标签的日志输出
      *
      * @param subTag   子标签
      * @param msg      输出内容
@@ -117,6 +128,41 @@ public class DebugLog {
                 Log.e(TAG, label, t);
             else
                 Log.w(TAG, label, t);
+    }
+
+    /*
+     * 还是用传统的格式方便
+     * ---
+     * {@link Log#v(String, String),Log#d(String, String),Log#i(String, String),Log#w(String, String),Log#e(String, String)}
+     *
+     * @param tag Used to identify the source of a log message. It usually identifies the class or activity where the log call occurs.
+     * @param msg The message you would like logged.
+     */
+
+
+    public static void v(String tag, String msg) {
+        if (isLog) Log.v(tagF(tag), msg);
+    }
+
+    public static void d(String tag, String msg) {
+        if (isLog) Log.d(tagF(tag), msg);
+    }
+
+    public static void i(String tag, String msg) {
+        if (isLog) Log.i(tagF(tag), msg);
+    }
+
+    public static void w(String tag, String msg) {
+        if (isLog) Log.w(tagF(tag), msg);
+    }
+
+    public static void e(String tag, String msg) {
+        if (isLog) Log.e(tagF(tag), msg);
+    }
+
+    //指定标签格式
+    private static String tagF(String subTag) {
+        return String.format("%s:%s", TAG, subTag);
     }
 
     //日志等级

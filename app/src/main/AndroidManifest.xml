@@ -20,10 +20,14 @@
     <uses-permission
         android:name="android.permission.DEVICE_POWER"
         tools:ignore="ProtectedPermissions" />
+    <!--Xposed检测通知-->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <!--测试：生物识别-->
     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
     <!--发送错误报告-->
     <uses-permission android:name="android.permission.INTERNET" />
+    <!--更新安装-->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
     <!--AS不让常规和穿戴APK共存(do not embed a watch APK in a phone APK)，在调试Wear OS时将required项改为true.-->
     <uses-feature
@@ -153,6 +157,13 @@
             </intent-filter>
         </receiver>
 
+        <receiver android:name=".receiver.DownloadActionReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
+
         <service
             android:name=".service.UnRootAccessibility"
             android:exported="false"
@@ -188,6 +199,8 @@
                 android:name="android.service.quicksettings.ACTIVE_TILE"
                 android:value="true" />
         </service>
+
+        <service android:name=".service.ReleaseDownloadService" />
 
         <meta-data
             android:name="xposedmodule"

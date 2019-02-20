@@ -21,8 +21,10 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
+import com.ryuunoakaihitomi.rebootmenu.BuildConfig;
 import com.ryuunoakaihitomi.rebootmenu.R;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
+import com.ryuunoakaihitomi.rebootmenu.util.NetUtils;
 import com.ryuunoakaihitomi.rebootmenu.util.StringUtils;
 import com.ryuunoakaihitomi.rebootmenu.util.ui.TextToast;
 import com.ryuunoakaihitomi.rebootmenu.util.ui.UIUtils;
@@ -30,19 +32,12 @@ import com.ryuunoakaihitomi.rebootmenu.util.ui.UIUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
-
-import javax.net.ssl.HttpsURLConnection;
 
 import androidx.annotation.Nullable;
 
@@ -286,8 +281,6 @@ class PostTask extends AsyncTask<String, Integer, Boolean> {
 
     private static final String TAG = "PostTask";
 
-    private static final int MAX_DELAY = 3000;
-
     @SuppressWarnings("CanBeFinal")
     private PostTrigger mTrigger;
 
@@ -318,69 +311,46 @@ class PostTask extends AsyncTask<String, Integer, Boolean> {
         long start = SystemClock.uptimeMillis();
         String issuesLink = null;
         try {
-            URL url = new URL("https://api.github.com/repos/ryuunoakaihitomi/rebootmenu/issues");
-            HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
-            conn.setRequestMethod("POST");
-            conn.setRequestProperty("Authorization", "Basic " + Base64.encodeToString((strings[0] + ":" + strings[1]).getBytes(), Base64.DEFAULT));
             //replace MarkDown引用
-            String post = "", get, moreDes = "> " + strings[5].replace("\n", "\n> ");
-            try {
-                JSONObject postBody = new JSONObject();
-                postBody.put("title", "Auto-generated issues:From SendBugFeedback");
-                /*
-                 * Markdown模板：自动反馈
-                 *
-                 *
-                 * # Time
-                 *
-                 * ```
-                 * 时间
-                 * ```
-                 *
-                 * # Exception Stack
-                 *
-                 * ```
-                 * 堆栈
-                 * ```
-                 *
-                 * # Build Info
-                 *
-                 * ```json
-                 * JSON构建信息
-                 * ```
-                 *
-                 * # More Description
-                 *
-                 * > 自定义（更多描述）
-                 *
-                 * ## MoreFeedBack: （bool，是否允许之后联系）
-                 */
-                postBody.put("body", "# Time\n\n```\n" + strings[2]
-                        + "\n```\n\n# Exception Stack\n\n```\n" + strings[3]
-                        + "\n```\n\n# Build Info\n\n```json\n" + strings[4]
-                        + "\n```\n\n# More Description\n\n" + moreDes
-                        + "\n\n## MoreFeedBack: " + strings[6]);
-                post = postBody.toString();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            OutputStream os = conn.getOutputStream();
-            os.write(post.getBytes());
-            os.flush();
-            os.close();
-            //设置超时
-            conn.setConnectTimeout(MAX_DELAY);
-            conn.setReadTimeout(MAX_DELAY);
-            //包装成字符串
-            InputStream is = conn.getInputStream();
-            BufferedReader br = new BufferedReader(new InputStreamReader(is));
-            StringBuilder sb = new StringBuilder();
-            String line;
-            while ((line = br.readLine()) != null)
-                sb.append(line);
-            br.close();
-            get = sb.toString();
-            conn.disconnect();
+            String post, get, moreDes = "> " + strings[5].replace("\n", "\n> ");
+            JSONObject postBody = new JSONObject();
+            postBody.put("title", "Auto-generated issues:From SendBugFeedback");
+            /*
+             * Markdown模板：自动反馈
+             *
+             *
+             * # Time
+             *
+             * ```
+             * 时间
+             * ```
+             *
+             * # Exception Stack
+             *
+             * ```
+             * 堆栈
+             * ```
+             *
+             * # Build Info
+             *
+             * ```json
+             * JSON构建信息
+             * ```
+             *
+             * # More Description
+             *
+             * > 自定义（更多描述）
+             *
+             * ## MoreFeedBack: （bool，是否允许之后联系） versionCode
+             */
+            postBody.put("body", "# Time\n\n```\n" + strings[2]
+                    + "\n```\n\n# Exception Stack\n\n```\n" + strings[3]
+                    + "\n```\n\n# Build Info\n\n```json\n" + strings[4]
+                    + "\n```\n\n# More Description\n\n" + moreDes
+                    + "\n\n## MoreFeedBack: " + strings[6] + " " + BuildConfig.VERSION_CODE);
+            post = postBody.toString();
+            get = NetUtils.githubConnectModel0("repos/ryuunoakaihitomi/rebootmenu/issues",
+                    "Basic " + Base64.encodeToString((strings[0] + ":" + strings[1]).getBytes(), Base64.DEFAULT), post);
             JSONObject ret = new JSONObject(get);
             issuesLink = ret.optString("html_url");
             return true;

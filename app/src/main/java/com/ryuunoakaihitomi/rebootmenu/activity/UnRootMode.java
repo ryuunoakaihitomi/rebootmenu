@@ -5,14 +5,11 @@ import android.app.AlertDialog;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.res.AssetManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.widget.ListView;
 
-import com.ryuunoakaihitomi.rebootmenu.BuildConfig;
 import com.ryuunoakaihitomi.rebootmenu.R;
 import com.ryuunoakaihitomi.rebootmenu.activity.base.Constants;
 import com.ryuunoakaihitomi.rebootmenu.activity.base.MyActivity;
@@ -27,8 +24,6 @@ import com.ryuunoakaihitomi.rebootmenu.util.ui.UIUtils;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-
-import androidx.core.content.FileProvider;
 
 /**
  * 免root模式活动
@@ -140,11 +135,7 @@ public class UnRootMode extends MyActivity {
                     is.close();
                     fos.close();
                     //打开
-                    Uri uri = Build.VERSION.SDK_INT < Build.VERSION_CODES.N
-                            ? Uri.fromFile(f)
-                            : FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".file_provider", f);
-                    startActivity(new Intent(Intent.ACTION_VIEW).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                            .setDataAndType(uri, "text/html"));
+                    DebugLog.i(TAG, "Fluid opened:" + UIUtils.openFile(this, path));
                 } catch (Throwable t) {
                     new DebugLog(t, TAG, true);
                 }

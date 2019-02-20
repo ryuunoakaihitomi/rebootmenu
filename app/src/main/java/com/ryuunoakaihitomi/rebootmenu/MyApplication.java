@@ -134,13 +134,15 @@ public class MyApplication extends Application implements Thread.UncaughtExcepti
 
     @Override
     public void uncaughtException(Thread thread, Throwable throwable) {
+        String crashTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS"
+                , Locale.getDefault()).format(new Date());
         new DebugLog(throwable, "FATAL:uncaughtException tid:" + thread.getId(), true);
-        SendBugFeedback.actionStart(getApplicationContext()
-                , new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS"
-                        , Locale.getDefault()).format(new Date()), StringUtils.printStackTraceToString(throwable));
         //用户友好：阻止弹出已停止运行窗口
         SystemClock.sleep(1000);
+        SendBugFeedback.actionStart(getApplicationContext()
+                , crashTime, StringUtils.printStackTraceToString(throwable));
         Process.killProcess(Process.myPid());
+        System.exit(-1);
     }
 
     @Override

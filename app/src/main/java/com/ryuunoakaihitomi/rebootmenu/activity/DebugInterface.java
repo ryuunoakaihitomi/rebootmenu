@@ -3,6 +3,7 @@ package com.ryuunoakaihitomi.rebootmenu.activity;
 import android.app.Activity;
 import android.app.AppOpsManager;
 import android.content.Context;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.hardware.biometrics.BiometricPrompt;
 import android.os.Build;
@@ -111,6 +112,51 @@ public class DebugInterface extends Activity {
         }
     }
 
+    /**
+     * 取应用VersionName
+     * （姑且放在这里）
+     *
+     * @param context c
+     * @return vn
+     */
+    private static String getAppVersionName(@NonNull Context context) {
+        new DebugLog("getAppVersionName: " + context, DebugLog.LogLevel.I);
+        String versionName = "";
+        try {
+            PackageManager pm = context.getPackageManager();
+            PackageInfo pi = pm.getPackageInfo(context.getPackageName(), 0);
+            versionName = pi.versionName;
+            if (versionName == null || versionName.length() <= 0)
+                return "";
+        } catch (Exception e) {
+            new DebugLog(e, "getAppVersionName", true);
+        }
+        return versionName;
+    }
+
+    private void print(Object text) {
+        new DebugLog(TAG, "print: " + text, DebugLog.LogLevel.I);
+        new TextToast(this, String.valueOf(text));
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        System.exit(0);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (Build.VERSION.SDK_INT < M) return;
+        if (Constants.DEBUG_INTERFACE_WRITE_EXTERNAL_STORAGE_REQUEST_CODE == requestCode) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                print("granted");
+            } else {
+                print("denied " + shouldShowRequestPermissionRationale(WRITE_EXTERNAL_STORAGE));
+            }
+        }
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         setTheme(android.R.style.Theme_DeviceDefault);
@@ -197,7 +243,7 @@ public class DebugInterface extends Activity {
                 //版本检查
                 case 'V':
                 case 'v':
-                    print(BuildConfig.APK_PACK_TIME + "\ndebug:" + MyApplication.isDebug);
+                    print(BuildConfig.APK_PACK_TIME + "(" + getAppVersionName(this) + ")\ndebug:" + MyApplication.isDebug);
                     break;
                 //测试异常
                 case 'c':
@@ -211,28 +257,5 @@ public class DebugInterface extends Activity {
             }
         });
         ViewDebug.dumpCapturedView(TAG, getWindow().getDecorView());
-    }
-
-    private void print(Object text) {
-        new DebugLog(TAG, "print: " + text, DebugLog.LogLevel.I);
-        new TextToast(this, String.valueOf(text));
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        System.exit(0);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (Build.VERSION.SDK_INT < M) return;
-        if (Constants.DEBUG_INTERFACE_WRITE_EXTERNAL_STORAGE_REQUEST_CODE == requestCode) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                print("granted");
-            } else {
-                print("denied " + shouldShowRequestPermissionRationale(WRITE_EXTERNAL_STORAGE));
-            }
-        }
     }
 }
