@@ -194,6 +194,9 @@ public class UIUtils {
             textView.setTextIsSelectable(true);
         } catch (Exception e) {
             new DebugLog(e, "helpDialog", true);
+        } finally {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
+                ReflectionOnPie.restoreLoaderInClass(UIUtils.class);
         }
     }
 

@@ -23,6 +23,7 @@ import java.lang.reflect.Method;
  * Created by ZQY on 2019/1/15.
  */
 
+@SuppressWarnings("JavaReflectionMemberAccess")
 public class ReflectionOnPie {
 
     private static final String TAG = "ReflectionOnPie";
@@ -38,7 +39,6 @@ public class ReflectionOnPie {
             ApplicationInfo applicationInfo = context.getApplicationInfo();
             synchronized (ReflectionOnPie.class) {
                 try {
-                    @SuppressWarnings("JavaReflectionMemberAccess")
                     @SuppressLint("PrivateApi")
                     Method setHiddenApiEnforcementPolicy = ApplicationInfo.class
                             .getDeclaredMethod("setHiddenApiEnforcementPolicy", int.class);
@@ -57,7 +57,7 @@ public class ReflectionOnPie {
      *
      * @param cls 需要清除Loader的类
      */
-    @SuppressWarnings({"unchecked", "JavaReflectionMemberAccess"})
+    @SuppressWarnings("unchecked")
     public static void clearClassLoaderInClass(Class cls) {
         try {
             Class unsafeClass = Class.forName("sun.misc.Unsafe");
@@ -65,6 +65,11 @@ public class ReflectionOnPie {
             unsafeInstanceField.setAccessible(true);
             Object unsafeInstance = unsafeInstanceField.get(null);
             Method objectFieldOffset = unsafeClass.getMethod("objectFieldOffset", Field.class);
+            // 警告：至少在Java 10上可能无效
+            // 查看源码发现，classLoader已经修饰上了final，并伴随以下注释
+            // Initialized in JVM not by private constructor
+            // This field is filtered from reflection access, i.e. getDeclaredField
+            // will throw NoSuchFieldException
             Field classLoaderField = Class.class.getDeclaredField("classLoader");
             classLoaderField.setAccessible(true);
             Method putObject = unsafeClass.getMethod("putObject", Object.class, long.class, Object.class);
@@ -73,6 +78,30 @@ public class ReflectionOnPie {
             putObject.invoke(unsafeInstance, cls, offset, null);
         } catch (Throwable throwable) {
             Log.e(TAG, "clearClassLoaderInClass: ", throwable);
+        }
+    }
+
+    /**
+     * 恢复classloader:清除loader可能会造成问题
+     * (java.lang.NoClassDefFoundError: Class not found using the boot class loader; no stack trace available)
+     * 反射完成后恢复loader
+     *
+     * @param cls 需要恢复Loader的类
+     */
+    public static void restoreLoaderInClass(Class cls) {
+        try {
+            Class classClass = Class.class;
+            Field classLoaderField = classClass.getDeclaredField("classLoader");
+            classLoaderField.setAccessible(true);
+            //If this object represents a primitive type or void, null is returned.
+            if (cls != null && !cls.isPrimitive() && classLoaderField.get(cls) == null) {
+                Log.w(TAG, "restoreLoaderInClass: classloader is null!");
+                // 已经阅读过相关源码（Java 10）。class.getClassLoader()
+                // 除了途径SecurityManager的权限检查（Android上不适用）,返回的就是classLoader对象
+                classLoaderField.set(cls, classClass.getClassLoader());
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "restoreLoaderInClass: ", e);
         }
     }
 }
