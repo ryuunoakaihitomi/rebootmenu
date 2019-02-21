@@ -3,6 +3,8 @@ package com.ryuunoakaihitomi.rebootmenu.activity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -10,14 +12,17 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.InputFilter;
+import android.text.InputType;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
+import android.util.Xml;
 import android.view.View;
 import android.view.autofill.AutofillManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
@@ -31,17 +36,19 @@ import com.ryuunoakaihitomi.rebootmenu.util.ui.UIUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.xmlpull.v1.XmlSerializer;
 
 import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 
 import androidx.annotation.Nullable;
-
-import static com.ryuunoakaihitomi.rebootmenu.util.StringUtils.strArr2String;
 
 
 /**
@@ -59,7 +66,8 @@ interface PostTrigger {
  * Created by ZQY on 2019/2/6.
  */
 
-public class SendBugFeedback extends Activity implements View.OnClickListener, View.OnFocusChangeListener {
+public class SendBugFeedback extends Activity implements View.OnClickListener, View.OnFocusChangeListener, View.OnLongClickListener, CompoundButton.OnCheckedChangeListener {
+
     private static final String TAG = "SendBugFeedback";
 
     private static final String EXTRA_TAG_EXP_STACK = "exp_stack",
@@ -67,9 +75,10 @@ public class SendBugFeedback extends Activity implements View.OnClickListener, V
             BUNDLE_TAG_MORE_DES = "more_des";
 
     private EditText userNameEdit, passwordEdit, moreDescriptionEdit;
-    private CheckBox keepContactChkBx;
+    boolean isKeepContactChecked;
 
     private String buildInfo, exp, time;
+    private CheckBox keepContactChkBx, hideBuildInfoChkBx;
 
     /**
      * 启动action
@@ -91,16 +100,16 @@ public class SendBugFeedback extends Activity implements View.OnClickListener, V
      * Build Info
      * <p>
      * {@link Build}
-     * {@link StringUtils#strArr2String(String[], String)}
+     * {@link TextUtils#join(CharSequence, Object[])}
      *
      * @return JSON String
      */
     private static String getRawBuildEnvInfo() {
         Map<String, Object> map = new HashMap<>();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            map.put("SUPPORTED_ABIS", strArr2String(Build.SUPPORTED_ABIS, ","));
-            map.put("SUPPORTED_32_BIT_ABIS", strArr2String(Build.SUPPORTED_32_BIT_ABIS, " "));
-            map.put("SUPPORTED_64_BIT_ABIS", strArr2String(Build.SUPPORTED_64_BIT_ABIS, " "));
+            map.put("SUPPORTED_ABIS", TextUtils.join(",", Build.SUPPORTED_ABIS));
+            map.put("SUPPORTED_32_BIT_ABIS", TextUtils.join(",", Build.SUPPORTED_32_BIT_ABIS));
+            map.put("SUPPORTED_64_BIT_ABIS", TextUtils.join(",", Build.SUPPORTED_64_BIT_ABIS));
         } else {
             map.put("CPU_ABI", Build.CPU_ABI);
             map.put("CPU_ABI2", Build.CPU_ABI2);
@@ -185,13 +194,14 @@ public class SendBugFeedback extends Activity implements View.OnClickListener, V
         userNameEdit = findViewById(R.id.username);
         passwordEdit = findViewById(R.id.password);
         moreDescriptionEdit = findViewById(R.id.more_des);
-        Button viewInfoBtn = findViewById(R.id.view_crash_info);
-        Button sendBtn = findViewById(R.id.send);
         keepContactChkBx = findViewById(R.id.contact_req);
-        viewInfoBtn.setOnClickListener(this);
-        sendBtn.setOnClickListener(this);
+        hideBuildInfoChkBx = findViewById(R.id.hide_build_info);
+        findViewById(R.id.view_crash_info).setOnClickListener(this);
+        findViewById(R.id.send).setOnClickListener(this);
         userNameEdit.setOnFocusChangeListener(this);
         passwordEdit.setOnFocusChangeListener(this);
+        passwordEdit.setOnLongClickListener(this);
+        hideBuildInfoChkBx.setOnCheckedChangeListener(this);
     }
 
     @Override
@@ -214,6 +224,38 @@ public class SendBugFeedback extends Activity implements View.OnClickListener, V
                         .replace("\\/", "/")
                         + "</code>", null, null);
                 builder.setView(webView);
+                builder.setPositiveButton(R.string.copy_to_clipboard, (dialogInterface, i) -> {
+                    final String headTag = BuildConfig.APPLICATION_ID + "-crash-report",
+                            timeTag = "crash-time", expTag = "exception-stack", buildInfoTag = "build-information";
+                    XmlSerializer serializer = Xml.newSerializer();
+                    String xmlRelease = null;
+                    try (Writer writer = new StringWriter()) {
+                        serializer.setOutput(writer);
+                        serializer.startDocument(null, true);
+                        serializer.startTag(null, headTag);
+                        serializer.attribute(null, "versionCode", String.valueOf(BuildConfig.VERSION_CODE));
+                        serializer.startTag(null, timeTag);
+                        serializer.text(time);
+                        serializer.endTag(null, timeTag);
+                        serializer.startTag(null, expTag);
+                        serializer.text(exp);
+                        serializer.endTag(null, expTag);
+                        serializer.startTag(null, buildInfoTag);
+                        serializer.text(buildInfo);
+                        serializer.endTag(null, buildInfoTag);
+                        serializer.endTag(null, headTag);
+                        serializer.endDocument();
+                        serializer.flush();
+                        xmlRelease = writer.toString();
+                    } catch (IOException e) {
+                        DebugLog.e(TAG, "onClick: " + StringUtils.printStackTraceToString(e));
+                    }
+                    DebugLog.i(TAG, "onClick: XML=" + xmlRelease);
+                    if (!TextUtils.isEmpty(xmlRelease))
+                        ((ClipboardManager) Objects.requireNonNull(getSystemService(Context.CLIPBOARD_SERVICE)))
+                                .setPrimaryClip(ClipData.newPlainText(null, xmlRelease));
+                    else Log.e(TAG, "onClick: xmlRelease is null!");
+                });
                 builder.setNegativeButton(android.R.string.ok, null);
                 builder.show();
                 break;
@@ -251,7 +293,7 @@ public class SendBugFeedback extends Activity implements View.OnClickListener, V
 
                 }).execute(userNameEdit.getText().toString()
                         , passwordEdit.getText().toString()
-                        , time, exp, buildInfo
+                        , time, exp, hideBuildInfoChkBx.isChecked() ? "Disabled by the user request." : buildInfo
                         , moreDescriptionEdit.getText().toString()
                         , String.valueOf(keepContactChkBx.isChecked()));
                 break;
@@ -270,6 +312,36 @@ public class SendBugFeedback extends Activity implements View.OnClickListener, V
                 }
                 break;
             default:
+        }
+    }
+
+    @Override
+    public boolean onLongClick(View view) {
+        switch (view.getId()) {
+            case R.id.password:
+                //长按显示或隐藏密码，保持光标位置不变
+                int start = passwordEdit.getSelectionStart(), end = passwordEdit.getSelectionEnd();
+                boolean isOnlyACursor = start == end;
+                DebugLog.d(TAG, "onLongClick: passwordEdit's Selection: " + (isOnlyACursor ? start : start + "<->" + end));
+                passwordEdit.setInputType(passwordEdit.getInputType() != InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+                        ? InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+                        : InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                if (isOnlyACursor) passwordEdit.setSelection(start);
+                else passwordEdit.setSelection(start, end);
+        }
+        return true;
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+        if (compoundButton.equals(hideBuildInfoChkBx)) {
+            // 这里的事务逻辑是，当隐藏build info选项被选为可用时，回访选项强制开启。
+            // 反之回访选项则回到选择之前的状态
+            keepContactChkBx.setEnabled(!b);
+            if (b) {
+                isKeepContactChecked = keepContactChkBx.isChecked();
+                keepContactChkBx.setChecked(true);
+            } else keepContactChkBx.setChecked(isKeepContactChecked);
         }
     }
 }

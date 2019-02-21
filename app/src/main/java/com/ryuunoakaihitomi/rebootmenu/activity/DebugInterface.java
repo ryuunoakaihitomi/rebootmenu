@@ -14,6 +14,7 @@ import android.os.PowerManager;
 import android.os.Process;
 import android.os.SELinux;
 import android.os.SystemClock;
+import android.text.TextUtils;
 import android.util.ArraySet;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -188,6 +189,10 @@ public class DebugInterface extends Activity {
         });
         execBtn.setOnClickListener(view -> {
             String param = paramET.getText().toString();
+            if (TextUtils.isEmpty(param)) {
+                print("param is null!");
+                return;
+            }
             switch (param.charAt(0)) {
                 case '0':
                     print(SELinux.isSELinuxEnforced());

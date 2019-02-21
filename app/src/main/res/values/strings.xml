@@ -90,4 +90,6 @@
     <string name="dl_serv_hint_link_analyse_success">链接解析成功,准备调用下载管理器下载,请注意通知栏或者\"下载\"应用…</string>
     <string name="dl_serv_hint_link_auto_dl_failed">出现错误,自动下载失败,通过浏览器打开下载页面链接…</string>
     <string name="dl_info_description">版本:%s,总下载次数:%d,发布版本数:%d</string>
+    <string name="hide_build_info">不发送系统环境构建信息</string>
+    <string name="copy_to_clipboard">复制进剪贴板</string>
 </resources>
