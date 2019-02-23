@@ -90,8 +90,7 @@ public class ReflectionOnPie {
      */
     public static void restoreLoaderInClass(Class cls) {
         try {
-            Class classClass = Class.class;
-            Field classLoaderField = classClass.getDeclaredField("classLoader");
+            Field classLoaderField = Class.class.getDeclaredField("classLoader");
             classLoaderField.setAccessible(true);
             //If this object represents a primitive type or void, null is returned.
             if (cls != null && !cls.isPrimitive() && classLoaderField.get(cls) == null) {

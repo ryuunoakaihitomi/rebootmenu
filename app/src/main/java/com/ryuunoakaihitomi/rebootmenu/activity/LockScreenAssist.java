@@ -21,6 +21,7 @@ public class LockScreenAssist extends MyActivity {
         if (!Intent.ACTION_ASSIST.equals(getIntent().getAction())) {
             //避免故意抛出的异常
             Log.e(TAG, "onCreate: ", new IllegalAccessError("Activity for Intent.ACTION_ASSIST!"));
+            finish();
             return;
         }
         int flag = ShellUtils.isRoot() ? Shortcut.LOCKSCREEN : Shortcut.UR_LOCKSCREEN;
