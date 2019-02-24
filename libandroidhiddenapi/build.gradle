@@ -1,4 +1,1 @@
 apply plugin: 'java-library'
-
-dependencies {
-}
