@@ -12,6 +12,5 @@ public class SystemService {
      * Request that the init daemon restart a named service.
      */
     public static void restart(String name) {
-        throw new RuntimeException("Stub!");
     }
 }

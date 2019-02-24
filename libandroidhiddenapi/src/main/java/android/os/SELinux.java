@@ -13,7 +13,7 @@ public class SELinux {
      * @return a boolean indicating whether SELinux is enabled.
      */
     public static /*final native*/ boolean isSELinuxEnabled() {
-        throw new RuntimeException("Stub!");
+        return false;
     }
 
     /**
@@ -22,7 +22,7 @@ public class SELinux {
      * @return a boolean indicating whether SELinux is enforcing.
      */
     public static /*final native*/ boolean isSELinuxEnforced() {
-        throw new RuntimeException("Stub!");
+        return false;
     }
 
     /**
@@ -31,6 +31,6 @@ public class SELinux {
      * @return a String representing the security context of the current process.
      */
     public static /*final native*/ String getContext() {
-        throw new RuntimeException("Stub!");
+        return null;
     }
 }

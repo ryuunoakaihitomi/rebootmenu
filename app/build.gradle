@@ -7,8 +7,8 @@ android {
         applicationId "com.ryuunoakaihitomi.rebootmenu"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 108
-        versionName "10.72_osc"
+        versionCode 109
+        versionName "10.73_osc"
         buildConfigField("String", "APK_PACK_TIME", "\"" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS").format(new Date()) + "\"")
     }
     compileOptions {
@@ -26,6 +26,9 @@ android {
 
 dependencies {
     compileOnly 'de.robv.android.xposed:api:82'
+    //存放方法签名只包含纯java部分不包含Android部分的Android隐私API
+    //这样就会尽量避免在APK中留下不必要的API存根
+    compileOnly project(':libandroidhiddenapi')
 }
 
 android.applicationVariants.all { variant ->

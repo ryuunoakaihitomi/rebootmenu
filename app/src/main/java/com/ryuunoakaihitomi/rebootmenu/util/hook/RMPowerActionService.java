@@ -15,6 +15,7 @@ import android.os.SystemProperties;
 import android.os.SystemService;
 import android.util.Log;
 
+import com.ryuunoakaihitomi.rebootmenu.BuildConfig;
 import com.ryuunoakaihitomi.rebootmenu.IRMPowerActionService;
 import com.ryuunoakaihitomi.rebootmenu.util.StringUtils;
 
@@ -197,7 +198,7 @@ class RMPowerActionService extends IRMPowerActionService.Stub {
         if (packages != null && packages.length > 0) {
             for (String pn : packages) {
                 Log.d(TAG, "ensureInvokePermission: pn=" + pn);
-                if (!pn.startsWith("com.ryuunoakaihitomi.rebootmenu")) {
+                if (!pn.startsWith(BuildConfig.APPLICATION_ID)) {
                     Log.e(TAG, "ensureInvokePermission: ", new SecurityException("Permission Denied!"));
                     return false;
                 }
