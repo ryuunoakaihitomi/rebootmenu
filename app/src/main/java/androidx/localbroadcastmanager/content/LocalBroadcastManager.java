@@ -18,7 +18,7 @@
  * The source code has been changed.
  * Original source:https://android.googlesource.com/platform/frameworks/support.git/+/androidx-master-dev/localbroadcastmanager/src/main/java/androidx/localbroadcastmanager/content/LocalBroadcastManager.java
  */
-package com.ryuunoakaihitomi.rebootmenu.util;
+package androidx.localbroadcastmanager.content;
 
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
@@ -48,7 +48,7 @@ import androidx.annotation.NonNull;
  * <li> It is more efficient than sending a global broadcast through the
  * system.
  * </ul>
- *
+ * <p>
  * //@deprecated LocalBroadcastManager is an application-wide event bus and embraces layer violations
  * in your app: any component may listen events from any other. You can replace usage of
  * {@code LocalBroadcastManager} with other implementation of observable pattern, depending on your

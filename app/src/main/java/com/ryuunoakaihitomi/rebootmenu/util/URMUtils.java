@@ -16,6 +16,7 @@ import com.ryuunoakaihitomi.rebootmenu.service.UnRootAccessibility;
 import com.ryuunoakaihitomi.rebootmenu.util.ui.TextToast;
 
 import androidx.annotation.NonNull;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 /**
  * 本应用中免（无需）root模式的工具集合
