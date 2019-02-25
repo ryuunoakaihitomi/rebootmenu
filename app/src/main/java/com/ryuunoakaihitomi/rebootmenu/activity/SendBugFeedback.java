@@ -31,6 +31,7 @@ import com.ryuunoakaihitomi.rebootmenu.R;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 import com.ryuunoakaihitomi.rebootmenu.util.NetUtils;
 import com.ryuunoakaihitomi.rebootmenu.util.StringUtils;
+import com.ryuunoakaihitomi.rebootmenu.util.TrueTimingLogger;
 import com.ryuunoakaihitomi.rebootmenu.util.ui.TextToast;
 import com.ryuunoakaihitomi.rebootmenu.util.ui.UIUtils;
 
@@ -352,18 +353,23 @@ public class SendBugFeedback extends Activity implements View.OnClickListener, V
 class PostTask extends AsyncTask<String, Integer, Boolean> {
 
     private static final String TAG = "PostTask";
+    //Create reference
+    private TrueTimingLogger logger = new TrueTimingLogger(null, null);
 
     @SuppressWarnings("CanBeFinal")
     private PostTrigger mTrigger;
 
     PostTask(PostTrigger trigger) {
         mTrigger = trigger;
+        logger.reset(TAG, Integer.toHexString(hashCode()));
     }
 
     @Override
     protected void onPreExecute() {
         new DebugLog(TAG, "onPreExecute: ", DebugLog.LogLevel.I);
+        logger.addSplit("onPreExecute s");
         mTrigger.onStart();
+        logger.addSplit("onPreExecute e");
     }
 
     /**
@@ -425,6 +431,7 @@ class PostTask extends AsyncTask<String, Integer, Boolean> {
                     "Basic " + Base64.encodeToString((strings[0] + ":" + strings[1]).getBytes(), Base64.DEFAULT), post);
             JSONObject ret = new JSONObject(get);
             issuesLink = ret.optString("html_url");
+            logger.addSplit("doInBackground t");
             return true;
         } catch (MalformedURLException e) {
             new DebugLog(e, "MalformedURLException", false);
@@ -440,12 +447,22 @@ class PostTask extends AsyncTask<String, Integer, Boolean> {
             //当try、catch中有return时，finally中的代码依然会继续执行
             new DebugLog(TAG, "delay=" + (SystemClock.uptimeMillis() - start) + " link=" + issuesLink, null);
         }
+        logger.addSplit("doInBackground f");
         return false;
     }
 
     @Override
     protected void onPostExecute(Boolean aBoolean) {
         new DebugLog(TAG, "post succeed? " + aBoolean, null);
+        logger.addSplit("onPostExecute s");
         mTrigger.onEnd(aBoolean);
+        logger.addSplit("onPostExecute e");
+        logger.dumpToLog();
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        logger.reset();
+        super.finalize();
     }
 }
