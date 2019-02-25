@@ -1,6 +1,7 @@
 package com.ryuunoakaihitomi.rebootmenu.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.AppOpsManager;
 import android.content.Context;
 import android.content.pm.PackageInfo;
@@ -22,6 +23,7 @@ import android.view.MotionEvent;
 import android.view.ViewDebug;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.SeekBar;
 
 import com.android.server.SystemConfig;
 import com.ryuunoakaihitomi.rebootmenu.BuildConfig;
@@ -29,7 +31,9 @@ import com.ryuunoakaihitomi.rebootmenu.MyApplication;
 import com.ryuunoakaihitomi.rebootmenu.R;
 import com.ryuunoakaihitomi.rebootmenu.activity.base.Constants;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
+import com.ryuunoakaihitomi.rebootmenu.util.ShellUtils;
 import com.ryuunoakaihitomi.rebootmenu.util.SpecialSupport;
+import com.ryuunoakaihitomi.rebootmenu.util.hook.SuJavaPlugin;
 import com.ryuunoakaihitomi.rebootmenu.util.hook.XposedUtils;
 import com.ryuunoakaihitomi.rebootmenu.util.ui.TextToast;
 
@@ -257,6 +261,43 @@ public class DebugInterface extends Activity {
                 case 'q':
                     SpecialSupport.showQRCodeWithZxingApp(this, param.substring(1), Character.isUpperCase(param.charAt(0)));
                     break;
+                //--灰度
+                // 本来想做成像Windows XP的电源菜单那样有色彩灰度渐变的效果的。
+                // 但是性能不佳，做成彩蛋算了。（而且一加的OOS对灰度调节的实现好像有点问题）
+                case 's':
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                        if (TextUtils.isEmpty(param.substring(1))) {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                            SeekBar seekBar = new SeekBar(this);
+                            seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                                @Override
+                                public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                                }
+
+                                @Override
+                                public void onStartTrackingTouch(SeekBar seekBar) {
+                                }
+
+                                @Override
+                                public void onStopTrackingTouch(SeekBar seekBar) {
+                                    float level = (float) seekBar.getProgress() / seekBar.getMax();
+                                    print(level);
+                                    ShellUtils.runSuJavaWithAppProcess(DebugInterface.this, SuJavaPlugin.class, SuJavaPlugin.ARG_SET_DISPLAY_SATURATION, String.valueOf(level));
+                                }
+                            });
+                            builder.setView(seekBar);
+                            seekBar.setProgress(seekBar.getMax());
+                            builder.show();
+                        } else
+                            ShellUtils.runSuJavaWithAppProcess(this, SuJavaPlugin.class, SuJavaPlugin.ARG_SET_DISPLAY_SATURATION, param.substring(1));
+                    }
+                    break;
+                case 'S':
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
+                        ShellUtils.runSuJavaWithAppProcess(this, SuJavaPlugin.class, SuJavaPlugin.ARG_DISPLAY_SATURATION_GRADIENT,
+                                String.valueOf(TextUtils.isEmpty(param.substring(1))));
+                    break;
+                //--
                 default:
                     print(param);
             }

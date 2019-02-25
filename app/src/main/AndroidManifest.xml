@@ -28,6 +28,10 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <!--更新安装-->
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <!--记录：调节屏幕灰度-->
+    <uses-permission
+        android:name="android.permission.CONTROL_DISPLAY_SATURATION"
+        tools:ignore="ProtectedPermissions" />
 
     <!--AS不让常规和穿戴APK共存(do not embed a watch APK in a phone APK)，在调试Wear OS时将required项改为true.-->
     <uses-feature

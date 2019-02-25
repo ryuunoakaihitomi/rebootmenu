@@ -2,6 +2,7 @@ package com.ryuunoakaihitomi.rebootmenu.util.hook;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.hardware.display.DisplayManagerGlobal;
 import android.os.Build;
 import android.os.IPowerManager;
 import android.os.Process;
@@ -32,6 +33,17 @@ public class SuJavaPlugin {
 
     public static final String ARG_SHUT_DOWN_DIALOG = "sdd";
 
+    /**
+     * 设置屏幕显示灰度
+     * 1->0
+     */
+    public static final String ARG_SET_DISPLAY_SATURATION = "sds";
+
+    /**
+     * 灰度渐变效果
+     */
+    public static final String ARG_DISPLAY_SATURATION_GRADIENT = "dsg";
+
     private static final String TAG = "SuJavaPlugin";
 
     //main入口
@@ -53,6 +65,14 @@ public class SuJavaPlugin {
                     break;
                 case ARG_SHUT_DOWN_DIALOG:
                     shutdownWithIPowerManager(true, false);
+                    break;
+                case ARG_SET_DISPLAY_SATURATION:
+                    float level = Float.valueOf(args[1]);
+                    if (setDisplaySaturationLevel(level))
+                        Log.d(TAG, "main: ARG_SET_DISPLAY_SATURATION");
+                    break;
+                case ARG_DISPLAY_SATURATION_GRADIENT:
+                    setDisplaySaturationGradient(Boolean.valueOf(args[1]));
                     break;
                 default:
                     throw new IllegalArgumentException("unknown arg[0]:" + args[0]);
@@ -90,5 +110,52 @@ public class SuJavaPlugin {
             return;
         }
         iPowerManager.shutdown(confirm, wait);
+    }
+
+    /**
+     * Set the level of color saturation to apply to the display.
+     *
+     * @param level The amount of saturation to apply, between 0 and 1 inclusive.
+     *              0 produces a grayscale image, 1 is normal.
+     *              //@hide
+     */
+    @TargetApi(Build.VERSION_CODES.P)
+    private static boolean setDisplaySaturationLevel(float level) {
+        boolean ret = false;
+        try {
+            //Landroid/hardware/display/DisplayManagerGlobal;->setSaturationLevel(F)V,greylist-max-o
+            //noinspection ConstantConditions
+            DisplayManagerGlobal.getInstance().setSaturationLevel(level);
+            ret = true;
+        } catch (Throwable t) {
+            Log.e(TAG, "setDisplaySaturationLevel: ", t);
+        } finally {
+            Log.d(TAG, "main: setDisplaySaturationLevel(" + level + "): " + ret);
+        }
+        return ret;
+    }
+
+    /**
+     * 屏幕灰度渐变
+     *
+     * @param isToGrey 是否由彩色转灰度，否则反之
+     */
+    private static synchronized void setDisplaySaturationGradient(boolean isToGrey) {
+        //在{duration 毫秒}中调节{levelCount}级
+        final float levelCount = 6, durationMs = 1000;
+        try {
+            DisplayManagerGlobal dmg = DisplayManagerGlobal.getInstance();
+            assert dmg != null;
+            float f = isToGrey ? 1 : 0;
+            while (isToGrey ? f >= 0 : f <= 1) {
+                //Log.v(TAG, "setDisplaySaturationGradient: f=" + f);
+                dmg.setSaturationLevel(f);
+                f = f + 1 / (isToGrey ? -levelCount : +levelCount);
+                Thread.sleep((long) (durationMs / levelCount));
+            }
+            dmg.setSaturationLevel(isToGrey ? 0 : 1);
+        } catch (Throwable t) {
+            Log.e(TAG, "setDisplaySaturationGradient: ", t);
+        }
     }
 }
