@@ -34,7 +34,7 @@ import androidx.annotation.Nullable;
 public class ReleaseDownloadService extends IntentService implements Handler.Callback {
 
     private static final String TAG = "ReleaseDownloadService";
-    boolean runningStatus = false;
+    private boolean runningStatus = false;
     private Handler handler = new Handler(this);
 
     //manifest

@@ -145,6 +145,7 @@ public class UnRootMode extends MyActivity {
         dialogInstance.setOnShowListener(dialog -> {
             ListView listView = dialogInstance.getListView();
             listView.setOnItemLongClickListener((parent, view, position, id) -> {
+                DebugLog.w(TAG, "onCreate: OnItemLongClickListener " + position);
                 switch (position) {
                     case 0:
                         UIUtils.addLauncherShortcut(this, R.string.lockscreen_unroot, android.R.drawable.ic_menu_slideshow, Shortcut.UR_LOCKSCREEN, false);

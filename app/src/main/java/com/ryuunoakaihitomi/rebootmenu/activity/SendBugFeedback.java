@@ -76,7 +76,7 @@ public class SendBugFeedback extends Activity implements View.OnClickListener, V
             BUNDLE_TAG_MORE_DES = "more_des";
 
     private EditText userNameEdit, passwordEdit, moreDescriptionEdit;
-    boolean isKeepContactChecked;
+    private boolean isKeepContactChecked;
 
     private String buildInfo, exp, time;
     private CheckBox keepContactChkBx, hideBuildInfoChkBx;
