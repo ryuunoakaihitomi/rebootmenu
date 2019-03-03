@@ -40,7 +40,10 @@ public interface IPowerManager extends IInterface {
     public abstract static class Stub extends Binder implements IPowerManager {
 
         public static IPowerManager asInterface(IBinder var0) {
-            throw new RuntimeException("Stub!");
+            // 备忘录：因为libandroidhiddenapi这个项目是compileOnly进app中的，
+            // 所以存根异常就失去了作用（无法抛出），所以一律改为return null。
+            /*throw new RuntimeException("Stub!");*/
+            return null;
         }
     }
 }

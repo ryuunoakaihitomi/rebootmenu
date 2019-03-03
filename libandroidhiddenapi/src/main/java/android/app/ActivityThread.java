@@ -9,4 +9,12 @@ package android.app;
  * {@hide}
  */
 public final class ActivityThread {
+
+    public static ActivityThread systemMain() {
+        return null;
+    }
+
+    public ContextImpl getSystemContext() {
+        return null;
+    }
 }

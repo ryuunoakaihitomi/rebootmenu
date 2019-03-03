@@ -2,13 +2,13 @@ import java.text.SimpleDateFormat
 
 apply plugin: 'com.android.application'
 android {
-    compileSdkVersion 28
+    compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
         applicationId "com.ryuunoakaihitomi.rebootmenu"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 110
-        versionName "10.74_osc"
+        versionCode 111
+        versionName "10.75_osc"
         buildConfigField("String", "APK_PACK_TIME", "\"" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS").format(new Date()) + "\"")
     }
     compileOptions {
@@ -27,7 +27,7 @@ android {
 dependencies {
     compileOnly 'de.robv.android.xposed:api:82'
     //存放方法签名只包含纯java部分不包含Android部分的Android隐私API
-    //这样就会尽量避免在APK中留下不必要的API存根
+    //这样就会避免在APK中留下不必要的API存根
     compileOnly project(':libandroidhiddenapi')
 }
 

@@ -1,5 +1,12 @@
 apply plugin: 'java-library'
 
+apply from: "androidJarRef.gradle"
 dependencies {
     implementation 'androidx.annotation:annotation:1.1.0-alpha01'
+    //调用android.jar以合法调用Android API
+    compileOnly files("${androidJarPath}")
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
 }

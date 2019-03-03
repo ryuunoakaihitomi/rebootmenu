@@ -60,7 +60,12 @@ public class XposedMain implements IXposedHookZygoteInit, IXposedHookLoadPackage
                         Context context = (Context) XposedHelpers.getObjectField(param.thisObject, "mContext");
                         rmPowerActionService = new RMPowerActionService(context);
                         XposedHelpers.callStaticMethod(ServiceManager.class, "addService",
-                                XposedUtils.getServiceName(RMPowerActionService.TAG), rmPowerActionService, true);
+                                XposedUtils.getServiceName(RMPowerActionService.TAG), rmPowerActionService
+                                /*
+                                 * @param allowIsolated set to true to allow isolated sandboxed processes
+                                 * to access this service
+                                 */
+                                , true);
                     }
                 });
                 XposedBridge.hookAllMethods(amsClass, "systemReady", new XC_MethodHook() {

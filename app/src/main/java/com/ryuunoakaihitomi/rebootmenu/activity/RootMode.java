@@ -17,7 +17,6 @@ import com.ryuunoakaihitomi.rebootmenu.util.RootModeUtils;
 import com.ryuunoakaihitomi.rebootmenu.util.ShellUtils;
 import com.ryuunoakaihitomi.rebootmenu.util.URMUtils;
 import com.ryuunoakaihitomi.rebootmenu.util.hook.RMPowerActionManager;
-import com.ryuunoakaihitomi.rebootmenu.util.hook.XposedUtils;
 import com.ryuunoakaihitomi.rebootmenu.util.ui.TextToast;
 import com.ryuunoakaihitomi.rebootmenu.util.ui.UIUtils;
 
@@ -170,14 +169,14 @@ public class RootMode extends MyActivity {
         final String[] rebootResList = {
                 null, null, "recovery", "bootloader"
         };
+        RMPowerActionManager manager = RMPowerActionManager.getInstance();
         if (i == 7) {
             RootModeUtils.lockScreen(this);
         }
         //是系统应用，且是reboot系，且不是关机
         else if (!isForceMode && MyApplication.isSystemApp && i != 1 && i < 4) {
             URMUtils.rebootWithPowerManager(this, rebootResList[i]);
-        } /*Xposed，且不是强制模式 放弃尝试重启系统UI*/ else if (!isForceMode && XposedUtils.isActive && i != 5) {
-            RMPowerActionManager manager = RMPowerActionManager.getInstance();
+        } /*服务可用，且不是强制模式 放弃尝试重启系统UI*/ else if (!isForceMode && manager.isServiceAvailable() && i != 5) {
             switch (i) {
                 case 1:
                     manager.shutdown();

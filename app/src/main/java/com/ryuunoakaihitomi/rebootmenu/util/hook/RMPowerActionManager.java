@@ -36,6 +36,22 @@ public final class RMPowerActionManager {
     }
 
     /**
+     * 检查服务是否可用
+     *
+     * @return 若可用返回真
+     */
+    public boolean isServiceAvailable() {
+        if (mService != null) {
+            try {
+                mService.ping();
+                return true;
+            } catch (RemoteException e) {
+                return false;
+            }
+        } else return false;
+    }
+
+    /**
      * 锁屏
      */
     public void lockScreen() throws Throwable {

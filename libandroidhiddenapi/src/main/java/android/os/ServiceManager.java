@@ -5,7 +5,7 @@ package android.os;
  * <p>
  * -> 28
  */
-
+@SuppressWarnings("unused")
 public final class ServiceManager {
 
     /**
@@ -14,8 +14,17 @@ public final class ServiceManager {
      * @param name the name of the service to get
      * @return a reference to the service, or <code>null</code> if the service doesn't exist
      */
-    @SuppressWarnings("unused")
     public static IBinder getService(String name) {
-        throw new RuntimeException("Stub!");
+        return null;
+    }
+
+    /**
+     * Place a new @a service called @a name into the service
+     * manager.
+     *
+     * @param name    the name of the new service
+     * @param service the service object
+     */
+    public static void addService(String name, IBinder service) {
     }
 }

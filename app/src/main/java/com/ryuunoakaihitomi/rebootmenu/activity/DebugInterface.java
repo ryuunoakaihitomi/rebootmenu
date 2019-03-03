@@ -33,7 +33,9 @@ import com.ryuunoakaihitomi.rebootmenu.activity.base.Constants;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 import com.ryuunoakaihitomi.rebootmenu.util.ShellUtils;
 import com.ryuunoakaihitomi.rebootmenu.util.SpecialSupport;
+import com.ryuunoakaihitomi.rebootmenu.util.hook.RMPowerActionManager;
 import com.ryuunoakaihitomi.rebootmenu.util.hook.SuJavaPlugin;
+import com.ryuunoakaihitomi.rebootmenu.util.hook.SuServiceStarter;
 import com.ryuunoakaihitomi.rebootmenu.util.hook.XposedUtils;
 import com.ryuunoakaihitomi.rebootmenu.util.ui.TextToast;
 
@@ -298,6 +300,12 @@ public class DebugInterface extends Activity {
                                 String.valueOf(TextUtils.isEmpty(param.substring(1))));
                     break;
                 //--
+                case 'i':
+                    SuServiceStarter.invoke(this, TextUtils.isEmpty(param.substring(1)));
+                    break;
+                case 'I':
+                    print(RMPowerActionManager.getInstance().isServiceAvailable());
+                    break;
                 default:
                     print(param);
             }
