@@ -9,6 +9,11 @@ import android.util.Log;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+/**
+ * 以root权限启动RMPowerActionService
+ * Created by ZQY on 2019/3/3.
+ */
+
 public class SuServiceStarter {
     private static final String TAG = "SuServiceStarter";
 
