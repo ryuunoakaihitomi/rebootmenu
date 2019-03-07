@@ -37,6 +37,7 @@ public final class RMPowerActionManager {
 
     /**
      * 检查服务是否可用
+     * 注意：由于单例模式，需要重启应用才能看到状态改变
      *
      * @return 若可用返回真
      */

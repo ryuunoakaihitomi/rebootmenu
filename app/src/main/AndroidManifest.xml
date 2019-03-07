@@ -50,7 +50,7 @@
         android:roundIcon="@mipmap/round_icon"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning"
-        tools:targetApi="o">
+        tools:targetApi="p">
 
         <activity
             android:name=".activity.MainActivity"

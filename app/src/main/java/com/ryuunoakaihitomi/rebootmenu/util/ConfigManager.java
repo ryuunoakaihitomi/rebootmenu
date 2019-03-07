@@ -27,12 +27,15 @@ public class ConfigManager {
     private static String path;
 
     //初始化外部files目录
-    @SuppressWarnings({"ConstantConditions", "ResultOfMethodCallIgnored"})
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public static void initDir(@NonNull Context context) {
-        path = context.getExternalFilesDir(null).getPath();
+        File file = context.getExternalFilesDir(null);
+        if (file != null) {
+            path = file.getPath();
+            //除了内置存储外，总是试图往外置存储创建目录，但貌似并无权限，因此总返回假
+            file.mkdirs();
+        }
         new DebugLog("initDir: path=" + path, DebugLog.LogLevel.I);
-        //除了内置存储外，总是试图往外置存储创建目录，但貌似并无权限，因此总返回假
-        context.getExternalFilesDir(null).mkdirs();
     }
 
     public static boolean get(String key) {
