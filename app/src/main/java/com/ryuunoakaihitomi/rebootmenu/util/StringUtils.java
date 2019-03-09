@@ -23,6 +23,7 @@ public class StringUtils {
      * @return {@link String}
      */
     public static String varArgsToString(Object... objects) {
+        if (objects.length <= 0) return "";
         return Arrays.toString(objects);
     }
 
