@@ -55,7 +55,6 @@ final class RMPowerActionService extends IRMPowerActionService.Stub {
     //API比aidl稳定，但是导包是个问题，现在暂时使用反射将就下
     private Method goToSleep, rebootSafeMode, shutdown;
 
-
     private RMPowerActionRecord record;
 
     RMPowerActionService(Context context) {
@@ -162,7 +161,7 @@ final class RMPowerActionService extends IRMPowerActionService.Stub {
                         dumpInfo(fOut);
                         break;
                     default:
-                        fOut.println("Unknown arguments:" + arg);
+                        fOut.println("Unknown arguments: " + arg);
                 }
             }
         }
