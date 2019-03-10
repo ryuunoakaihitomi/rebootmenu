@@ -15,6 +15,10 @@ import android.util.Log;
 import com.android.internal.os.Zygote;
 import com.ryuunoakaihitomi.rebootmenu.util.Commands;
 
+import java.util.Objects;
+
+import androidx.annotation.FloatRange;
+
 /**
  * 本应用中可以root权限执行的Java代码
  * Created by ZQY on 2018/12/23.
@@ -86,6 +90,7 @@ public class SuJavaPlugin {
     private static void lockScreenWithIPowerManager() {
         Log.v(TAG, "lockScreenWithIPowerManager()");
         IPowerManager iPowerManager = IPowerManager.Stub.asInterface(ServiceManager.getService(Context.POWER_SERVICE));
+        if (iPowerManager == null) return;
         //Go to sleep reason code: Going to sleep due by application request.
         final int GO_TO_SLEEP_REASON_APPLICATION = 0;
         long uptimeMillis = SystemClock.uptimeMillis();
@@ -101,7 +106,7 @@ public class SuJavaPlugin {
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     private static void shutdownWithIPowerManager(boolean confirm, boolean wait) {
         Log.v(TAG, "shutdownWithIPowerManager(...)");
-        IPowerManager iPowerManager = IPowerManager.Stub.asInterface(ServiceManager.getService(Context.POWER_SERVICE));
+        IPowerManager iPowerManager = Objects.requireNonNull(IPowerManager.Stub.asInterface(ServiceManager.getService(Context.POWER_SERVICE)));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             // @param reason code to pass to android_reboot() (e.g. "userrequested"), or null.
             // @hide The value to pass as the 'reason' argument to android_reboot().
@@ -120,7 +125,7 @@ public class SuJavaPlugin {
      *              //@hide
      */
     @TargetApi(Build.VERSION_CODES.P)
-    private static boolean setDisplaySaturationLevel(float level) {
+    private static boolean setDisplaySaturationLevel(@FloatRange(from = 0, to = 1) float level) {
         boolean ret = false;
         try {
             //Landroid/hardware/display/DisplayManagerGlobal;->setSaturationLevel(F)V,greylist-max-o

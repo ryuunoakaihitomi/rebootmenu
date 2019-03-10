@@ -4,8 +4,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import java.io.File;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.StringDef;
 
 /**
  * 配置管理器
@@ -23,6 +26,12 @@ public class ConfigManager {
             UNROOT_MODE = "urm",
             LASTEST_RELEASE_DOWNLOAD_ID = "lrdi";
 
+    public static boolean get(@DefCfgOptions String key) {
+        boolean isExists = new File(path + "/" + key).exists();
+        new DebugLog("ConfigManager.get: key:" + key + " isExists:" + isExists, DebugLog.LogLevel.I);
+        return isExists;
+    }
+
     //父目录
     private static String path;
 
@@ -38,31 +47,31 @@ public class ConfigManager {
         new DebugLog("initDir: path=" + path, DebugLog.LogLevel.I);
     }
 
-    public static boolean get(String key) {
-        boolean isExists = new File(path + "/" + key).exists();
-        new DebugLog("ConfigManager.get: key:" + key + " isExists:" + isExists, DebugLog.LogLevel.I);
-        return isExists;
-    }
-
     /**
      * @param key   键
      * @param value 值
      * @return 是否成功
      */
-    public static boolean set(String key, boolean value) {
+    public static boolean set(@DefCfgOptions String key, boolean value) {
         File f = new File(path + "/" + key);
         return value ? f.mkdirs() : f.delete();
+    }
+
+    public static long getPrivateLong(Context context, @DefCfgOptions String key, long def) {
+        SharedPreferences pref = context.getSharedPreferences(null, Context.MODE_PRIVATE);
+        return pref.getLong(key, def);
     }
 
     private ConfigManager() {
     }
 
-    public static long getPrivateLong(Context context, String key, long def) {
-        SharedPreferences pref = context.getSharedPreferences(null, Context.MODE_PRIVATE);
-        return pref.getLong(key, def);
+    public static void setPrivateLong(Context context, @DefCfgOptions String key, long val) {
+        context.getSharedPreferences(null, Context.MODE_PRIVATE).edit().putLong(key, val).apply();
     }
 
-    public static void setPrivateLong(Context context, String key, long val) {
-        context.getSharedPreferences(null, Context.MODE_PRIVATE).edit().putLong(key, val).apply();
+    //默认配置选项注解
+    @StringDef({WHITE_THEME, NO_NEED_TO_COMFIRM, CANCELABLE, DO_NOT_CHECK_ROOT, UNROOT_MODE, LASTEST_RELEASE_DOWNLOAD_ID})
+    @Retention(RetentionPolicy.SOURCE)
+    private @interface DefCfgOptions {
     }
 }

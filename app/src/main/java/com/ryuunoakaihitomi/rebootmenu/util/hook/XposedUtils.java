@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.SELinux;
 import android.util.Log;
 
+import androidx.annotation.Keep;
 import de.robv.android.xposed.SELinuxHelper;
 
 /**
@@ -14,6 +15,7 @@ import de.robv.android.xposed.SELinuxHelper;
  */
 
 public class XposedUtils {
+    @Keep
     private static final String TAG = "XposedUtils";
 
     /**

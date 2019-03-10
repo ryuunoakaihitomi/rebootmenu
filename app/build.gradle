@@ -29,6 +29,8 @@ dependencies {
     //存放方法签名只包含纯java部分不包含Android部分的Android隐私API
     //这样就会避免在APK中留下不必要的API存根
     compileOnly project(':libandroidhiddenapi')
+    //compileOnly引入androidx注解只能在代码高亮中出现提示，在发布编译的时候一样会找不到API
+    implementation 'androidx.annotation:annotation:1.1.0-alpha01'
 }
 
 android.applicationVariants.all { variant ->

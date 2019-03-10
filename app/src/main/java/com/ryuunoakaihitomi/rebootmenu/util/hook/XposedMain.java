@@ -11,6 +11,7 @@ import android.util.Log;
 import com.ryuunoakaihitomi.rebootmenu.BuildConfig;
 import com.ryuunoakaihitomi.rebootmenu.util.StringUtils;
 
+import androidx.annotation.Keep;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.IXposedHookZygoteInit;
 import de.robv.android.xposed.XC_MethodHook;
@@ -25,6 +26,7 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
  * @author ZQY
  */
 
+@Keep
 public class XposedMain implements IXposedHookZygoteInit, IXposedHookLoadPackage {
 
     private static final String TAG = "XposedMain";

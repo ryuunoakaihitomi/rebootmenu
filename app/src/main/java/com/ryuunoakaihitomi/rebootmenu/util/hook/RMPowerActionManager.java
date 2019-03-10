@@ -15,7 +15,7 @@ import com.ryuunoakaihitomi.rebootmenu.IRMPowerActionService;
 public final class RMPowerActionManager {
     private static final String TAG = "RMPowerActionManager";
 
-    private static RMPowerActionManager mInstance;
+    private static volatile RMPowerActionManager mInstance;
     private static IRMPowerActionService mService;
 
     private RMPowerActionManager() {
@@ -29,9 +29,10 @@ public final class RMPowerActionManager {
      */
     //单例模式
     public static RMPowerActionManager getInstance() {
-        if (mInstance == null) {
-            mInstance = new RMPowerActionManager();
-        }
+        if (mInstance == null)
+            synchronized (RMPowerActionManager.class) {
+                if (mInstance == null) mInstance = new RMPowerActionManager();
+            }
         return mInstance;
     }
 

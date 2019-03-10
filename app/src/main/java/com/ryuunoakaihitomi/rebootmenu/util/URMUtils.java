@@ -76,7 +76,7 @@ public class URMUtils {
      *
      * @param activity 1
      */
-    public static void accessibilityOn(Activity activity) {
+    public static void accessibilityOn(@NonNull Activity activity) {
         new DebugLog("accessibilityOn", DebugLog.LogLevel.V);
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P && SpecialSupport.isAndroidWearOS(activity)) {
             activity.startActivity(new Intent(Settings.ACTION_SETTINGS));
@@ -102,7 +102,7 @@ public class URMUtils {
      * @return boolean
      */
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    public static boolean isAccessibilitySettingsOn(Context mContext) {
+    public static boolean isAccessibilitySettingsOn(@NonNull Context mContext) {
         //注意：不要使用以下注释掉的代码取无障碍服务开启状态！disableSelf()之后仍返回true
         //noinspection ConstantConditions
         //return ((AccessibilityManager) mContext.getSystemService(Context.ACCESSIBILITY_SERVICE)).isEnabled();

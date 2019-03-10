@@ -45,7 +45,9 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 import androidx.annotation.DrawableRes;
+import androidx.annotation.FloatRange;
 import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
 import androidx.core.content.FileProvider;
 
 /**
@@ -94,7 +96,7 @@ public class UIUtils {
      * @throws NullPointerException null.XXX();
      */
     @SuppressWarnings("JavaReflectionMemberAccess")
-    public static void alphaShow(@NonNull AlertDialog w, Float f) {
+    public static void alphaShow(@NonNull AlertDialog w, @FloatRange(from = 0, to = 1) Float f) {
         Window window = w.getWindow();
         assert window != null;
         //使用反射来取系统属性（但在Android P(ill)上行不通）
@@ -247,7 +249,7 @@ public class UIUtils {
      * @see com.ryuunoakaihitomi.rebootmenu.activity.Shortcut
      */
     @SuppressWarnings("ConstantConditions")
-    public static void addLauncherShortcut(@NonNull Context context, int titleRes, @DrawableRes int iconRes, int shortcutAct, boolean isForce) {
+    public static void addLauncherShortcut(@NonNull Context context, @StringRes int titleRes, @DrawableRes int iconRes, int shortcutAct, boolean isForce) {
         new DebugLog("addLauncherShortcut", DebugLog.LogLevel.V);
         String forceToken = isForce ? "*" : "";
         String title = forceToken + context.getString(titleRes);

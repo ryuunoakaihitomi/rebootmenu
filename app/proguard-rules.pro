@@ -9,10 +9,10 @@
 -keep class android.** {*;}
 -keep class com.android.** {*;}
 
-# 保护Xposed入口
+# 保护Xposed入口 @Keep
 -keep public class com.ryuunoakaihitomi.rebootmenu.util.hook.XposedMain
 
-# 保存Xposed检测开关
+# 保存Xposed检测开关 @Keep
 -keep public class com.ryuunoakaihitomi.rebootmenu.util.hook.XposedUtils {
     public static boolean isActive;
 }
