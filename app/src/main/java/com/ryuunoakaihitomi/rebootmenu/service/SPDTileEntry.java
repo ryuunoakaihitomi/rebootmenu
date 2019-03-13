@@ -55,7 +55,8 @@ public class SPDTileEntry extends TileService {
         new DebugLog("accessibilityOnImpl", DebugLog.LogLevel.V);
         if (!URMUtils.isAccessibilitySettingsOn(getApplicationContext())) {
             new TextToast(getApplicationContext(), getString(R.string.service_disabled));
-            Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+            //service -> activity
+            Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             //收起状态栏
             startActivityAndCollapse(intent);
         } else {
