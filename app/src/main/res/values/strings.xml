@@ -40,7 +40,7 @@
     <string name="offical_download_link">官方下载(链接)</string>
     <string name="source_code">源代码…</string>
     <string name="help_notice">应用版本：%s\n帮助更新日期：%s</string>
-    <string name="help_update_date">20190216o</string>
+    <string name="help_update_date">20190313</string>
     <string name="recovery_short">Recovery</string>
     <string name="sys_power_dialog_tile_label">电源菜单</string>
     <string name="fastboot_short">Fastboot</string>
