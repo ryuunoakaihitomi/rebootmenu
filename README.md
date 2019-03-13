@@ -20,7 +20,3 @@
 
 ## License
 基于[GNU GPLv3协议](https://choosealicense.com/licenses/gpl-3.0/)发布。
-
-## 捐赠
-[捐赠地址](http://ryuunoakaihitomi.info/donate/)
-~~每一笔0.02元都是对我的鼓励与支持。~~
