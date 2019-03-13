@@ -10,6 +10,8 @@ import android.widget.ListView;
 import com.ryuunoakaihitomi.rebootmenu.MyApplication;
 import com.ryuunoakaihitomi.rebootmenu.R;
 import com.ryuunoakaihitomi.rebootmenu.activity.base.MyActivity;
+import com.ryuunoakaihitomi.rebootmenu.csc_compat.AdImpl;
+import com.ryuunoakaihitomi.rebootmenu.csc_compat.EventStatistics;
 import com.ryuunoakaihitomi.rebootmenu.util.Commands;
 import com.ryuunoakaihitomi.rebootmenu.util.ConfigManager;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
@@ -19,6 +21,9 @@ import com.ryuunoakaihitomi.rebootmenu.util.URMUtils;
 import com.ryuunoakaihitomi.rebootmenu.util.hook.RMPowerActionManager;
 import com.ryuunoakaihitomi.rebootmenu.util.ui.TextToast;
 import com.ryuunoakaihitomi.rebootmenu.util.ui.UIUtils;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Root模式活动
@@ -41,6 +46,8 @@ public class RootMode extends MyActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             UIUtils.transparentStatusBar(this);
         }
+        //初始化广告
+        AdImpl.initialize(this);
         final AlertDialog.Builder mainDialog = UIUtils.LoadDialog(ConfigManager.get(ConfigManager.WHITE_THEME), this);
         UIUtils.setExitStyleAndHelp(RootMode.this, mainDialog);
         mainDialog.setTitle(getString(R.string.root_title));
@@ -93,8 +100,14 @@ public class RootMode extends MyActivity {
         //功能监听
         final DialogInterface.OnClickListener mainListener = (dialogInterface, i) -> {
             new DebugLog("RootMode: i:" + i);
+            //统计选中操作选项
+            Map<String, String> optionSelection = new HashMap<>();
+            optionSelection.put("i", String.valueOf(i));
+            optionSelection.put("isForceMode", String.valueOf(isForceMode));
             //锁屏就直接锁了，不需要确认。
             if (i != 7 && !ConfigManager.get(ConfigManager.NO_NEED_TO_COMFIRM)) {
+                //到二次确认界面时，显示横幅广告
+                AdImpl.showAdView();
                 //确认界面显示（？YN）
                 final String[] confirmList = {
                         getString(R.string.confirm_operation),
@@ -109,12 +122,15 @@ public class RootMode extends MyActivity {
                 //点击是或者否的监听
                 //iConfirm不和i混淆
                 DialogInterface.OnClickListener confirmListener = (dialogInterface1, iConfirm) -> {
+                    optionSelection.put("iConfirm", String.valueOf(iConfirm));
                     //若否
                     if (iConfirm == 1) {
                         new TextToast(getApplicationContext(), getString(R.string.no_seleted_notice));
-                        finish();
+                        //如果不选择是，显示插页广告
+                        AdImpl.showInterstitialAd(this);
                     } else
                         exeKernel(i);
+                    EventStatistics.record(EventStatistics.OPTION_SELECTION, optionSelection);
                 };
                 //YN
                 String[] confirmSelect = {
@@ -126,10 +142,14 @@ public class RootMode extends MyActivity {
                 mainDialog.setPositiveButton(null, null);
                 mainDialog.setNegativeButton(null, null);
                 dialogInstance = mainDialog.create();
+                AdImpl.setFlagNotFocusable(dialogInstance);
                 UIUtils.alphaShow(dialogInstance, UIUtils.TransparentLevel.CONFIRM);
-            } else
+            } else {
                 //直接执行（无需确认）
                 exeKernel(i);
+                EventStatistics.record(EventStatistics.OPTION_SELECTION, optionSelection);
+            }
+
         };
         mainDialog.setItems(uiTextList, mainListener);
         /*

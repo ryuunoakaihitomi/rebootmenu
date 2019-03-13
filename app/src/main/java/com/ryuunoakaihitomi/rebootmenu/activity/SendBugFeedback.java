@@ -28,6 +28,7 @@ import android.widget.ProgressBar;
 
 import com.ryuunoakaihitomi.rebootmenu.BuildConfig;
 import com.ryuunoakaihitomi.rebootmenu.R;
+import com.ryuunoakaihitomi.rebootmenu.csc_compat.CrashReport;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 import com.ryuunoakaihitomi.rebootmenu.util.NetUtils;
 import com.ryuunoakaihitomi.rebootmenu.util.StringUtils;
@@ -105,7 +106,7 @@ public class SendBugFeedback extends Activity implements View.OnClickListener, V
      *
      * @return JSON String
      */
-    private static String getRawBuildEnvInfo() {
+    public static String getRawBuildEnvInfo() {
         Map<String, Object> map = new HashMap<>();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             map.put("SUPPORTED_ABIS", TextUtils.join(",", Build.SUPPORTED_ABIS));
@@ -199,6 +200,7 @@ public class SendBugFeedback extends Activity implements View.OnClickListener, V
         hideBuildInfoChkBx = findViewById(R.id.hide_build_info);
         findViewById(R.id.view_crash_info).setOnClickListener(this);
         findViewById(R.id.send).setOnClickListener(this);
+        findViewById(R.id.auto_send_crash_report).setOnClickListener(this);
         userNameEdit.setOnFocusChangeListener(this);
         passwordEdit.setOnFocusChangeListener(this);
         passwordEdit.setOnLongClickListener(this);
@@ -297,6 +299,19 @@ public class SendBugFeedback extends Activity implements View.OnClickListener, V
                         , time, exp, hideBuildInfoChkBx.isChecked() ? "Disabled by the user request." : buildInfo
                         , moreDescriptionEdit.getText().toString()
                         , String.valueOf(keepContactChkBx.isChecked()));
+                break;
+            case R.id.auto_send_crash_report:
+                String simplifyBuildInfo = null;
+                if (!hideBuildInfoChkBx.isChecked())
+                    try {
+                        simplifyBuildInfo = new JSONObject(buildInfo).toString();
+                    } catch (JSONException e) {
+                        CrashReport.logNonFatalExceptions(e);
+                    }
+                CrashReport.log("moreDescriptionEdit", moreDescriptionEdit.getText().toString());
+                CrashReport.setAutoSendReport(this, StringUtils.varArgsToString(time, exp, simplifyBuildInfo));
+                new TextToast(this, true, getString(R.string.auto_crash_report_hint));
+                UIUtils.restartApp(this);
                 break;
         }
     }

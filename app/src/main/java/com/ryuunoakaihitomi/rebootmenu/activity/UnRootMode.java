@@ -13,6 +13,7 @@ import android.widget.ListView;
 import com.ryuunoakaihitomi.rebootmenu.R;
 import com.ryuunoakaihitomi.rebootmenu.activity.base.Constants;
 import com.ryuunoakaihitomi.rebootmenu.activity.base.MyActivity;
+import com.ryuunoakaihitomi.rebootmenu.csc_compat.AdImpl;
 import com.ryuunoakaihitomi.rebootmenu.receiver.AdminReceiver;
 import com.ryuunoakaihitomi.rebootmenu.util.ConfigManager;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
@@ -39,6 +40,9 @@ public class UnRootMode extends MyActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         new DebugLog("UnRootMode.onCreate", DebugLog.LogLevel.V);
+        //广告
+        AdImpl.initialize(this);
+        AdImpl.showAdView();
         URLockScrInit(false, Constants.UN_ROOT_MODE_LOCK_SCREEN_REQUEST_CODE, (DevicePolicyManager) getSystemService(DEVICE_POLICY_SERVICE), new ComponentName(this, AdminReceiver.class));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             UIUtils.transparentStatusBar(this);
@@ -142,6 +146,7 @@ public class UnRootMode extends MyActivity {
                 finish();
             });
         dialogInstance = mainDialog.create();
+        AdImpl.setFlagNotFocusable(dialogInstance);
         dialogInstance.setOnShowListener(dialog -> {
             ListView listView = dialogInstance.getListView();
             listView.setOnItemLongClickListener((parent, view, position, id) -> {

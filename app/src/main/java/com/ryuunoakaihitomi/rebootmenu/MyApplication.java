@@ -1,12 +1,8 @@
 package com.ryuunoakaihitomi.rebootmenu;
 
 import android.app.Application;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Process;
@@ -14,12 +10,12 @@ import android.os.SELinux;
 import android.os.SystemClock;
 import android.util.Base64;
 import android.util.Log;
-import android.util.LogPrinter;
 
 import com.ryuunoakaihitomi.rebootmenu.activity.SendBugFeedback;
+import com.ryuunoakaihitomi.rebootmenu.csc_compat.CrashReport;
+import com.ryuunoakaihitomi.rebootmenu.csc_compat.EventStatistics;
 import com.ryuunoakaihitomi.rebootmenu.util.ConfigManager;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
-import com.ryuunoakaihitomi.rebootmenu.util.ShellUtils;
 import com.ryuunoakaihitomi.rebootmenu.util.SpecialSupport;
 import com.ryuunoakaihitomi.rebootmenu.util.StringUtils;
 import com.ryuunoakaihitomi.rebootmenu.util.hook.ReflectionOnPie;
@@ -42,38 +38,6 @@ public class MyApplication extends Application implements Thread.UncaughtExcepti
 
     public static boolean isDebug, isSystemApp;
     private static final String TAG = "MyApplication";
-
-    //
-    private void coolapkOrMe() {
-        final String CA_PKG_NAME = "com.coolapk.market";
-        final String CA_URL = "https://www.coolapk.com/apk/com.ryuunoakaihitomi.rebootmenu";
-        LogPrinter printer = new LogPrinter(Log.VERBOSE, TAG);
-        try {
-            printer.println("Coolapk, versionName:"
-                    + getPackageManager().getPackageInfo(CA_PKG_NAME, 0).versionName);
-            Intent toCoolForum = new Intent()
-                    .setData(Uri.parse("market://details?id=" + getPackageName()))
-                    //按back键从这个任务返回的时候会回到home，防止返回重复进入
-                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME)
-                    .setPackage(CA_PKG_NAME);
-            startActivity(toCoolForum);
-            System.exit(0);
-        } catch (PackageManager.NameNotFoundException ignored) {
-            printer.println("Me");
-        } catch (ActivityNotFoundException ignored) {
-            printer.println("ActivityNotFoundException,CA is still here but frozen.");
-            try {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(CA_URL))
-                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_TASK_ON_HOME));
-                System.exit(0);
-            } catch (ActivityNotFoundException | SecurityException ignore) {
-                printer.println(CA_URL);
-                ShellUtils.suCmdExec("pm uninstall " + getPackageName());
-                startActivity(new Intent(Intent.ACTION_UNINSTALL_PACKAGE, Uri.fromParts("package", getPackageName(), null))
-                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-            }
-        }
-    }
 
     //keep reference
     private static void checkSELinuxStatus() {
@@ -134,6 +98,7 @@ public class MyApplication extends Application implements Thread.UncaughtExcepti
 
     @Override
     public void uncaughtException(Thread thread, Throwable throwable) {
+        DebugLog.d(TAG, "uncaughtException");
         String crashTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS"
                 , Locale.getDefault()).format(new Date());
         new DebugLog(throwable, "FATAL:uncaughtException tid:" + thread.getId(), true);
@@ -149,7 +114,6 @@ public class MyApplication extends Application implements Thread.UncaughtExcepti
     public void onCreate() {
         super.onCreate();
         checkSELinuxStatus();
-        coolapkOrMe();
         //按需记录自身日志
         if (new File(Environment.getExternalStorageDirectory().getPath() + "/rbmLogWriter").exists())
             logcatHolder();
@@ -161,18 +125,23 @@ public class MyApplication extends Application implements Thread.UncaughtExcepti
         //包检测
         Log.i(TAG, "APK_PACK_INFO: " + BuildConfig.APK_PACK_TIME + ' ' + (isDebug ? "dbg" : "rls"));
         //捕捉异常
-        Thread.setDefaultUncaughtExceptionHandler(this);
+        CrashReport.start(this, this);
+        //初始化统计组件
+        EventStatistics.initComponent(this);
         ConfigManager.initDir(this);
-        //尝试禁用xposed
+        //尝试禁用xposed，并统计是否安装Xposed
+        boolean hasXposed = false;
         try {
             Field field = ClassLoader.getSystemClassLoader()
                     .loadClass("de.robv.android.xposed.XposedBridge")
                     .getDeclaredField("disableHooks");
             field.setAccessible(true);
             field.set(null, true);
+            hasXposed = true;
         } catch (Throwable t) {
             new DebugLog(t, "disableXposed", false);
         }
+        EventStatistics.record(EventStatistics.HAS_XPOSED, String.valueOf(hasXposed));
         //无障碍服务的保活用通知只能让系统屏蔽，所以要特别注意让Toast不会因此消失
         //只有MIUI已经修复了这个问题
         if (!SpecialSupport.isMIUI()) TextToast.defineSystemToast();

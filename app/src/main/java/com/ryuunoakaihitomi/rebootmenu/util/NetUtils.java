@@ -24,9 +24,13 @@ public class NetUtils {
      */
     public static final String GITHUB_API_KEY = "d25f7d6d964756339f22f29996b243a5a1c2ff4c";
     /**
-     * 本应用的Release版本网址
+     * 本应用的源代码网址
      */
-    public static final String GITHUB_RELEASE_WEB_LINK = "https://github.com/ryuunoakaihitomi/rebootmenu/releases";
+    public static final String GITHUB_LINK = "https://github.com/ryuunoakaihitomi/rebootmenu";
+    /**
+     * 本应用的Github Release版本网址
+     */
+    public static final String GITHUB_RELEASE_WEB_LINK = GITHUB_LINK + "/releases";
     private static final int MAX_DELAY = 3000;
 
     private NetUtils() {

@@ -15,7 +15,9 @@
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
     <!--Apps targeting API Build.VERSION_CODES.P or later must request the permission Manifest.permission.FOREGROUND_SERVICE in order to use this API.-->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
+    <!---->
+    <!--<uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />-->
+
     <!--记录:goToSleep锁屏权限.现在还用不上,因为比起以root权限执行命令,将本应用以系统签名打包的概率可以忽略不计,priv_app权限也不会有效-->
     <uses-permission
         android:name="android.permission.DEVICE_POWER"
@@ -219,6 +221,11 @@
         <meta-data
             android:name="com.google.android.wearable.standalone"
             android:value="true" />
+
+        <!--AdMob要求-->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-3887749646735208~8115523935" />
 
     </application>
 </manifest>

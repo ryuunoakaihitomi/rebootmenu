@@ -30,6 +30,7 @@ import com.ryuunoakaihitomi.rebootmenu.BuildConfig;
 import com.ryuunoakaihitomi.rebootmenu.MyApplication;
 import com.ryuunoakaihitomi.rebootmenu.R;
 import com.ryuunoakaihitomi.rebootmenu.activity.base.Constants;
+import com.ryuunoakaihitomi.rebootmenu.csc_compat.CrashReport;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 import com.ryuunoakaihitomi.rebootmenu.util.ShellUtils;
 import com.ryuunoakaihitomi.rebootmenu.util.SpecialSupport;
@@ -41,6 +42,7 @@ import com.ryuunoakaihitomi.rebootmenu.util.ui.TextToast;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -258,7 +260,7 @@ public class DebugInterface extends Activity {
                     break;
                 //测试异常
                 case 'c':
-                    throw new IllegalStateException("Test Exception");
+                    CrashReport.crashEmulator(Calendar.getInstance().get(Calendar.SECOND) % 2 == 0);
                 case 'Q':
                 case 'q':
                     SpecialSupport.showQRCodeWithZxingApp(this, param.substring(1), Character.isUpperCase(param.charAt(0)));

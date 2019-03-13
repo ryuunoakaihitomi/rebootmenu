@@ -90,6 +90,12 @@
             android:layout_height="wrap_content"
             android:text="@string/hide_build_info" />
 
+        <Button
+            android:id="@+id/auto_send_crash_report"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/auto_send_crash_report" />
+
     </LinearLayout>
 
     <LinearLayout

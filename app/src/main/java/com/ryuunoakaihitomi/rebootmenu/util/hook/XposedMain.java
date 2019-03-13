@@ -27,6 +27,7 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
  */
 
 @Keep
+@Deprecated
 public class XposedMain implements IXposedHookZygoteInit, IXposedHookLoadPackage {
 
     private static final String TAG = "XposedMain";

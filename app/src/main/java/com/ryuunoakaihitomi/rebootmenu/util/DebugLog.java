@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.ryuunoakaihitomi.rebootmenu.MyApplication;
+import com.ryuunoakaihitomi.rebootmenu.csc_compat.CrashReport;
 
 import java.io.File;
 
@@ -56,6 +57,7 @@ public class DebugLog {
     public DebugLog(String msg) {
         if (isLog)
             Log.d(TAG, msg);
+        CrashReport.log("-", msg);
     }
 
     /**
@@ -88,6 +90,7 @@ public class DebugLog {
                 default:
                     Log.w(TAG, "(level?)" + msg);
             }
+        CrashReport.log("LogLevel " + logLevel2String(logLevel), msg);
     }
 
     /**
@@ -112,6 +115,7 @@ public class DebugLog {
         if (TextUtils.isEmpty(subTag)) new DebugLog(msg, logLevel == null ? LogLevel.D : logLevel);
         else
             new DebugLog(String.format("%s:[%s]", subTag, msg), logLevel != null ? logLevel : LogLevel.D);
+        CrashReport.log(subTag + ' ' + logLevel2String(logLevel), msg);
     }
 
     /**
@@ -123,6 +127,7 @@ public class DebugLog {
      *                    重要堆栈指不太可能发生或有待深入研究的异常
      */
     public DebugLog(Throwable t, String label, boolean isImportant) {
+        if (isImportant) CrashReport.logNonFatalExceptions(t);
         if (isLog)
             if (isImportant)
                 Log.e(TAG, label, t);
@@ -142,27 +147,36 @@ public class DebugLog {
 
     public static void v(String tag, String msg) {
         if (isLog) Log.v(tagF(tag), msg);
+        CrashReport.log(tag + ' ' + logLevel2String(LogLevel.V), msg);
     }
 
     public static void d(String tag, String msg) {
         if (isLog) Log.d(tagF(tag), msg);
+        CrashReport.log(tag + ' ' + logLevel2String(LogLevel.D), msg);
     }
 
     public static void i(String tag, String msg) {
         if (isLog) Log.i(tagF(tag), msg);
+        CrashReport.log(tag + ' ' + logLevel2String(LogLevel.I), msg);
     }
 
     public static void w(String tag, String msg) {
         if (isLog) Log.w(tagF(tag), msg);
+        CrashReport.log(tag + ' ' + logLevel2String(LogLevel.W), msg);
     }
 
     public static void e(String tag, String msg) {
         if (isLog) Log.e(tagF(tag), msg);
+        CrashReport.log(tag + ' ' + logLevel2String(LogLevel.E), msg);
     }
 
     //指定标签格式
     private static String tagF(String subTag) {
         return String.format("%s:%s", TAG, subTag);
+    }
+
+    private static String logLevel2String(@Nullable LogLevel level) {
+        return level == null ? "" : level.name();
     }
 
     //日志等级

@@ -7,10 +7,14 @@ import android.os.Build;
 import android.os.Bundle;
 
 import com.ryuunoakaihitomi.rebootmenu.R;
+import com.ryuunoakaihitomi.rebootmenu.csc_compat.EventStatistics;
 import com.ryuunoakaihitomi.rebootmenu.util.ConfigManager;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 import com.ryuunoakaihitomi.rebootmenu.util.ShellUtils;
 import com.ryuunoakaihitomi.rebootmenu.util.ui.TextToast;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 主活动，(免)Root模式的加载
@@ -46,6 +50,7 @@ public class MainActivity extends Activity {
             if (ConfigManager.get(ConfigManager.UNROOT_MODE))
                 configView += PREFIX + getString(R.string.r_unroot_mode);
         }
+        cfgStat();
         new TextToast(this, configView);
         if (!ConfigManager.get(ConfigManager.DO_NOT_CHECK_ROOT))
             activitySwitch(ShellUtils.isRoot());
@@ -67,4 +72,16 @@ public class MainActivity extends Activity {
         }
         finish();
     }
+
+    //配置统计
+    private void cfgStat() {
+        Map<String, String> configData = new HashMap<>();
+        configData.put(ConfigManager.WHITE_THEME, String.valueOf(ConfigManager.get(ConfigManager.WHITE_THEME)));
+        configData.put(ConfigManager.CANCELABLE, String.valueOf(ConfigManager.get(ConfigManager.CANCELABLE)));
+        configData.put(ConfigManager.NO_NEED_TO_COMFIRM, String.valueOf(ConfigManager.get(ConfigManager.NO_NEED_TO_COMFIRM)));
+        configData.put(ConfigManager.DO_NOT_CHECK_ROOT, String.valueOf(ConfigManager.get(ConfigManager.DO_NOT_CHECK_ROOT)));
+        configData.put(ConfigManager.UNROOT_MODE, String.valueOf(ConfigManager.get(ConfigManager.UNROOT_MODE)));
+        EventStatistics.record(EventStatistics.CONFIG_DATA, configData);
+    }
 }
+

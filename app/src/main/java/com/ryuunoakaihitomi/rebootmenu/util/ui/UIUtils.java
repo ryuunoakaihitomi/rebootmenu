@@ -30,6 +30,7 @@ import com.ryuunoakaihitomi.rebootmenu.BuildConfig;
 import com.ryuunoakaihitomi.rebootmenu.R;
 import com.ryuunoakaihitomi.rebootmenu.activity.Shortcut;
 import com.ryuunoakaihitomi.rebootmenu.activity.base.MyActivity;
+import com.ryuunoakaihitomi.rebootmenu.csc_compat.MainCompat;
 import com.ryuunoakaihitomi.rebootmenu.service.ReleaseDownloadService;
 import com.ryuunoakaihitomi.rebootmenu.util.ConfigManager;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
@@ -146,6 +147,10 @@ public class UIUtils {
             restartApp(activityThis);
         });
         h.setNeutralButton(activityThis.getString(R.string.offical_download_link), (dialogInterface, i) -> {
+            if (MainCompat.openCoolapk(activityThis)) {
+                activityThis.finish();
+                return;
+            }
             if (SpecialSupport.isAndroidWearOS(activityThis))
                 openURL(activityThis, NetUtils.GITHUB_RELEASE_WEB_LINK);
             else {
@@ -159,7 +164,7 @@ public class UIUtils {
                 }
             }
         });
-        h.setNegativeButton(activityThis.getString(R.string.donate), (p1, p2) -> openURL(activityThis, "http://ryuunoakaihitomi.info/donate/"));
+        h.setNegativeButton(activityThis.getString(R.string.source_code), (p1, p2) -> openURL(activityThis, NetUtils.GITHUB_LINK));
         //有意保留的bug:帮助对话框的退出方式与配置相反
         if (cancelable) {
             h.setPositiveButton(activityThis.getString(R.string.exit), (dialogInterface, i) -> restartApp(activityThis));

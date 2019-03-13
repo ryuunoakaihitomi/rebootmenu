@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.os.Build;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -27,7 +28,7 @@ import static com.ryuunoakaihitomi.rebootmenu.util.DebugLog.LogLevel.I;
  * Created by ZQY on 2018/2/8.
  *
  * @author ZQY
- * @version 1.2
+ * @version 1.3
  * @see android.widget.Toast
  */
 
@@ -44,7 +45,7 @@ public class TextToast {
      * @param message 显示的文本内容
      */
     public TextToast(Context context, boolean isLong, String message) {
-        toastCompat(context, message, isLong ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT);
+        toastCompat(context, message, isLong, false);
     }
 
     /**
@@ -54,7 +55,19 @@ public class TextToast {
      * @param message 文本内容
      */
     public TextToast(Context context, String message) {
-        toastCompat(context, message, Toast.LENGTH_SHORT);
+        toastCompat(context, message, false, false);
+    }
+
+    /**
+     * 中心位置toast生成
+     *
+     * @param context  上下文
+     * @param isLong   是否是持续时间较长的toast
+     * @param message  文本内容
+     * @param isCenter 是否显示在中心位置
+     */
+    public TextToast(@NonNull Context context, boolean isLong, String message, boolean isCenter) {
+        toastCompat(context, message, isLong, isCenter);
     }
 
     /**
@@ -62,13 +75,15 @@ public class TextToast {
      *
      * @param context  {@link Context}
      * @param text     文本信息
-     * @param duration 持续时间
+     * @param isLong   是否是持续时间较长的toast
+     * @param isCenter 是否显示在中心位置
      */
-    private static void toastCompat(Context context, CharSequence text, int duration) {
+    private static void toastCompat(Context context, CharSequence text, boolean isLong, boolean isCenter) {
         boolean isMI = SpecialSupport.isMIUI();
         //MIUI的Toast在文本前面添加应用名称很不合理，因为Toast显示时间有限，需要尽快让用户注意最重要的内容
-        Toast toast = Toast.makeText(context.getApplicationContext(), isMI ? null : text, duration);
+        Toast toast = Toast.makeText(context.getApplicationContext(), isMI ? null : text, isLong ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT);
         if (isMI) toast.setText(text);
+        if (isCenter) toast.setGravity(Gravity.CENTER, 0, 0);
         fixBadTokenException(context, toast);
         toast.show();
     }

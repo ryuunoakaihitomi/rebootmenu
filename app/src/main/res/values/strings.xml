@@ -38,7 +38,7 @@
     <string name="lollipop_notice">你的Android版本在5.0以下,在免root模式中只能使用锁屏功能</string>
     <string name="spd_showed">已经调出系统电源菜单…</string>
     <string name="offical_download_link">官方下载(链接)</string>
-    <string name="donate">捐赠…</string>
+    <string name="source_code">源代码…</string>
     <string name="help_notice">应用版本：%s\n帮助更新日期：%s</string>
     <string name="help_update_date">20190216o</string>
     <string name="recovery_short">Recovery</string>
@@ -65,7 +65,7 @@
     <string name="monkey_test_notice">\"猴子\"不能打开本应用主UI</string>
     <string name="secret_code_label">隐藏的测试</string>
     <string name="hidden_function_description">启动选项的试验性功能</string>
-    <string name="xposed_description">加快Root默认模式的项目执行速度(实验性)</string>
+    <string name="xposed_description">加快Root默认模式的项目执行速度(实验性)\n备用方案,开机自启的root权限已经顶替了这个功能</string>
     <string name="accessibility_service_sunnary_hint">服务保活用通知</string>
     <string name="android_wear_power_menu_in_sys_settings">打开\"系统\"选项后,往下翻…</string>
     <string name="android_waer_cannot_open_url">zxing应用缺失,无法打开网址\n%s</string>
@@ -92,4 +92,7 @@
     <string name="dl_info_description">版本:%s,总下载次数:%d,发布版本数:%d</string>
     <string name="hide_build_info">不发送系统环境构建信息</string>
     <string name="copy_to_clipboard">复制进剪贴板</string>
+    <string name="auto_send_crash_report">自动发送错误报告(适合没有Github账号的用户,下次生效)</string>
+    <string name="auto_crash_report_hint">你不会再次看到此界面,因为之后所有的崩溃异常都将自动上传</string>
+    <string name="ad_opened_toast">点击叉号关闭广告\n或者点击广告帮开发者盈利</string>
 </resources>

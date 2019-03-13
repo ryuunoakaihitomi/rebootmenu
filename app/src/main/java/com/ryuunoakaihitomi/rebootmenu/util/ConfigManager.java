@@ -1,5 +1,6 @@
 package com.ryuunoakaihitomi.rebootmenu.util;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -24,7 +25,13 @@ public class ConfigManager {
             CANCELABLE = "c",
             DO_NOT_CHECK_ROOT = "dncr",
             UNROOT_MODE = "urm",
-            LASTEST_RELEASE_DOWNLOAD_ID = "lrdi";
+            LASTEST_RELEASE_DOWNLOAD_ID = "lrdi",
+            AUTO_CRASH_REPORT = "acr",
+            APP_LAUNCH_TIMES = "alt",
+            AUTO_NOAD = "ana";
+
+    private static SharedPreferences pref;
+    private static SharedPreferences.Editor editor;
 
     public static boolean get(@DefCfgOptions String key) {
         boolean isExists = new File(path + "/" + key).exists();
@@ -58,19 +65,40 @@ public class ConfigManager {
     }
 
     public static long getPrivateLong(Context context, @DefCfgOptions String key, long def) {
-        SharedPreferences pref = context.getSharedPreferences(null, Context.MODE_PRIVATE);
+        initSharedPreferencesAndEditor(context);
         return pref.getLong(key, def);
+    }
+
+    public static boolean getPrivateBoolean(Context context, @DefCfgOptions String key, boolean def) {
+        initSharedPreferencesAndEditor(context);
+        return pref.getBoolean(key, def);
+    }
+
+    public static void setPrivateBoolean(Context context, @DefCfgOptions String key, boolean val) {
+        initSharedPreferencesAndEditor(context);
+        editor.putBoolean(key, val).apply();
     }
 
     private ConfigManager() {
     }
 
     public static void setPrivateLong(Context context, @DefCfgOptions String key, long val) {
-        context.getSharedPreferences(null, Context.MODE_PRIVATE).edit().putLong(key, val).apply();
+        initSharedPreferencesAndEditor(context);
+        editor.putLong(key, val).apply();
+    }
+
+    @SuppressLint("CommitPrefEdits")
+    private static void initSharedPreferencesAndEditor(Context context) {
+        if (pref == null || editor == null) {
+            pref = context.getSharedPreferences(null, Context.MODE_PRIVATE);
+            editor = pref.edit();
+        }
     }
 
     //默认配置选项注解
-    @StringDef({WHITE_THEME, NO_NEED_TO_COMFIRM, CANCELABLE, DO_NOT_CHECK_ROOT, UNROOT_MODE, LASTEST_RELEASE_DOWNLOAD_ID})
+    @StringDef({WHITE_THEME, NO_NEED_TO_COMFIRM, CANCELABLE,
+            DO_NOT_CHECK_ROOT, UNROOT_MODE, LASTEST_RELEASE_DOWNLOAD_ID,
+            AUTO_CRASH_REPORT, APP_LAUNCH_TIMES, AUTO_NOAD})
     @Retention(RetentionPolicy.SOURCE)
     private @interface DefCfgOptions {
     }

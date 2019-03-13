@@ -1,14 +1,18 @@
 import java.text.SimpleDateFormat
 
 apply plugin: 'com.android.application'
+// Crashlytics依赖
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'io.fabric'
+
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
         applicationId "com.ryuunoakaihitomi.rebootmenu"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 113
-        versionName "10.77_osc"
+        versionCode 1077000
+        versionName "11"
         buildConfigField("String", "APK_PACK_TIME", "\"" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS").format(new Date()) + "\"")
     }
     compileOptions {
@@ -30,7 +34,15 @@ dependencies {
     //这样就会避免在APK中留下不必要的API存根
     compileOnly project(':libandroidhiddenapi')
     //compileOnly引入androidx注解只能在代码高亮中出现提示，在发布编译的时候一样会找不到API
-    implementation 'androidx.annotation:annotation:1.1.0-alpha01'
+    //不再需要，以下第三方库已经包含了这些东西
+    //implementation 'androidx.annotation:annotation:1.1.0-alpha01'
+
+    //--第三方库
+    //用来统计和上传崩溃报告
+    implementation 'com.google.firebase:firebase-core:16.0.7'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.9'
+    //用来显示广告
+    implementation 'com.google.firebase:firebase-ads:17.1.3'
 }
 
 android.applicationVariants.all { variant ->
