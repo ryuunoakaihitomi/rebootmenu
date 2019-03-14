@@ -47,7 +47,8 @@ public final class RMPowerActionManager {
             try {
                 mService.ping();
                 return true;
-            } catch (RemoteException e) {
+            } catch (Throwable e) {
+                //SecurityException (Binder invocation to an incorrect interface) | RemoteException
                 return false;
             }
         } else return false;

@@ -93,7 +93,9 @@ public class UnRootAccessibility extends AccessibilityService {
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent accessibilityEvent) {
-        String className = accessibilityEvent.getClassName().toString();
+        CharSequence classNameCS = accessibilityEvent.getClassName();
+        String className = null;
+        if (classNameCS != null) className = classNameCS.toString();
         new DebugLog("SystemPowerDialog.onAccessibilityEvent className:" + className, DebugLog.LogLevel.V);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
             //使用root模式就没有必要保留辅助服务
