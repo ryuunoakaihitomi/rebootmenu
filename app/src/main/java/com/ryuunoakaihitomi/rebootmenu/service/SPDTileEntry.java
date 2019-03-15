@@ -1,6 +1,7 @@
 package com.ryuunoakaihitomi.rebootmenu.service;
 
 import android.annotation.TargetApi;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Build;
 import android.provider.Settings;
@@ -57,8 +58,12 @@ public class SPDTileEntry extends TileService {
             new TextToast(getApplicationContext(), getString(R.string.service_disabled));
             //service -> activity
             Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            //收起状态栏
-            startActivityAndCollapse(intent);
+            try {
+                //收起状态栏
+                startActivityAndCollapse(intent);
+            } catch (ActivityNotFoundException e) {
+                new TextToast(this, true, getString(R.string.accessibility_settings_not_found), true);
+            }
         } else {
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(UnRootAccessibility.POWER_DIALOG_ACTION));
         }

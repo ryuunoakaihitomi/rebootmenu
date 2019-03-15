@@ -3,6 +3,7 @@ package com.ryuunoakaihitomi.rebootmenu.util;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.admin.DevicePolicyManager;
+import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -85,7 +86,12 @@ public class URMUtils {
             if (!isAccessibilitySettingsOn(activity.getApplicationContext())) {
                 new TextToast(activity.getApplicationContext(), activity.getString(R.string.service_disabled));
                 Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
-                activity.startActivity(intent);
+                try {
+                    //匪夷所思，这个都能阉割掉(
+                    activity.startActivity(intent);
+                } catch (ActivityNotFoundException e) {
+                    new TextToast(activity, true, activity.getString(R.string.accessibility_settings_not_found), true);
+                }
             } else {
                 boolean isSucceed = LocalBroadcastManager.getInstance(activity).sendBroadcast(new Intent(UnRootAccessibility.POWER_DIALOG_ACTION));
                 new DebugLog("sendBroadcast POWER_DIALOG_ACTION : " + isSucceed);

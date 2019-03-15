@@ -36,7 +36,7 @@ public class EventStatistics {
      * @param context {@link Context}
      */
     public static void initComponent(Context context) {
-        if (MainCompat.shouldLoadCSCModule())
+        if (MainCompat.shouldLoadCSC())
             analytics = FirebaseAnalytics.getInstance(context);
     }
 

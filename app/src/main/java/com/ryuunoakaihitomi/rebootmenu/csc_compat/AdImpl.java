@@ -58,7 +58,7 @@ public class AdImpl {
 
     //初始化广告组件
     public static void initialize(Activity activity) {
-        if (!MainCompat.shouldLoadCSCModule()) return;
+        if (!MainCompat.shouldLoadCSC()) return;
         // ConfigManager.set() 有可能有权限建立目录却没权删除目录
         if (adSwitchGetter(activity)) {
             hideBottomUIMenu(activity);

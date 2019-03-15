@@ -30,7 +30,7 @@ import com.ryuunoakaihitomi.rebootmenu.BuildConfig;
 import com.ryuunoakaihitomi.rebootmenu.R;
 import com.ryuunoakaihitomi.rebootmenu.activity.Shortcut;
 import com.ryuunoakaihitomi.rebootmenu.activity.base.MyActivity;
-import com.ryuunoakaihitomi.rebootmenu.csc_compat.MainCompat;
+import com.ryuunoakaihitomi.rebootmenu.csc_compat.CoolapkCompat;
 import com.ryuunoakaihitomi.rebootmenu.service.ReleaseDownloadService;
 import com.ryuunoakaihitomi.rebootmenu.util.ConfigManager;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
@@ -147,7 +147,7 @@ public class UIUtils {
             restartApp(activityThis);
         });
         h.setNeutralButton(activityThis.getString(R.string.offical_download_link), (dialogInterface, i) -> {
-            if (MainCompat.openCoolapk(activityThis)) {
+            if (CoolapkCompat.openCoolapk(activityThis)) {
                 activityThis.finish();
                 return;
             }
