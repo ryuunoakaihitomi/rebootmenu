@@ -34,16 +34,13 @@ public class CrashReport {
     public static void start(Context context, Thread.UncaughtExceptionHandler handler) {
         long launchTimes = ConfigManager.getPrivateLong(context, ConfigManager.APP_LAUNCH_TIMES, 0);
         /*
-         * 0.条件足以加载csc
-         * 1.用户是一般用户（安装了酷安，是MIUI系统）
-         * 2.自动上报功能开启
-         * 满足其一就使用Crashlytics
+         * 第一条件：用户不是一般用户 -> !(安装了酷安，是MIUI系统)
+         * 第二条件：自动上报功能关闭，或条件不足以加载csc
          */
-        if (!MainCompat.shouldLoadCSC()
-                || !(CoolapkCompat.hasCoolapk(context) || SpecialSupport.isMIUI())
-                || !ConfigManager.getPrivateBoolean(context, ConfigManager.AUTO_CRASH_REPORT, false))
-            Thread.setDefaultUncaughtExceptionHandler(handler);
-        else {
+        if (!CoolapkCompat.hasCoolapk(context) && !SpecialSupport.isMIUI()) {
+            if (!ConfigManager.getPrivateBoolean(context, ConfigManager.AUTO_CRASH_REPORT, false) || !MainCompat.shouldLoadCSC())
+                Thread.setDefaultUncaughtExceptionHandler(handler);
+        } else {
             //Firebase Crashlytics抓取的机型信息不全面，这里再手动抓一次
             try {
                 JSONObject object = new JSONObject(SendBugFeedback.getRawBuildEnvInfo());
