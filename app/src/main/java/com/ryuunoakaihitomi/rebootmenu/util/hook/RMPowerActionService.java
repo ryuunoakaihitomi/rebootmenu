@@ -55,7 +55,7 @@ final class RMPowerActionService extends IRMPowerActionService.Stub {
     //API比aidl稳定，但是导包是个问题，现在暂时使用反射将就下
     private Method goToSleep, rebootSafeMode, shutdown;
 
-    private RMPowerActionRecord record;
+    private final RMPowerActionRecord record;
 
     RMPowerActionService(Context context) {
         Log.d(TAG, "Constructor: " + context);
@@ -345,21 +345,23 @@ final class RMPowerActionService extends IRMPowerActionService.Stub {
 
         instance;
         private @NonNull
+        final
         ArrayList<Long> mOpTimes = new ArrayList<>();
         private @NonNull
+        final
         ArrayList<String> mOpTags = new ArrayList<>();
 
-        public void add(Long time, String tag) {
+        void add(Long time, String tag) {
             mOpTimes.add(time);
             mOpTags.add(tag);
         }
 
-        public void clear() {
+        void clear() {
             mOpTimes.clear();
             mOpTags.clear();
         }
 
-        public Map<Long, String> traversal() {
+        Map<Long, String> traversal() {
             Map<Long, String> ret = new LinkedHashMap<>();
             for (int i = 0; i < mOpTimes.size(); i++)
                 ret.put(mOpTimes.get(i), mOpTags.get(i));

@@ -35,7 +35,7 @@ public class ReleaseDownloadService extends IntentService implements Handler.Cal
 
     private static final String TAG = "ReleaseDownloadService";
     private boolean runningStatus = false;
-    private Handler handler = new Handler(this);
+    private final Handler handler = new Handler(this);
 
     //manifest
     public ReleaseDownloadService() {

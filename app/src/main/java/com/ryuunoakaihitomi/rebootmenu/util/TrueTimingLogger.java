@@ -19,7 +19,7 @@ public class TrueTimingLogger {
 
     private static final String TAG = "TrueTimingLogger";
     private Field mDisabledField, mSplitsField, mSplitLabelsField, mTagField, mLabelField;
-    private TimingLogger logger;
+    private final TimingLogger logger;
 
     /**
      * Create and initialize a TimingLogger object that will log using

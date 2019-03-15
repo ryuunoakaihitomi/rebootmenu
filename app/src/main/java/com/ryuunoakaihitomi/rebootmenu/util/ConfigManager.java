@@ -69,6 +69,7 @@ public class ConfigManager {
         return pref.getLong(key, def);
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean getPrivateBoolean(Context context, @DefCfgOptions String key, boolean def) {
         initSharedPreferencesAndEditor(context);
         return pref.getBoolean(key, def);

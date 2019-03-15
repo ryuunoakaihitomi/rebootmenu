@@ -369,7 +369,7 @@ class PostTask extends AsyncTask<String, Integer, Boolean> {
 
     private static final String TAG = "PostTask";
     //Create reference
-    private TrueTimingLogger logger = new TrueTimingLogger(null, null);
+    private final TrueTimingLogger logger = new TrueTimingLogger(null, null);
 
     @SuppressWarnings("CanBeFinal")
     private PostTrigger mTrigger;
