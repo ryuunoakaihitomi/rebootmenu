@@ -144,7 +144,10 @@ public class MyApplication extends Application implements Thread.UncaughtExcepti
         EventStatistics.record(EventStatistics.HAS_XPOSED, String.valueOf(hasXposed));
         //无障碍服务的保活用通知只能让系统屏蔽，所以要特别注意让Toast不会因此消失
         //只有MIUI已经修复了这个问题
-        if (!SpecialSupport.isMIUI()) TextToast.defineSystemToast();
+        // 从Android Q开始也修复了这个问题，而且反射会出错：
+        // java.lang.SecurityException: Calling uid 10087 gave package android which is owned by uid 1000
+        if (!SpecialSupport.isMIUI() || Build.VERSION.SDK_INT > Build.VERSION_CODES.P)
+            TextToast.defineSystemToast();
     }
 
     @Override
