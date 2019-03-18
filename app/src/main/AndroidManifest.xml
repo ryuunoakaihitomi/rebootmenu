@@ -225,7 +225,7 @@
         <!--AdMob要求-->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3887749646735208~8115523935" />
+            android:value="${AD_APP_ID}" />
 
     </application>
 </manifest>

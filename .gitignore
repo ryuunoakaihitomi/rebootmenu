@@ -78,3 +78,6 @@ lint/generated/
 lint/outputs/
 lint/tmp/
 # lint/reports/
+
+# 自定义配置(私密配置)
+custom_config.properties

@@ -16,6 +16,7 @@ import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
+import com.ryuunoakaihitomi.rebootmenu.BuildConfig;
 import com.ryuunoakaihitomi.rebootmenu.MyApplication;
 import com.ryuunoakaihitomi.rebootmenu.R;
 import com.ryuunoakaihitomi.rebootmenu.activity.RootMode;
@@ -36,12 +37,12 @@ public class AdImpl {
     private static final String TAG = "AdImpl";
 
     //AdMob应用密钥
-    private static final String AD_APP_KEY = "ca-app-pub-3887749646735208~8115523935";
+    private static final String AD_APP_KEY = BuildConfig.AD_APP_ID;
 
     //AdMob广告单元密钥
-    private static final String InterstitialAdUnitKey = "ca-app-pub-3887749646735208/2003920462";
+    private static final String InterstitialAdUnitKey = BuildConfig.AD_INTERSTITIAL_UNIT;
     //发布ID
-    private static final String AdViewUnitKey = "ca-app-pub-3887749646735208/6916393844";
+    private static final String AdViewUnitKey = BuildConfig.AD_VIEW_UNIT;
 
     //测试用广告ID
     private static final String DEBUG_INTERSTITIAL_AD_UNIT_KEY = "ca-app-pub-3940256099942544/1033173712";
@@ -51,6 +52,7 @@ public class AdImpl {
     private static final String[] adStatusCode =
             {"ERROR_CODE_INTERNAL_ERROR", "ERROR_CODE_NETWORK_ERROR", "ERROR_CODE_INVALID_REQUEST", "ERROR_CODE_NO_FILL",
                     "LISTENER_ON_AD_OPENED", "LISTENER_ON_AD_CLICKED", "SIGNAL_NO_AD_AUTO"};
+
     //AD操作对象
     private static AdView adView;
     private static InterstitialAd interstitialAd;

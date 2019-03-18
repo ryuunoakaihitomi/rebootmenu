@@ -1,5 +1,6 @@
 package com.ryuunoakaihitomi.rebootmenu.receiver;
 
+import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -27,8 +28,12 @@ public class BootReceiver extends BroadcastReceiver {
             return;
         Log.v(TAG, "onReceive: ");
         //Xposed警告
-        context.startActivity(new Intent(context, XposedWarning.class)
-                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        try {
+            context.startActivity(new Intent(context, XposedWarning.class)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        } catch (ActivityNotFoundException ignored) {
+            //发现联想机型可能会出现错误
+        }
         if (XposedUtils.isActive)
             RMPowerActionManager.getInstance().testPrint();
         else if (!SpecialSupport.hasTvFeature(context) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)

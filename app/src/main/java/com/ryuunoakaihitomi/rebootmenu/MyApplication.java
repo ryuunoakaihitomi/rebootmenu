@@ -146,6 +146,7 @@ public class MyApplication extends Application implements Thread.UncaughtExcepti
         //只有MIUI已经修复了这个问题
         // 从Android Q开始也修复了这个问题，而且反射会出错：
         // java.lang.SecurityException: Calling uid 10087 gave package android which is owned by uid 1000
+        //TODO 傻Android Q Beta 1似乎还没有把API Level升上去(仍然是28)...
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P && !SpecialSupport.isMIUI())
             TextToast.defineSystemToast();
     }

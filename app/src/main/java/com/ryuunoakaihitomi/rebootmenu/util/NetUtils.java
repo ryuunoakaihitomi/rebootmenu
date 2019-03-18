@@ -3,6 +3,8 @@ package com.ryuunoakaihitomi.rebootmenu.util;
 
 import android.os.NetworkOnMainThreadException;
 
+import com.ryuunoakaihitomi.rebootmenu.BuildConfig;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,7 +24,7 @@ public class NetUtils {
     /**
      * Personal access tokens: 保证只持有公共权限
      */
-    public static final String GITHUB_API_KEY = "d25f7d6d964756339f22f29996b243a5a1c2ff4c";
+    public static final String GITHUB_API_KEY = BuildConfig.GITHUB_PAT;
     /**
      * 本应用的源代码网址
      */

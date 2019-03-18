@@ -4,19 +4,12 @@
  * 修改自
  * https://stackoverflow.com/questions/20203787/access-sdk-dir-value-in-build-gradle-after-project-evaluation
  */
+apply from: "${rootProject.file('loadProperties.gradle')}"
 ext {
     def fs = File.separator
-    def rootDir = project.rootDir
-    def localProperties = new File(rootDir, "local.properties")
-    if (localProperties.exists()) {
-        Properties properties = new Properties()
-        localProperties.withInputStream { instr ->
-            properties.load(instr)
-        }
-        def sdkDir = properties.getProperty('sdk.dir')
-        //非局部变量不加def
-        androidJarPath =
-                sdkDir + fs + "platforms" + fs + "android-" + rootProject.ext.compileSdkVersion + fs + "android.jar"
-        println "androidJarPath: " + androidJarPath
-    }
+    def sdkDir = loadProps('local').getProperty('sdk.dir')
+    //非局部变量不加def
+    androidJarPath =
+            sdkDir + fs + "platforms" + fs + "android-" + rootProject.ext.compileSdkVersion + fs + "android.jar"
+    println "androidJarPath: " + androidJarPath
 }
