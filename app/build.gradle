@@ -17,8 +17,9 @@ android {
         buildConfigField("String", "APK_PACK_TIME", "\"" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS").format(new Date()) + "\"")
 
         //导入API Key
-        manifestPlaceholders = [AD_APP_ID: loadProps('custom_config').getProperty('admobAdAppId')]
-        buildConfigField('String', 'AD_APP_ID', '\"' + loadProps('custom_config').getProperty('admobAdAppId') + '\"')
+        def adAppIdKey = loadProps('custom_config').getProperty('admobAdAppId')
+        manifestPlaceholders = [AD_APP_ID: adAppIdKey]
+        buildConfigField('String', 'AD_APP_ID', '\"' + adAppIdKey + '\"')
         buildConfigField('String', 'AD_INTERSTITIAL_UNIT', '\"' + loadProps('custom_config').getProperty('admobInterstitialAdUnit') + '\"')
         buildConfigField('String', 'AD_VIEW_UNIT', '\"' + loadProps('custom_config').getProperty('admobAdViewUnit') + '\"')
         buildConfigField('String', 'GITHUB_PAT', '\"' + loadProps('custom_config').getProperty('githubPAT') + '\"')
