@@ -146,6 +146,8 @@ public class UnRootMode extends MyActivity {
                 finish();
             });
         dialogInstance = mainDialog.create();
+        //NPE:AQUOS PHONE ZETA SH-01F (4.4.2)
+        if (dialogInstance == null) return;
         AdImpl.setFlagNotFocusable(dialogInstance);
         dialogInstance.setOnShowListener(dialog -> {
             ListView listView = dialogInstance.getListView();
