@@ -1,6 +1,7 @@
 package com.ryuunoakaihitomi.rebootmenu.csc_compat;
 
 import android.content.Context;
+import android.os.Build;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
@@ -53,6 +54,9 @@ public class CrashReport {
                 e.printStackTrace();
             }
             Crashlytics.setLong("launchTimes", launchTimes);
+            //小米设备的话看看是不是原版系统
+            if ("Xiaomi".equals(Build.MANUFACTURER))
+                Crashlytics.setBool("isMIUI", SpecialSupport.isMIUI());
         }
         ConfigManager.setPrivateLong(context, ConfigManager.APP_LAUNCH_TIMES, ++launchTimes);
     }

@@ -35,6 +35,11 @@
         android:name="android.permission.CONTROL_DISPLAY_SATURATION"
         tools:ignore="ProtectedPermissions" />
 
+    <!--Fatal Exception: java.lang.SecurityException:
+    Not allowed to bind to service
+    Intent { act=com.google.android.c2dm.intent.REGISTER pkg=com.google.android.gms }-->
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+
     <!--AS不让常规和穿戴APK共存(do not embed a watch APK in a phone APK)，在调试Wear OS时将required项改为true.-->
     <uses-feature
         android:name="android.hardware.type.watch"

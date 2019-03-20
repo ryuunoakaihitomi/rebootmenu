@@ -12,8 +12,8 @@ android {
         applicationId "com.ryuunoakaihitomi.rebootmenu"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 1077004
-        versionName "11.004"
+        versionCode 1077005
+        versionName "11.005"
         buildConfigField("String", "APK_PACK_TIME", "\"" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS").format(new Date()) + "\"")
 
         //导入API Key
