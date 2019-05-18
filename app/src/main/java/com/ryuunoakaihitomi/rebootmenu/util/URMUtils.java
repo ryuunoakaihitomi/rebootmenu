@@ -12,12 +12,12 @@ import android.os.PowerManager;
 import android.provider.Settings;
 import android.text.TextUtils;
 
+import androidx.annotation.NonNull;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
 import com.ryuunoakaihitomi.rebootmenu.R;
 import com.ryuunoakaihitomi.rebootmenu.service.UnRootAccessibility;
 import com.ryuunoakaihitomi.rebootmenu.util.ui.TextToast;
-
-import androidx.annotation.NonNull;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 /**
  * 本应用中免（无需）root模式的工具集合
@@ -27,6 +27,8 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
  */
 
 public class URMUtils {
+
+    private static final String TAG = "URMUtils";
 
     /**
      * 用辅助功能锁屏
@@ -110,7 +112,6 @@ public class URMUtils {
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean isAccessibilitySettingsOn(@NonNull Context mContext) {
         //注意：不要使用以下注释掉的代码取无障碍服务开启状态！disableSelf()之后仍返回true
-        //noinspection ConstantConditions
         //return ((AccessibilityManager) mContext.getSystemService(Context.ACCESSIBILITY_SERVICE)).isEnabled();
         new DebugLog("isAccessibilitySettingsOn", DebugLog.LogLevel.V);
         int accessibilityEnabled = 0;
@@ -160,10 +161,13 @@ public class URMUtils {
      * @param context 1
      * @param reason  参数
      */
-    @SuppressWarnings("ConstantConditions")
     public static void rebootWithPowerManager(Context context, String reason) {
         new DebugLog("rebootWithPowerManager: reason:" + reason, DebugLog.LogLevel.V);
-        ((PowerManager) context.getSystemService(Context.POWER_SERVICE)).reboot(reason);
+        try {
+            ((PowerManager) context.getSystemService(Context.POWER_SERVICE)).reboot(reason);
+        } catch (SecurityException se) {
+            DebugLog.e(TAG, "android.permission.REBOOT?");
+        }
     }
 
     private URMUtils() {

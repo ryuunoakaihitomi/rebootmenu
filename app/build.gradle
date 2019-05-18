@@ -13,7 +13,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 28
         versionCode 1077005
-        versionName "11.005"
+        versionName "11.006"
         buildConfigField("String", "APK_PACK_TIME", "\"" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS").format(new Date()) + "\"")
 
         //导入API Key
@@ -48,8 +48,8 @@ dependencies {
 
     //--第三方库
     //用来统计和上传崩溃报告
-    implementation 'com.google.firebase:firebase-core:16.0.8'
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.9'
+    implementation 'com.google.firebase:firebase-core:16.0.9'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.0'
     //用来显示广告
     implementation 'com.google.firebase:firebase-ads:17.2.0'
 }
