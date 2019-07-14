@@ -5,10 +5,13 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Build;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+
+import androidx.annotation.NonNull;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -25,8 +28,6 @@ import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 import com.ryuunoakaihitomi.rebootmenu.util.ui.TextToast;
 
 import java.util.Objects;
-
-import androidx.annotation.NonNull;
 
 /**
  * 对A广告组件的二次封装，方便以后更换及调整
@@ -195,7 +196,12 @@ public class AdImpl {
 
     //显示横幅广告
     public static void showAdView() {
-        if (adView != null) adView.loadAd(adRequest);
+        if (adView != null) {
+            //TODO 需要确认这段修复代码的可用性
+            if (TextUtils.isEmpty(adView.getAdUnitId())) adView.setAdUnitId(AdViewUnitKey);
+            if (adView.getAdSize() == null) adView.setAdSize(AdSize.SMART_BANNER);
+            adView.loadAd(adRequest);
+        }
     }
 
     private static void adSwitchSetter(Context context, boolean val) {

@@ -33,11 +33,13 @@ public class MainTileEntry extends TileService {
     @Override
     public void onStartListening() {
         boolean isLocked = isLocked();
-        int qsTileState = getQsTile().getState();
+        Tile tile = getQsTile();
+        if (tile == null) return;
+        int qsTileState = tile.getState();
         new DebugLog("MainTileEntry.onStartListening: isLocked=" + isLocked + " qsTileState=" + qsTileState, DebugLog.LogLevel.I);
         if (!isLocked && qsTileState != Tile.STATE_ACTIVE) {
-            getQsTile().setState(Tile.STATE_ACTIVE);
-            getQsTile().updateTile();
+            tile.setState(Tile.STATE_ACTIVE);
+            tile.updateTile();
         }
     }
 }

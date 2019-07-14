@@ -28,11 +28,15 @@ public class BootReceiver extends BroadcastReceiver {
             return;
         Log.v(TAG, "onReceive: ");
         //Xposed警告
-        try {
-            context.startActivity(new Intent(context, XposedWarning.class)
-                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-        } catch (ActivityNotFoundException ignored) {
-            //发现联想机型可能会出现错误
+        //Android Q已经不允许后台打开活动
+        //Xposed模块已经废弃，不再继续打开活动
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+            try {
+                context.startActivity(new Intent(context, XposedWarning.class)
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            } catch (ActivityNotFoundException ignored) {
+                //发现联想机型可能会出现错误
+            }
         }
         if (XposedUtils.isActive)
             RMPowerActionManager.getInstance().testPrint();

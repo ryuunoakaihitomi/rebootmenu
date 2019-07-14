@@ -26,6 +26,12 @@ import android.webkit.MimeTypeMap;
 import android.widget.Magnifier;
 import android.widget.TextView;
 
+import androidx.annotation.DrawableRes;
+import androidx.annotation.FloatRange;
+import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
+import androidx.core.content.FileProvider;
+
 import com.ryuunoakaihitomi.rebootmenu.BuildConfig;
 import com.ryuunoakaihitomi.rebootmenu.R;
 import com.ryuunoakaihitomi.rebootmenu.activity.Shortcut;
@@ -44,12 +50,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-
-import androidx.annotation.DrawableRes;
-import androidx.annotation.FloatRange;
-import androidx.annotation.NonNull;
-import androidx.annotation.StringRes;
-import androidx.core.content.FileProvider;
 
 /**
  * 本应用关于界面操作的工具集合
@@ -123,7 +123,6 @@ public class UIUtils {
                 new DebugLog(e, "alphaShow", true);
             }
         else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
-            //noinspection ConstantConditions
             isLowRam = ((ActivityManager) w.getContext().getSystemService(Context.ACTIVITY_SERVICE)).isLowRamDevice();
         new DebugLog("alphaShow: isLowRam=" + isLowRam, DebugLog.LogLevel.I);
         if (!isLowRam) {
@@ -185,12 +184,13 @@ public class UIUtils {
         Accessing hidden field Landroid/app/AlertDialog;->mAlert:Lcom/android/internal/app/AlertController; (light greylist, reflection)
         Accessing hidden field Lcom/android/internal/app/AlertController;->mMessageView:Landroid/widget/TextView; (dark greylist, reflection)
          */
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.P)
             ReflectionOnPie.clearClassLoaderInClass(UIUtils.class);
         try {
             @SuppressWarnings("JavaReflectionMemberAccess") Field mAlert = AlertDialog.class.getDeclaredField("mAlert");
             mAlert.setAccessible(true);
             Object mAlertController = mAlert.get(hc);
+            //Field mMessageView = ReflectionOnPie.getDeclaredField(mAlertController.getClass(), "mMessageView");
             Field mMessageView = mAlertController.getClass().getDeclaredField("mMessageView");
             mMessageView.setAccessible(true);
             TextView textView = (TextView) mMessageView.get(mAlertController);
@@ -202,7 +202,7 @@ public class UIUtils {
         } catch (Exception e) {
             new DebugLog(e, "helpDialog", true);
         } finally {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
+            if (Build.VERSION.SDK_INT == Build.VERSION_CODES.P)
                 ReflectionOnPie.restoreLoaderInClass(UIUtils.class);
         }
     }
@@ -253,7 +253,6 @@ public class UIUtils {
      * @param isForce     是否是root强制模式
      * @see com.ryuunoakaihitomi.rebootmenu.activity.Shortcut
      */
-    @SuppressWarnings("ConstantConditions")
     public static void addLauncherShortcut(@NonNull Context context, @StringRes int titleRes, @DrawableRes int iconRes, int shortcutAct, boolean isForce) {
         new DebugLog("addLauncherShortcut", DebugLog.LogLevel.V);
         String forceToken = isForce ? "*" : "";

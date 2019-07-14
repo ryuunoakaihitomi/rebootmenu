@@ -50,7 +50,6 @@ public class MyApplication extends Application implements Thread.UncaughtExcepti
         } catch (Throwable throwable) {
             Log.w(TAG, "checkSELinuxStatus: ", throwable);
         }
-        //noinspection ConstantConditions
         Log.i(TAG, "checkSELinuxStatus: Security Context:" + context + " is(Enabled/Enforced):" + StringUtils.varArgsToString(isEnabled, isEnforced));
     }
 
@@ -115,8 +114,11 @@ public class MyApplication extends Application implements Thread.UncaughtExcepti
         super.onCreate();
         checkSELinuxStatus();
         //按需记录自身日志
-        if (new File(Environment.getExternalStorageDirectory().getPath() + "/rbmLogWriter").exists())
-            logcatHolder();
+        try {
+            if (new File(Environment.getExternalStorageDirectory().getPath() + "/rbmLogWriter").exists())
+                logcatHolder();
+        } catch (NullPointerException ignored) {
+        }
         //初始化属性值
         isDebug = isDebuggable();
         isSystemApp = isSystemApp();
@@ -146,7 +148,6 @@ public class MyApplication extends Application implements Thread.UncaughtExcepti
         //只有MIUI已经修复了这个问题
         // 从Android Q开始也修复了这个问题，而且反射会出错：
         // java.lang.SecurityException: Calling uid 10087 gave package android which is owned by uid 1000
-        //TODO 傻Android Q Beta 1似乎还没有把API Level升上去(仍然是28)...
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P && !SpecialSupport.isMIUI())
             TextToast.defineSystemToast();
     }
@@ -154,6 +155,6 @@ public class MyApplication extends Application implements Thread.UncaughtExcepti
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
-        ReflectionOnPie.zeroHAEP(base);
+        ReflectionOnPie.init(base);
     }
 }

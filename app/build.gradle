@@ -12,17 +12,18 @@ android {
         applicationId "com.ryuunoakaihitomi.rebootmenu"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 1077006
-        versionName "11.006"
+        versionCode 1077007
+        versionName "11.007"
         buildConfigField("String", "APK_PACK_TIME", "\"" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS").format(new Date()) + "\"")
 
         //导入API Key
-        def adAppIdKey = loadProps('custom_config').getProperty('admobAdAppId')
+        Properties cfgProps = loadProps('custom_config')
+        def adAppIdKey = cfgProps.getProperty('admobAdAppId')
         manifestPlaceholders = [AD_APP_ID: adAppIdKey]
         buildConfigField('String', 'AD_APP_ID', '\"' + adAppIdKey + '\"')
-        buildConfigField('String', 'AD_INTERSTITIAL_UNIT', '\"' + loadProps('custom_config').getProperty('admobInterstitialAdUnit') + '\"')
-        buildConfigField('String', 'AD_VIEW_UNIT', '\"' + loadProps('custom_config').getProperty('admobAdViewUnit') + '\"')
-        buildConfigField('String', 'GITHUB_PAT', '\"' + loadProps('custom_config').getProperty('githubPAT') + '\"')
+        buildConfigField('String', 'AD_INTERSTITIAL_UNIT', '\"' + cfgProps.getProperty('admobInterstitialAdUnit') + '\"')
+        buildConfigField('String', 'AD_VIEW_UNIT', '\"' + cfgProps.getProperty('admobAdViewUnit') + '\"')
+        buildConfigField('String', 'GITHUB_PAT', '\"' + cfgProps.getProperty('githubPAT') + '\"')
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -48,10 +49,10 @@ dependencies {
 
     //--第三方库
     //用来统计和上传崩溃报告
-    implementation 'com.google.firebase:firebase-core:16.0.9'
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.0'
+    implementation 'com.google.firebase:firebase-core:17.0.1'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
     //用来显示广告
-    implementation 'com.google.firebase:firebase-ads:17.2.0'
+    implementation 'com.google.firebase:firebase-ads:18.1.0'
 }
 
 android.applicationVariants.all { variant ->
