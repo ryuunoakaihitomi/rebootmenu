@@ -28,7 +28,7 @@ public class DownloadActionReceiver extends BroadcastReceiver {
         String action = Objects.requireNonNull(intent.getAction());
         DebugLog.d(TAG, "onReceive: action=" + action);
         DownloadManager manager = (DownloadManager) Objects.requireNonNull(context.getSystemService(Context.DOWNLOAD_SERVICE));
-        long id = ConfigManager.getPrivateLong(context, ConfigManager.LASTEST_RELEASE_DOWNLOAD_ID, NULL_DOWNLOAD_ID);
+        long id = ConfigManager.getPrivateLong(context, ConfigManager.LATEST_RELEASE_DOWNLOAD_ID, NULL_DOWNLOAD_ID);
         DebugLog.i(TAG, "id=" + id);
         switch (action) {
             //下载完成自动打开安装
@@ -56,7 +56,7 @@ public class DownloadActionReceiver extends BroadcastReceiver {
             case Intent.ACTION_MY_PACKAGE_REPLACED:
                 if (id != NULL_DOWNLOAD_ID) {
                     DebugLog.i(TAG, "delete dl id:" + id + " ret=" + manager.remove(id));
-                    ConfigManager.setPrivateLong(context, ConfigManager.LASTEST_RELEASE_DOWNLOAD_ID, NULL_DOWNLOAD_ID);
+                    ConfigManager.setPrivateLong(context, ConfigManager.LATEST_RELEASE_DOWNLOAD_ID, NULL_DOWNLOAD_ID);
                 }
         }
     }

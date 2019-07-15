@@ -4,12 +4,12 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.StringDef;
+
 import java.io.File;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.StringDef;
 
 /**
  * 配置管理器
@@ -21,11 +21,11 @@ public class ConfigManager {
     //设置选项列表
     public static final String
             WHITE_THEME = "wt",
-            NO_NEED_TO_COMFIRM = "nntc",
+            NO_NEED_TO_CONFIRM = "nntc",
             CANCELABLE = "c",
             DO_NOT_CHECK_ROOT = "dncr",
             UNROOT_MODE = "urm",
-            LASTEST_RELEASE_DOWNLOAD_ID = "lrdi",
+            LATEST_RELEASE_DOWNLOAD_ID = "lrdi",
             AUTO_CRASH_REPORT = "acr",
             APP_LAUNCH_TIMES = "alt",
             AUTO_NOAD = "ana";
@@ -97,8 +97,8 @@ public class ConfigManager {
     }
 
     //默认配置选项注解
-    @StringDef({WHITE_THEME, NO_NEED_TO_COMFIRM, CANCELABLE,
-            DO_NOT_CHECK_ROOT, UNROOT_MODE, LASTEST_RELEASE_DOWNLOAD_ID,
+    @StringDef({WHITE_THEME, NO_NEED_TO_CONFIRM, CANCELABLE,
+            DO_NOT_CHECK_ROOT, UNROOT_MODE, LATEST_RELEASE_DOWNLOAD_ID,
             AUTO_CRASH_REPORT, APP_LAUNCH_TIMES, AUTO_NOAD})
     @Retention(RetentionPolicy.SOURCE)
     private @interface DefCfgOptions {

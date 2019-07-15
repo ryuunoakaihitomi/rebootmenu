@@ -66,7 +66,7 @@ public class URMUtils {
                 devicePolicyManager.lockNow();
                 if (needConfig)
                     //如果需要二次确认，禁用设备管理器。（这里的策略和root模式的锁屏无需确认不同）
-                    if (!ConfigManager.get(ConfigManager.NO_NEED_TO_COMFIRM)) {
+                    if (!ConfigManager.get(ConfigManager.NO_NEED_TO_CONFIRM)) {
                         devicePolicyManager.removeActiveAdmin(componentName);
                     }
                 activity.finish();

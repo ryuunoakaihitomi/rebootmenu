@@ -9,6 +9,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Process;
 
+import androidx.annotation.NonNull;
+
 import com.ryuunoakaihitomi.rebootmenu.R;
 import com.ryuunoakaihitomi.rebootmenu.activity.base.Constants;
 import com.ryuunoakaihitomi.rebootmenu.activity.base.MyActivity;
@@ -17,11 +19,9 @@ import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 import com.ryuunoakaihitomi.rebootmenu.util.ui.TextToast;
 import com.ryuunoakaihitomi.rebootmenu.util.ui.UIUtils;
 
-import androidx.annotation.NonNull;
-
 import static com.ryuunoakaihitomi.rebootmenu.util.ConfigManager.CANCELABLE;
 import static com.ryuunoakaihitomi.rebootmenu.util.ConfigManager.DO_NOT_CHECK_ROOT;
-import static com.ryuunoakaihitomi.rebootmenu.util.ConfigManager.NO_NEED_TO_COMFIRM;
+import static com.ryuunoakaihitomi.rebootmenu.util.ConfigManager.NO_NEED_TO_CONFIRM;
 import static com.ryuunoakaihitomi.rebootmenu.util.ConfigManager.UNROOT_MODE;
 import static com.ryuunoakaihitomi.rebootmenu.util.ConfigManager.WHITE_THEME;
 
@@ -54,7 +54,7 @@ public class PreferenceActivity extends MyActivity {
                                 ConfigManager.get(WHITE_THEME),
                                 ConfigManager.get(CANCELABLE),
                                 ConfigManager.get(DO_NOT_CHECK_ROOT),
-                                ConfigManager.get(NO_NEED_TO_COMFIRM),
+                                ConfigManager.get(NO_NEED_TO_CONFIRM),
                                 ConfigManager.get(UNROOT_MODE)
                         },
                         (dialogInterface, i, b) -> {
@@ -70,7 +70,7 @@ public class PreferenceActivity extends MyActivity {
                                     ret += ConfigManager.set(DO_NOT_CHECK_ROOT, b);
                                     break;
                                 case 3:
-                                    ret += ConfigManager.set(NO_NEED_TO_COMFIRM, b);
+                                    ret += ConfigManager.set(NO_NEED_TO_CONFIRM, b);
                                     break;
                                 case 4:
                                     ret += ConfigManager.set(UNROOT_MODE, b);
@@ -125,7 +125,6 @@ public class PreferenceActivity extends MyActivity {
         try {
             boolean fromCtx = PackageManager.PERMISSION_GRANTED ==
                     checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            @SuppressWarnings("ConstantConditions")
             boolean fromAppOps = AppOpsManager.MODE_ALLOWED == getSystemService(AppOpsManager.class)
                     .checkOpNoThrow(AppOpsManager.OPSTR_WRITE_EXTERNAL_STORAGE, Process.myUid(), getPackageName());
             return fromCtx && fromAppOps;

@@ -63,7 +63,7 @@ public class UnRootMode extends MyActivity {
                         URMUtils.accessibilityOn(UnRootMode.this);
                         break;
                     case 2:
-                        if (!ConfigManager.get(ConfigManager.NO_NEED_TO_COMFIRM)) {
+                        if (!ConfigManager.get(ConfigManager.NO_NEED_TO_CONFIRM)) {
                             mainDialog.setTitle(getString(R.string.confirm_operation));
                             mainDialog.setItems(new String[]{getString(R.string.yes), getString(R.string.no)}, (dialogInterface1, iConfirm) -> {
                                 if (iConfirm == 1)

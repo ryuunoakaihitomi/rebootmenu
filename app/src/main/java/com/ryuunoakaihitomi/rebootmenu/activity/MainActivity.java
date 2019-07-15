@@ -43,7 +43,7 @@ public class MainActivity extends Activity {
             configView += PREFIX + getString(R.string.r_whitetheme);
         if (ConfigManager.get(ConfigManager.CANCELABLE))
             configView += PREFIX + getString(R.string.r_cancelable);
-        if (ConfigManager.get(ConfigManager.NO_NEED_TO_COMFIRM))
+        if (ConfigManager.get(ConfigManager.NO_NEED_TO_CONFIRM))
             configView += PREFIX + getString(R.string.r_normal_do);
         if (ConfigManager.get(ConfigManager.DO_NOT_CHECK_ROOT)) {
             configView += PREFIX + getString(R.string.r_no_root_check);
@@ -78,7 +78,7 @@ public class MainActivity extends Activity {
         Map<String, String> configData = new HashMap<>();
         configData.put(ConfigManager.WHITE_THEME, String.valueOf(ConfigManager.get(ConfigManager.WHITE_THEME)));
         configData.put(ConfigManager.CANCELABLE, String.valueOf(ConfigManager.get(ConfigManager.CANCELABLE)));
-        configData.put(ConfigManager.NO_NEED_TO_COMFIRM, String.valueOf(ConfigManager.get(ConfigManager.NO_NEED_TO_COMFIRM)));
+        configData.put(ConfigManager.NO_NEED_TO_CONFIRM, String.valueOf(ConfigManager.get(ConfigManager.NO_NEED_TO_CONFIRM)));
         configData.put(ConfigManager.DO_NOT_CHECK_ROOT, String.valueOf(ConfigManager.get(ConfigManager.DO_NOT_CHECK_ROOT)));
         configData.put(ConfigManager.UNROOT_MODE, String.valueOf(ConfigManager.get(ConfigManager.UNROOT_MODE)));
         EventStatistics.record(EventStatistics.CONFIG_DATA, configData);

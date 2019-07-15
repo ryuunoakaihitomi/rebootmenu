@@ -71,8 +71,7 @@ public class ReflectionOnPie {
                     t.printStackTrace();
                 }
             }
-        } else
-            Log.w(TAG, "init: SDK_INT<28,skipping...");
+        } else Log.w(TAG, "init: SDK_INT<28,skipping...");
     }
 
     /**

@@ -105,7 +105,7 @@ public class RootMode extends MyActivity {
             optionSelection.put("i", String.valueOf(i));
             optionSelection.put("isForceMode", String.valueOf(isForceMode));
             //锁屏就直接锁了，不需要确认。
-            if (i != 7 && !ConfigManager.get(ConfigManager.NO_NEED_TO_COMFIRM)) {
+            if (i != 7 && !ConfigManager.get(ConfigManager.NO_NEED_TO_CONFIRM)) {
                 //到二次确认界面时，显示横幅广告
                 AdImpl.showAdView();
                 //确认界面显示（？YN）

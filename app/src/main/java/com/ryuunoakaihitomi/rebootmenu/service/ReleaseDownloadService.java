@@ -11,6 +11,9 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.ryuunoakaihitomi.rebootmenu.MyApplication;
 import com.ryuunoakaihitomi.rebootmenu.R;
 import com.ryuunoakaihitomi.rebootmenu.util.ConfigManager;
@@ -21,9 +24,6 @@ import com.ryuunoakaihitomi.rebootmenu.util.ui.TextToast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 /**
  * Github发布版本下载服务
@@ -161,10 +161,9 @@ public class ReleaseDownloadService extends IntentService implements Handler.Cal
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 request.setRequiresCharging(false).setRequiresDeviceIdle(false);
             }
-            //noinspection ConstantConditions
             long downloadID = manager.enqueue(request);
             new DebugLog(TAG, "id=" + downloadID, null);
-            ConfigManager.setPrivateLong(this, ConfigManager.LASTEST_RELEASE_DOWNLOAD_ID, downloadID);
+            ConfigManager.setPrivateLong(this, ConfigManager.LATEST_RELEASE_DOWNLOAD_ID, downloadID);
         } catch (Throwable throwable) {
             new DebugLog(throwable, "DownloadRelease", true);
             handlerMessenger(UIActions.ACTIONS_FAILED);

@@ -12,14 +12,14 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 
+import androidx.annotation.Nullable;
+
 import com.ryuunoakaihitomi.rebootmenu.R;
 import com.ryuunoakaihitomi.rebootmenu.activity.LockScreenAssist;
 import com.ryuunoakaihitomi.rebootmenu.activity.Shortcut;
 import com.ryuunoakaihitomi.rebootmenu.util.ConfigManager;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 import com.ryuunoakaihitomi.rebootmenu.util.ui.TextToast;
-
-import androidx.annotation.Nullable;
 
 /**
  * 自定义Activity：亮屏监听，设备管理员申请回调
@@ -132,7 +132,7 @@ public class MyActivity extends Activity {
                 devicePolicyManager.lockNow();
                 /*如果是在App Shortcut中调用不要解锁
                  如果需要二次确认，禁用设备管理器。*/
-                if (!isShortcut && !ConfigManager.get(ConfigManager.NO_NEED_TO_COMFIRM))
+                if (!isShortcut && !ConfigManager.get(ConfigManager.NO_NEED_TO_CONFIRM))
                     devicePolicyManager.removeActiveAdmin(componentName);
             } else
                 new TextToast(this, getString(R.string.lockscreen_failed));
