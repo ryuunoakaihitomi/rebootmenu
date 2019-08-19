@@ -47,7 +47,7 @@ public class SpecialSupportTest {
      * DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN
      * Settings.ACTION_ACCESSIBILITY_SETTINGS   （可以手动打开）
      */
-    @Test(expected = AssertionError.class)
+    @Test()
     @RequiresDevice
     public void checkTVSupport() {
         if (SpecialSupport.isAndroidTV(ContextInit.ctx())) {
