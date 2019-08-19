@@ -116,7 +116,8 @@ public class UnRootMode extends MyActivity {
         }
         mainDialog.setItems(uiTextList, mainListener);
         //节省手表屏幕空间，而且因为容易看出，这也不算是一个彩蛋了
-        if (!SpecialSupport.isAndroidWearOS(this))
+        //Android TV用遥控器可能会选择到这里
+        if (!SpecialSupport.isAndroidWearOS(this) && !SpecialSupport.isAndroidTV(this))
             //egg
             mainDialog.setNeutralButton(" ", (dialogInterface, i) -> {
                 new TextToast(getApplicationContext(), true, "はなび");
@@ -150,6 +151,8 @@ public class UnRootMode extends MyActivity {
         if (dialogInstance == null) return;
         AdImpl.setFlagNotFocusable(dialogInstance);
         dialogInstance.setOnShowListener(dialog -> {
+            //Android TV无法使用快捷方式，放大镜也没有意义
+            if (SpecialSupport.isAndroidTV(this)) return;
             ListView listView = dialogInstance.getListView();
             listView.setOnItemLongClickListener((parent, view, position, id) -> {
                 DebugLog.w(TAG, "onCreate: OnItemLongClickListener " + position);

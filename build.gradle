@@ -20,6 +20,9 @@ buildscript {
         // Crashlytics依赖
         classpath 'com.google.gms:google-services:4.3.0'
         classpath 'io.fabric.tools:gradle:1.26.1'
+
+        //https://github.com/mannodermaus/android-junit5
+        classpath "de.mannodermaus.gradle.plugins:android-junit5:1.5.1.0"
     }
 }
 

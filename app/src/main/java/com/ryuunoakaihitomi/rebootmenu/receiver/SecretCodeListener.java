@@ -31,6 +31,10 @@ public class SecretCodeListener extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        if (intent == null || context == null) {
+            DebugLog.e(TAG, "Intent or context or both are null.");
+            return;
+        }
         if ("android.provider.Telephony.SECRET_CODE".equals(intent.getAction())) {
             String code = Objects.requireNonNull(intent.getData()).getHost();
             new TextToast(context, true, context.getString(R.string.hidden_function_description));

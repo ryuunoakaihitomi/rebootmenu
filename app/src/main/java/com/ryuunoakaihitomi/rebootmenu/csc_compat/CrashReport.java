@@ -57,6 +57,7 @@ public class CrashReport {
             //小米设备的话看看是不是原版系统
             if ("Xiaomi".equals(Build.MANUFACTURER))
                 Crashlytics.setBool("isMIUI", SpecialSupport.isMIUI());
+            Crashlytics.setString("serviceAvailableState", GmsApiWrapper.fetchStateString(context));
         }
         ConfigManager.setPrivateLong(context, ConfigManager.APP_LAUNCH_TIMES, ++launchTimes);
     }

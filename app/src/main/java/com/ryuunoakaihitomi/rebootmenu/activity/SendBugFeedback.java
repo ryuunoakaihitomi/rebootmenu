@@ -26,6 +26,8 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
+import androidx.annotation.Nullable;
+
 import com.ryuunoakaihitomi.rebootmenu.BuildConfig;
 import com.ryuunoakaihitomi.rebootmenu.R;
 import com.ryuunoakaihitomi.rebootmenu.csc_compat.CrashReport;
@@ -49,8 +51,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.TreeMap;
-
-import androidx.annotation.Nullable;
 
 
 /**
@@ -333,23 +333,23 @@ public class SendBugFeedback extends Activity implements View.OnClickListener, V
 
     @Override
     public boolean onLongClick(View view) {
-        switch (view.getId()) {
-            case R.id.password:
-                //长按显示或隐藏密码，保持光标位置不变
-                int start = passwordEdit.getSelectionStart(), end = passwordEdit.getSelectionEnd();
-                boolean isOnlyACursor = start == end;
-                DebugLog.d(TAG, "onLongClick: passwordEdit's Selection: " + (isOnlyACursor ? start : start + "<->" + end));
-                passwordEdit.setInputType(passwordEdit.getInputType() != InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
-                        ? InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
-                        : InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                if (isOnlyACursor) passwordEdit.setSelection(start);
-                else passwordEdit.setSelection(start, end);
+        if (view.getId() == R.id.password) {
+            //长按显示或隐藏密码，保持光标位置不变
+            int start = passwordEdit.getSelectionStart(), end = passwordEdit.getSelectionEnd();
+            boolean isOnlyACursor = start == end;
+            DebugLog.d(TAG, "onLongClick: passwordEdit's Selection: " + (isOnlyACursor ? start : start + "<->" + end));
+            passwordEdit.setInputType(passwordEdit.getInputType() != InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+                    ? InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+                    : InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            if (isOnlyACursor) passwordEdit.setSelection(start);
+            else passwordEdit.setSelection(start, end);
         }
         return true;
     }
 
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
         if (compoundButton.equals(hideBuildInfoChkBx)) {
             // 这里的事务逻辑是，当隐藏build info选项被选为可用时，回访选项强制开启。
             // 反之回访选项则回到选择之前的状态

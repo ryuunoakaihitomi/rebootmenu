@@ -18,6 +18,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.ryuunoakaihitomi.rebootmenu.R;
 import com.ryuunoakaihitomi.rebootmenu.service.UnRootAccessibility;
 import com.ryuunoakaihitomi.rebootmenu.util.ui.TextToast;
+import com.ryuunoakaihitomi.rebootmenu.util.ui.UIUtils;
 
 /**
  * 本应用中免（无需）root模式的工具集合
@@ -44,14 +45,18 @@ public class URMUtils {
         new DebugLog("lockScreen", DebugLog.LogLevel.V);
         //设备管理器是否启用
         boolean active = devicePolicyManager.isAdminActive(componentName);
-        //Android P
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O_MR1) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             //自动移除不必要的管理员，避免在卸载时造成困扰
             if (active) devicePolicyManager.removeActiveAdmin(componentName);
             //请求打开辅助服务设置
             if (!isAccessibilitySettingsOn(activity.getApplicationContext())) {
                 new TextToast(activity.getApplicationContext(), activity.getString(R.string.service_disabled));
-                activity.startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
+                try {
+                    activity.startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
+                } catch (Throwable t) {
+                    t.printStackTrace();
+                    UIUtils.visibleHint(activity, R.string.accessibility_settings_not_found);
+                }
             } else
                 LocalBroadcastManager.getInstance(activity).sendBroadcast(new Intent(UnRootAccessibility.LOCK_SCREEN_ACTION));
             activity.finish();
@@ -61,7 +66,11 @@ public class URMUtils {
                 Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
                 intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, componentName);
                 intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, activity.getString(R.string.service_explanation));
-                activity.startActivityForResult(intent, requestCode);
+                try {
+                    activity.startActivityForResult(intent, requestCode);
+                } catch (ActivityNotFoundException e) {
+                    UIUtils.visibleHint(activity, R.string.hint_add_dev_admin_activity_not_found);
+                }
             } else {
                 devicePolicyManager.lockNow();
                 if (needConfig)
@@ -91,7 +100,10 @@ public class URMUtils {
                 try {
                     //匪夷所思，这个都能阉割掉(
                     activity.startActivity(intent);
-                } catch (ActivityNotFoundException e) {
+                }
+                // SecurityException:BYD(com.byd.vehiclesettings/.system.mvp.view.app.AccessibilityActivity)
+                // requires android.permission.GRANT_RUNTIME_PERMISSIONS
+                catch (ActivityNotFoundException | SecurityException e) {
                     new TextToast(activity, true, activity.getString(R.string.accessibility_settings_not_found), true);
                 }
             } else {

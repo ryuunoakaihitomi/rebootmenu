@@ -18,6 +18,7 @@ import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Build;
 import android.text.Html;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -398,6 +399,29 @@ public class UIUtils {
         activity.startActivity(activity.getPackageManager().getLaunchIntentForPackage(activity.getPackageName())
                 .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
         activity.finish();
+    }
+
+    /**
+     * 可视化提示，提示一些“不可能”的错误
+     * 出现在短toast和logcat中
+     *
+     * @param context      Toast显示使用的Context
+     * @param hintResIndex 提示
+     */
+    public static void visibleHint(Context context, @StringRes int hintResIndex) {
+        int lastStackCount = 0;
+        StackTraceElement[] elements = Thread.currentThread().getStackTrace();
+        for (StackTraceElement e : elements) {
+            //Log.i(String.valueOf(lastStackCount), e.getClassName());
+            if (e.getClassName().contains(TAG)) break;
+            lastStackCount++;
+        }
+        String className = elements[++lastStackCount].getClassName();
+        String[] names = className.split("\\.");
+        String classTag = names[names.length - 1];
+        String hint = context.getString(hintResIndex);
+        Log.i(classTag, "visibleHint: " + hint);
+        new TextToast(context, hint);
     }
 
     //半透明级别(alphaShow参数)

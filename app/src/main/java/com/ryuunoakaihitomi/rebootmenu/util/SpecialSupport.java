@@ -1,11 +1,13 @@
 package com.ryuunoakaihitomi.rebootmenu.util;
 
 import android.annotation.TargetApi;
+import android.app.UiModeManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.SystemProperties;
 import android.text.TextUtils;
@@ -65,7 +67,7 @@ public class SpecialSupport {
     }
 
     /**
-     * 检测是不是Android TV设备
+     * 检测是否支持Live TV这个feature
      *
      * @param context {@link PackageManager}
      * @return boolean
@@ -74,6 +76,18 @@ public class SpecialSupport {
     public static boolean hasTvFeature(Context context) {
         return context.getPackageManager()
                 .hasSystemFeature(PackageManager.FEATURE_LIVE_TV);
+    }
+
+    /**
+     * 检测是否在Android TV环境下
+     *
+     * @param context {@link PackageManager}
+     * @return boolean
+     * @see <a href="https://developer.android.com/training/tv/start/hardware.html#check-features">处理 TV 硬件 - 检查硬件功能</a>
+     */
+    public static boolean isAndroidTV(Context context) {
+        UiModeManager uiModeManager = (UiModeManager) context.getSystemService(Context.UI_MODE_SERVICE);
+        return uiModeManager.getCurrentModeType() == Configuration.UI_MODE_TYPE_TELEVISION;
     }
 
     //静态集合不需要实例化

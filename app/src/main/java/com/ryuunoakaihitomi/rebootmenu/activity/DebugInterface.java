@@ -34,6 +34,7 @@ import com.ryuunoakaihitomi.rebootmenu.MyApplication;
 import com.ryuunoakaihitomi.rebootmenu.R;
 import com.ryuunoakaihitomi.rebootmenu.activity.base.Constants;
 import com.ryuunoakaihitomi.rebootmenu.csc_compat.CrashReport;
+import com.ryuunoakaihitomi.rebootmenu.csc_compat.GmsApiWrapper;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 import com.ryuunoakaihitomi.rebootmenu.util.ShellUtils;
 import com.ryuunoakaihitomi.rebootmenu.util.SpecialSupport;
@@ -307,6 +308,9 @@ public class DebugInterface extends Activity {
                     break;
                 case 'I':
                     print(RMPowerActionManager.getInstance().isServiceAvailable());
+                    break;
+                case 'g':
+                    print(GmsApiWrapper.fetchStateString(this));
                     break;
                 default:
                     print(param);

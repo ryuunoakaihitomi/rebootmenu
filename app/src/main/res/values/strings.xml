@@ -95,5 +95,7 @@
     <string name="auto_send_crash_report">自动发送错误报告(适合没有Github账号的用户,下次生效)</string>
     <string name="auto_crash_report_hint">你不会再次看到此界面,因为之后所有的崩溃异常都将自动上传</string>
     <string name="ad_opened_toast">点击叉号关闭广告\n或者点击广告帮开发者盈利</string>
-    <string name="accessibility_settings_not_found">找不到无障碍服务设置页面,请自行前往并开启本应用的辅助服务</string>
+    <string name="accessibility_settings_not_found">找不到无障碍服务设置页面或出现其他错误,请自行前往并开启本应用的辅助服务</string>
+    <string name="hint_add_dev_admin_activity_not_found">DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN匹配的活动不存在</string>
+    <string name="hint_android_tv_error">不支持Android P以下的Android TV</string>
 </resources>

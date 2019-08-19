@@ -4,6 +4,9 @@ apply plugin: 'com.android.application'
 // Crashlytics依赖
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'io.fabric'
+
+apply plugin: "de.mannodermaus.android-junit5"
+
 //加载载入properties的gradle模块
 apply from: "${rootProject.file('loadProperties.gradle')}"
 android {
@@ -24,6 +27,8 @@ android {
         buildConfigField('String', 'AD_INTERSTITIAL_UNIT', '\"' + cfgProps.getProperty('admobInterstitialAdUnit') + '\"')
         buildConfigField('String', 'AD_VIEW_UNIT', '\"' + cfgProps.getProperty('admobAdViewUnit') + '\"')
         buildConfigField('String', 'GITHUB_PAT', '\"' + cfgProps.getProperty('githubPAT') + '\"')
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -34,6 +39,11 @@ android {
             shrinkResources true
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
         }
     }
 }
@@ -52,7 +62,12 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:17.0.1'
     implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
     //用来显示广告
-    implementation 'com.google.firebase:firebase-ads:18.1.0'
+    implementation 'com.google.firebase:firebase-ads:18.1.1'
+
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test:rules:1.2.0'
+    testImplementation "org.junit.jupiter:junit-jupiter-api:5.5.1"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.5.1"
 }
 
 android.applicationVariants.all { variant ->

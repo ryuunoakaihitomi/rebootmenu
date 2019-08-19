@@ -3,15 +3,19 @@ package com.ryuunoakaihitomi.rebootmenu.activity;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
+import com.ryuunoakaihitomi.rebootmenu.BuildConfig;
 import com.ryuunoakaihitomi.rebootmenu.R;
 import com.ryuunoakaihitomi.rebootmenu.csc_compat.EventStatistics;
 import com.ryuunoakaihitomi.rebootmenu.util.ConfigManager;
 import com.ryuunoakaihitomi.rebootmenu.util.DebugLog;
 import com.ryuunoakaihitomi.rebootmenu.util.ShellUtils;
+import com.ryuunoakaihitomi.rebootmenu.util.SpecialSupport;
 import com.ryuunoakaihitomi.rebootmenu.util.ui.TextToast;
+import com.ryuunoakaihitomi.rebootmenu.util.ui.UIUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,6 +31,13 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         new DebugLog("MainActivity.onCreate", DebugLog.LogLevel.V);
+        //不支持旧版本的Android TV，理由：仅支持打开系统电源菜单意义不大
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P && SpecialSupport.isAndroidTV(this)) {
+            UIUtils.visibleHint(this, R.string.hint_android_tv_error);
+            startActivity(new Intent(Intent.ACTION_UNINSTALL_PACKAGE, Uri.parse("package:" + BuildConfig.APPLICATION_ID)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            finish();
+            return;
+        }
         //对于本应用的性质而言，Monkey Test没有必要，而且也容易造成测试机器电源状态改变
         if (ActivityManager.isUserAMonkey()) {
             new TextToast(this, true, getString(R.string.monkey_test_notice));
