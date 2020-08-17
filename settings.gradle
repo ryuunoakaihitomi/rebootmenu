@@ -1,1 +1,2 @@
-include ':app', ':libandroidhiddenapi'
+include ':app'
+rootProject.name = "rebootmenu"
