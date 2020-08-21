@@ -1,4 +1,4 @@
-package github.ryuunoakaihitomi.powerpanel
+package github.ryuunoakaihitomi.powerpanel.desc
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
@@ -10,8 +10,7 @@ data class PowerInfo(
     var label: CharSequence = "",
     // 由于每个的标签都不一样，可以用作标识符
     @StringRes var labelResId: Int = ResourcesCompat.ID_NULL,
-    @DrawableRes var iconResId: Int = ResourcesCompat.ID_NULL,
-    var execution: Runnable = Runnable { }
+    @DrawableRes var iconResId: Int = ResourcesCompat.ID_NULL
 ) {
 
     companion object {
@@ -22,5 +21,3 @@ data class PowerInfo(
         }
     }
 }
-
-fun PowerInfo.run() = this.execution.run()

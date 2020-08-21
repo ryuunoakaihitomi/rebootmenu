@@ -6,4 +6,4 @@
 
 ### 备注
 
-如果及其注重隐私或者没有注册Firebase服务，可以不去准备`google-services.json`并删除掉[应用层`build.gradle`](/app/build.gradle)中Firebase的相关依赖项，注释中有详细说明。
+如果想打包不含Firebase组件的版本，可以不去准备`google-services.json`并前往[应用层`build.gradle`](/app/build.gradle)中禁用Firebase组件，注释中有详细说明。

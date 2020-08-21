@@ -1,4 +1,4 @@
-# 黑魔法
+# 黑魔法 getAlertDialogMessageView
 -keepclassmembernames class androidx.appcompat.app.AlertDialog {
     androidx.appcompat.app.AlertController mAlert;
 }

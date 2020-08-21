@@ -1,25 +1,26 @@
-package github.ryuunoakaihitomi.powerpanel
+package github.ryuunoakaihitomi.powerpanel.ui.main
 
 import android.graphics.Typeface
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import androidx.annotation.StringRes
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.text.set
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.topjohnwu.superuser.Shell
 import es.dmoral.toasty.Toasty
-import github.ryuunoakaihitomi.poweract.PowerActX
+import github.ryuunoakaihitomi.powerpanel.MyApplication
+import github.ryuunoakaihitomi.powerpanel.R
+import github.ryuunoakaihitomi.powerpanel.desc.PowerInfo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class PowerViewModel : ViewModel() {
+class PowerViewModel : AndroidViewModel(MyApplication.getInstance()) {
 
     /* Root模式：分隔开受限模式 */
     val rootMode: LiveData<Boolean>
@@ -34,49 +35,55 @@ class PowerViewModel : ViewModel() {
         get() = _title
     private var _title = MutableLiveData<String>()
 
-    /* 观察对象，提供界面资源和操作接口 */
+    /* 观察对象，提供界面资源 */
     val infoArray: LiveData<Array<PowerInfo>>
         get() = _infoArray
     private var _infoArray = MutableLiveData<Array<PowerInfo>>()
 
-    fun goto(activity: AppCompatActivity) {
+    /* 观察对象，执行回调 */
+    val labelResId: LiveData<Int>
+        get() = _labelResId
+    private var _labelResId = MutableLiveData<Int>()
+
+    // 用来显示对话框
+    fun prepare() {
         GlobalScope.launch(Dispatchers.IO) {
             val isRoot = Shell.rootAccess() // 在这里提供root状态
             viewModelScope.launch {
                 _rootMode.value = isRoot
                 forceMode.value = false
-                changeInfo(activity)
+                changeInfo()
             }
         }
     }
 
-    fun reverseForceMode(activity: AppCompatActivity) {
-        forceMode.value = getForceMode().not()
-        if (forceMode.value == true) {
-            Toasty.warning(
-                activity,
-                R.string.toast_switch_to_force_mode
-            ).show()
-        } else {
-            Toasty.normal(
-                activity,
-                R.string.toast_switch_to_privileged_mode
-            ).show()
-        }
-        changeInfo(activity)
+    // 用来执行操作
+    fun call(@StringRes labelResId: Int) {
+        _labelResId.value = labelResId
     }
 
-    private fun changeInfo(activity: AppCompatActivity) {
-        val lockScreen = provide(R.string.func_lock_screen, activity)
-        val showSysPowerDialog = provide(R.string.func_sys_pwr_menu, activity)
-        val reboot = provide(R.string.func_reboot, activity)
-        val shutdown = provide(R.string.func_shutdown, activity)
-        val recovery = provide(R.string.func_recovery, activity)
-        val bootloader = provide(R.string.func_bootloader, activity)
-        val softReboot = provide(R.string.func_soft_reboot, activity)
-        val restartSysUi = provide(R.string.func_restart_sys_ui, activity)
-        val safeMode = provide(R.string.func_safe_mode, activity)
-        val lockScreenPrivileged = provide(R.string.func_lock_screen_privileged, activity)
+    fun reverseForceMode() {
+        forceMode.value = getForceMode().not()
+        if (forceMode.value == true) {
+            Toasty.warning(app(), R.string.toast_switch_to_force_mode).show()
+        } else {
+            Toasty.normal(app(), R.string.toast_switch_to_privileged_mode).show()
+        }
+        changeInfo()
+    }
+
+    private fun changeInfo() {
+
+        val lockScreen = provide(R.string.func_lock_screen)
+        val showSysPowerDialog = provide(R.string.func_sys_pwr_menu)
+        val reboot = provide(R.string.func_reboot)
+        val shutdown = provide(R.string.func_shutdown)
+        val recovery = provide(R.string.func_recovery)
+        val bootloader = provide(R.string.func_bootloader)
+        val softReboot = provide(R.string.func_soft_reboot)
+        val restartSysUi = provide(R.string.func_restart_sys_ui)
+        val safeMode = provide(R.string.func_safe_mode)
+        val lockScreenPrivileged = provide(R.string.func_lock_screen_privileged)
 
         /* 这里定义了各个选项的顺序，这个顺序已经经过反复的试验，一般不需要更改 */
         val normalActions = arrayOf(lockScreen, showSysPowerDialog)
@@ -91,7 +98,7 @@ class PowerViewModel : ViewModel() {
             lockScreenPrivileged
         )
 
-        val rawTitle = activity.title.toString()
+        val rawTitle = app().getString(R.string.app_name)
         if (rootMode.value == true) {
             _title.value = rawTitle
             _infoArray.value = privilegedActions
@@ -99,94 +106,70 @@ class PowerViewModel : ViewModel() {
             _title.value = String.format(
                 "%s %s",
                 rawTitle,
-                MyApplication.getInstance()
-                    .getString(R.string.title_dialog_restricted_mode)
+                app().getString(R.string.title_dialog_restricted_mode)
             )
             _infoArray.value = normalActions
         }
     }
 
-    private fun provide(@StringRes labelResId: Int, activity: AppCompatActivity): PowerInfo {
-        val callback = getGlobalCallback(activity)
-
-        //<editor-fold desc="定义电源信息">
+    //<editor-fold desc="定义电源信息">
+    private fun provide(@StringRes labelResId: Int): PowerInfo {
         val powerInfo = PowerInfo()
         return when (labelResId) {
             R.string.func_lock_screen -> {
-                powerInfo.apply {
-                    iconResId = R.drawable.ic_baseline_lock_24
-                    execution = Runnable { lockScreenWithTip(activity, callback) }
-                }
+                powerInfo.apply { iconResId = R.drawable.ic_baseline_lock_24 }
             }
             R.string.func_sys_pwr_menu -> {
-                powerInfo.apply {
-                    iconResId = R.drawable.ic_baseline_menu_24
-                    execution = Runnable { showPowerDialogWithTip(activity, callback) }
-                }
+                powerInfo.apply { iconResId = R.drawable.ic_baseline_menu_24 }
             }
             R.string.func_reboot -> {
                 powerInfo.apply {
                     hasForceMode = true
                     iconResId = R.drawable.ic_baseline_settings_backup_restore_24
-                    execution = Runnable { PowerActX.reboot(callback, getForceMode()) }
                 }
             }
             R.string.func_shutdown -> {
                 powerInfo.apply {
                     hasForceMode = true
                     iconResId = R.drawable.ic_baseline_mobile_off_24
-                    execution = Runnable { PowerActX.shutdown(callback, getForceMode()) }
                 }
             }
             R.string.func_recovery -> {
                 powerInfo.apply {
                     hasForceMode = true
                     iconResId = R.drawable.ic_baseline_restore_page_24
-                    execution = Runnable { PowerActX.recovery(callback, getForceMode()) }
                 }
             }
             R.string.func_bootloader -> {
                 powerInfo.apply {
                     hasForceMode = true
                     iconResId = R.drawable.ic_baseline_system_update_24
-                    execution = Runnable { PowerActX.bootloader(callback, getForceMode()) }
                 }
             }
             R.string.func_soft_reboot -> {
-                powerInfo.apply {
-                    iconResId = R.drawable.ic_baseline_power_24
-                    execution = Runnable { PowerActX.softReboot(callback) }
-                }
+                powerInfo.apply { iconResId = R.drawable.ic_baseline_power_24 }
             }
             R.string.func_restart_sys_ui -> {
-                powerInfo.apply {
-                    iconResId = R.drawable.ic_baseline_aspect_ratio_24
-                    execution = Runnable {
-                        restartSysUi()
-                        callback.done()
-                    }
-                }
+                powerInfo.apply { iconResId = R.drawable.ic_baseline_aspect_ratio_24 }
             }
             R.string.func_safe_mode -> {
                 powerInfo.apply {
                     hasForceMode = true
                     iconResId = R.drawable.ic_baseline_android_24
-                    execution = Runnable { PowerActX.safeMode(callback, getForceMode()) }
                 }
             }
             R.string.func_lock_screen_privileged -> {
-                powerInfo.apply {
-                    iconResId = R.drawable.ic_baseline_lock_24
-                    execution = Runnable { PowerActX.lockScreen(callback) }
-                }
+                powerInfo.apply { iconResId = R.drawable.ic_baseline_lock_24 }
             }
             else -> powerInfo
         }.apply {
-            label = colorForceLabel(activity.getString(labelResId), this)
+            label = colorForceLabel(app().getString(labelResId), this)
             this.labelResId = labelResId
         }
-        //</editor-fold>
     }
+    //</editor-fold>
+
+    private fun app() = getApplication<MyApplication>()
 
     fun getForceMode() = forceMode.value ?: false
 
@@ -198,9 +181,8 @@ class PowerViewModel : ViewModel() {
             val range = 0..forceLabel.length
             forceLabel[range] = ForegroundColorSpan(
                 ResourcesCompat.getColor(
-                    MyApplication.getInstance().resources,
-                    R.color.colorForceModeItem,
-                    null
+                    app().resources,
+                    R.color.colorForceModeItem, null
                 )
             )
             forceLabel[range] = StyleSpan(Typeface.BOLD)

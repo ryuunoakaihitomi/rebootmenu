@@ -1,17 +1,22 @@
-package github.ryuunoakaihitomi.powerpanel
+package github.ryuunoakaihitomi.powerpanel.util
 
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Typeface
 import android.net.Uri
 import android.os.Build
-import android.util.Log
+import android.text.SpannableString
+import android.text.style.StyleSpan
+import android.text.style.TypefaceSpan
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
+import androidx.core.text.set
 import com.topjohnwu.superuser.Shell
 import es.dmoral.toasty.Toasty
+import github.ryuunoakaihitomi.powerpanel.R
 import java.util.*
 
 
@@ -70,4 +75,12 @@ fun Context.openUrlInBrowser(url: String) {
     } catch (t: Throwable) {
         Log.e(TAG, "openUrlInBrowser: ", t)
     }
+}
+
+fun CharSequence.emphasize(): SpannableString = let {
+    val spannableString = SpannableString(it)
+    val range = 0..it.length
+    spannableString[range] = StyleSpan(Typeface.BOLD)
+    spannableString[range] = TypefaceSpan("monospace")
+    spannableString
 }

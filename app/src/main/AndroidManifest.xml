@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="github.ryuunoakaihitomi.powerpanel">
 
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
@@ -7,12 +8,14 @@
     <application
         android:name=".MyApplication"
         android:allowBackup="false"
+        android:appCategory="productivity"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:targetApi="o">
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.main.MainActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,12 +24,12 @@
         </activity>
 
         <activity
-            android:name=".ShortcutActivity"
+            android:name=".ui.ShortcutActivity"
             android:excludeFromRecents="true"
             android:exported="true" />
 
         <activity
-            android:name=".VolumeControlActivity"
+            android:name=".ui.VolumeControlActivity"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE_PREFERENCES" />
@@ -34,7 +37,7 @@
         </activity>
 
         <service
-            android:name=".PdTileService"
+            android:name=".ui.PdTileService"
             android:icon="@android:drawable/ic_lock_power_off"
             android:label="@string/tile_pwr_menu"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">

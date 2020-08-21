@@ -1,4 +1,4 @@
-package github.ryuunoakaihitomi.powerpanel
+package github.ryuunoakaihitomi.powerpanel.ui.main
 
 import android.content.DialogInterface
 import android.os.Bundle
@@ -12,6 +12,13 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import es.dmoral.toasty.Toasty
+import github.ryuunoakaihitomi.powerpanel.BuildConfig
+import github.ryuunoakaihitomi.powerpanel.MyApplication
+import github.ryuunoakaihitomi.powerpanel.R
+import github.ryuunoakaihitomi.powerpanel.desc.PowerExecution
+import github.ryuunoakaihitomi.powerpanel.desc.PowerInfo
+import github.ryuunoakaihitomi.powerpanel.ui.ShortcutActivity
+import github.ryuunoakaihitomi.powerpanel.util.*
 import io.noties.markwon.Markwon
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin
 import org.apache.commons.io.IOUtils
@@ -25,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         private const val DIALOG_ALPHA = 0.85f
 
         // 项目链接
-        private const val SOURCE_PATH_LINK = "https://github.com/ryuunoakaihitomi/rebootmenu/"
+        private const val SOURCE_PATH_LINK = "https://github.com/ryuunoakaihitomi/rebootmenu"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,6 +40,9 @@ class MainActivity : AppCompatActivity() {
         makeTransparent()
         var mainDialog: AlertDialog = AlertDialog.Builder(this).create()
         val powerViewModel = ViewModelProvider(this)[PowerViewModel::class.java]
+        powerViewModel.labelResId.observe(this) {
+            PowerExecution.execute(it, this, powerViewModel.getForceMode())
+        }
         powerViewModel.infoArray.observe(this) {
             mainDialog = AlertDialog.Builder(this).apply {
                 setTitle(powerViewModel.title.value)
@@ -49,32 +59,34 @@ class MainActivity : AppCompatActivity() {
                                 item.label
                             )
                         )
+                        // 再次确认
                         setItems(
                             arrayOf(
-                                resources.getString(android.R.string.ok),
-                                resources.getString(android.R.string.no)
+                                resources.getText(android.R.string.ok).emphasize(),
+                                resources.getText(android.R.string.no).emphasize()
                             )
                         ) { _, confirmWhich ->
-                            // OK
-                            if (confirmWhich == 0) {
-                                item.run()
+                            val ok = confirmWhich == 0
+                            FirebaseUtils.logDialogCancel(item.labelResId, ok.not())
+                            if (ok) {
+                                powerViewModel.call(item.labelResId)
                                 // dismiss防止窗口泄露
                                 dialog.dismiss()
                             } else {
-                                powerViewModel.goto(this@MainActivity)
+                                powerViewModel.prepare()
                             }
                         }
-                        setOnCancelListener { powerViewModel.goto(this@MainActivity) }
+                        setOnCancelListener { powerViewModel.prepare() }
                         setNeutralButton(null, null)
                         show()
                     } else {
-                        item.run()
+                        powerViewModel.call(item.labelResId)
                         dialog.dismiss()
                     }
                 }
                 if (powerViewModel.rootMode.value == true) {
                     setNeutralButton(R.string.btn_dialog_switch_mode) { _, _ ->
-                        powerViewModel.reverseForceMode(this@MainActivity)
+                        powerViewModel.reverseForceMode()
                     }
                 }
                 setPositiveButton(R.string.btn_dialog_help) { _, _ ->
@@ -90,7 +102,7 @@ class MainActivity : AppCompatActivity() {
                     /* 去除操作选项 */
                     setItems(null, null)
                     setNeutralButton(null, null)
-                    setOnCancelListener { powerViewModel.goto(this@MainActivity) }
+                    setOnCancelListener { powerViewModel.prepare() }
                     /* 主要信息 */
                     val alertDialogMessageView = BlackMagic.getAlertDialogMessageView(show())
                     Markwon.builder(this@MainActivity)
@@ -103,7 +115,7 @@ class MainActivity : AppCompatActivity() {
                                 Charset.defaultCharset()
                             )
                         )
-                    Toasty.info(
+                    Toasty.normal(
                         this@MainActivity,
                         "${BuildConfig.VERSION_NAME}\n${BuildConfig.VERSION_CODE}",
                         Toasty.LENGTH_LONG
@@ -142,8 +154,10 @@ class MainActivity : AppCompatActivity() {
             // 半透明
             mainDialog.window?.decorView?.alpha = DIALOG_ALPHA
             // 测试：崩溃汇报组件是否正常工作
-            mainDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnLongClickListener {
-                throw RuntimeException("Test Crash")
+            if (BuildConfig.DEBUG) {
+                mainDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnLongClickListener {
+                    throw RuntimeException("Test Crash")
+                }
             }
         }
         lifecycle.addObserver(LifecycleEventObserver { _, event ->
@@ -151,6 +165,6 @@ class MainActivity : AppCompatActivity() {
                 mainDialog.dismiss()
             }
         })
-        powerViewModel.goto(this)
+        powerViewModel.prepare()
     }
 }

@@ -1,3 +1,7 @@
+## About
+
+This android app is used to control the power state.
+
 ## Author
 [@ryuunoakaihitomi github.com](https://github.com/ryuunoakaihitomi)
 

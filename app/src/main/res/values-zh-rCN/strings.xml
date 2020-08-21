@@ -10,7 +10,8 @@
     <string name="func_soft_reboot">软重启</string>
     <string name="func_restart_sys_ui">重启系统UI</string>
     <string name="func_safe_mode">安全模式</string>
-    <string name="func_lock_screen_privileged">锁屏（特权）</string>
+    <!-- 使用半角符号节省长度用来显示App shortcut -->
+    <string name="func_lock_screen_privileged">锁屏(特权)</string>
     <string name="title_dialog_restricted_mode">受限模式</string>
     <string name="toast_switch_to_force_mode">切换成强制模式</string>
     <string name="toast_switch_to_privileged_mode">切换成特权模式</string>

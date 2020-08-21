@@ -11,7 +11,7 @@
 
 受限模式可能需要**常驻**的**无障碍服务**，所以启用后会留有通知以保持前台状态。用户可以通过手动屏蔽通知，在非原生系统中，用户应该尽可能使用其自带机制~~如白名单，最近任务卡片锁定，电池优化等~~保留后台。
 
-长按项目可以创建启动器快捷方式，下拉任务栏有一个叫*电源菜单*的磁贴。
+长按项目可以创建启动器快捷方式。从Android7.0开始，下拉任务栏有一个叫*电源菜单*的磁贴。
 
 为防止误操作，在特权模式中，除*锁屏*外，其他项目均需要再次确认。
 
@@ -41,5 +41,4 @@ Apache License 2.0
 
 * [Markwon](https://github.com/noties/Markwon) Apache License 2.0
 
-本应用程序作为在Android平台及其相关支持组件下开发的产物，同时也受到[Android Source Licenses](https://source.android.google.cn/setup/start/licenses)
-的约束。
+本应用程序作为在Android平台及其相关支持组件下开发的产物，同时也受到[Android Source Licenses](https://source.android.google.cn/setup/start/licenses)的约束。

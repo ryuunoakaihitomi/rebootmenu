@@ -1,4 +1,4 @@
-package github.ryuunoakaihitomi.powerpanel
+package github.ryuunoakaihitomi.powerpanel.ui
 
 import android.content.ComponentName
 import android.content.Intent
@@ -8,6 +8,9 @@ import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import androidx.annotation.RequiresApi
 import github.ryuunoakaihitomi.poweract.PaService
+import github.ryuunoakaihitomi.powerpanel.R
+import github.ryuunoakaihitomi.powerpanel.ui.main.MainActivity
+import github.ryuunoakaihitomi.powerpanel.util.Log
 
 /**
  * Power Dialog Tile Service
@@ -15,9 +18,14 @@ import github.ryuunoakaihitomi.poweract.PaService
 @RequiresApi(Build.VERSION_CODES.N)
 class PdTileService : TileService() {
 
+    companion object {
+        private const val TAG = "PdTileService"
+    }
+
     override fun onClick() {
         // 在锁屏时给用户“无效”的反馈
         if (isLocked) {
+            Log.w(TAG, "onClick: locked!")
             qsTile?.run {
                 state = Tile.STATE_UNAVAILABLE
                 updateTile()
