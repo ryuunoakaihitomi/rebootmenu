@@ -29,12 +29,7 @@ class ShortcutActivity : AppCompatActivity() {
         makeTransparent()
         val forceMode = intent.getBooleanExtra(EXTRA_FORCE_MODE, false)
         PowerExecution.execute(
-            intent.getIntExtra(
-                EXTRA_LABEL_RES_ID,
-                ResourcesCompat.ID_NULL
-            ),
-            this,
-            forceMode
+            intent.getIntExtra(EXTRA_LABEL_RES_ID, ResourcesCompat.ID_NULL), this, forceMode
         )
     }
 }

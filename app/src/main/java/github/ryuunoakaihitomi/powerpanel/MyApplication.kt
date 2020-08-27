@@ -4,7 +4,7 @@ import android.app.Application
 import android.os.StrictMode
 import github.ryuunoakaihitomi.poweract.ExternalUtils
 import github.ryuunoakaihitomi.powerpanel.util.BlackMagic
-import github.ryuunoakaihitomi.powerpanel.util.FirebaseUtils
+import github.ryuunoakaihitomi.powerpanel.util.StatisticsUtils
 
 class MyApplication : Application() {
 
@@ -20,10 +20,11 @@ class MyApplication : Application() {
         myApplication = this
         if (BuildConfig.DEBUG) {
             StrictMode.enableDefaults()
-            FirebaseUtils.disableDataCollection()
+            // 也可以使用DebugView：adb shell setprop debug.firebase.analytics.app com.ryuunoakaihitomi.rebootmenu
+            StatisticsUtils.disableDataCollection()
         }
         if (BuildConfig.DISABLE_FIREBASE) {
-            FirebaseUtils.disableDataCollection()
+            StatisticsUtils.disableDataCollection()
         }
         BlackMagic.toastBugFix()
         ExternalUtils.enableLog(BuildConfig.DEBUG)

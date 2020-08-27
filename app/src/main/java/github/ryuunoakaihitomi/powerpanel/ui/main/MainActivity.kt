@@ -1,19 +1,25 @@
 package github.ryuunoakaihitomi.powerpanel.ui.main
 
 import android.content.DialogInterface
+import android.graphics.Typeface
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.style.StyleSpan
+import android.text.style.TypefaceSpan
 import android.widget.AdapterView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.pm.ShortcutInfoCompat
+import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.drawable.IconCompat
 import androidx.core.graphics.drawable.toBitmap
+import androidx.core.text.set
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.observe
 import es.dmoral.toasty.Toasty
 import github.ryuunoakaihitomi.powerpanel.BuildConfig
-import github.ryuunoakaihitomi.powerpanel.MyApplication
 import github.ryuunoakaihitomi.powerpanel.R
 import github.ryuunoakaihitomi.powerpanel.desc.PowerExecution
 import github.ryuunoakaihitomi.powerpanel.desc.PowerInfo
@@ -23,10 +29,12 @@ import io.noties.markwon.Markwon
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin
 import org.apache.commons.io.IOUtils
 import java.nio.charset.Charset
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
     companion object {
+        private const val TAG = "MainActivity"
 
         // 窗口透明度
         private const val DIALOG_ALPHA = 0.85f
@@ -42,6 +50,23 @@ class MainActivity : AppCompatActivity() {
         val powerViewModel = ViewModelProvider(this)[PowerViewModel::class.java]
         powerViewModel.labelResId.observe(this) {
             PowerExecution.execute(it, this, powerViewModel.getForceMode())
+        }
+        powerViewModel.shortcutInfoArray.observe(this) { it ->
+            ShortcutManagerCompat.removeAllDynamicShortcuts(this)
+            val maxCount = ShortcutManagerCompat.getMaxShortcutCountPerActivity(this)
+            if (maxCount >= it.size) {
+                Log.d(TAG, "onCreate: Allow app shortcut. ${it.size} in $maxCount")
+                it.forEach {
+                    val unspannedLabel = it.label.toString()
+                    val shortcut = ShortcutInfoCompat.Builder(this, unspannedLabel).run {
+                        setShortLabel(unspannedLabel)
+                        setIcon(IconCompat.createWithResource(applicationContext, it.iconResId))
+                        setIntent(ShortcutActivity.getActionIntent(it.labelResId, false))
+                        build()
+                    }
+                    ShortcutManagerCompat.addDynamicShortcuts(this, listOf(shortcut))
+                }
+            }
         }
         powerViewModel.infoArray.observe(this) {
             mainDialog = AlertDialog.Builder(this).apply {
@@ -67,7 +92,7 @@ class MainActivity : AppCompatActivity() {
                             )
                         ) { _, confirmWhich ->
                             val ok = confirmWhich == 0
-                            FirebaseUtils.logDialogCancel(item.labelResId, ok.not())
+                            StatisticsUtils.logDialogCancel(item.labelResId, ok.not())
                             if (ok) {
                                 powerViewModel.call(item.labelResId)
                                 // dismiss防止窗口泄露
@@ -76,8 +101,12 @@ class MainActivity : AppCompatActivity() {
                                 powerViewModel.prepare()
                             }
                         }
-                        setOnCancelListener { powerViewModel.prepare() }
+                        setOnCancelListener {
+                            StatisticsUtils.logDialogCancel(item.labelResId, true)
+                            powerViewModel.prepare()
+                        }
                         setNeutralButton(null, null)
+                        setPositiveButton(null, null)
                         show()
                     } else {
                         powerViewModel.call(item.labelResId)
@@ -139,16 +168,32 @@ class MainActivity : AppCompatActivity() {
                                     )
                                 )
                             }
-                            addLauncherShortcut(
-                                MyApplication.getInstance(),
-                                item.label, toBitmap(),
-                                ShortcutActivity.getActionIntent(
-                                    item.labelResId,
-                                    powerViewModel.getForceMode()
+                            val unspannedLabel = item.label.toString()
+                            val shortcut = ShortcutInfoCompat.Builder(
+                                applicationContext,
+                                // 使用UUID有两种后果：可以重复添加Icon，修复图标无法变色的bug
+                                UUID.randomUUID().toString()
+                            ).run {
+                                setShortLabel(unspannedLabel)
+                                setLongLabel(unspannedLabel)
+                                setIcon(IconCompat.createWithBitmap(toBitmap()))
+                                setIntent(
+                                    ShortcutActivity.getActionIntent(
+                                        item.labelResId,
+                                        powerViewModel.getForceMode()
+                                    )
                                 )
+                                build()
+                            }
+                            ShortcutManagerCompat.requestPinShortcut(
+                                applicationContext,
+                                shortcut,
+                                null
                             )
                         }
                     }
+                    // 在Android8.0以下和一些自定义系统（自动拒绝）可能没有反馈
+                    Toasty.info(this, R.string.toast_shortcut_added).show()
                     return@OnItemLongClickListener true
                 }
             // 半透明
@@ -167,4 +212,12 @@ class MainActivity : AppCompatActivity() {
         })
         powerViewModel.prepare()
     }
+}
+
+private fun CharSequence.emphasize(): SpannableString = let {
+    val spannableString = SpannableString(it)
+    val range = 0..it.length
+    spannableString[range] = StyleSpan(Typeface.BOLD)
+    spannableString[range] = TypefaceSpan("monospace")
+    spannableString
 }

@@ -3,43 +3,14 @@ package github.ryuunoakaihitomi.powerpanel.util
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.Typeface
 import android.net.Uri
 import android.os.Build
-import android.text.SpannableString
-import android.text.style.StyleSpan
-import android.text.style.TypefaceSpan
-import androidx.core.content.pm.ShortcutInfoCompat
-import androidx.core.content.pm.ShortcutManagerCompat
-import androidx.core.graphics.drawable.IconCompat
-import androidx.core.text.set
 import com.topjohnwu.superuser.Shell
 import es.dmoral.toasty.Toasty
-import github.ryuunoakaihitomi.powerpanel.R
 import java.util.*
 
 
 private const val TAG = "Utils"
-
-fun addLauncherShortcut(
-    context: Context,
-    label: CharSequence,
-    bitmap: Bitmap,
-    intent: Intent
-) {
-    val unspannedLabel = label.toString()
-    // 使用UUID有两种后果：可以重复添加Icon，修复图标无法变色的bug
-    val shortcut = ShortcutInfoCompat.Builder(context, UUID.randomUUID().toString())
-        .setShortLabel(unspannedLabel)
-        .setLongLabel(unspannedLabel)
-        .setIcon(IconCompat.createWithBitmap(bitmap))
-        .setIntent(intent)
-        .build()
-    ShortcutManagerCompat.requestPinShortcut(context, shortcut, null)
-    // 在Android8.0以下和一些自定义系统（自动拒绝）可能没有反馈
-    Toasty.info(context, R.string.toast_shortcut_added).show()
-}
 
 fun Activity.makeTransparent() {
     this.window.decorView.alpha = 0f
@@ -70,17 +41,10 @@ fun restartSysUi() {
 }
 
 fun Context.openUrlInBrowser(url: String) {
-    try {
+    runCatching {
         startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
-    } catch (t: Throwable) {
-        Log.e(TAG, "openUrlInBrowser: ", t)
+    }.onFailure {
+        Log.e(TAG, "openUrlInBrowser: ", it)
+        Toasty.info(this, url).show()
     }
-}
-
-fun CharSequence.emphasize(): SpannableString = let {
-    val spannableString = SpannableString(it)
-    val range = 0..it.length
-    spannableString[range] = StyleSpan(Typeface.BOLD)
-    spannableString[range] = TypefaceSpan("monospace")
-    spannableString
 }

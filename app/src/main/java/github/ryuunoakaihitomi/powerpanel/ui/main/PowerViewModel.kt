@@ -39,6 +39,9 @@ class PowerViewModel : AndroidViewModel(MyApplication.getInstance()) {
     val infoArray: LiveData<Array<PowerInfo>>
         get() = _infoArray
     private var _infoArray = MutableLiveData<Array<PowerInfo>>()
+    val shortcutInfoArray: LiveData<Array<PowerInfo>>
+        get() = _shortcutInfoArray
+    private var _shortcutInfoArray = MutableLiveData<Array<PowerInfo>>()
 
     /* 观察对象，执行回调 */
     val labelResId: LiveData<Int>
@@ -86,7 +89,7 @@ class PowerViewModel : AndroidViewModel(MyApplication.getInstance()) {
         val lockScreenPrivileged = provide(R.string.func_lock_screen_privileged)
 
         /* 这里定义了各个选项的顺序，这个顺序已经经过反复的试验，一般不需要更改 */
-        val normalActions = arrayOf(lockScreen, showSysPowerDialog)
+        val restrictedActions = arrayOf(lockScreen, showSysPowerDialog)
         val privilegedActions = arrayOf(
             reboot,
             shutdown,
@@ -102,13 +105,17 @@ class PowerViewModel : AndroidViewModel(MyApplication.getInstance()) {
         if (rootMode.value == true) {
             _title.value = rawTitle
             _infoArray.value = privilegedActions
+            // https://developer.android.google.cn/guide/topics/ui/shortcuts?hl=en#shortcut-limitations
+            // Although you can publish up to five shortcuts (static and dynamic shortcuts combined) at a time for your app, most launchers can only display four.
+            _shortcutInfoArray.value = privilegedActions.copyOfRange(0, 4)
         } else {
             _title.value = String.format(
                 "%s %s",
                 rawTitle,
                 app().getString(R.string.title_dialog_restricted_mode)
             )
-            _infoArray.value = normalActions
+            _infoArray.value = restrictedActions
+            _shortcutInfoArray.value = restrictedActions
         }
     }
 

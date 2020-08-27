@@ -9,28 +9,28 @@ object Log {
         if (BuildConfig.DEBUG) {
             Log.v(tag, msg)
         }
-        FirebaseUtils.log(Log.VERBOSE, tag, msg)
+        StatisticsUtils.log(Log.VERBOSE, tag, msg)
     }
 
     fun d(tag: String, msg: String) {
         if (BuildConfig.DEBUG) {
             Log.d(tag, msg)
         }
-        FirebaseUtils.log(Log.DEBUG, tag, msg)
+        StatisticsUtils.log(Log.DEBUG, tag, msg)
     }
 
     fun i(tag: String, msg: String) {
         if (BuildConfig.DEBUG) {
             Log.i(tag, msg)
         }
-        FirebaseUtils.log(Log.INFO, tag, msg)
+        StatisticsUtils.log(Log.INFO, tag, msg)
     }
 
     fun w(tag: String, msg: String) {
         if (BuildConfig.DEBUG) {
             Log.w(tag, msg)
         }
-        FirebaseUtils.log(Log.WARN, tag, msg)
+        StatisticsUtils.log(Log.WARN, tag, msg)
 
     }
 
@@ -38,7 +38,7 @@ object Log {
         if (BuildConfig.DEBUG) {
             Log.e(tag, msg)
         }
-        FirebaseUtils.log(Log.ERROR, tag, msg)
+        StatisticsUtils.log(Log.ERROR, tag, msg)
     }
 
     fun e(tag: String, msg: String, throwable: Throwable) {
