@@ -12,13 +12,13 @@ android {
         minSdkVersion 22
         targetSdkVersion 29
         // 版本号：发布日期
-        versionCode 20200827
+        versionCode 20200903
         /*
          版本名说明：
          R3.0.0
          Refactoring 第三次重构+功能更新+缺陷修复
          */
-        versionName "R3.1.1"
+        versionName "R3.1.2"
         resConfigs "en", "zh-rCN"
         // 致用户：可以在这里禁用Firebase，将以下值设为true
         final def disableFirebase = false
@@ -54,14 +54,14 @@ dependencies {
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.0.10'
 
     def lifecycle_version = "2.2.0"
-    implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
     /* 崩溃报告组件 */
     implementation 'com.google.firebase:firebase-analytics-ktx:17.5.0'
     implementation 'com.google.firebase:firebase-crashlytics:17.2.1'
     /* --- 使用的非Google提供开源库 --- */
     // PowerAct
-    implementation 'github.ryuunoakaihitomi.poweract:poweract:1.1.1'
+    implementation 'github.ryuunoakaihitomi.poweract:poweract:1.1.2'
     // Toasty
     implementation 'com.github.GrenderG:Toasty:1.5.0'
     /* libsu */

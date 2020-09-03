@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity() {
                     val shortcut = ShortcutInfoCompat.Builder(this, unspannedLabel).run {
                         setShortLabel(unspannedLabel)
                         setIcon(IconCompat.createWithResource(applicationContext, it.iconResId))
-                        setIntent(ShortcutActivity.getActionIntent(it.labelResId, false))
+                        setIntent(ShortcutActivity.getActionIntent(it.labelResId))
                         build()
                     }
                     ShortcutManagerCompat.addDynamicShortcuts(this, listOf(shortcut))
