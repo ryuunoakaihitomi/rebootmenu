@@ -13,7 +13,6 @@ import github.ryuunoakaihitomi.powerpanel.MyApplication
 import github.ryuunoakaihitomi.powerpanel.R
 import github.ryuunoakaihitomi.powerpanel.util.Log
 import github.ryuunoakaihitomi.powerpanel.util.StatisticsUtils
-import github.ryuunoakaihitomi.powerpanel.util.restartSysUi
 
 object PowerExecution {
 
@@ -48,10 +47,7 @@ object PowerExecution {
             R.string.func_recovery -> PowerActX.recovery(callback, forceMode)
             R.string.func_bootloader -> PowerActX.bootloader(callback, forceMode)
             R.string.func_soft_reboot -> PowerActX.softReboot(callback)
-            R.string.func_restart_sys_ui -> {
-                restartSysUi()
-                callback.done()
-            }
+            R.string.func_restart_sys_ui -> PowerActX.restartSystemUi(callback)
             R.string.func_safe_mode -> PowerActX.safeMode(callback, forceMode)
             R.string.func_lock_screen_privileged -> PowerActX.lockScreen(callback)
             else -> {

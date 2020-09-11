@@ -1,6 +1,7 @@
 package github.ryuunoakaihitomi.powerpanel.ui.main
 
 import android.content.DialogInterface
+import android.content.pm.PackageManager
 import android.graphics.Typeface
 import android.os.Bundle
 import android.text.SpannableString
@@ -9,6 +10,7 @@ import android.text.style.TypefaceSpan
 import android.widget.AdapterView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.content.res.ResourcesCompat
@@ -27,6 +29,7 @@ import github.ryuunoakaihitomi.powerpanel.ui.ShortcutActivity
 import github.ryuunoakaihitomi.powerpanel.util.*
 import io.noties.markwon.Markwon
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin
+import moe.shizuku.api.ShizukuApiConstants
 import org.apache.commons.io.IOUtils
 import java.nio.charset.Charset
 import java.util.*
@@ -69,6 +72,13 @@ class MainActivity : AppCompatActivity() {
             }
         }
         powerViewModel.infoArray.observe(this) {
+            /* 特权模式下主动请求Shizuku授权，在受限模式下PowerAct已经处理好这个步骤 */
+            if (powerViewModel.rootMode.value == true &&
+                ActivityCompat.checkSelfPermission(this, ShizukuApiConstants.PERMISSION)
+                != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(this, arrayOf(ShizukuApiConstants.PERMISSION), 0)
+            }
             mainDialog = AlertDialog.Builder(this).apply {
                 setTitle(powerViewModel.title.value)
                 setItems(PowerInfo.getLabelArray(it)) { dialog, which ->
@@ -88,7 +98,7 @@ class MainActivity : AppCompatActivity() {
                         setItems(
                             arrayOf(
                                 resources.getText(android.R.string.ok).emphasize(),
-                                resources.getText(android.R.string.no).emphasize()
+                                resources.getText(android.R.string.cancel).emphasize()
                             )
                         ) { _, confirmWhich ->
                             val ok = confirmWhich == 0

@@ -5,6 +5,8 @@
 
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
 
+    <uses-sdk tools:overrideLibrary="moe.shizuku.shared" />
+
     <application
         android:name=".MyApplication"
         android:allowBackup="false"
@@ -16,6 +18,7 @@
         tools:targetApi="o">
         <activity
             android:name=".ui.main.MainActivity"
+            android:autoRemoveFromRecents="true"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -45,5 +48,13 @@
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
         </service>
+
+        <provider
+            android:name="moe.shizuku.api.ShizukuProvider"
+            android:authorities="${applicationId}.shizuku"
+            android:enabled="true"
+            android:exported="true"
+            android:multiprocess="false"
+            android:permission="android.permission.INTERACT_ACROSS_USERS_FULL" />
     </application>
 </manifest>

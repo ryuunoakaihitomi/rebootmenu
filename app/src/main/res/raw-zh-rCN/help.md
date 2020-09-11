@@ -11,11 +11,13 @@
 
 受限模式可能需要**常驻**的**无障碍服务**，所以启用后会留有通知以保持前台状态。用户可以通过手动屏蔽通知，在非原生系统中，用户应该尽可能使用其自带机制~~如白名单，最近任务卡片锁定，电池优化等~~保留后台。
 
-长按项目可以创建启动器快捷方式。从Android7.0开始，下拉任务栏有一个叫*电源菜单*的磁贴。
+长按项目可以创建启动器快捷方式。（非原生系统可能需要事先手动授予添加桌面图标权限）从Android7.0开始，下拉任务栏有一个叫*电源菜单*的磁贴。
 
 为防止误操作，在特权模式中，除*锁屏*外，其他项目均需要再次确认。
 
 受限模式和特权模式的锁屏的区别是：受限模式的在Android 9.0下不能用生物传感器解锁，从9.0开始需要常驻无障碍服务；特权模式无此限制，但是会稍有延迟。
+
+从Android 6.0开始，通过雫服务（Shizuku Service）可以使特权模式反应速度加快和破解Android 9.0以下受限模式的锁屏需要设备管理器的限制，用户可以使用[Shizuku Manager](https://shizuku.rikka.app/zh-hans/download.html)并授权给本应用以享受这种更佳的操作体验。
 
 ## 作者
 [@ryuunoakaihitomi github.com](https://github.com/ryuunoakaihitomi)
@@ -34,6 +36,9 @@ Apache License 2.0
 LGPL-3.0 License
 
 * [libsu](https://github.com/topjohnwu/libsu)
+Apache License 2.0
+
+* [Shizuku](https://shizuku.rikka.app/)
 Apache License 2.0
 
 * [Apache Commons IO](http://commons.apache.org/proper/commons-io/)
