@@ -19,6 +19,7 @@ class MyApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         myApplication = this
+        StatisticsUtils.recordEnvInfo()
         if (BuildConfig.DEBUG) {
             StrictMode.enableDefaults()
             Shell.enableVerboseLogging = true

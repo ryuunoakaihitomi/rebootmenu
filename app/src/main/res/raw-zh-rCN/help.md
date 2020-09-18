@@ -30,20 +30,27 @@
 ## 开源引用
 
 * [PowerAct](https://github.com/ryuunoakaihitomi/PowerAct)
-Apache License 2.0
+
+`Apache License, Version 2.0`
 
 * [Toasty](https://github.com/GrenderG/Toasty)
-LGPL-3.0 License
+
+`GNU Lesser General Public License, Version 3`
 
 * [libsu](https://github.com/topjohnwu/libsu)
-Apache License 2.0
+
+`Apache License, Version 2.0`
 
 * [Shizuku](https://shizuku.rikka.app/)
-Apache License 2.0
+
+`Apache License, Version 2.0`
 
 * [Apache Commons IO](http://commons.apache.org/proper/commons-io/)
-Apache License 2.0
 
-* [Markwon](https://github.com/noties/Markwon) Apache License 2.0
+`Apache License, Version 2.0`
+
+* [Markwon](https://github.com/noties/Markwon)
+
+`Apache License, Version 2.0`
 
 本应用程序作为在Android平台及其相关支持组件下开发的产物，同时也受到[Android Source Licenses](https://source.android.google.cn/setup/start/licenses)的约束。

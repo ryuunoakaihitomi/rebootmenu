@@ -154,6 +154,7 @@ class MainActivity : AppCompatActivity() {
                                 Charset.defaultCharset()
                             )
                         )
+                    alertDialogMessageView.setTextIsSelectable(true)
                     Toasty.normal(
                         this@MainActivity,
                         "${BuildConfig.VERSION_NAME}\n${BuildConfig.VERSION_CODE}",

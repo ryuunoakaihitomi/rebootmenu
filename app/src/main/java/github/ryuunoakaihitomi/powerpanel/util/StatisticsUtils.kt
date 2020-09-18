@@ -1,5 +1,6 @@
 package github.ryuunoakaihitomi.powerpanel.util
 
+import android.os.Build
 import android.os.Bundle
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
@@ -62,6 +63,15 @@ object StatisticsUtils {
         logEvent(EVENT_DIALOG_CANCEL, bundle)
     }
 
+    fun recordEnvInfo() {
+        arrayOf(Build::class, Build.VERSION::class).forEach { clz ->
+            clz.java.fields.forEach {
+                @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+                setCustomKey("${clz.simpleName} ${it.name}", it[null])
+            }
+        }
+    }
+
     fun disableDataCollection() {
         Firebase.app.setDataCollectionDefaultEnabled(false as Boolean?)
     }
@@ -71,8 +81,26 @@ object StatisticsUtils {
         if (!BuildConfig.DISABLE_FIREBASE) FirebaseCrashlytics.getInstance().log(logLine)
     }
 
+    private fun setCustomKey(key: String, value: Any) {
+        if (!BuildConfig.DISABLE_FIREBASE) FirebaseCrashlytics.getInstance().apply {
+            when (value) {
+                is String -> setCustomKey(key, value)
+                is Boolean -> setCustomKey(key, value)
+                is Int -> setCustomKey(key, value)
+                is Long -> setCustomKey(key, value)
+                is Float -> setCustomKey(key, value)
+                is Double -> setCustomKey(key, value)
+                is Array<*> -> setCustomKey(key, value.contentToString())
+                else -> Log.w(TAG, "Undefined type: $key, $value")
+            }
+        }
+    }
+
     private fun logEvent(string: String, bundle: Bundle) {
-        if (!BuildConfig.DISABLE_FIREBASE) Firebase.analytics.logEvent(string, bundle)
+        if (!BuildConfig.DISABLE_FIREBASE) {
+            Firebase.analytics.logEvent(string, bundle)
+            FirebaseCrashlytics.getInstance().setCustomKey(string, bundle.toString())
+        }
     }
 
     private fun Int.toLabel() = MyApplication.getInstance().resources.getResourceEntryName(this)

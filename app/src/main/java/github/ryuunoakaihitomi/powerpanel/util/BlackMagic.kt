@@ -38,6 +38,7 @@ object BlackMagic {
                             val tn = args[1]
                             val mHandler = tn.javaClass.getDeclaredField("mHandler")
                             mHandler.isAccessible = true
+                            @Suppress("DEPRECATION") // Handler(), since 30
                             class HandlerProxy(private val handler: Handler) : Handler() {
                                 override fun handleMessage(msg: Message) {
                                     try {

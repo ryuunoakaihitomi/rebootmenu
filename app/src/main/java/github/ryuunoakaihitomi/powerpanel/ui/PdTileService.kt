@@ -7,7 +7,7 @@ import android.os.Build
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import androidx.annotation.RequiresApi
-import github.ryuunoakaihitomi.poweract.PaService
+import github.ryuunoakaihitomi.poweract.internal.pa.PaService
 import github.ryuunoakaihitomi.powerpanel.R
 import github.ryuunoakaihitomi.powerpanel.ui.main.MainActivity
 import github.ryuunoakaihitomi.powerpanel.util.Log
