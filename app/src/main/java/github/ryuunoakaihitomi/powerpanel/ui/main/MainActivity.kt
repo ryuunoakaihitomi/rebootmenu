@@ -154,7 +154,8 @@ class MainActivity : AppCompatActivity() {
                                 Charset.defaultCharset()
                             )
                         )
-                    alertDialogMessageView.setTextIsSelectable(true)
+                    // 不能设置为可选择，否则无法点击打开链接
+                    //alertDialogMessageView.setTextIsSelectable(true)
                     Toasty.normal(
                         this@MainActivity,
                         "${BuildConfig.VERSION_NAME}\n${BuildConfig.VERSION_CODE}",
