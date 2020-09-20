@@ -40,9 +40,19 @@
         </activity>
 
         <service
-            android:name=".ui.PdTileService"
+            android:name=".ui.tile.PdTileService"
             android:icon="@android:drawable/ic_lock_power_off"
             android:label="@string/tile_pwr_menu"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".ui.tile.LsTileService"
+            android:icon="@drawable/ic_baseline_lock_24"
+            android:label="@string/func_lock_screen"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE" />

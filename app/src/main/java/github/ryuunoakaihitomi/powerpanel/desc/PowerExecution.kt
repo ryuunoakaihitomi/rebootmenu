@@ -9,7 +9,6 @@ import github.ryuunoakaihitomi.poweract.ExternalUtils
 import github.ryuunoakaihitomi.poweract.PowerAct
 import github.ryuunoakaihitomi.poweract.PowerActX
 import github.ryuunoakaihitomi.powerpanel.BuildConfig
-import github.ryuunoakaihitomi.powerpanel.MyApplication
 import github.ryuunoakaihitomi.powerpanel.R
 import github.ryuunoakaihitomi.powerpanel.util.Log
 import github.ryuunoakaihitomi.powerpanel.util.StatisticsUtils
@@ -36,10 +35,10 @@ object PowerExecution {
             }
         }
         when (labelResId) {
-            R.string.func_lock_screen -> requestAccessibilityService {
+            R.string.func_lock_screen -> requestAccessibilityService(activity) {
                 PowerAct.lockScreen(activity, callback)
             }
-            R.string.func_sys_pwr_menu -> requestAccessibilityService {
+            R.string.func_sys_pwr_menu -> requestAccessibilityService(activity) {
                 PowerAct.showPowerDialog(activity, callback)
             }
             R.string.func_reboot -> PowerActX.reboot(callback, forceMode)
@@ -61,10 +60,10 @@ object PowerExecution {
     }
 
     // 打开无障碍服务的提示信息
-    private fun requestAccessibilityService(work: () -> Unit) {
+    private fun requestAccessibilityService(activity: AppCompatActivity, work: () -> Unit) {
         ExternalUtils.setUserGuideRunnable {
             Toasty.info(
-                MyApplication.getInstance(),
+                activity,
                 R.string.toast_enable_accessibility_service_hint,
                 Toasty.LENGTH_LONG
             ).show()
