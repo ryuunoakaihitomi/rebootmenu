@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
+import android.provider.Browser
 import android.service.quicksettings.Tile
 import androidx.annotation.RequiresApi
 import es.dmoral.toasty.Toasty
@@ -22,6 +23,8 @@ fun Context.openUrlInBrowser(url: String) {
     }.onFailure {
         Log.e(TAG, "openUrlInBrowser: ", it)
         Toasty.info(this, url).show()
+        // 分享到其他地方，这个方法catch了ActivityNotFoundException，所以不用担心崩溃问题
+        Browser.sendString(this, url)
     }
 }
 

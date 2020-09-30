@@ -10,15 +10,15 @@ android {
     defaultConfig {
         applicationId "com.ryuunoakaihitomi.rebootmenu"
         minSdkVersion 22
-        targetSdkVersion 30
+        targetSdkVersion compileSdkVersion
         // 版本号：发布日期
-        versionCode 20200920
+        versionCode 20200930
         /*
          版本名说明：
          R3.0.0
          Refactoring 第三次重构+功能更新+缺陷修复
          */
-        versionName "R3.2.2"
+        versionName "R3.2.3"
         resConfigs "en", "zh-rCN"
         // 致用户：可以在这里禁用Firebase，将以下值设为true
         final def disableFirebase = false
@@ -61,7 +61,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-crashlytics:17.2.1'
     /* --- 使用的非Google提供开源库 --- */
     // PowerAct
-    implementation 'github.ryuunoakaihitomi.poweract:poweract:1.2.2'
+    implementation 'github.ryuunoakaihitomi.poweract:poweract:1.2.3'
     // Toasty
     implementation 'com.github.GrenderG:Toasty:1.5.0'
     // libsu
@@ -71,9 +71,9 @@ dependencies {
     // LeakCanary
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.4'
     // Apache Commons IO
-    implementation 'commons-io:commons-io:2.7'
+    implementation 'commons-io:commons-io:2.8.0'
     /* Markwon */
-    final def markwon_version = '4.5.1'
+    final def markwon_version = '4.6.0'
     implementation "io.noties.markwon:core:$markwon_version"
     implementation "io.noties.markwon:ext-strikethrough:$markwon_version"
 }

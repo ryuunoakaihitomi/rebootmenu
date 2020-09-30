@@ -19,6 +19,6 @@
     <string name="btn_dialog_source_code">源代码</string>
     <string name="toast_enable_accessibility_service_hint">请启用本应用的无障碍服务</string>
     <string name="tile_pwr_menu">电源菜单</string>
-    <string name="title_dialog_confirm_op">确认操作　”%s“</string>
+    <string name="title_dialog_confirm_op">确认操作　“%s”</string>
     <string name="toast_shortcut_added">已经尝试添加快捷方式</string>
 </resources>
