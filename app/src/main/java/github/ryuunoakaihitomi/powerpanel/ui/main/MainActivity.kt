@@ -30,6 +30,7 @@ import github.ryuunoakaihitomi.powerpanel.util.*
 import io.noties.markwon.Markwon
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin
 import moe.shizuku.api.ShizukuApiConstants
+import moe.shizuku.api.ShizukuProvider
 import org.apache.commons.io.IOUtils
 import java.nio.charset.Charset
 import java.util.*
@@ -43,7 +44,10 @@ class MainActivity : AppCompatActivity() {
         private const val DIALOG_ALPHA = 0.85f
 
         // 项目链接
-        private const val SOURCE_PATH_LINK = "https://github.com/ryuunoakaihitomi/rebootmenu"
+        private const val SOURCE_LINK = "https://github.com/ryuunoakaihitomi/rebootmenu"
+
+        // 反馈链接 （Github Issues）
+        private const val FEEDBACK_LINK = "$SOURCE_LINK/issues"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,6 +78,7 @@ class MainActivity : AppCompatActivity() {
         powerViewModel.infoArray.observe(this) {
             /* 特权模式下主动请求Shizuku授权，在受限模式下PowerAct已经处理好这个步骤 */
             if (powerViewModel.rootMode.value == true &&
+                ShizukuProvider.isShizukuInstalled(this) &&
                 ActivityCompat.checkSelfPermission(this, ShizukuApiConstants.PERMISSION)
                 != PackageManager.PERMISSION_GRANTED
             ) {
@@ -134,7 +139,11 @@ class MainActivity : AppCompatActivity() {
                     // 准备使用下面的MarkDown组件
                     setMessage("placeholder")
                     setPositiveButton(R.string.btn_dialog_source_code) { _, _ ->
-                        openUrlInBrowser(SOURCE_PATH_LINK)
+                        openUrlInBrowser(SOURCE_LINK)
+                        finish()
+                    }
+                    setNegativeButton(R.string.btn_dialog_feedback) { _, _ ->
+                        openUrlInBrowser(FEEDBACK_LINK)
                         finish()
                     }
 

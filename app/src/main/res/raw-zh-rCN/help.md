@@ -19,6 +19,8 @@
 
 从Android 6.0开始，通过雫服务（Shizuku Service）可以使特权模式反应速度加快和破解Android 9.0以下受限模式的锁屏需要设备管理器的限制，用户可以使用[Shizuku Manager](https://shizuku.rikka.app/zh-hans/download.html)并授权给本应用以享受这种更佳的操作体验。
 
+不要将此应用安装在[工作资料](https://developer.android.google.cn/work/managed-profiles)！在此处某些功能将无法启用。
+
 ## 作者
 [@ryuunoakaihitomi github.com](https://github.com/ryuunoakaihitomi)
 
@@ -29,28 +31,20 @@
 
 ## 开源引用
 
-* [PowerAct](https://github.com/ryuunoakaihitomi/PowerAct)
-
 `Apache License, Version 2.0`
 
-* [Toasty](https://github.com/GrenderG/Toasty)
-
-`GNU Lesser General Public License, Version 3`
+* [PowerAct](https://github.com/ryuunoakaihitomi/PowerAct)
 
 * [libsu](https://github.com/topjohnwu/libsu)
 
-`Apache License, Version 2.0`
-
 * [Shizuku](https://shizuku.rikka.app/)
-
-`Apache License, Version 2.0`
 
 * [Apache Commons IO](http://commons.apache.org/proper/commons-io/)
 
-`Apache License, Version 2.0`
-
 * [Markwon](https://github.com/noties/Markwon)
 
-`Apache License, Version 2.0`
+`GNU Lesser General Public License, Version 3`
+
+* [Toasty](https://github.com/GrenderG/Toasty)
 
 本应用程序作为在Android平台及其相关支持组件下开发的产物，同时也受到[Android Source Licenses](https://source.android.google.cn/setup/start/licenses)的约束。
