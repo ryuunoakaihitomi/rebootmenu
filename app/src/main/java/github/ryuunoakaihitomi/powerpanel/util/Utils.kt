@@ -3,11 +3,16 @@ package github.ryuunoakaihitomi.powerpanel.util
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Typeface
 import android.net.Uri
 import android.os.Build
 import android.provider.Browser
 import android.service.quicksettings.Tile
+import android.text.SpannableString
+import android.text.style.StyleSpan
+import android.text.style.TypefaceSpan
 import androidx.annotation.RequiresApi
+import androidx.core.text.set
 import es.dmoral.toasty.Toasty
 
 
@@ -34,4 +39,12 @@ fun Tile.updateState(state: Int) {
         this.state = state
         updateTile()
     }
+}
+
+fun CharSequence.emphasize(): SpannableString = let {
+    val spannableString = SpannableString(it)
+    val range = 0..it.length
+    spannableString[range] = StyleSpan(Typeface.BOLD)
+    spannableString[range] = TypefaceSpan("monospace")
+    spannableString
 }

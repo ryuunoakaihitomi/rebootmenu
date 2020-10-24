@@ -2,11 +2,7 @@ package github.ryuunoakaihitomi.powerpanel.ui.main
 
 import android.content.DialogInterface
 import android.content.pm.PackageManager
-import android.graphics.Typeface
 import android.os.Bundle
-import android.text.SpannableString
-import android.text.style.StyleSpan
-import android.text.style.TypefaceSpan
 import android.widget.AdapterView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -16,7 +12,6 @@ import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.IconCompat
 import androidx.core.graphics.drawable.toBitmap
-import androidx.core.text.set
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.ViewModelProvider
@@ -86,7 +81,13 @@ class MainActivity : AppCompatActivity() {
             }
             mainDialog = AlertDialog.Builder(this).apply {
                 setTitle(powerViewModel.title.value)
-                setItems(PowerInfo.getLabelArray(it)) { dialog, which ->
+                setAdapter(
+                    PowerItemAdapter(
+                        this@MainActivity,
+                        PowerInfo.getLabelArray(it),
+                        PowerInfo.getIconResIdArray(it)
+                    )
+                ) { dialog, which ->
                     val item = it[which]
                     /* 如果为特权模式且不为锁屏，再次确认 */
                     if (powerViewModel.rootMode.value == true
@@ -100,6 +101,7 @@ class MainActivity : AppCompatActivity() {
                             )
                         )
                         // 再次确认
+                        setAdapter(null, null)
                         setItems(
                             arrayOf(
                                 resources.getText(android.R.string.ok).emphasize(),
@@ -148,7 +150,6 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     /* 去除操作选项 */
-                    setItems(null, null)
                     setNeutralButton(null, null)
                     setOnCancelListener { powerViewModel.prepare() }
                     /* 主要信息 */
@@ -233,12 +234,4 @@ class MainActivity : AppCompatActivity() {
         })
         powerViewModel.prepare()
     }
-}
-
-private fun CharSequence.emphasize(): SpannableString = let {
-    val spannableString = SpannableString(it)
-    val range = 0..it.length
-    spannableString[range] = StyleSpan(Typeface.BOLD)
-    spannableString[range] = TypefaceSpan("monospace")
-    spannableString
 }

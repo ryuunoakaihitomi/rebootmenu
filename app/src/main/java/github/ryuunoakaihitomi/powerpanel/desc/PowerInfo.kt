@@ -14,10 +14,16 @@ data class PowerInfo(
 ) {
 
     companion object {
-        fun getLabelArray(array: Array<PowerInfo>): Array<CharSequence> {
-            val labelList = mutableListOf<CharSequence>()
-            array.forEach { labelList.add(it.label) }
-            return labelList.toTypedArray()
+        fun getLabelArray(array: Array<PowerInfo>) = getAttr(array) { label }
+        fun getIconResIdArray(array: Array<PowerInfo>) = getAttr(array) { iconResId }
+
+        private inline fun <reified T> getAttr(
+            array: Array<PowerInfo>,
+            member: PowerInfo.() -> T
+        ): Array<T> {
+            val list = mutableListOf<T>()
+            array.forEach { list.add(it.member()) }
+            return list.toTypedArray()
         }
     }
 }

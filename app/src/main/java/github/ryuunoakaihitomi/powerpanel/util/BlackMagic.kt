@@ -18,15 +18,13 @@ object BlackMagic {
 
     private const val TAG = "BlackMagic"
 
+    @SuppressLint("PrivateApi")
     fun toastBugFix() {
         if (Build.VERSION.SDK_INT < Q) {
             runCatching {
-                @SuppressLint("DiscouragedPrivateApi")
                 val getService = Toast::class.java.getDeclaredMethod("getService")
                 getService.isAccessible = true
                 val iNotificationManager = getService.invoke(null)
-
-                @SuppressLint("PrivateApi")
                 val iNotificationManagerProxy = Proxy.newProxyInstance(
                     Toast::class.java.classLoader,
                     arrayOf(Class.forName("android.app.INotificationManager"))
