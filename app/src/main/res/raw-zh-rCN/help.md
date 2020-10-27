@@ -35,6 +35,8 @@
 
 * [PowerAct](https://github.com/ryuunoakaihitomi/PowerAct)
 
+* [ReToast](https://github.com/ryuunoakaihitomi/ReToast)
+
 * [libsu](https://github.com/topjohnwu/libsu)
 
 * [Shizuku](https://shizuku.rikka.app/)

@@ -4,16 +4,13 @@ import android.app.Application
 import android.os.StrictMode
 import com.topjohnwu.superuser.Shell
 import github.ryuunoakaihitomi.poweract.ExternalUtils
-import github.ryuunoakaihitomi.powerpanel.util.BlackMagic
 import github.ryuunoakaihitomi.powerpanel.util.StatisticsUtils
 
 class MyApplication : Application() {
 
     companion object {
         private lateinit var myApplication: MyApplication
-        fun getInstance(): MyApplication {
-            return myApplication
-        }
+        fun getInstance() = myApplication
     }
 
     override fun onCreate() {
@@ -29,7 +26,6 @@ class MyApplication : Application() {
         if (BuildConfig.DISABLE_FIREBASE) {
             StatisticsUtils.disableDataCollection()
         }
-        BlackMagic.toastBugFix()
         ExternalUtils.enableLog(BuildConfig.DEBUG)
     }
 }

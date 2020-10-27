@@ -19,7 +19,8 @@ import es.dmoral.toasty.Toasty
 import github.ryuunoakaihitomi.powerpanel.BuildConfig
 import github.ryuunoakaihitomi.powerpanel.R
 import github.ryuunoakaihitomi.powerpanel.desc.PowerExecution
-import github.ryuunoakaihitomi.powerpanel.desc.PowerInfo
+import github.ryuunoakaihitomi.powerpanel.desc.getIconResIdArray
+import github.ryuunoakaihitomi.powerpanel.desc.getLabelArray
 import github.ryuunoakaihitomi.powerpanel.ui.ShortcutActivity
 import github.ryuunoakaihitomi.powerpanel.util.*
 import io.noties.markwon.Markwon
@@ -84,8 +85,8 @@ class MainActivity : AppCompatActivity() {
                 setAdapter(
                     PowerItemAdapter(
                         this@MainActivity,
-                        PowerInfo.getLabelArray(it),
-                        PowerInfo.getIconResIdArray(it)
+                        it.getLabelArray(),
+                        it.getIconResIdArray()
                     )
                 ) { dialog, which ->
                     val item = it[which]

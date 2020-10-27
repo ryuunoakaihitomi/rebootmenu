@@ -11,19 +11,16 @@ data class PowerInfo(
     // 由于每个的标签都不一样，可以用作标识符
     @StringRes var labelResId: Int = ResourcesCompat.ID_NULL,
     @DrawableRes var iconResId: Int = ResourcesCompat.ID_NULL
-) {
+)
 
-    companion object {
-        fun getLabelArray(array: Array<PowerInfo>) = getAttr(array) { label }
-        fun getIconResIdArray(array: Array<PowerInfo>) = getAttr(array) { iconResId }
+fun Array<PowerInfo>.getLabelArray() = getAttrArray(this) { label }
+fun Array<PowerInfo>.getIconResIdArray() = getAttrArray(this) { iconResId }
 
-        private inline fun <reified T> getAttr(
-            array: Array<PowerInfo>,
-            member: PowerInfo.() -> T
-        ): Array<T> {
-            val list = mutableListOf<T>()
-            array.forEach { list.add(it.member()) }
-            return list.toTypedArray()
-        }
-    }
+private inline fun <reified T> getAttrArray(
+    array: Array<PowerInfo>,
+    member: PowerInfo.() -> T
+): Array<T> {
+    val list = mutableListOf<T>()
+    array.forEach { list.add(it.member()) }
+    return list.toTypedArray()
 }
