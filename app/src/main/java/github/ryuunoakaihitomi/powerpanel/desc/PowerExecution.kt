@@ -10,12 +10,10 @@ import github.ryuunoakaihitomi.poweract.PowerAct
 import github.ryuunoakaihitomi.poweract.PowerActX
 import github.ryuunoakaihitomi.powerpanel.BuildConfig
 import github.ryuunoakaihitomi.powerpanel.R
-import github.ryuunoakaihitomi.powerpanel.util.Log
 import github.ryuunoakaihitomi.powerpanel.util.StatisticsUtils
+import timber.log.Timber
 
 object PowerExecution {
-
-    private const val TAG = "PowerExecution"
 
     fun execute(@StringRes labelResId: Int, activity: AppCompatActivity, forceMode: Boolean) {
         val callback = object : Callback {
@@ -50,7 +48,7 @@ object PowerExecution {
             R.string.func_safe_mode -> PowerActX.safeMode(callback, forceMode)
             R.string.func_lock_screen_privileged -> PowerActX.lockScreen(callback)
             else -> {
-                Log.w(TAG, "execute: Unknown res id($labelResId). Go home...")
+                Timber.w("Unknown res id($labelResId). Go home...")
                 activity.startActivity(
                     activity.packageManager.getLaunchIntentForPackage(BuildConfig.APPLICATION_ID)
                 )

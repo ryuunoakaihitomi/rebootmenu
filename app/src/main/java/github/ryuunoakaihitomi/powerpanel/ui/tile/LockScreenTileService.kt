@@ -14,10 +14,9 @@ import github.ryuunoakaihitomi.powerpanel.util.updateState
  * 目前唯一感觉不顺畅的地方就是如果未授权安全锁屏时要解锁才能操作，但是Activity已经在后台打开。
  * 通过这个行为即使在安全锁屏状态时操作也得以执行并被记录，但是未授权时Activity会滞留在后台。
  * 由于不确定这是不是一个bug，所以不予理会。
- * Lock Screen Tile Service
  */
 @RequiresApi(Build.VERSION_CODES.N)
-class LsTileService : TileService() {
+class LockScreenTileService : TileService() {
 
     override fun onClick() {
         val intent = ShortcutActivity.getActionIntent(

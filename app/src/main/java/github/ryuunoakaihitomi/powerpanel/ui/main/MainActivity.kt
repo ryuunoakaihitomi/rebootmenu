@@ -1,6 +1,7 @@
 package github.ryuunoakaihitomi.powerpanel.ui.main
 
 import android.content.DialogInterface
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.widget.AdapterView
@@ -21,6 +22,7 @@ import github.ryuunoakaihitomi.powerpanel.R
 import github.ryuunoakaihitomi.powerpanel.desc.PowerExecution
 import github.ryuunoakaihitomi.powerpanel.desc.getIconResIdArray
 import github.ryuunoakaihitomi.powerpanel.desc.getLabelArray
+import github.ryuunoakaihitomi.powerpanel.ui.OpenSourceLibDependencyActivity
 import github.ryuunoakaihitomi.powerpanel.ui.ShortcutActivity
 import github.ryuunoakaihitomi.powerpanel.util.*
 import io.noties.markwon.Markwon
@@ -28,13 +30,13 @@ import io.noties.markwon.ext.strikethrough.StrikethroughPlugin
 import moe.shizuku.api.ShizukuApiConstants
 import moe.shizuku.api.ShizukuProvider
 import org.apache.commons.io.IOUtils
+import timber.log.Timber
 import java.nio.charset.Charset
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
     companion object {
-        private const val TAG = "MainActivity"
 
         // 窗口透明度
         private const val DIALOG_ALPHA = 0.85f
@@ -58,7 +60,7 @@ class MainActivity : AppCompatActivity() {
             ShortcutManagerCompat.removeAllDynamicShortcuts(this)
             val maxCount = ShortcutManagerCompat.getMaxShortcutCountPerActivity(this)
             if (maxCount >= it.size) {
-                Log.d(TAG, "onCreate: Allow app shortcut. ${it.size} in $maxCount")
+                Timber.d("Allow app shortcut. ${it.size} in $maxCount")
                 it.forEach {
                     val unspannedLabel = it.label.toString()
                     val shortcut = ShortcutInfoCompat.Builder(this, unspannedLabel).run {
@@ -78,6 +80,7 @@ class MainActivity : AppCompatActivity() {
                 ActivityCompat.checkSelfPermission(this, ShizukuApiConstants.PERMISSION)
                 != PackageManager.PERMISSION_GRANTED
             ) {
+                Timber.i("Request shizuku permission.")
                 ActivityCompat.requestPermissions(this, arrayOf(ShizukuApiConstants.PERMISSION), 0)
             }
             mainDialog = AlertDialog.Builder(this).apply {
@@ -150,8 +153,12 @@ class MainActivity : AppCompatActivity() {
                         finish()
                     }
 
-                    /* 去除操作选项 */
-                    setNeutralButton(null, null)
+                    setNeutralButton(getString(R.string.btn_dialog_open_source_lib_dependency)) { _, _ ->
+                        this@MainActivity.startActivity(
+                            Intent(application, OpenSourceLibDependencyActivity::class.java)
+                        )
+                        finish()
+                    }
                     setOnCancelListener { powerViewModel.prepare() }
                     /* 主要信息 */
                     val alertDialogMessageView = BlackMagic.getAlertDialogMessageView(show())

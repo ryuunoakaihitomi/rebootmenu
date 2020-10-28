@@ -9,23 +9,16 @@ import github.ryuunoakaihitomi.poweract.ExternalUtils
 import github.ryuunoakaihitomi.powerpanel.R
 import github.ryuunoakaihitomi.powerpanel.ui.ShortcutActivity
 import github.ryuunoakaihitomi.powerpanel.ui.main.MainActivity
-import github.ryuunoakaihitomi.powerpanel.util.Log
 import github.ryuunoakaihitomi.powerpanel.util.updateState
+import timber.log.Timber
 
-/**
- * Power Dialog Tile Service
- */
 @RequiresApi(Build.VERSION_CODES.N)
-class PdTileService : TileService() {
-
-    companion object {
-        private const val TAG = "PdTileService"
-    }
+class PowerDialogTileService : TileService() {
 
     override fun onClick() {
         // 在安全锁屏时给用户“无效”的反馈，并请求用户解锁
         if (isLocked && isSecure) {
-            Log.w(TAG, "onClick: locked!")
+            Timber.w("locked!")
             qsTile?.run {
                 updateState(Tile.STATE_UNAVAILABLE)
                 unlockAndRun {

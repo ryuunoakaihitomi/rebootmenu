@@ -14,9 +14,8 @@ import android.text.style.TypefaceSpan
 import androidx.annotation.RequiresApi
 import androidx.core.text.set
 import es.dmoral.toasty.Toasty
+import timber.log.Timber
 
-
-private const val TAG = "Utils"
 
 fun Activity.makeTransparent() {
     this.window.decorView.alpha = 0f
@@ -26,7 +25,7 @@ fun Context.openUrlInBrowser(url: String) {
     runCatching {
         startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
     }.onFailure {
-        Log.e(TAG, "openUrlInBrowser: ", it)
+        Timber.e(it)
         Toasty.info(this, url).show()
         // 分享到其他地方，这个方法catch了ActivityNotFoundException，所以不用担心崩溃问题
         Browser.sendString(this, url)

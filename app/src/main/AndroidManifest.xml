@@ -27,6 +27,10 @@
         </activity>
 
         <activity
+            android:name=".ui.OpenSourceLibDependencyActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+
+        <activity
             android:name=".ui.ShortcutActivity"
             android:excludeFromRecents="true"
             android:exported="true" />
@@ -40,7 +44,7 @@
         </activity>
 
         <service
-            android:name=".ui.tile.PdTileService"
+            android:name=".ui.tile.PowerDialogTileService"
             android:icon="@android:drawable/ic_lock_power_off"
             android:label="@string/tile_pwr_menu"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
@@ -50,7 +54,7 @@
         </service>
 
         <service
-            android:name=".ui.tile.LsTileService"
+            android:name=".ui.tile.LockScreenTileService"
             android:icon="@drawable/ic_baseline_lock_24"
             android:label="@string/func_lock_screen"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">

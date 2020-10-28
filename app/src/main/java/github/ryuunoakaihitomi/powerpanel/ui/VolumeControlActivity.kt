@@ -4,7 +4,7 @@ import android.media.AudioManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.getSystemService
-import github.ryuunoakaihitomi.powerpanel.util.Log
+import timber.log.Timber
 
 /**
  * 这个打开音量面板不属于主要功能
@@ -13,13 +13,9 @@ import github.ryuunoakaihitomi.powerpanel.util.Log
  */
 class VolumeControlActivity : AppCompatActivity() {
 
-    companion object {
-        private const val TAG = "VolumeControlActivity"
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.v(TAG, "onCreate")
+        Timber.v("active")
         getSystemService<AudioManager>()?.adjustVolume(
             AudioManager.ADJUST_SAME,
             AudioManager.FLAG_SHOW_UI

@@ -9,7 +9,7 @@
 
 在root模式下，使用*切换模式*按钮可以在特权模式和强制模式间相互切换。有对应强制模式的项目会**变色加粗**。
 
-受限模式可能需要**常驻**的**无障碍服务**，所以启用后会留有通知以保持前台状态。用户可以通过手动屏蔽通知，在非原生系统中，用户应该尽可能使用其自带机制~~如白名单，最近任务卡片锁定，电池优化等~~保留后台。
+受限模式可能需要**常驻**的**无障碍服务**，所以启用后会留有通知以保持前台状态。用户可以通过手动屏蔽通知，在非原生系统中，用户应该尽可能使用其自带机制~~如白名单，最近任务卡片锁定，电池优化等~~保留后台。（也可参考[Don't kill my app!](https://dontkillmyapp.com)）
 
 长按项目可以创建启动器快捷方式。（非原生系统可能需要事先手动授予添加桌面图标权限）从Android7.0开始，为下拉任务栏的快速设置面板提供*电源菜单*和*锁屏*图块。
 
@@ -31,22 +31,5 @@
 
 ## 开源引用
 
-`Apache License, Version 2.0`
-
-* [PowerAct](https://github.com/ryuunoakaihitomi/PowerAct)
-
-* [ReToast](https://github.com/ryuunoakaihitomi/ReToast)
-
-* [libsu](https://github.com/topjohnwu/libsu)
-
-* [Shizuku](https://shizuku.rikka.app/)
-
-* [Apache Commons IO](http://commons.apache.org/proper/commons-io/)
-
-* [Markwon](https://github.com/noties/Markwon)
-
-`GNU Lesser General Public License, Version 3`
-
-* [Toasty](https://github.com/GrenderG/Toasty)
-
+除已经列出的直接引用项目外，
 本应用程序作为在Android平台及其相关支持组件下开发的产物，同时也受到[Android Source Licenses](https://source.android.google.cn/setup/start/licenses)的约束。

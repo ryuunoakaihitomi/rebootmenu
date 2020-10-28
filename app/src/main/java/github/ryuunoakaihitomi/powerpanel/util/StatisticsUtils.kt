@@ -5,11 +5,12 @@ import android.os.Bundle
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.analytics.ktx.analytics
-import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.ktx.app
 import github.ryuunoakaihitomi.powerpanel.BuildConfig
 import github.ryuunoakaihitomi.powerpanel.MyApplication
+import timber.log.Timber
 import java.time.LocalTime
 
 /**
@@ -18,8 +19,6 @@ import java.time.LocalTime
  * 目前使用的是`Firebase`
  */
 object StatisticsUtils {
-
-    private const val TAG = "FirebaseUtils"
 
     /* 记录电源操作，评估万一某个功能有bug所带来的影响范围 */
     private const val EVENT_PWR_OP = "power_operation"
@@ -50,7 +49,7 @@ object StatisticsUtils {
             putString(KEY_FORCE_MODE, forceMode.toString())
             putString(KEY_DONE, done.toString())
         }
-        Log.i(TAG, "logPowerOperation: $bundle")
+        Timber.i("$bundle")
         logEvent(EVENT_PWR_OP, bundle)
     }
 
@@ -59,7 +58,7 @@ object StatisticsUtils {
             putString(KEY_TYPE, labelResId.toLabel())
             putString(KEY_CANCELLED, cancelled.toString())
         }
-        Log.i(TAG, "logDialogCancel: $bundle")
+        Timber.i(bundle.toString())
         logEvent(EVENT_DIALOG_CANCEL, bundle)
     }
 
@@ -76,13 +75,13 @@ object StatisticsUtils {
         Firebase.app.setDataCollectionDefaultEnabled(false as Boolean?)
     }
 
-    fun log(level: Int, tag: String, msg: String) {
-        val logLine = listOf(Log.levelToString(level), tag, msg).toString()
-        if (!BuildConfig.DISABLE_FIREBASE) FirebaseCrashlytics.getInstance().log(logLine)
+    fun log(level: String, tag: String, msg: String) {
+        val logLine = listOf(level, tag, msg).toString()
+        if (!BuildConfig.DISABLE_FIREBASE) Firebase.crashlytics.log(logLine)
     }
 
     private fun setCustomKey(key: String, value: Any) {
-        if (!BuildConfig.DISABLE_FIREBASE) FirebaseCrashlytics.getInstance().apply {
+        if (!BuildConfig.DISABLE_FIREBASE) Firebase.crashlytics.apply {
             when (value) {
                 is String -> setCustomKey(key, value)
                 is Boolean -> setCustomKey(key, value)
@@ -91,7 +90,7 @@ object StatisticsUtils {
                 is Float -> setCustomKey(key, value)
                 is Double -> setCustomKey(key, value)
                 is Array<*> -> setCustomKey(key, value.contentToString())
-                else -> Log.w(TAG, "Undefined type: $key, $value")
+                else -> Timber.w("Undefined type: $key, $value")
             }
         }
     }
@@ -99,7 +98,7 @@ object StatisticsUtils {
     private fun logEvent(string: String, bundle: Bundle) {
         if (!BuildConfig.DISABLE_FIREBASE) {
             Firebase.analytics.logEvent(string, bundle)
-            FirebaseCrashlytics.getInstance().setCustomKey(string, bundle.toString())
+            Firebase.crashlytics.setCustomKey(string, bundle.toString())
         }
     }
 
