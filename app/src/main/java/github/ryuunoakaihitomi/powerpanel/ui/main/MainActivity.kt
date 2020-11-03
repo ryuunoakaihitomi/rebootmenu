@@ -226,8 +226,11 @@ class MainActivity : AppCompatActivity() {
                     Toasty.info(this, R.string.toast_shortcut_added).show()
                     return@OnItemLongClickListener true
                 }
-            // 半透明
-            mainDialog.window?.decorView?.alpha = DIALOG_ALPHA
+            mainDialog.window?.decorView?.run {
+                // 半透明度
+                alpha = DIALOG_ALPHA
+                hideFromAccessibilityService()
+            }
             // 测试：崩溃汇报组件是否正常工作
             if (BuildConfig.DEBUG) {
                 mainDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnLongClickListener {

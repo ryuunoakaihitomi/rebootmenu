@@ -28,8 +28,3 @@
 本应用开源，代码可供任何人查看。开发者承诺不会使应用做出任何有损用户隐私权等利益的行为。
 
 使用Firebase相关组件进行崩溃报告收集和使用统计，这些信息有益于开发者改进本应用。详情参阅：[Firebase 中的隐私权和安全性](https://firebase.google.cn/support/privacy)
-
-## 开源引用
-
-除已经列出的直接引用项目外，
-本应用程序作为在Android平台及其相关支持组件下开发的产物，同时也受到[Android Source Licenses](https://source.android.google.cn/setup/start/licenses)的约束。

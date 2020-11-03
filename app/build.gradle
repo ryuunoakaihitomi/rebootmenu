@@ -13,13 +13,13 @@ android {
         //targetSdkVersion compileSdkVersion
         targetSdkVersion 30
         // 版本号：发布日期
-        versionCode 20201028
+        versionCode 20201103
         /*
          版本名说明：
          R3.0.0
          Refactoring 第三次重构+功能更新+缺陷修复
          */
-        versionName "R3.3.2"
+        versionName "R3.3.3"
         resConfigs "en", "zh-rCN"
         // 致用户：可以在这里禁用Firebase，将以下值设为true
         final def disableFirebase = false
@@ -57,10 +57,12 @@ dependencies {
     def lifecycle_version = "2.2.0"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+
     /* 崩溃报告组件 */
     implementation platform('com.google.firebase:firebase-bom:26.0.0')
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
+
     /* --- 使用的非Google提供开源库 --- */
     implementation 'github.ryuunoakaihitomi.poweract:poweract:1.2.5'
     implementation 'com.github.GrenderG:Toasty:1.5.0'
@@ -71,9 +73,10 @@ dependencies {
     final def markwon_version = '4.6.0'
     implementation "io.noties.markwon:core:$markwon_version"
     implementation "io.noties.markwon:ext-strikethrough:$markwon_version"
-    implementation 'github.ryuunoakaihitomi.retoast:retoast:1.0.1'
+    implementation 'github.ryuunoakaihitomi.retoast:retoast:1.0.2'
     implementation 'com.jakewharton.timber:timber:4.7.1'
     implementation 'com.drakeet.about:about:2.4.1'
+    debugImplementation "com.github.whataa:pandora:androidx_v2.1.0"
 }
 
 // 规格化APK文件名
