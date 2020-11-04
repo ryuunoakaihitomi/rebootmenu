@@ -23,5 +23,5 @@
     <string name="title_dialog_confirm_op">Confirm operation \"%s\"</string>
     <string name="toast_shortcut_added">Have tried to add shortcut</string>
     <string name="btn_dialog_feedback">Feedback</string>
-    <string name="btn_dialog_open_source_lib_dependency">Open Source Library Dependency</string>
+    <string name="open_source_lib_dependency">Open Source Library Dependency</string>
 </resources>

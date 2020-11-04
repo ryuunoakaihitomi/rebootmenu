@@ -86,11 +86,7 @@ class MainActivity : AppCompatActivity() {
             mainDialog = AlertDialog.Builder(this).apply {
                 setTitle(powerViewModel.title.value)
                 setAdapter(
-                    PowerItemAdapter(
-                        this@MainActivity,
-                        it.getLabelArray(),
-                        it.getIconResIdArray()
-                    )
+                    PowerItemAdapter(this@MainActivity, it.getLabelArray(), it.getIconResIdArray())
                 ) { dialog, which ->
                     val item = it[which]
                     /* 如果为特权模式且不为锁屏，再次确认 */
@@ -99,10 +95,7 @@ class MainActivity : AppCompatActivity() {
                         and (item.labelResId != R.string.func_lock_screen_privileged)
                     ) {
                         setTitle(
-                            String.format(
-                                getString(R.string.title_dialog_confirm_op),
-                                item.label
-                            )
+                            String.format(getString(R.string.title_dialog_confirm_op), item.label)
                         )
                         // 再次确认
                         setAdapter(null, null)
@@ -128,16 +121,14 @@ class MainActivity : AppCompatActivity() {
                         }
                         setNeutralButton(null, null)
                         setPositiveButton(null, null)
-                        show()
+                        show().listView.rootView.hideFromAccessibilityService()
                     } else {
                         powerViewModel.call(item.labelResId)
                         dialog.dismiss()
                     }
                 }
                 if (powerViewModel.rootMode.value == true) {
-                    setNeutralButton(R.string.btn_dialog_switch_mode) { _, _ ->
-                        powerViewModel.reverseForceMode()
-                    }
+                    setNeutralButton(R.string.btn_dialog_switch_mode) { _, _ -> powerViewModel.reverseForceMode() }
                 }
                 setPositiveButton(R.string.btn_dialog_help) { _, _ ->
                     /* --- 帮助界面逻辑 ---*/
@@ -153,7 +144,7 @@ class MainActivity : AppCompatActivity() {
                         finish()
                     }
 
-                    setNeutralButton(getString(R.string.btn_dialog_open_source_lib_dependency)) { _, _ ->
+                    setNeutralButton(getString(R.string.open_source_lib_dependency)) { _, _ ->
                         this@MainActivity.startActivity(
                             Intent(application, OpenSourceLibDependencyActivity::class.java)
                         )
@@ -176,7 +167,10 @@ class MainActivity : AppCompatActivity() {
                     //alertDialogMessageView.setTextIsSelectable(true)
                     Toasty.normal(
                         this@MainActivity,
-                        "${BuildConfig.VERSION_NAME}\n${BuildConfig.VERSION_CODE}",
+                        """
+                            ${BuildConfig.VERSION_NAME}
+                            ${BuildConfig.VERSION_CODE}
+                        """.trimIndent(),
                         Toasty.LENGTH_LONG
                     ).show()
                 }

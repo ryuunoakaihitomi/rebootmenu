@@ -13,13 +13,13 @@ android {
         //targetSdkVersion compileSdkVersion
         targetSdkVersion 30
         // 版本号：发布日期
-        versionCode 20201103
+        versionCode 20201104
         /*
          版本名说明：
          R3.0.0
          Refactoring 第三次重构+功能更新+缺陷修复
          */
-        versionName "R3.3.3"
+        versionName "R3.3.4"
         resConfigs "en", "zh-rCN"
         // 致用户：可以在这里禁用Firebase，将以下值设为true
         final def disableFirebase = false

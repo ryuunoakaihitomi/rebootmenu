@@ -187,10 +187,7 @@ class PowerViewModel : AndroidViewModel(MyApplication.getInstance()) {
         if (isOnForceMode(info)) {
             val range = 0..forceLabel.length
             forceLabel[range] = ForegroundColorSpan(
-                ResourcesCompat.getColor(
-                    app().resources,
-                    R.color.colorForceModeItem, null
-                )
+                ResourcesCompat.getColor(app().resources, R.color.colorForceModeItem, null)
             )
             forceLabel[range] = StyleSpan(Typeface.BOLD)
         }

@@ -22,5 +22,5 @@
     <string name="title_dialog_confirm_op">确认操作　“%s”</string>
     <string name="toast_shortcut_added">已经尝试添加快捷方式</string>
     <string name="btn_dialog_feedback">反馈</string>
-    <string name="btn_dialog_open_source_lib_dependency">开源库依赖项</string>
+    <string name="open_source_lib_dependency">开源库依赖项</string>
 </resources>
