@@ -97,7 +97,6 @@ class MainActivity : AppCompatActivity() {
                         setTitle(
                             String.format(getString(R.string.title_dialog_confirm_op), item.label)
                         )
-                        // 再次确认
                         setAdapter(null, null)
                         setItems(
                             arrayOf(
@@ -143,7 +142,6 @@ class MainActivity : AppCompatActivity() {
                         openUrlInBrowser(FEEDBACK_LINK)
                         finish()
                     }
-
                     setNeutralButton(getString(R.string.open_source_lib_dependency)) { _, _ ->
                         this@MainActivity.startActivity(
                             Intent(application, OpenSourceLibDependencyActivity::class.java)
@@ -209,11 +207,7 @@ class MainActivity : AppCompatActivity() {
                                 )
                                 build()
                             }
-                            ShortcutManagerCompat.requestPinShortcut(
-                                applicationContext,
-                                shortcut,
-                                null
-                            )
+                            ShortcutManagerCompat.requestPinShortcut(application, shortcut, null)
                         }
                     }
                     // 在Android8.0以下和一些自定义系统（自动拒绝）可能没有反馈
