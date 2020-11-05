@@ -89,11 +89,7 @@ class MainActivity : AppCompatActivity() {
                     PowerItemAdapter(this@MainActivity, it.getLabelArray(), it.getIconResIdArray())
                 ) { dialog, which ->
                     val item = it[which]
-                    /* 如果为特权模式且不为锁屏，再次确认 */
-                    if (powerViewModel.rootMode.value == true
-                        and !powerViewModel.getForceMode()
-                        and (item.labelResId != R.string.func_lock_screen_privileged)
-                    ) {
+                    if (powerViewModel.shouldConfirmAgain(item)) {
                         setTitle(
                             String.format(getString(R.string.title_dialog_confirm_op), item.label)
                         )

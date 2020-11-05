@@ -182,6 +182,10 @@ class PowerViewModel : AndroidViewModel(MyApplication.getInstance()) {
 
     fun isOnForceMode(info: PowerInfo) = getForceMode() and info.hasForceMode
 
+    /* 如果为特权模式且不为锁屏，再次确认 */
+    fun shouldConfirmAgain(item: PowerInfo) =
+        rootMode.value == true and !getForceMode() and (item.labelResId != R.string.func_lock_screen_privileged)
+
     private fun colorForceLabel(label: String, info: PowerInfo): SpannableString {
         val forceLabel = SpannableString(label)
         if (isOnForceMode(info)) {
