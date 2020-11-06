@@ -14,12 +14,13 @@ class PowerItemAdapter(context: Context, items: Array<CharSequence>, iconResId: 
     ArrayAdapter<CharSequence>(context, android.R.layout.simple_list_item_1, items) {
     private val iconResIdList: List<Int> = listOf(*iconResId)
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+        if (convertView != null) return convertView
         val view = super.getView(position, convertView, parent)
         val textView = view.findViewById<TextView>(android.R.id.text1)
         textView.compoundDrawablePadding = ViewConfiguration.get(context).scaledTouchSlop
         val drawable = RC.getDrawable(context.resources, iconResIdList[position], null)?.mutate()
         drawable?.setTint(textView.textColors.defaultColor)
-        textView.setCompoundDrawablesRelativeWithIntrinsicBounds(drawable, null, null, null)
+        textView.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null)
         return view
     }
 }
