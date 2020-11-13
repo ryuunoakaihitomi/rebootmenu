@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         makeTransparent()
-        var mainDialog: AlertDialog = AlertDialog.Builder(this).create()
+        var mainDialog = AlertDialog.Builder(this).create()
         val powerViewModel = ViewModelProvider(this)[PowerViewModel::class.java]
         powerViewModel.labelResId.observe(this) {
             PowerExecution.execute(it, this, powerViewModel.getForceMode())

@@ -11,7 +11,7 @@ import com.google.firebase.ktx.app
 import github.ryuunoakaihitomi.powerpanel.BuildConfig
 import github.ryuunoakaihitomi.powerpanel.MyApplication
 import timber.log.Timber
-import java.time.LocalTime
+import java.util.*
 
 /**
  * 统计工具类，**为方便迁移请务必在此处创建接口并且不在此类外直接调用统计SDK**
@@ -43,7 +43,7 @@ object StatisticsUtils {
             val split = activity.localClassName.split('.')
             putString(KEY_SRC, split[split.size - 1])
             // 作为数字，也就是用putInt()，在Events面板只能看到平均值和总数
-            putString(KEY_TIME_HOUR, LocalTime.now().hour.toString())
+            putString(KEY_TIME_HOUR, Calendar.getInstance()[Calendar.HOUR_OF_DAY].toString())
             putString(KEY_TYPE, labelResId.toLabel())
             /* FirebaseAnalytics不支持Boolean (String, long and double param types are supported.) */
             putString(KEY_FORCE_MODE, forceMode.toString())

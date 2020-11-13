@@ -23,7 +23,7 @@ import timber.log.Timber
 
 
 fun Activity.makeTransparent() {
-    this.window.decorView.alpha = 0f
+    window.decorView.alpha = 0f
 }
 
 fun Context.openUrlInBrowser(url: String) {
@@ -45,7 +45,7 @@ fun Tile.updateState(state: Int) {
     }
 }
 
-fun CharSequence.emphasize(): SpannableString = let {
+fun CharSequence.emphasize() = let {
     val spannableString = SpannableString(it)
     val range = 0..it.length
     spannableString[range] = StyleSpan(Typeface.BOLD)
