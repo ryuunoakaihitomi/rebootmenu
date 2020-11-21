@@ -87,3 +87,8 @@ fun View.hideFromAccessibilityService() = run {
         override fun sendAccessibilityEventUnchecked(host: View?, event: AccessibilityEvent?) {}
     }
 }
+
+inline fun <reified T : Activity> Activity.teleport() {
+    startActivity(Intent(this, T::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+    finish()
+}

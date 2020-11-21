@@ -7,8 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.ktx.app
-import github.ryuunoakaihitomi.powerpanel.BuildConfig
 import github.ryuunoakaihitomi.powerpanel.MyApplication
 import timber.log.Timber
 import java.util.*
@@ -71,17 +69,13 @@ object StatisticsUtils {
         }
     }
 
-    fun disableDataCollection() {
-        Firebase.app.setDataCollectionDefaultEnabled(false as Boolean?)
-    }
-
     fun log(level: String, tag: String, msg: String) {
         val logLine = listOf(level, tag, msg).toString()
-        if (!BuildConfig.DISABLE_FIREBASE) Firebase.crashlytics.log(logLine)
+        Firebase.crashlytics.log(logLine)
     }
 
     private fun setCustomKey(key: String, value: Any) {
-        if (!BuildConfig.DISABLE_FIREBASE) Firebase.crashlytics.apply {
+        Firebase.crashlytics.apply {
             when (value) {
                 is String -> setCustomKey(key, value)
                 is Boolean -> setCustomKey(key, value)
@@ -96,10 +90,8 @@ object StatisticsUtils {
     }
 
     private fun logEvent(string: String, bundle: Bundle) {
-        if (!BuildConfig.DISABLE_FIREBASE) {
-            Firebase.analytics.logEvent(string, bundle)
-            Firebase.crashlytics.setCustomKey(string, bundle.toString())
-        }
+        Firebase.analytics.logEvent(string, bundle)
+        Firebase.crashlytics.setCustomKey(string, bundle.toString())
     }
 
     private fun Int.toLabel() = MyApplication.getInstance().resources.getResourceEntryName(this)

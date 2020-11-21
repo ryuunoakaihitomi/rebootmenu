@@ -1,7 +1,6 @@
 package github.ryuunoakaihitomi.powerpanel.ui.main
 
 import android.content.DialogInterface
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.widget.AdapterView
@@ -22,6 +21,7 @@ import github.ryuunoakaihitomi.powerpanel.R
 import github.ryuunoakaihitomi.powerpanel.desc.PowerExecution
 import github.ryuunoakaihitomi.powerpanel.desc.getIconResIdArray
 import github.ryuunoakaihitomi.powerpanel.desc.getLabelArray
+import github.ryuunoakaihitomi.powerpanel.ui.DonateActivity
 import github.ryuunoakaihitomi.powerpanel.ui.OpenSourceLibDependencyActivity
 import github.ryuunoakaihitomi.powerpanel.ui.ShortcutActivity
 import github.ryuunoakaihitomi.powerpanel.util.*
@@ -43,9 +43,6 @@ class MainActivity : AppCompatActivity() {
 
         // 项目链接
         private const val SOURCE_LINK = "https://github.com/ryuunoakaihitomi/rebootmenu"
-
-        // 反馈链接 （Github Issues）
-        private const val FEEDBACK_LINK = "$SOURCE_LINK/issues"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -134,15 +131,9 @@ class MainActivity : AppCompatActivity() {
                         openUrlInBrowser(SOURCE_LINK)
                         finish()
                     }
-                    setNegativeButton(R.string.btn_dialog_feedback) { _, _ ->
-                        openUrlInBrowser(FEEDBACK_LINK)
-                        finish()
-                    }
-                    setNeutralButton(getString(R.string.open_source_lib_dependency)) { _, _ ->
-                        this@MainActivity.startActivity(
-                            Intent(application, OpenSourceLibDependencyActivity::class.java)
-                        )
-                        finish()
+                    setNegativeButton(R.string.donate) { _, _ -> teleport<DonateActivity>() }
+                    setNeutralButton(R.string.open_source_lib_dependency) { _, _ ->
+                        teleport<OpenSourceLibDependencyActivity>()
                     }
                     setOnCancelListener { powerViewModel.prepare() }
                     /* 主要信息 */

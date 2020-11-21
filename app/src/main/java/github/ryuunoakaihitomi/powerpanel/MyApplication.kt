@@ -28,11 +28,9 @@ class MyApplication : Application() {
         if (BuildConfig.DEBUG) {
             StrictMode.enableDefaults()
             Shell.enableVerboseLogging = true
-            // 也可以使用DebugView：adb shell setprop debug.firebase.analytics.app com.ryuunoakaihitomi.rebootmenu
-            StatisticsUtils.disableDataCollection()
-        }
-        if (BuildConfig.DISABLE_FIREBASE) {
-            StatisticsUtils.disableDataCollection()
+            // 调试时，使用FirebaseApp#setDataCollectionDefaultEnabled后仍有数据流通，不能保证与firebase的通信绝对被屏蔽
+            // 况且setDataCollectionDefaultEnabled不是公开API （含@hide和@KeepForSdk）
+            // 只能使用DebugView：adb shell setprop debug.firebase.analytics.app com.ryuunoakaihitomi.rebootmenu
         }
         ExternalUtils.enableLog(BuildConfig.DEBUG)
     }

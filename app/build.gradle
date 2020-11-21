@@ -13,17 +13,10 @@ android {
         //targetSdkVersion compileSdkVersion
         targetSdkVersion 30
         // 版本号：发布日期
-        versionCode 20201113
-        /*
-         版本名说明：
-         R3.0.0
-         Refactoring 第三次重构+功能更新+缺陷修复
-         */
-        versionName "R3.3.6"
+        versionCode 20201121
+        // 版本名说明： R3.x.y (R3:Refactoring 第三次重构)
+        versionName "R3.4.0"
         resConfigs "en", "zh-rCN"
-        // 致用户：可以在这里禁用Firebase，将以下值设为true
-        final def disableFirebase = false
-        buildConfigField('boolean', 'DISABLE_FIREBASE', String.valueOf(disableFirebase))
     }
 
     buildTypes {
@@ -38,16 +31,23 @@ android {
         }
     }
     compileOptions {
+        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
     kotlinOptions {
         jvmTarget = "1.8"
+    }
+
+    buildFeatures {
+        viewBinding true
     }
 }
 
 dependencies {
+    // ZXing需要method sort(Ljava/util/Comparator;)V in class Ljava/util/List;
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.1'
+
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation 'androidx.core:core-ktx:1.3.2'
     implementation 'androidx.appcompat:appcompat:1.2.0'
@@ -61,8 +61,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
 
-    /* --- 使用的非Google提供开源库 --- */
-    implementation 'github.ryuunoakaihitomi.poweract:poweract:1.2.5'
+    implementation 'github.ryuunoakaihitomi.poweract:poweract:1.2.6'
     implementation 'com.github.GrenderG:Toasty:1.5.0'
     implementation "com.github.topjohnwu.libsu:core:3.0.2"
     implementation 'moe.shizuku.privilege:api:4.2.1'
@@ -75,6 +74,7 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:4.7.1'
     implementation 'com.drakeet.about:about:2.4.1'
     debugImplementation "com.github.whataa:pandora:androidx_v2.1.0"
+    implementation 'com.google.zxing:core:3.4.1'
 }
 
 // 规格化APK文件名

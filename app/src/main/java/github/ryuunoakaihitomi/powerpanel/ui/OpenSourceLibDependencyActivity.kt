@@ -8,6 +8,7 @@ import com.drakeet.about.AbsAboutActivity
 import com.drakeet.about.Category
 import com.drakeet.about.License
 import github.ryuunoakaihitomi.powerpanel.BuildConfig
+import github.ryuunoakaihitomi.powerpanel.R
 
 class OpenSourceLibDependencyActivity : AbsAboutActivity() {
 
@@ -50,6 +51,10 @@ class OpenSourceLibDependencyActivity : AbsAboutActivity() {
             "Timber", "Jake Wharton", License.APACHE_2,
             "https://github.com/JakeWharton/timber"
         ),
+        License(
+            "ZXing", "Google LLC", License.APACHE_2,
+            "https://github.com/zxing/zxing"
+        ),
     )
 
     /* debug用，发布产品中排除的库 */
@@ -86,8 +91,8 @@ class OpenSourceLibDependencyActivity : AbsAboutActivity() {
         items.add(
             License(
                 "Android Open Source Project", "Google LLC",
-                "https://source.android.com/setup/start/licenses",
-                "https://source.android.com"
+                getString(R.string.url_aosp_license),
+                getString(R.string.url_aosp_home)
             )
         )
 

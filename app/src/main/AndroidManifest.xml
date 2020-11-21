@@ -33,6 +33,13 @@
             android:theme="@style/Theme.AppCompat.NoActionBar" />
 
         <activity
+            android:name=".ui.DonateActivity"
+            android:exported="true"
+            android:label="@string/donate"
+            android:resizeableActivity="false"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+
+        <activity
             android:name=".ui.ShortcutActivity"
             android:excludeFromRecents="true"
             android:exported="true" />
@@ -67,6 +74,7 @@
             </intent-filter>
         </service>
 
+        <!-- Shizuku provided. -->
         <provider
             android:name="moe.shizuku.api.ShizukuProvider"
             android:authorities="${applicationId}.shizuku"
