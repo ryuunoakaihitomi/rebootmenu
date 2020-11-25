@@ -9,6 +9,15 @@
 
 请查看[这里](./app/src/main/res/raw-zh-rCN/help.md)获得更详细的帮助信息。
 
+## 屏幕截图
+
+[壁纸来源](https://www.pixiv.net/artworks/84998106)
+
+.[img](/annex/Screenshot_20201121-120926.png)
+.[img](/annex/Screenshot_20201121-121516.png)
+.[img](/annex/Screenshot_20201121-121001.png)
+.[img](/annex/Screenshot_20201122-212313.png)
+
 ## 下载
 * [Github Release](https://github.com/ryuunoakaihitomi/rebootmenu/releases)
 * [酷安网](https://www.coolapk.com/apk/com.ryuunoakaihitomi.rebootmenu)
