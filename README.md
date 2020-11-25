@@ -13,10 +13,7 @@
 
 [壁纸来源](https://www.pixiv.net/artworks/84998106)
 
-<img src="/annex/Screenshot_20201121-120926.png" height="25%" width="25%"/>
-<img src="/annex/Screenshot_20201121-121516.png" height="25%" width="25%"/>
-<img src="/annex/Screenshot_20201121-121001.png" height="25%" width="25%"/>
-<img src="/annex/Screenshot_20201122-212313.png" height="25%" width="25%"/>
+<img src="/annex/Screenshot_20201121-120926.png" style="zoom:25%" /><img src="/annex/Screenshot_20201121-121516.png" style="zoom:25%" /><img src="/annex/Screenshot_20201121-121001.png" style="zoom:25%" /><img src="/annex/Screenshot_20201122-212313.png" style="zoom:25%" />
 
 ## 下载
 * [Github Release](https://github.com/ryuunoakaihitomi/rebootmenu/releases)
