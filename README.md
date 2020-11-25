@@ -13,10 +13,10 @@
 
 [壁纸来源](https://www.pixiv.net/artworks/84998106)
 
-.[img](/annex/Screenshot_20201121-120926.png)
-.[img](/annex/Screenshot_20201121-121516.png)
-.[img](/annex/Screenshot_20201121-121001.png)
-.[img](/annex/Screenshot_20201122-212313.png)
+![img](/annex/Screenshot_20201121-120926.png)
+![img](/annex/Screenshot_20201121-121516.png)
+![img](/annex/Screenshot_20201121-121001.png)
+![img](/annex/Screenshot_20201122-212313.png)
 
 ## 下载
 * [Github Release](https://github.com/ryuunoakaihitomi/rebootmenu/releases)
