@@ -26,6 +26,6 @@ class LockScreenTileService : TileService() {
     }
 
     override fun onStartListening() {
-        qsTile?.updateState(Tile.STATE_ACTIVE)
+        qsTile?.updateState(Tile.STATE_INACTIVE)
     }
 }

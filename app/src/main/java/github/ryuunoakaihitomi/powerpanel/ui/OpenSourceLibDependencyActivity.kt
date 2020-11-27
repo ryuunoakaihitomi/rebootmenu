@@ -70,6 +70,15 @@ class OpenSourceLibDependencyActivity : AbsAboutActivity() {
         ),
     )
 
+    /* 使用的Gradle插件 */
+    @Suppress("SpellCheckingInspection")
+    private val gradlePluginList = listOf(
+        License(
+            "AndResGuard", "shwenzhang", License.APACHE_2,
+            "https://github.com/shwenzhang/AndResGuard"
+        )
+    )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         supportActionBar?.setDisplayHomeAsUpEnabled(false)
@@ -100,5 +109,7 @@ class OpenSourceLibDependencyActivity : AbsAboutActivity() {
         libraryList.forEach { items.add(it) }
         items.add(Category("debugImplementation"))
         debugLibraryList.forEach { items.add(it) }
+        items.add(Category("Gradle plugin"))
+        gradlePluginList.forEach { items.add(it) }
     }
 }

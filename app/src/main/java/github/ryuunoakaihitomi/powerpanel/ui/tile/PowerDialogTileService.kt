@@ -34,7 +34,7 @@ class PowerDialogTileService : TileService() {
         }
     }
 
-    // 这是一个随时可用的磁贴，因此应该在可见时时刻保持“活跃状态”（对比突出图标），但在锁屏时没有使用的理由
+    // 时刻保持“活跃状态”（对比突出图标）以防止误操作，但在锁屏时没有使用的理由
     override fun onStartListening() {
         qsTile?.run { if (!isLocked) updateState(Tile.STATE_ACTIVE) }
     }

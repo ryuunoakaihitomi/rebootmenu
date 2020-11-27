@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'AndResGuard'
 /* 崩溃分析插件 */
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
@@ -13,10 +14,25 @@ android {
         //targetSdkVersion compileSdkVersion
         targetSdkVersion 30
         // 版本号：发布日期
-        versionCode 20201121
+        versionCode 20201127
         // 版本名说明： R3.x.y (R3:Refactoring 第三次重构)
-        versionName "R3.4.0"
+        versionName "R3.4.1"
         resConfigs "en", "zh-rCN"
+    }
+
+    signingConfigs {
+        release {
+            Properties p = new Properties()
+            File f = new File(rootDir, "signInfo.properties")
+            if (f.exists()) {
+                p.load(new FileReader(f))
+                keyAlias p['KEY_ALIAS']
+                keyPassword p['KEY_PWD']
+                storePassword p['STORE_PWD']
+                storeFile file(p['STORE_FILE'])
+            } else System.err.println 'If you want to build the app in a smaller size with AndResGuard,' +
+                    'you must create signInfo.properties before.'
+        }
     }
 
     buildTypes {
@@ -28,6 +44,7 @@ android {
             firebaseCrashlytics {
                 mappingFileUploadEnabled true  // TODO 此值发布时必须为true
             }
+            signingConfig signingConfigs.release
         }
     }
     compileOptions {
@@ -85,4 +102,33 @@ android.applicationVariants.all { variant ->
 }
 repositories {
     mavenCentral()
+}
+
+/* AndResGuard配置 */
+andResGuard {
+    mappingFile = null
+    use7zip = true
+    useSign = true
+    keepRoot = false
+    fixedResName = "x"
+    mergeDuplicatedRes = true
+    whiteList = [
+            /*
+            为了防止混淆后找不到资源并最精简配置，
+            需要编译一个不使用ARG的release包后手动使用jadx等工具搜索getIdentifier()用法，
+            并检查resources.arsc以确保豁免项存在。
+             */
+            "R.string.firebase_database_url",
+            "R.string.gcm_defaultSenderId",
+            "R.string.project_id",
+            "R.string.google_app_id",
+            "R.string.google_api_key",
+            "R.string.google_storage_bucket",
+            "R.string.com.crashlytics.android.build_id",
+    ]
+    compressFilePattern = [
+            "*.png",
+    ]
+    sevenzip { artifact = 'com.tencent.mm:SevenZip:1.2.20' }
+    digestalg = "SHA-256"
 }

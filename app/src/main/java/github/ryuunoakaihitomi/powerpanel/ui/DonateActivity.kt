@@ -29,8 +29,8 @@ class DonateActivity : AppCompatActivity() {
                 val source = RGBLuminanceSource(bitmap.width, bitmap.height, px)
                 val binaryBitmap = BinaryBitmap(HybridBinarizer(source))
                 runCatching {
-                    val text = QRCodeReader().decode(binaryBitmap).text
-                    openUrlInBrowser(text)
+                    val url = QRCodeReader().decode(binaryBitmap).text
+                    openUrlInBrowser(url)
                 }.onFailure { Timber.e(it) }
             }
         }
