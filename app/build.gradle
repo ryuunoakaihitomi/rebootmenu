@@ -14,9 +14,9 @@ android {
         //targetSdkVersion compileSdkVersion
         targetSdkVersion 30
         // 版本号：发布日期
-        versionCode 20201127
+        versionCode 20201128
         // 版本名说明： R3.x.y (R3:Refactoring 第三次重构)
-        versionName "R3.4.1"
+        versionName "R3.4.2"
         resConfigs "en", "zh-rCN"
     }
 
@@ -109,7 +109,6 @@ andResGuard {
     mappingFile = null
     use7zip = true
     useSign = true
-    keepRoot = false
     fixedResName = "x"
     mergeDuplicatedRes = true
     whiteList = [
@@ -125,6 +124,8 @@ andResGuard {
             "R.string.google_api_key",
             "R.string.google_storage_bucket",
             "R.string.com.crashlytics.android.build_id",
+            // 使用资源入口名记录事件：getResourceEntryName()
+            'R.string.func_*',
     ]
     compressFilePattern = [
             "*.png",
