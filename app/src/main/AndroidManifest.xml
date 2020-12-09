@@ -45,6 +45,11 @@
             android:exported="true" />
 
         <activity
+            android:name=".ui.DebugActivity"
+            android:excludeFromRecents="true"
+            android:theme="@android:style/Theme.DeviceDefault" />
+
+        <activity
             android:name=".ui.VolumeControlActivity"
             android:exported="false">
             <intent-filter>

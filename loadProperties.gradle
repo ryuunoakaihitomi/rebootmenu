@@ -1,0 +1,18 @@
+/**
+ * 加载xxx.properties文件中的配置
+ * @return Properties
+ */
+Properties loadProperties(fileName) {
+    def localPropertiesFile = new File(rootDir, fileName + '.properties')
+    if (localPropertiesFile.exists()) {
+        Properties properties = new Properties()
+        properties.load(new FileReader(localPropertiesFile))
+        return properties
+    } else {
+        System.err.println "No such properties: $fileName"
+    }
+}
+
+ext {
+    loadProps = this.&loadProperties
+}

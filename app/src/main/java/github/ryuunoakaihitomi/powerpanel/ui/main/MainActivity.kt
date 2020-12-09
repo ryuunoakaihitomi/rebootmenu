@@ -1,6 +1,5 @@
 package github.ryuunoakaihitomi.powerpanel.ui.main
 
-import android.content.DialogInterface
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.widget.AdapterView
@@ -48,6 +47,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         makeTransparent()
+        Timber.v("Starting to load main logic.")
+        StatisticsUtils.initialize(this)
         var mainDialog = AlertDialog.Builder(this).create()
         val powerViewModel = ViewModelProvider(this)[PowerViewModel::class.java]
         powerViewModel.labelResId.observe(this) {
@@ -205,12 +206,6 @@ class MainActivity : AppCompatActivity() {
                 // 半透明度
                 alpha = DIALOG_ALPHA
                 hideFromAccessibilityService()
-            }
-            // 测试：崩溃汇报组件是否正常工作
-            if (BuildConfig.DEBUG) {
-                mainDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnLongClickListener {
-                    throw RuntimeException("Test Crash")
-                }
             }
         }
         lifecycle.addObserver(LifecycleEventObserver { _, event ->
