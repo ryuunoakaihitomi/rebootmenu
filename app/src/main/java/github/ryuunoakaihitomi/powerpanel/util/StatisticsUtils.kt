@@ -10,8 +10,6 @@ import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase
 import com.oasisfeng.condom.CondomContext
-import com.oasisfeng.condom.CondomOptions
-import com.oasisfeng.condom.kit.NullDeviceIdKit
 import github.ryuunoakaihitomi.powerpanel.BuildConfig
 import github.ryuunoakaihitomi.powerpanel.MyApplication
 import timber.log.Timber
@@ -83,23 +81,27 @@ object StatisticsUtils {
     /**
      * 手动初始化
      */
-    fun initialize(baseContext: Context) {
+    fun initialize(context: Context) {
         val lang = Locale.getDefault().toString()
         Timber.d("language = $lang")
 
         /* 百度移动统计，由于找不到隐私声明，仅在简体中文环境下加载 */
         if (lang.contains("zh_CN")) {
             Timber.i("Load baidu mob stat sdk for Chinese lang env.")
-
-            val options = CondomOptions().addKit(NullDeviceIdKit())
-            val context = CondomContext.wrap(baseContext, "BaiduMobStat", options)
-
-            StatService.setAppKey(BuildConfig.BaiduMobAd_STAT_ID)
-            StatService.setDebugOn(BuildConfig.DEBUG)
-            StatService.enableDeviceMac(context, false)
-            StatService.setAuthorizedState(context, true)
-            StatService.start(context)
+            loadBaiduMobileStatisticSdk(context)
         }
+    }
+
+    private fun loadBaiduMobileStatisticSdk(baseContext: Context) {
+        val context = CondomContext.wrap(baseContext, "BaiduMobStat")
+
+        StatService.setAppKey(BuildConfig.BaiduMobAd_STAT_ID)
+        StatService.setDebugOn(BuildConfig.DEBUG)
+        StatService.setSessionTimeOut(3)    // 大多数情况下3秒即可完成一次操作
+        StatService.enableDeviceMac(context, false)
+        StatService.setAuthorizedState(context, true)
+
+        StatService.start(context)
     }
 
     private fun setCustomKey(key: String, value: Any) {

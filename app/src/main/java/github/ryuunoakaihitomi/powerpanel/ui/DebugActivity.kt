@@ -48,6 +48,7 @@ class DebugActivity : Activity() {
         // 导出自身logcat日志
         binding.btnLogcat.setOnClickListener {
             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
+                .addFlags(Intent.FLAG_GRANT_PREFIX_URI_PERMISSION)
             startActivityForResult(intent, REQ_CODE_LOGCAT)
             Shell.sh(
                 "logcat -d" +
@@ -76,6 +77,7 @@ class DebugActivity : Activity() {
                             if (canWrite() && !TextUtils.isEmpty(logcat)) write(logcat.toByteArray())
                             flush()
                             close()
+                            logcat = ""
                         }
                     }
                 }
