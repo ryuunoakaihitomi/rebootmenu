@@ -1,10 +1,10 @@
 package github.ryuunoakaihitomi.powerpanel.ui
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import com.drakeet.about.AbsAboutActivity
 import com.drakeet.about.Category
 import com.drakeet.about.License
@@ -57,7 +57,7 @@ class OpenSourceLibDependencyActivity : AbsAboutActivity() {
             "https://github.com/zxing/zxing"
         ),
         License(
-            "Condom", "Oasis Feng", License.APACHE_2,
+            "Project Condom", "Oasis Feng", License.APACHE_2,
             "https://github.com/oasisfeng/condom"
         ),
     )
@@ -91,9 +91,8 @@ class OpenSourceLibDependencyActivity : AbsAboutActivity() {
 
     override fun onCreateHeader(icon: ImageView, slogan: TextView, version: TextView) {
         icon.setImageResource(android.R.drawable.ic_lock_power_off)
-        // 由此进入调试界面
         icon.setOnLongClickListener {
-            startActivity(Intent(this, DebugActivity::class.java))
+            Toast.makeText(this, BuildConfig.BUILD_TIME, Toast.LENGTH_LONG).show()
             true
         }
         slogan.visibility = View.GONE
