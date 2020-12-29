@@ -1,6 +1,8 @@
 package github.ryuunoakaihitomi.powerpanel.ui
 
 import android.media.AudioManager
+import android.media.AudioManager.ADJUST_SAME
+import android.media.AudioManager.FLAG_SHOW_UI
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.getSystemService
@@ -16,10 +18,7 @@ class VolumeControlActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Timber.v("active")
-        getSystemService<AudioManager>()?.adjustVolume(
-            AudioManager.ADJUST_SAME,
-            AudioManager.FLAG_SHOW_UI
-        )
+        getSystemService<AudioManager>()?.adjustVolume(ADJUST_SAME, FLAG_SHOW_UI)
         finish()
     }
 }

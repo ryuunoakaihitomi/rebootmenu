@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import github.ryuunoakaihitomi.powerpanel.MyApplication
 import github.ryuunoakaihitomi.powerpanel.desc.PowerExecution
-import github.ryuunoakaihitomi.powerpanel.util.StatisticsUtils
 import github.ryuunoakaihitomi.powerpanel.util.makeTransparent
 
 class ShortcutActivity : AppCompatActivity() {
@@ -28,7 +27,6 @@ class ShortcutActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         makeTransparent()
-        StatisticsUtils.initialize(this)
         val forceMode = intent.getBooleanExtra(EXTRA_FORCE_MODE, false)
         PowerExecution.execute(
             intent.getIntExtra(EXTRA_LABEL_RES_ID, ResourcesCompat.ID_NULL), this, forceMode

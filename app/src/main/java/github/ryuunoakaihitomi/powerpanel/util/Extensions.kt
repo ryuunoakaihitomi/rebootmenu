@@ -57,7 +57,7 @@ fun CharSequence.emphasize() = let {
  * 防止无障碍服务攻击
  * 可以使用adb shell uiautomator dump验证效果
  */
-fun View.hideFromAccessibilityService() = run {
+fun View.emptyAccessibilityDelegate() = run {
     accessibilityDelegate = object : View.AccessibilityDelegate() {
         override fun addExtraDataToAccessibilityNodeInfo(
             host: View,

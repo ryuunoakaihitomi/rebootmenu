@@ -16,13 +16,12 @@ android {
         //targetSdkVersion compileSdkVersion
         targetSdkVersion 30
         // 版本号：发布日期
-        versionCode 20201213
+        versionCode 20201229
         // 版本名说明： R3.x.y (R3:Refactoring 第三次重构)
-        versionName "R3.4.5"
+        versionName "R3.4.6"
         resConfigs "en", "zh-rCN"
 
         buildConfigField 'String', 'BUILD_TIME', '\"' + new Date() + '\"'
-        buildConfigField 'String', 'BaiduMobAd_STAT_ID', '\"' + loadProps('apiKey')['BAIDU_STAT'] + '\"'
     }
 
     signingConfigs {
@@ -65,7 +64,6 @@ dependencies {
     // ZXing需要method sort(Ljava/util/Comparator;)V in class Ljava/util/List;
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.1'
 
-    implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation 'androidx.core:core-ktx:1.3.2'
     implementation 'androidx.appcompat:appcompat:1.2.0'
 
@@ -92,7 +90,6 @@ dependencies {
     implementation 'com.drakeet.about:about:2.4.1'
     debugImplementation "com.github.whataa:pandora:androidx_v2.1.0"
     implementation 'com.google.zxing:core:3.4.1'
-    implementation 'com.oasisfeng.condom:library:2.5.0'
 }
 
 // 规格化APK文件名

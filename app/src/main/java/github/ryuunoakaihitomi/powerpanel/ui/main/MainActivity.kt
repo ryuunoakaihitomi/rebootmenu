@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
-import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.IconCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.Lifecycle
@@ -32,23 +31,20 @@ import org.apache.commons.io.IOUtils
 import timber.log.Timber
 import java.nio.charset.Charset
 import java.util.*
+import androidx.core.content.res.ResourcesCompat as RC
+
+// 窗口透明度
+private const val DIALOG_ALPHA = 0.85f
+
+// 项目链接
+private const val SOURCE_LINK = "https://github.com/ryuunoakaihitomi/rebootmenu"
 
 class MainActivity : AppCompatActivity() {
-
-    companion object {
-
-        // 窗口透明度
-        private const val DIALOG_ALPHA = 0.85f
-
-        // 项目链接
-        private const val SOURCE_LINK = "https://github.com/ryuunoakaihitomi/rebootmenu"
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         makeTransparent()
-        Timber.v("Starting to load main logic.")
-        StatisticsUtils.initialize(this)
+        Timber.v("start!")
         var mainDialog = AlertDialog.Builder(this).create()
         val powerViewModel = ViewModelProvider(this)[PowerViewModel::class.java]
         powerViewModel.labelResId.observe(this) {
@@ -114,7 +110,7 @@ class MainActivity : AppCompatActivity() {
                         }
                         setNeutralButton(null, null)
                         setPositiveButton(null, null)
-                        show().listView.rootView.hideFromAccessibilityService()
+                        show().listView.rootView.emptyAccessibilityDelegate()
                     } else {
                         powerViewModel.call(item.labelResId)
                         dialog.dismiss()
@@ -165,17 +161,13 @@ class MainActivity : AppCompatActivity() {
             mainDialog.listView.onItemLongClickListener =
                 AdapterView.OnItemLongClickListener { _, _, position, _ ->
                     val item = it[position]
-                    ResourcesCompat.getDrawable(resources, item.iconResId, null)?.run {
+                    RC.getDrawable(resources, item.iconResId, null)?.run {
                         // 注意：必须使用mutate()保持Drawable独立性以修复无法变色的Bug
                         mutate().run {
                             // 如果是强制模式，为了便于区分，改变shortcut图标颜色
                             if (powerViewModel.isOnForceMode(item)) {
                                 setTint(
-                                    ResourcesCompat.getColor(
-                                        resources,
-                                        R.color.colorIconForceModeShortcut,
-                                        null
-                                    )
+                                    RC.getColor(resources, R.color.colorIconForceModeShortcut, null)
                                 )
                             }
                             val unspannedLabel = item.label.toString()
@@ -205,7 +197,7 @@ class MainActivity : AppCompatActivity() {
             mainDialog.window?.decorView?.run {
                 // 半透明度
                 alpha = DIALOG_ALPHA
-                hideFromAccessibilityService()
+                emptyAccessibilityDelegate()
             }
         }
         lifecycle.addObserver(LifecycleEventObserver { _, event ->

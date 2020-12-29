@@ -90,5 +90,3 @@ lint/tmp/
 # --- 自定义配置 ---
 # 签名信息
 signInfo.properties
-# 网络服务API令牌
-apiKey.properties

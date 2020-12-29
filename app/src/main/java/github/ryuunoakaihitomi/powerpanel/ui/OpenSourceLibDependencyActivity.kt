@@ -7,81 +7,38 @@ import android.widget.TextView
 import android.widget.Toast
 import com.drakeet.about.AbsAboutActivity
 import com.drakeet.about.Category
-import com.drakeet.about.License
 import github.ryuunoakaihitomi.powerpanel.BuildConfig
 import github.ryuunoakaihitomi.powerpanel.R
+import com.drakeet.about.License as L
 
 class OpenSourceLibDependencyActivity : AbsAboutActivity() {
 
     /* 在发布产品中包含的库 */
     @Suppress("SpellCheckingInspection")
     private val libraryList = listOf(
-        License(
-            "PowerAct", "ZQY", License.APACHE_2,
-            "https://github.com/ryuunoakaihitomi/PowerAct"
-        ),
-        License(
-            "libsu", "John Wu", License.APACHE_2,
-            "https://github.com/topjohnwu/libsu"
-        ),
-        License(
-            "Shizuku", "Rikka", License.APACHE_2,
-            "https://shizuku.rikka.app"
-        ),
-        License(
-            "ReToast", "ZQY", License.APACHE_2,
-            "https://github.com/ryuunoakaihitomi/ReToast"
-        ),
-        License(
-            "Toasty", "GrenderG", "GNU LGPL v3",
-            "https://github.com/GrenderG/Toasty"
-        ),
-        License(
-            "Markwon", "Dimitry Ivanov", License.APACHE_2,
-            "https://noties.io/Markwon"
-        ),
-        License(
-            "about-page", "Drakeet", License.APACHE_2,
-            "https://github.com/PureWriter/about-page"
-        ),
-        License(
-            "Apache Commons IO", "the Apache Software Foundation", License.APACHE_2,
-            "http://commons.apache.org/proper/commons-io"
-        ),
-        License(
-            "Timber", "Jake Wharton", License.APACHE_2,
-            "https://github.com/JakeWharton/timber"
-        ),
-        License(
-            "ZXing", "Google LLC", License.APACHE_2,
-            "https://github.com/zxing/zxing"
-        ),
-        License(
-            "Project Condom", "Oasis Feng", License.APACHE_2,
-            "https://github.com/oasisfeng/condom"
-        ),
+        L("PowerAct", "ZQY", L.APACHE_2, "https://github.com/ryuunoakaihitomi/PowerAct"),
+        L("libsu", "John Wu", L.APACHE_2, "https://github.com/topjohnwu/libsu"),
+        L("Shizuku", "Rikka", L.APACHE_2, "https://shizuku.rikka.app"),
+        L("ReToast", "ZQY", L.APACHE_2, "https://github.com/ryuunoakaihitomi/ReToast"),
+        L("Toasty", "GrenderG", "GNU LGPL v3", "https://github.com/GrenderG/Toasty"),
+        L("Markwon", "Dimitry Ivanov", L.APACHE_2, "https://noties.io/Markwon"),
+        L("about-page", "Drakeet", L.APACHE_2, "https://github.com/PureWriter/about-page"),
+        L("Commons IO", "Apache", L.APACHE_2, "http://commons.apache.org/proper/commons-io"),
+        L("Timber", "Jake Wharton", L.APACHE_2, "https://github.com/JakeWharton/timber"),
+        L("ZXing", "Google LLC", L.APACHE_2, "https://github.com/zxing/zxing"),
     )
 
     /* debug用，发布产品中排除的库 */
     @Suppress("SpellCheckingInspection")
     private val debugLibraryList = listOf(
-        License(
-            "LeakCanary", "Square, Inc.", License.APACHE_2,
-            "https://square.github.io/leakcanary"
-        ),
-        License(
-            "Pandora", "linjiang", License.APACHE_2,
-            "https://github.com/whataa/pandora"
-        ),
+        L("LeakCanary", "Square, Inc.", L.APACHE_2, "https://square.github.io/leakcanary"),
+        L("Pandora", "linjiang", L.APACHE_2, "https://github.com/whataa/pandora"),
     )
 
     /* 使用的Gradle插件 */
     @Suppress("SpellCheckingInspection")
     private val gradlePluginList = listOf(
-        License(
-            "AndResGuard", "shwenzhang", License.APACHE_2,
-            "https://github.com/shwenzhang/AndResGuard"
-        )
+        L("AndResGuard", "shwenzhang", L.APACHE_2, "https://github.com/shwenzhang/AndResGuard")
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -107,7 +64,7 @@ class OpenSourceLibDependencyActivity : AbsAboutActivity() {
          */
         items.add(Category("Powered by…"))
         items.add(
-            License(
+            L(
                 "Android Open Source Project", "Google LLC",
                 getString(R.string.url_aosp_license),
                 getString(R.string.url_aosp_home)

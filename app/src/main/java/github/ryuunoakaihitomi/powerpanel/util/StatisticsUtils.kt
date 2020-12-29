@@ -1,16 +1,12 @@
 package github.ryuunoakaihitomi.powerpanel.util
 
-import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
-import com.baidu.mobstat.StatService
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase
-import com.oasisfeng.condom.CondomContext
-import github.ryuunoakaihitomi.powerpanel.BuildConfig
 import github.ryuunoakaihitomi.powerpanel.MyApplication
 import timber.log.Timber
 import java.util.*
@@ -18,7 +14,7 @@ import java.util.*
 /**
  * 统计工具类，**为方便迁移请务必在此处创建接口并且不在此类外直接调用统计SDK**
  *
- * 目前使用的是`Firebase`和`百度移动统计`
+ * 目前使用的是`Firebase`
  */
 object StatisticsUtils {
 
@@ -30,7 +26,7 @@ object StatisticsUtils {
     private const val KEY_FORCE_MODE = "force_mode"
     private const val KEY_DONE = "done"
 
-    /* 记录特权模式二次操作取消，这是之前添加广告的地方，现在评估一下此处受众占比 */
+    /* 记录特权模式二次操作取消 */
     private const val EVENT_DIALOG_CANCEL = "dialog_cancel"
     private const val KEY_CANCELLED = "cancelled"
 
@@ -76,32 +72,6 @@ object StatisticsUtils {
     fun log(level: String, tag: String, msg: String) {
         val logLine = listOf(level, tag, msg).toString()
         Firebase.crashlytics.log(logLine)
-    }
-
-    /**
-     * 手动初始化
-     */
-    fun initialize(context: Context) {
-        val lang = Locale.getDefault().toString()
-        Timber.d("language = $lang")
-
-        /* 百度移动统计，由于找不到隐私声明，仅在简体中文环境下加载 */
-        if (lang.contains("zh_CN")) {
-            Timber.i("Load baidu mob stat sdk for Chinese lang env.")
-            loadBaiduMobileStatisticSdk(context)
-        }
-    }
-
-    private fun loadBaiduMobileStatisticSdk(baseContext: Context) {
-        val context = CondomContext.wrap(baseContext, "BaiduMobStat")
-
-        StatService.setAppKey(BuildConfig.BaiduMobAd_STAT_ID)
-        StatService.setDebugOn(BuildConfig.DEBUG)
-        StatService.setSessionTimeOut(3)    // 大多数情况下3秒即可完成一次操作
-        StatService.enableDeviceMac(context, false)
-        StatService.setAuthorizedState(context, true)
-
-        StatService.start(context)
     }
 
     private fun setCustomKey(key: String, value: Any) {
