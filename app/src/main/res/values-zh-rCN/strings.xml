@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">启动选项</string>
+    <string name="app_name">电源面板</string>
     <string name="btn_dialog_help">帮助</string>
     <string name="btn_dialog_switch_mode">切换模式</string>
     <string name="title_dialog_help_info">帮助信息</string>

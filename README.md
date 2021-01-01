@@ -1,4 +1,4 @@
-# 启动选项
+# 电源面板
 
 ![image](./app/src/main/res/mipmap/ic_launcher.png)
 
@@ -17,7 +17,6 @@
 
 ## 下载
 * [Github Release](https://github.com/ryuunoakaihitomi/rebootmenu/releases)
-* [酷安网](https://www.coolapk.com/apk/com.ryuunoakaihitomi.rebootmenu)
 
 ## 捐赠
 如果认为这个小工具或者其源码给你带来了便利，可以考虑捐赠一些金钱以支持开发者。

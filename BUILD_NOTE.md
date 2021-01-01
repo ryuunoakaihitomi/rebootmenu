@@ -6,8 +6,6 @@
 
 构建
 
-- 修改并填写[`apiKey_exapmle.properties`](apiKey_exapmle.properties)，重命名为`apiKey.properties`
-
 - 修改[`signInfo_example.properties`](signInfo_example.properties)，填入签名信息，并将其命名为`signInfo.properties`
 
 - 执行Gradle任务：`resguardRelease`
