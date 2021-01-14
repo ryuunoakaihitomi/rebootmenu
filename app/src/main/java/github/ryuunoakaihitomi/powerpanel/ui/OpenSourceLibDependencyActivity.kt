@@ -5,6 +5,8 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import com.drakeet.about.AbsAboutActivity
 import com.drakeet.about.Category
 import github.ryuunoakaihitomi.powerpanel.BuildConfig
@@ -47,7 +49,9 @@ class OpenSourceLibDependencyActivity : AbsAboutActivity() {
     }
 
     override fun onCreateHeader(icon: ImageView, slogan: TextView, version: TextView) {
-        icon.setImageResource(android.R.drawable.ic_lock_power_off)
+        val badge = ContextCompat.getDrawable(this, android.R.drawable.ic_lock_power_off)
+        badge?.setTint(ResourcesCompat.getColor(resources, R.color.colorIconBackground, null))
+        icon.setImageDrawable(badge)
         icon.setOnLongClickListener {
             Toast.makeText(this, BuildConfig.BUILD_TIME, Toast.LENGTH_LONG).show()
             true
