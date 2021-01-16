@@ -74,6 +74,15 @@ class OpenSourceLibDependencyActivity : AbsAboutActivity() {
                 getString(R.string.url_aosp_home)
             )
         )
+        // CyanogenMod系统平台支持
+        items.add(
+            L(
+                "CyanogenMod Platform SDK",
+                "CyanogenMod",
+                L.APACHE_2,
+                "https://github.com/CyanogenMod/cm_platform_sdk"
+            )
+        )
 
         items.add(Category("implementation"))
         libraryList.forEach { items.add(it) }

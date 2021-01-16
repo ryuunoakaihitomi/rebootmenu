@@ -4,6 +4,10 @@
     package="github.ryuunoakaihitomi.powerpanel">
 
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <!-- CM平台SDK文档 -->
+    <uses-permission android:name="cyanogenmod.permission.PUBLISH_CUSTOM_TILE" />
 
     <uses-sdk tools:overrideLibrary="moe.shizuku.shared" />
 
@@ -54,6 +58,14 @@
             </intent-filter>
         </activity>
 
+        <receiver
+            android:name=".receiver.BootCompletedReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
         <service
             android:name=".ui.tile.PowerDialogTileService"
             android:icon="@android:drawable/ic_lock_power_off"
@@ -73,6 +85,8 @@
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
         </service>
+
+        <service android:name=".ui.tile.CmCustomTileService" />
 
         <!-- Shizuku提供 -->
         <provider

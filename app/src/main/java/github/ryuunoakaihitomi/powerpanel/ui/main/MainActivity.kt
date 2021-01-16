@@ -22,6 +22,7 @@ import github.ryuunoakaihitomi.powerpanel.desc.getLabelArray
 import github.ryuunoakaihitomi.powerpanel.ui.DonateActivity
 import github.ryuunoakaihitomi.powerpanel.ui.OpenSourceLibDependencyActivity
 import github.ryuunoakaihitomi.powerpanel.ui.ShortcutActivity
+import github.ryuunoakaihitomi.powerpanel.ui.tile.CmCustomTileService
 import github.ryuunoakaihitomi.powerpanel.util.*
 import io.noties.markwon.Markwon
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin
@@ -77,6 +78,7 @@ class MainActivity : AppCompatActivity() {
                 Timber.i("Request shizuku permission.")
                 ActivityCompat.requestPermissions(this, arrayOf(ShizukuApiConstants.PERMISSION), 0)
             }
+            CmCustomTileService.start()
             mainDialog = AlertDialog.Builder(this).apply {
                 setTitle(powerViewModel.title.value)
                 setAdapter(

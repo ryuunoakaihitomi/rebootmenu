@@ -16,9 +16,9 @@ android {
         //targetSdkVersion compileSdkVersion
         targetSdkVersion 30
         // 版本号：发布日期
-        versionCode 20210114
+        versionCode 20210117
         // 版本名说明： R3.x.y (R3:Refactoring 第三次重构)
-        versionName "R3.5.2"
+        versionName "R3.6.0"
         resConfigs "en", "zh-rCN"
 
         buildConfigField 'String', 'BUILD_TIME', '\"' + new Date() + '\"'
@@ -91,6 +91,7 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:4.7.1'
     implementation 'com.drakeet.about:about:2.4.1'
     implementation 'com.google.zxing:core:3.4.1'
+    implementation 'org.cyanogenmod:platform.sdk:5.0.1'
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.4'
     debugImplementation "com.github.whataa:pandora:androidx_v2.1.0"
 }
