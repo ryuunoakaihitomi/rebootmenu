@@ -26,7 +26,7 @@ class CmCustomTileService : JobIntentService() {
         private val publish by lazy {
             Timber.i("Starting to publish tile...")
             if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.N &&
-                Build.CM_VERSION.SDK_INT >= Build.CM_VERSION_CODES.DRAGON_FRUIT // January 2016
+                Build.CM_VERSION.SDK_INT >= Build.CM_VERSION_CODES.APRICOT
             ) {
                 val context = MyApplication.getInstance()
                 context.startService(Intent(context, CmCustomTileService::class.java))
@@ -53,9 +53,10 @@ class CmCustomTileService : JobIntentService() {
             /* 目前也就加一个“电源面板”的瓷块，锁屏的话双击状态栏比瓷块更方便 */
             CustomTile.Builder(this).run {
                 setLabel(R.string.tile_pwr_menu)
-                // 由于长按后才显示，和setOnLongClickIntent()冲突
-                //setContentDescription(R.string.app_name)
+                // 由于长按后才显示，和setOnLongClickIntent()冲突。保留以兼容更早期不支持OnLongClickIntent的CM
+                setContentDescription(R.string.app_name)
                 // CM有自己瓷块“音量面板”，但是点击不收起快捷设置面板，长按弹出的是占满屏幕的声音设置
+                // 这套SDK似乎做了适配，提供类似于appcompat的兼容性
                 setOnLongClickIntent(
                     Intent(application, VolumeControlActivity::class.java).pend()
                 )
