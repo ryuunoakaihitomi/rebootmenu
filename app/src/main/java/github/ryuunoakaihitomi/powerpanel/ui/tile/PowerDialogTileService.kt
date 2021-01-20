@@ -1,14 +1,10 @@
 package github.ryuunoakaihitomi.powerpanel.ui.tile
 
-import android.content.Intent
 import android.os.Build
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import androidx.annotation.RequiresApi
-import github.ryuunoakaihitomi.poweract.ExternalUtils
-import github.ryuunoakaihitomi.powerpanel.R
-import github.ryuunoakaihitomi.powerpanel.ui.ShortcutActivity
-import github.ryuunoakaihitomi.powerpanel.ui.main.MainActivity
+import github.ryuunoakaihitomi.powerpanel.desc.PowerExecution
 import github.ryuunoakaihitomi.powerpanel.util.updateState
 import timber.log.Timber
 
@@ -24,13 +20,7 @@ class PowerDialogTileService : TileService() {
                 unlockAndRun { updateState(Tile.STATE_ACTIVE) }
             }
         } else {
-            /* 打开电源菜单 */
-            val intent = if (ExternalUtils.isExposedComponentAvailable(this)) {
-                ShortcutActivity.getActionIntent(R.string.func_sys_pwr_menu)
-            } else {
-                Intent(this, MainActivity::class.java)
-            }.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivityAndCollapse(intent)
+            startActivityAndCollapse(PowerExecution.toPowerControlPanel(this))
         }
     }
 

@@ -1,5 +1,7 @@
 package github.ryuunoakaihitomi.powerpanel.desc
 
+import android.content.Context
+import android.content.Intent
 import android.view.Gravity
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
@@ -10,6 +12,8 @@ import github.ryuunoakaihitomi.poweract.PowerAct
 import github.ryuunoakaihitomi.poweract.PowerActX
 import github.ryuunoakaihitomi.powerpanel.BuildConfig
 import github.ryuunoakaihitomi.powerpanel.R
+import github.ryuunoakaihitomi.powerpanel.ui.ShortcutActivity
+import github.ryuunoakaihitomi.powerpanel.ui.main.MainActivity
 import github.ryuunoakaihitomi.powerpanel.util.StatisticsUtils
 import timber.log.Timber
 
@@ -68,4 +72,11 @@ object PowerExecution {
         }
         work()
     }
+
+    fun toPowerControlPanel(context: Context) =
+        if (ExternalUtils.isExposedComponentAvailable(context)) {
+            ShortcutActivity.getActionIntent(R.string.func_sys_pwr_menu)
+        } else {
+            Intent(context, MainActivity::class.java)
+        }.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 }

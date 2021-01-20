@@ -14,7 +14,7 @@ import timber.log.Timber
 /**
  * 这个打开音量面板不属于主要功能
  * 但是这个用习惯了比较顺手
- * 所以予以保留
+ * 所以保留在各个额外设置入口
  */
 class VolumeControlActivity : AppCompatActivity() {
 

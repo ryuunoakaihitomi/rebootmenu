@@ -27,7 +27,7 @@ import github.ryuunoakaihitomi.powerpanel.util.*
 import io.noties.markwon.Markwon
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin
 import moe.shizuku.api.ShizukuApiConstants
-import moe.shizuku.api.ShizukuProvider
+import moe.shizuku.api.ShizukuService
 import org.apache.commons.io.IOUtils
 import timber.log.Timber
 import java.nio.charset.Charset
@@ -69,15 +69,16 @@ class MainActivity : AppCompatActivity() {
             }
         }
         powerViewModel.infoArray.observe(this) {
+            val rootMode = powerViewModel.rootMode.value ?: false
             /* 特权模式下主动请求Shizuku授权，在受限模式下PowerAct已经处理好这个步骤 */
-            if (powerViewModel.rootMode.value == true &&
-                ShizukuProvider.isShizukuInstalled(this) &&
+            if (rootMode && ShizukuService.pingBinder() &&
                 ActivityCompat.checkSelfPermission(this, ShizukuApiConstants.PERMISSION)
                 != PackageManager.PERMISSION_GRANTED
             ) {
                 Timber.i("Request shizuku permission.")
                 ActivityCompat.requestPermissions(this, arrayOf(ShizukuApiConstants.PERMISSION), 0)
             }
+            PowerActHelper.toggleExposedComponents(application, !rootMode)   // 为CMTile提前更新外置组件可见性
             CmCustomTileService.start()
             mainDialog = AlertDialog.Builder(this).apply {
                 setTitle(powerViewModel.title.value)
@@ -118,7 +119,7 @@ class MainActivity : AppCompatActivity() {
                         dialog.dismiss()
                     }
                 }
-                if (powerViewModel.rootMode.value == true) {
+                if (rootMode) {
                     setNeutralButton(R.string.btn_dialog_switch_mode) { _, _ -> powerViewModel.reverseForceMode() }
                 }
                 setPositiveButton(R.string.btn_dialog_help) { _, _ ->
