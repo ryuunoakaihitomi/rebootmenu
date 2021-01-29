@@ -4,6 +4,9 @@ import android.util.Log
 import github.ryuunoakaihitomi.powerpanel.BuildConfig
 import timber.log.Timber
 
+/**
+ * 从main复制至此以防止Redeclaration错误
+ */
 class MyLogTree : Timber.DebugTree() {
 
     override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {

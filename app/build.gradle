@@ -16,9 +16,9 @@ android {
         //targetSdkVersion compileSdkVersion
         targetSdkVersion 30
         // 版本号：发布日期
-        versionCode 20210123
+        versionCode 20210129
         // 版本名说明： R3.x.y (R3:Refactoring 第三次重构)
-        versionName "R3.6.3"
+        versionName "R3.6.4"
         resConfigs "en", "zh-rCN"
 
         buildConfigField 'String', 'BUILD_TIME', '\"' + new Date() + '\"'
@@ -44,6 +44,21 @@ android {
                 mappingFileUploadEnabled true  // TODO 此值发布时必须为true
             }
             signingConfig signingConfigs.release
+        }
+        debug {
+            versionNameSuffix '-debug'
+        }
+    }
+    flavorDimensions "version"
+    productFlavors {
+        normal {
+            dimension "version"
+        }
+        // Free/Libre and Open Source Software
+        floss {
+            dimension "version"
+            versionNameSuffix '-floss'
+            applicationId 'github.ryuunoakaihitomi.powerpanel'  // 现在想要个新的packageName
         }
     }
     compileOptions {
@@ -72,9 +87,9 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
 
     /* 崩溃报告组件 */
-    implementation platform('com.google.firebase:firebase-bom:26.2.0')
-    implementation 'com.google.firebase:firebase-analytics-ktx'
-    implementation 'com.google.firebase:firebase-crashlytics-ktx'
+    normalImplementation platform('com.google.firebase:firebase-bom:26.2.0')
+    normalImplementation 'com.google.firebase:firebase-analytics-ktx'
+    normalImplementation 'com.google.firebase:firebase-crashlytics-ktx'
 
     /* ------- 其他第三方开源组件 ------- */
 
@@ -87,7 +102,7 @@ dependencies {
     implementation "com.github.topjohnwu.libsu:core:3.0.2"
     implementation 'moe.shizuku.privilege:api:4.2.1'
     implementation 'commons-io:commons-io:2.8.0'
-    implementation 'github.ryuunoakaihitomi.retoast:retoast:1.2.0'
+    implementation 'github.ryuunoakaihitomi.retoast:retoast:1.2.1'
     implementation 'com.jakewharton.timber:timber:4.7.1'
     implementation 'com.drakeet.about:about:2.4.1'
     implementation 'com.google.zxing:core:3.4.1'
@@ -96,10 +111,24 @@ dependencies {
     debugImplementation "com.github.whataa:pandora:androidx_v2.1.0"
 }
 
-// 规格化APK文件名
 android.applicationVariants.all { variant ->
+
+    // 规格化APK文件名
     variant.outputs.all {
         outputFileName = "${rootProject.name}-${variant.versionCode}_${variant.versionName}_${variant.buildType.name}.apk"
+    }
+
+    // 在floss变体中过滤gms插件任务
+    // processFlossReleaseGoogleServices
+    tasks.forEach { task ->
+        final def name = task.name
+        if ((name.contains('Google') || name.contains('Crashlytics'))) {
+            System.out.println "G task in ${variant.flavorName} -> $name"
+            if (name.contains('floss'.capitalize())) {
+                System.err.println "Skip G task for floss: $name"
+                task.enabled = false
+            }
+        }
     }
 }
 repositories {
