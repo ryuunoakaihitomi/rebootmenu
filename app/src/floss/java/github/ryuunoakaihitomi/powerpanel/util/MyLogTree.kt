@@ -3,7 +3,7 @@ package github.ryuunoakaihitomi.powerpanel.util
 import timber.log.Timber
 
 /**
- * floss版本保留日志
+ * floss版本完全保留日志
  */
 class MyLogTree : Timber.DebugTree() {
 
