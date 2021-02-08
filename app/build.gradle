@@ -16,9 +16,9 @@ android {
         //targetSdkVersion compileSdkVersion
         targetSdkVersion 30
         // 版本号：发布日期
-        versionCode 20210129
+        versionCode 20210208
         // 版本名说明： R3.x.y (R3:Refactoring 第三次重构)
-        versionName "R3.6.4"
+        versionName "R3.6.5"
         resConfigs "en", "zh-rCN"
 
         buildConfigField 'String', 'BUILD_TIME', '\"' + new Date() + '\"'

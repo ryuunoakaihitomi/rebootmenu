@@ -57,7 +57,8 @@ object StatisticsUtils {
         }
     }
 
-    private fun setCustomKey(key: String, value: Any) {
+    private fun setCustomKey(key: String, v: Any) {
+        val value = if (v is Array<*>) v.contentToString() else v
         Timber.i("Custom Key: $key, $value")
     }
 
