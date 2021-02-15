@@ -18,6 +18,11 @@
 ## 下载
 * [Github Release](https://github.com/ryuunoakaihitomi/rebootmenu/releases)
 
+> 不推荐的备用下载，有无法直接下载APK文件并引流至其客户端的历史。
+![相关源代码在此次commit的时间点时已被注释](/annex/coolapk_ban_apk_history.webp)
+
+* [酷安网](https://www.coolapk.com/apk/com.ryuunoakaihitomi.rebootmenu)
+
 ## 捐赠
 如果认为这个小工具或者其源码给你带来了便利，可以考虑捐赠一些金钱以支持开发者。
 
