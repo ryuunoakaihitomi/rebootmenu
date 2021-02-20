@@ -94,5 +94,6 @@ object StatisticsUtils {
         Firebase.crashlytics.setCustomKey(string, bundle.toString())
     }
 
-    private fun Int.toLabel() = MyApplication.getInstance().resources.getResourceEntryName(this)
+    private fun @receiver:StringRes Int.toLabel() =
+        MyApplication.getInstance().resources.getResourceEntryName(this)
 }

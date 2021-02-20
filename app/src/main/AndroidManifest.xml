@@ -9,7 +9,7 @@
     <!-- CM平台SDK文档 -->
     <uses-permission android:name="cyanogenmod.permission.PUBLISH_CUSTOM_TILE" />
 
-    <uses-sdk tools:overrideLibrary="moe.shizuku.shared" />
+    <uses-sdk tools:overrideLibrary="rikka.shizuku.shared,rikka.shizuku.provider,rikka.shizuku.api,rikka.shizuku.aidl" />
 
     <application
         android:name=".MyApplication"
@@ -90,7 +90,7 @@
 
         <!-- Shizuku提供 -->
         <provider
-            android:name="moe.shizuku.api.ShizukuProvider"
+            android:name="rikka.shizuku.ShizukuProvider"
             android:authorities="${applicationId}.shizuku"
             android:enabled="true"
             android:exported="true"

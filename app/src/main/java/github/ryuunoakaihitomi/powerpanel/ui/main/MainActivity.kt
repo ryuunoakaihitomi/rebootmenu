@@ -1,11 +1,11 @@
 package github.ryuunoakaihitomi.powerpanel.ui.main
 
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.widget.AdapterView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
@@ -26,9 +26,8 @@ import github.ryuunoakaihitomi.powerpanel.ui.tile.CmCustomTileService
 import github.ryuunoakaihitomi.powerpanel.util.*
 import io.noties.markwon.Markwon
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin
-import moe.shizuku.api.ShizukuApiConstants
-import moe.shizuku.api.ShizukuService
 import org.apache.commons.io.IOUtils
+import rikka.shizuku.Shizuku
 import timber.log.Timber
 import java.nio.charset.Charset
 import java.util.*
@@ -71,12 +70,12 @@ class MainActivity : AppCompatActivity() {
         powerViewModel.infoArray.observe(this) {
             val rootMode = powerViewModel.rootMode.value ?: false
             /* 特权模式下主动请求Shizuku授权，在受限模式下PowerAct已经处理好这个步骤 */
-            if (rootMode && ShizukuService.pingBinder() &&
-                ActivityCompat.checkSelfPermission(this, ShizukuApiConstants.PERMISSION)
-                != PackageManager.PERMISSION_GRANTED
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
+                rootMode && Shizuku.pingBinder() &&
+                Shizuku.checkSelfPermission() != PackageManager.PERMISSION_GRANTED
             ) {
                 Timber.i("Request shizuku permission.")
-                ActivityCompat.requestPermissions(this, arrayOf(ShizukuApiConstants.PERMISSION), 0)
+                Shizuku.requestPermission(0)
             }
             PowerActHelper.toggleExposedComponents(application, !rootMode)   // 为CMTile提前更新外置组件可见性
             CmCustomTileService.start()

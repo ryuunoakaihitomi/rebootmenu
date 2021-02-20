@@ -24,12 +24,7 @@ class MyApplication : Application() {
         super.onCreate()
         myApplication = this
         StatisticsUtils.recordEnvInfo()
-        if (BuildConfig.DEBUG) {
-            StrictMode.enableDefaults()
-            // 调试时，使用FirebaseApp#setDataCollectionDefaultEnabled后仍有数据流通，不能保证与firebase的通信绝对被屏蔽
-            // 况且setDataCollectionDefaultEnabled不是公开API （含@hide和@KeepForSdk）
-            // 只能使用DebugView：adb shell setprop debug.firebase.analytics.app com.ryuunoakaihitomi.rebootmenu
-        }
+        if (BuildConfig.DEBUG) StrictMode.enableDefaults()
         // 留下PowerAct核心日志用以发布后的调试
         ExternalUtils.enableLog(true)
     }
