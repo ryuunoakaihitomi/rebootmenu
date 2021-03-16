@@ -27,6 +27,7 @@ object InternalDoerImpl : InternalDoer {
     }
 
     override fun logEvent(tag: String, bundle: Bundle) {
+        Timber.i(bundle.toString())
         Firebase.analytics.logEvent(tag, bundle)
         Firebase.crashlytics.setCustomKey(tag, bundle.toString())
     }

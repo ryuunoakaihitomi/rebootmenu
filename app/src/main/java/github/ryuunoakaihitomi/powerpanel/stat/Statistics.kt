@@ -5,7 +5,6 @@ import android.os.Bundle
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import github.ryuunoakaihitomi.powerpanel.util.BlackMagic
-import timber.log.Timber
 import java.util.*
 
 /**
@@ -45,7 +44,6 @@ object Statistics {
             putString(KEY_FORCE_MODE, forceMode.toString())
             putString(KEY_DONE, done.toString())
         }
-        Timber.i("$bundle")
         InternalDoerImpl.logEvent(EVENT_PWR_OP, bundle)
     }
 
@@ -54,7 +52,6 @@ object Statistics {
             putString(KEY_TYPE, labelResId.toLabel())
             putString(KEY_CANCELLED, cancelled.toString())
         }
-        Timber.i(bundle.toString())
         InternalDoerImpl.logEvent(EVENT_DIALOG_CANCEL, bundle)
     }
 
