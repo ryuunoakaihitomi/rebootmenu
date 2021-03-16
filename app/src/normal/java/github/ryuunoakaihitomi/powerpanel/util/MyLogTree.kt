@@ -2,6 +2,7 @@ package github.ryuunoakaihitomi.powerpanel.util
 
 import android.util.Log
 import github.ryuunoakaihitomi.powerpanel.BuildConfig
+import github.ryuunoakaihitomi.powerpanel.stat.InternalDoerImpl
 import timber.log.Timber
 
 /**
@@ -10,7 +11,7 @@ import timber.log.Timber
 class MyLogTree : Timber.DebugTree() {
 
     override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
-        StatisticsUtils.log(levelToString(priority), tag ?: "empty tag", message)
+        InternalDoerImpl.log(levelToString(priority), tag ?: "empty tag", message)
         if (BuildConfig.DEBUG) super.log(priority, tag, message, t)
     }
 

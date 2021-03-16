@@ -12,9 +12,9 @@ import github.ryuunoakaihitomi.poweract.PowerAct
 import github.ryuunoakaihitomi.poweract.PowerActX
 import github.ryuunoakaihitomi.powerpanel.BuildConfig
 import github.ryuunoakaihitomi.powerpanel.R
+import github.ryuunoakaihitomi.powerpanel.stat.Statistics
 import github.ryuunoakaihitomi.powerpanel.ui.ShortcutActivity
 import github.ryuunoakaihitomi.powerpanel.ui.main.MainActivity
-import github.ryuunoakaihitomi.powerpanel.util.StatisticsUtils
 import timber.log.Timber
 
 object PowerExecution {
@@ -23,12 +23,12 @@ object PowerExecution {
         val callback = object : Callback {
 
             override fun done() {
-                StatisticsUtils.logPowerOperation(activity, labelResId, forceMode, true)
+                Statistics.logPowerOperation(activity, labelResId, forceMode, true)
                 activity.finish()
             }
 
             override fun failed() {
-                StatisticsUtils.logPowerOperation(activity, labelResId, forceMode, false)
+                Statistics.logPowerOperation(activity, labelResId, forceMode, false)
                 Toasty.error(activity, R.string.toast_op_failed).run {
                     setGravity(Gravity.CENTER, 0, 0)
                     show()

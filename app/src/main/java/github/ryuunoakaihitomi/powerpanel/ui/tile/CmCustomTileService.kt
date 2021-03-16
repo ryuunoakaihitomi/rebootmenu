@@ -6,10 +6,10 @@ import androidx.core.app.JobIntentService
 import cyanogenmod.app.CMStatusBarManager
 import cyanogenmod.app.CustomTile
 import cyanogenmod.os.Build
-import github.ryuunoakaihitomi.powerpanel.MyApplication
 import github.ryuunoakaihitomi.powerpanel.R
 import github.ryuunoakaihitomi.powerpanel.desc.PowerExecution
 import github.ryuunoakaihitomi.powerpanel.ui.VolumeControlActivity
+import github.ryuunoakaihitomi.powerpanel.util.BlackMagic
 import timber.log.Timber
 
 /**
@@ -22,11 +22,11 @@ class CmCustomTileService : JobIntentService() {
     companion object {
 
         private val publish by lazy {
-            Timber.i("Starting to publish tile...")
             if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.N &&
                 Build.CM_VERSION.SDK_INT >= Build.CM_VERSION_CODES.APRICOT
             ) {
-                val context = MyApplication.getInstance()
+                Timber.i("Starting to publish tile...")
+                val context = BlackMagic.getGlobalApp()
                 context.startService(Intent(context, CmCustomTileService::class.java))
             }
             true

@@ -16,11 +16,12 @@ import es.dmoral.toasty.Toasty
 import github.ryuunoakaihitomi.powerpanel.MyApplication
 import github.ryuunoakaihitomi.powerpanel.R
 import github.ryuunoakaihitomi.powerpanel.desc.PowerInfo
+import github.ryuunoakaihitomi.powerpanel.util.BlackMagic
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class PowerViewModel : AndroidViewModel(MyApplication.getInstance()) {
+class PowerViewModel : AndroidViewModel(BlackMagic.getGlobalApp()) {
 
     /* Root模式：分隔开受限模式 */
     val rootMode: LiveData<Boolean>

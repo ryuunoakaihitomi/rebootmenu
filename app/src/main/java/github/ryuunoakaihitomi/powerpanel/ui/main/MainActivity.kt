@@ -19,6 +19,7 @@ import github.ryuunoakaihitomi.powerpanel.R
 import github.ryuunoakaihitomi.powerpanel.desc.PowerExecution
 import github.ryuunoakaihitomi.powerpanel.desc.getIconResIdArray
 import github.ryuunoakaihitomi.powerpanel.desc.getLabelArray
+import github.ryuunoakaihitomi.powerpanel.stat.Statistics
 import github.ryuunoakaihitomi.powerpanel.ui.DonateActivity
 import github.ryuunoakaihitomi.powerpanel.ui.OpenSourceLibDependencyActivity
 import github.ryuunoakaihitomi.powerpanel.ui.ShortcutActivity
@@ -97,7 +98,7 @@ class MainActivity : AppCompatActivity() {
                             )
                         ) { _, confirmWhich ->
                             val ok = confirmWhich == 0
-                            StatisticsUtils.logDialogCancel(item.labelResId, ok.not())
+                            Statistics.logDialogCancel(item.labelResId, ok.not())
                             if (ok) {
                                 powerViewModel.call(item.labelResId)
                                 // dismiss防止窗口泄露
@@ -107,7 +108,7 @@ class MainActivity : AppCompatActivity() {
                             }
                         }
                         setOnCancelListener {
-                            StatisticsUtils.logDialogCancel(item.labelResId, true)
+                            Statistics.logDialogCancel(item.labelResId, true)
                             powerViewModel.prepare()
                         }
                         setNeutralButton(null, null)

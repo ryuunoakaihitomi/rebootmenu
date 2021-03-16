@@ -1,5 +1,7 @@
 package github.ryuunoakaihitomi.powerpanel.util
 
+import android.annotation.SuppressLint
+import android.app.Application
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 
@@ -22,4 +24,9 @@ object BlackMagic {
         mMessageView.isAccessible = true
         return mMessageView[mAlertController] as TextView
     }
+
+    @SuppressLint("PrivateApi")
+    fun getGlobalApp() =
+        Class.forName("android.app.ActivityThread").getMethod("currentApplication")
+            .invoke(null) as Application
 }

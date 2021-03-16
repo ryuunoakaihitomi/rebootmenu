@@ -5,8 +5,8 @@ import android.os.Bundle
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
-import github.ryuunoakaihitomi.powerpanel.MyApplication
 import github.ryuunoakaihitomi.powerpanel.desc.PowerExecution
+import github.ryuunoakaihitomi.powerpanel.util.BlackMagic
 import github.ryuunoakaihitomi.powerpanel.util.makeTransparent
 
 class ShortcutActivity : AppCompatActivity() {
@@ -16,7 +16,7 @@ class ShortcutActivity : AppCompatActivity() {
         const val EXTRA_FORCE_MODE = "extraForceMode"
 
         fun getActionIntent(@StringRes labelResId: Int, forceMode: Boolean = false) = run {
-            Intent(MyApplication.getInstance(), ShortcutActivity::class.java).run {
+            Intent(BlackMagic.getGlobalApp(), ShortcutActivity::class.java).run {
                 action = Intent.ACTION_VIEW
                 putExtra(EXTRA_LABEL_RES_ID, labelResId)
                 putExtra(EXTRA_FORCE_MODE, forceMode)

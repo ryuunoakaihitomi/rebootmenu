@@ -1,22 +1,20 @@
-package github.ryuunoakaihitomi.powerpanel.util
+package github.ryuunoakaihitomi.powerpanel.stat
 
 import android.os.Build
 import android.os.Bundle
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.analytics.ktx.analytics
-import com.google.firebase.crashlytics.ktx.crashlytics
-import com.google.firebase.ktx.Firebase
-import github.ryuunoakaihitomi.powerpanel.MyApplication
+import github.ryuunoakaihitomi.powerpanel.util.BlackMagic
 import timber.log.Timber
 import java.util.*
 
 /**
- * 统计工具类，**为方便迁移请务必在此处创建接口并且不在此类外直接调用统计SDK**
+ * 统计工具
  *
- * 目前使用的是`Firebase`
+ * **为方便迁移请务必在此处创建接口并且不在此类外直接调用统计SDK**
+ * **修改及实现[InternalDoer]以分离floss版本**
  */
-object StatisticsUtils {
+object Statistics {
 
     /* 记录电源操作，评估万一某个功能有bug所带来的影响范围 */
     private const val EVENT_PWR_OP = "power_operation"
@@ -48,7 +46,7 @@ object StatisticsUtils {
             putString(KEY_DONE, done.toString())
         }
         Timber.i("$bundle")
-        logEvent(EVENT_PWR_OP, bundle)
+        InternalDoerImpl.logEvent(EVENT_PWR_OP, bundle)
     }
 
     fun logDialogCancel(@StringRes labelResId: Int, cancelled: Boolean) {
@@ -57,43 +55,18 @@ object StatisticsUtils {
             putString(KEY_CANCELLED, cancelled.toString())
         }
         Timber.i(bundle.toString())
-        logEvent(EVENT_DIALOG_CANCEL, bundle)
+        InternalDoerImpl.logEvent(EVENT_DIALOG_CANCEL, bundle)
     }
 
     fun recordEnvInfo() {
         arrayOf(Build::class, Build.VERSION::class).forEach { clz ->
             clz.java.fields.forEach {
                 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
-                setCustomKey("${clz.simpleName} ${it.name}", it[null])
+                InternalDoerImpl.setCustomKey("${clz.simpleName} ${it.name}", it[null])
             }
         }
-    }
-
-    fun log(level: String, tag: String, msg: String) {
-        val logLine = listOf(level, tag, msg).toString()
-        Firebase.crashlytics.log(logLine)
-    }
-
-    private fun setCustomKey(key: String, value: Any) {
-        Firebase.crashlytics.apply {
-            when (value) {
-                is String -> setCustomKey(key, value)
-                is Boolean -> setCustomKey(key, value)
-                is Int -> setCustomKey(key, value)
-                is Long -> setCustomKey(key, value)
-                is Float -> setCustomKey(key, value)
-                is Double -> setCustomKey(key, value)
-                is Array<*> -> setCustomKey(key, value.contentToString())
-                else -> Timber.w("Undefined type: $key, $value")
-            }
-        }
-    }
-
-    private fun logEvent(string: String, bundle: Bundle) {
-        Firebase.analytics.logEvent(string, bundle)
-        Firebase.crashlytics.setCustomKey(string, bundle.toString())
     }
 
     private fun @receiver:StringRes Int.toLabel() =
-        MyApplication.getInstance().resources.getResourceEntryName(this)
+        BlackMagic.getGlobalApp().resources.getResourceEntryName(this)
 }
