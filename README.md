@@ -1,5 +1,9 @@
 # 电源面板
 
+![Lines of code](https://img.shields.io/tokei/lines/github/ryuunoakaihitomi/rebootmenu?style=flat-square)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/ryuunoakaihitomi/rebootmenu?style=flat-square)
+![GitHub Release Date](https://img.shields.io/github/release-date/ryuunoakaihitomi/rebootmenu?style=flat-square)
+
 ![image](./app/src/main/res/mipmap/ic_launcher.png)
 
 ## 概要
