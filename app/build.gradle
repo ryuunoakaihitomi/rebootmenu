@@ -8,17 +8,17 @@ apply plugin: 'com.google.firebase.crashlytics'
 apply from: "${rootProject.file('loadProperties.gradle')}"
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 'android-S'
     defaultConfig {
         applicationId "com.ryuunoakaihitomi.rebootmenu"
         minSdkVersion 21
         // 以下方式会出现这样的错误：android:targetSdkVersion="android-30"
         //targetSdkVersion compileSdkVersion
-        targetSdkVersion 30
+        targetSdkVersion 31
         // 版本号：发布日期
-        versionCode 20210317
+        versionCode 20210404
         // 版本名说明： R3.x.y (R3:Refactoring 第三次重构)
-        versionName 'R3.7.0'
+        versionName 'R3.7.1'
         resConfigs "en", "zh-rCN"
 
         buildConfigField 'String', 'BUILD_TIME', '\"' + new Date() + '\"'
@@ -101,7 +101,7 @@ dependencies {
     implementation "rikka.shizuku:api:$shizuku_version"
     implementation "rikka.shizuku:provider:$shizuku_version"
 
-    implementation 'github.ryuunoakaihitomi.poweract:poweract:1.4.0'
+    implementation 'github.ryuunoakaihitomi.poweract:poweract:1.4.1'
     implementation 'github.ryuunoakaihitomi.retoast:retoast:1.3.0'
     implementation 'com.github.GrenderG:Toasty:1.5.0'
     implementation "com.github.topjohnwu.libsu:core:3.0.2"
@@ -110,7 +110,7 @@ dependencies {
     implementation 'com.drakeet.about:about:2.4.1'
     implementation 'com.google.zxing:core:3.4.1'
     implementation 'org.cyanogenmod:platform.sdk:5.0.1'
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.6'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
     debugImplementation "com.github.whataa:pandora:androidx_v2.1.0"
 }
 
@@ -125,7 +125,7 @@ android.applicationVariants.all { variant ->
     // processFlossReleaseGoogleServices
     tasks.forEach { task ->
         final def name = task.name
-        if ((name.contains('Google') || name.contains('Crashlytics'))) {
+        if (['Google', 'Crashlytics'].any { e -> name.contains(e) }) {
             System.out.println "G task in ${variant.flavorName} -> $name"
             if (name.contains('floss'.capitalize())) {
                 System.err.println "Skip G task for floss: $name"

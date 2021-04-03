@@ -17,13 +17,13 @@
     <string name="toast_switch_to_force_mode">Switch to FORCE mode</string>
     <string name="toast_switch_to_privileged_mode">Switch to PRIVILEGED mode</string>
     <string name="toast_op_failed">Operation FAILED</string>
-    <string name="btn_dialog_source_code">Source Code</string>
+    <string name="btn_dialog_source_code"><i><u>Source Code</u></i></string>
     <string name="toast_enable_accessibility_service_hint">Please enable the accessibility service</string>
     <string name="tile_pwr_menu">Power Menu</string>
     <string name="title_dialog_confirm_op">Confirm operation \"%s\"</string>
     <string name="toast_shortcut_added">Have tried to add shortcut</string>
     <string name="donate">Donate</string>
     <string name="open_source_lib_dependency">Open Source Library Dependency</string>
-    <string name="url_aosp_home">https://source.android.com</string>
-    <string name="url_aosp_license">https://source.android.com/setup/start/licenses</string>
+    <string name="url_aosp_home" translatable="false">https://source.android.com</string>
+    <string name="url_aosp_license" translatable="false">https://source.android.com/setup/start/licenses</string>
 </resources>

@@ -32,7 +32,6 @@ import rikka.shizuku.Shizuku
 import timber.log.Timber
 import java.nio.charset.Charset
 import java.util.*
-import androidx.core.content.res.ResourcesCompat as RC
 
 // 窗口透明度
 private const val DIALOG_ALPHA = 0.85f

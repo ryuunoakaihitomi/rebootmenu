@@ -23,8 +23,9 @@
         <activity
             android:name=".ui.main.MainActivity"
             android:autoRemoveFromRecents="true"
+            android:exported="true"
             android:launchMode="singleTop"
-            android:theme="@style/Theme.AppCompat.DayNight.Dialog.Alert">
+            android:theme="@style/MainStyle">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -68,6 +69,7 @@
 
         <service
             android:name=".ui.tile.PowerDialogTileService"
+            android:exported="false"
             android:icon="@android:drawable/ic_lock_power_off"
             android:label="@string/tile_pwr_menu"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
@@ -78,6 +80,7 @@
 
         <service
             android:name=".ui.tile.LockScreenTileService"
+            android:exported="false"
             android:icon="@drawable/ic_baseline_lock_24"
             android:label="@string/func_lock_screen"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">

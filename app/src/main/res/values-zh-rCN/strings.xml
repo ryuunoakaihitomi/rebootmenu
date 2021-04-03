@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">电源面板</string>
     <string name="btn_dialog_help">帮助</string>
     <string name="btn_dialog_switch_mode">切换模式</string>
@@ -10,19 +10,19 @@
     <string name="func_soft_reboot">软重启</string>
     <string name="func_restart_sys_ui">重启系统UI</string>
     <string name="func_safe_mode">安全模式</string>
-    <!-- 使用半角符号节省长度用来显示App shortcut -->
-    <string name="func_lock_screen_privileged">锁屏(特权)</string>
+    <string name="func_lock_screen_privileged">锁屏(特权)</string>    <!-- 使用半角符号节省长度用来显示App shortcut -->
     <string name="title_dialog_restricted_mode">受限模式</string>
     <string name="toast_switch_to_force_mode">切换成强制模式</string>
     <string name="toast_switch_to_privileged_mode">切换成特权模式</string>
     <string name="toast_op_failed">操作失败</string>
-    <string name="btn_dialog_source_code">源代码</string>
+    <string name="btn_dialog_source_code"><b><font color="red">源代码</font></b></string>    <!-- 这里的HTML标签从26开始生效 -->
     <string name="toast_enable_accessibility_service_hint">请启用本应用的无障碍服务</string>
     <string name="tile_pwr_menu">电源菜单</string>
     <string name="title_dialog_confirm_op">确认操作　“%s”</string>
     <string name="toast_shortcut_added">已经尝试添加快捷方式</string>
     <string name="donate">捐赠</string>
     <string name="open_source_lib_dependency">开源库依赖项</string>
-    <string name="url_aosp_home">https://source.android.google.cn</string>
-    <string name="url_aosp_license">https://source.android.google.cn/setup/start/licenses</string>
+    <!-- 中国专有Android Source网址 -->
+    <string name="url_aosp_home" tools:ignore="Untranslatable">https://source.android.google.cn</string>
+    <string name="url_aosp_license" tools:ignore="Untranslatable">https://source.android.google.cn/setup/start/licenses</string>
 </resources>

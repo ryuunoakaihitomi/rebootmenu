@@ -17,10 +17,13 @@ import android.view.ViewGroup
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
 import androidx.annotation.RequiresApi
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.text.set
 import es.dmoral.toasty.Toasty
 import timber.log.Timber
 
+
+typealias RC = ResourcesCompat
 
 fun Activity.makeTransparent() {
     window.decorView.alpha = 0f

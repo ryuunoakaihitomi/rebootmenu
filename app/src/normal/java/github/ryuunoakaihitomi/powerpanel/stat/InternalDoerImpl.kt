@@ -1,15 +1,34 @@
 package github.ryuunoakaihitomi.powerpanel.stat
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase
+import github.ryuunoakaihitomi.powerpanel.BuildConfig
 import timber.log.Timber
 
 /**
  * 目前使用的是`Firebase`
  */
 object InternalDoerImpl : InternalDoer {
+
+    init {
+        disableFirebaseInDebug()
+    }
+
+    /**
+     * 使用DebugView过滤上传的统计信息比较麻烦
+     */
+    @SuppressLint("LogNotTimber")
+    private fun disableFirebaseInDebug() {
+        if (BuildConfig.DEBUG) {
+            Log.e(javaClass.simpleName, "!!! NOTICE: Crash analytics is disabled in debug variant.")
+            Firebase.crashlytics.setCrashlyticsCollectionEnabled(false)
+            Firebase.analytics.setAnalyticsCollectionEnabled(false)
+        }
+    }
 
     override fun setCustomKey(k: String, v: Any) {
         Firebase.crashlytics.apply {

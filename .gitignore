@@ -42,6 +42,7 @@ captures/
 .idea/tasks.xml
 .idea/gradle.xml
 .idea/assetWizardSettings.xml
+# 默认生成的工程级字典使用用户名命名，有泄漏隐私的风险
 .idea/dictionaries
 .idea/libraries
 # Android Studio 3 in .gitignore file.

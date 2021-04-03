@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Application
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import java.lang.Class as C
 
 object BlackMagic {
 
@@ -26,7 +27,6 @@ object BlackMagic {
     }
 
     @SuppressLint("PrivateApi")
-    fun getGlobalApp() =
-        Class.forName("android.app.ActivityThread").getMethod("currentApplication")
-            .invoke(null) as Application
+    fun getGlobalApp() = C.forName("android.app.ActivityThread").getMethod("currentApplication")
+        .invoke(null) as Application
 }

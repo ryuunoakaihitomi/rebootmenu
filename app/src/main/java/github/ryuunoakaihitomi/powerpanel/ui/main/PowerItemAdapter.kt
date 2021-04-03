@@ -6,9 +6,7 @@ import android.view.ViewConfiguration
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
-import androidx.core.content.res.ResourcesCompat
-
-private typealias RC = ResourcesCompat
+import github.ryuunoakaihitomi.powerpanel.util.RC
 
 class PowerItemAdapter(context: Context, items: Array<CharSequence>, iconResId: Array<Int>) :
     ArrayAdapter<CharSequence>(context, android.R.layout.simple_list_item_1, items) {
