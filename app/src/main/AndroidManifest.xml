@@ -67,9 +67,34 @@
             </intent-filter>
         </receiver>
 
+        <!--
+
+        TileService必须android:exported="true"才可以启用
+
+        W/ActivityManager: Permission Denial: Accessing service github.ryuunoakaihitomi.powerpanel/.ui.tile.PowerDialogTileService from pid=2358, uid=10250 that is not exported from uid 10265
+        E/TileLifecycleManager: Failed to bind to service
+    java.lang.SecurityException: Not allowed to bind to service Intent { cmp=github.ryuunoakaihitomi.powerpanel/.ui.tile.PowerDialogTileService (has extras) }
+        at android.app.ContextImpl.bindServiceCommon(ContextImpl.java:1922)
+        at android.app.ContextImpl.bindServiceAsUser(ContextImpl.java:1857)
+        at android.content.ContextWrapper.bindServiceAsUser(ContextWrapper.java:810)
+        at com.android.systemui.qs.external.TileLifecycleManager.setBindService(TileLifecycleManager.java:187)
+        at com.android.systemui.qs.external.TileServiceManager.bindService(TileServiceManager.java:200)
+        at com.android.systemui.qs.external.TileServiceManager.setBindRequested(TileServiceManager.java:149)
+        at com.android.systemui.qs.external.CustomTile.handleSetListening(CustomTile.java:249)
+        at com.android.systemui.qs.tileimpl.QSTileImpl.handleSetListeningInternal(QSTileImpl.java:464)
+        at com.android.systemui.qs.tileimpl.QSTileImpl.access$700(QSTileImpl.java:85)
+        at com.android.systemui.qs.tileimpl.QSTileImpl$H.handleMessage(QSTileImpl.java:639)
+        at android.os.Handler.dispatchMessage(Handler.java:106)
+        at android.os.Looper.loopOnce(Looper.java:201)
+        at android.os.Looper.loop(Looper.java:288)
+        at android.os.HandlerThread.run(HandlerThread.java:67)
+
+        -->
+
+
         <service
             android:name=".ui.tile.PowerDialogTileService"
-            android:exported="false"
+            android:exported="true"
             android:icon="@android:drawable/ic_lock_power_off"
             android:label="@string/tile_pwr_menu"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
@@ -80,7 +105,7 @@
 
         <service
             android:name=".ui.tile.LockScreenTileService"
-            android:exported="false"
+            android:exported="true"
             android:icon="@drawable/ic_baseline_lock_24"
             android:label="@string/func_lock_screen"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
