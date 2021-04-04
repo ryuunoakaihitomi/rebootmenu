@@ -91,6 +91,15 @@ class OpenSourceLibDependencyActivity : AbsAboutActivity() {
         items.add(Category("Gradle plugin"))
         gradlePluginList.forEach { items.add(it) }
     }
+
+//    /**
+//     * 在Android 12 DP中似乎无法自动[finish]掉，[DonateActivity]亦如是。
+//     */
+//    override fun onBackPressed() {
+//        Timber.d("onBackPressed")
+//        super.onBackPressed()
+//        finish()
+//    }
 }
 
 private fun strOf(@StringRes id: Int) = BlackMagic.getGlobalApp().getString(id)

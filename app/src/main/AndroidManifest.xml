@@ -91,7 +91,6 @@
 
         -->
 
-
         <service
             android:name=".ui.tile.PowerDialogTileService"
             android:exported="true"

@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import github.ryuunoakaihitomi.powerpanel.util.BlackMagic
+import rikka.shizuku.Shizuku
 import java.util.*
 
 /**
@@ -22,6 +23,7 @@ object Statistics {
     private const val KEY_TYPE = "type"
     private const val KEY_FORCE_MODE = "force_mode"
     private const val KEY_DONE = "done"
+    private const val KEY_SHIZUKU = "shizuku"
 
     /* 记录特权模式二次操作取消 */
     private const val EVENT_DIALOG_CANCEL = "dialog_cancel"
@@ -43,6 +45,7 @@ object Statistics {
             /* FirebaseAnalytics不支持Boolean (String, long and double param types are supported.) */
             putString(KEY_FORCE_MODE, forceMode.toString())
             putString(KEY_DONE, done.toString())
+            putString(KEY_SHIZUKU, Shizuku.pingBinder().toString())
         }
         InternalDoerImpl.logEvent(EVENT_PWR_OP, bundle)
     }

@@ -8,17 +8,17 @@ apply plugin: 'com.google.firebase.crashlytics'
 apply from: "${rootProject.file('loadProperties.gradle')}"
 
 android {
-    compileSdkVersion 'android-S'
+    compileSdkVersion 30
     defaultConfig {
         applicationId "com.ryuunoakaihitomi.rebootmenu"
         minSdkVersion 21
         // 以下方式会出现这样的错误：android:targetSdkVersion="android-30"
         //targetSdkVersion compileSdkVersion
-        targetSdkVersion 31
+        targetSdkVersion 30
         // 版本号：发布日期
-        versionCode 20210405
+        versionCode 20210406
         // 版本名说明： R3.x.y (R3:Refactoring 第三次重构)
-        versionName 'R3.7.2'
+        versionName 'R3.7.3'
         resConfigs "en", "zh-rCN"
 
         buildConfigField 'String', 'BUILD_TIME', '\"' + new Date() + '\"'

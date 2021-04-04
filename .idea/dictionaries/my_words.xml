@@ -2,8 +2,17 @@
   <dictionary name="my_words">
     <words>
       <w>aosp</w>
+      <w>crashlytics</w>
+      <w>jetpack</w>
+      <w>libre</w>
+      <w>markwon</w>
+      <w>poweract</w>
+      <w>powerpanel</w>
+      <w>rebootmenu</w>
       <w>rikka</w>
+      <w>ryuunoakaihitomi</w>
       <w>shizuku</w>
+      <w>systemui</w>
       <w>teleport</w>
     </words>
   </dictionary>
