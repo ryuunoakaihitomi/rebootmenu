@@ -16,9 +16,9 @@ android {
         //targetSdkVersion compileSdkVersion
         targetSdkVersion 30
         // 版本号：发布日期
-        versionCode 20210406
+        versionCode 20210407
         // 版本名说明： R3.x.y (R3:Refactoring 第三次重构)
-        versionName 'R3.7.3'
+        versionName 'R3.8.0'
         resConfigs "en", "zh-rCN"
 
         buildConfigField 'String', 'BUILD_TIME', '\"' + new Date() + '\"'
@@ -93,18 +93,19 @@ dependencies {
 
     /* ------- 其他第三方开源组件 ------- */
 
-    final def markwon_version = '4.6.1'
+    final def markwon_version = '4.6.2'
     implementation "io.noties.markwon:core:$markwon_version"
     implementation "io.noties.markwon:ext-strikethrough:$markwon_version"
+    implementation "io.noties.markwon:image:$markwon_version"
 
     def shizuku_version = '11.0.2'
     implementation "rikka.shizuku:api:$shizuku_version"
     implementation "rikka.shizuku:provider:$shizuku_version"
 
-    implementation 'github.ryuunoakaihitomi.poweract:poweract:1.4.1'
+    implementation 'github.ryuunoakaihitomi.poweract:poweract:1.4.2'
     implementation 'github.ryuunoakaihitomi.retoast:retoast:1.3.0'
     implementation 'com.github.GrenderG:Toasty:1.5.0'
-    implementation "com.github.topjohnwu.libsu:core:3.0.2"
+    implementation "com.github.topjohnwu.libsu:core:3.1.1"
     implementation 'commons-io:commons-io:2.8.0'
     implementation 'com.jakewharton.timber:timber:4.7.1'
     implementation 'com.drakeet.about:about:2.4.1'

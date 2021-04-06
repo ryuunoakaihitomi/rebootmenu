@@ -1,6 +1,8 @@
 package github.ryuunoakaihitomi.powerpanel.ui.main
 
+import android.content.pm.PackageManager
 import android.graphics.Typeface
+import android.os.Build
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
@@ -20,6 +22,8 @@ import github.ryuunoakaihitomi.powerpanel.util.BlackMagic
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import rikka.shizuku.Shizuku
+import timber.log.Timber
 
 class PowerViewModel : AndroidViewModel(BlackMagic.getGlobalApp()) {
 
@@ -91,7 +95,7 @@ class PowerViewModel : AndroidViewModel(BlackMagic.getGlobalApp()) {
 
         /* 这里定义了各个选项的顺序，这个顺序已经经过反复的试验，一般不需要更改 */
         val restrictedActions = arrayOf(lockScreen, showSysPowerDialog)
-        val privilegedActions = arrayOf(
+        var privilegedActions = arrayOf(
             reboot,
             shutdown,
             recovery,
@@ -105,6 +109,19 @@ class PowerViewModel : AndroidViewModel(BlackMagic.getGlobalApp()) {
         val rawTitle = app().getString(R.string.app_name)
         if (rootMode.value == true) {
             _title.value = rawTitle
+
+            /* 在Android 11中，为特权模式添加打开系统电源菜单的选项以访问设备控制器（使用Shizuku实现） */
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R &&
+                Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED &&
+                app().packageManager.hasSystemFeature(PackageManager.FEATURE_CONTROLS)
+            ) {
+                Timber.d("add showSysPowerDialog for device controls")
+                val size = privilegedActions.size
+                @Suppress("UNCHECKED_CAST")
+                privilegedActions = privilegedActions.copyOf(size + 1) as Array<PowerInfo>
+                privilegedActions[size] = showSysPowerDialog
+            }
+
             _infoArray.value = privilegedActions
             // https://developer.android.google.cn/guide/topics/ui/shortcuts?hl=en#shortcut-limitations
             // Although you can publish up to five shortcuts (static and dynamic shortcuts combined) at a time for your app, most launchers can only display four.
@@ -183,9 +200,12 @@ class PowerViewModel : AndroidViewModel(BlackMagic.getGlobalApp()) {
 
     fun isOnForceMode(info: PowerInfo) = getForceMode() and info.hasForceMode
 
-    /* 如果为特权模式且不为锁屏，再次确认 */
     fun shouldConfirmAgain(item: PowerInfo) =
-        rootMode.value == true and !getForceMode() and (item.labelResId != R.string.func_lock_screen_privileged)
+        rootMode.value == true && getForceMode().not() && listOf(
+            R.string.func_lock_screen_privileged,
+            // 打开系统电源菜单之后还有一步操作，所以无需确认
+            R.string.func_sys_pwr_menu
+        ).contains(item.labelResId).not()
 
     private fun colorForceLabel(label: String, info: PowerInfo): SpannableString {
         val forceLabel = SpannableString(label)

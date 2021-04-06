@@ -27,6 +27,7 @@ import github.ryuunoakaihitomi.powerpanel.ui.tile.CmCustomTileService
 import github.ryuunoakaihitomi.powerpanel.util.*
 import io.noties.markwon.Markwon
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin
+import io.noties.markwon.image.ImagesPlugin
 import org.apache.commons.io.IOUtils
 import rikka.shizuku.Shizuku
 import timber.log.Timber
@@ -76,6 +77,17 @@ class MainActivity : AppCompatActivity() {
             ) {
                 Timber.i("Request shizuku permission.")
                 Shizuku.requestPermission(0)
+                Shizuku.addRequestPermissionResultListener(object :
+                    Shizuku.OnRequestPermissionResultListener {
+                    override fun onRequestPermissionResult(requestCode: Int, grantResult: Int) {
+                        if (grantResult == PackageManager.PERMISSION_GRANTED) {
+                            Timber.d("refresh items for showSysPowerDialog")
+                            mainDialog.dismiss()
+                            powerViewModel.prepare()
+                        }
+                        Shizuku.removeRequestPermissionResultListener(this)
+                    }
+                })
             }
             PowerActHelper.toggleExposedComponents(application, !rootMode)   // 为CMTile提前更新外置组件可见性
             CmCustomTileService.start()
@@ -139,6 +151,7 @@ class MainActivity : AppCompatActivity() {
                     val alertDialogMessageView = BlackMagic.getAlertDialogMessageView(show())
                     Markwon.builder(this@MainActivity)
                         .usePlugin(StrikethroughPlugin.create())
+                        .usePlugin(ImagesPlugin.create())
                         .build()
                         .setMarkdown(
                             alertDialogMessageView,
