@@ -112,6 +112,7 @@ class PowerViewModel : AndroidViewModel(BlackMagic.getGlobalApp()) {
 
             /* 在Android 11中，为特权模式添加打开系统电源菜单的选项以访问设备控制器（使用Shizuku实现） */
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R &&
+                Shizuku.pingBinder() &&
                 Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED &&
                 app().packageManager.hasSystemFeature(PackageManager.FEATURE_CONTROLS)
             ) {
