@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- https://nipponcolors.com/#ginsyu -->
-    <color name="colorIconBackground">#C73E3A</color>
+    <color name="colorIconBackground">#C73E3A</color>    <!-- https://nipponcolors.com/#ginsyu -->
     <color name="colorIconForceModeShortcut">@android:color/holo_red_light</color>
     <color name="colorForceModeItem">@android:color/holo_red_dark</color>
 </resources>

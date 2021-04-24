@@ -1,15 +1,29 @@
 package github.ryuunoakaihitomi.powerpanel.ui.main
 
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.Resources
+import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.style.StyleSpan
+import android.text.style.TypefaceSpan
+import android.view.View
+import android.view.ViewGroup
+import android.view.accessibility.AccessibilityEvent
+import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.AdapterView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
 import androidx.core.graphics.drawable.toBitmap
+import androidx.core.text.set
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.ViewModelProvider
@@ -36,9 +50,6 @@ import java.util.*
 
 // 窗口透明度
 private const val DIALOG_ALPHA = 0.85f
-
-// 项目链接
-private const val SOURCE_LINK = "https://github.com/ryuunoakaihitomi/rebootmenu"
 
 class MainActivity : AppCompatActivity() {
 
@@ -112,7 +123,7 @@ class MainActivity : AppCompatActivity() {
                             Statistics.logDialogCancel(item.labelResId, ok.not())
                             if (ok) {
                                 powerViewModel.call(item.labelResId)
-                                // dismiss防止窗口泄露
+                                // dismiss防止窗口泄漏
                                 dialog.dismiss()
                             } else {
                                 powerViewModel.prepare()
@@ -139,7 +150,7 @@ class MainActivity : AppCompatActivity() {
                     // 准备使用下面的MarkDown组件
                     setMessage("placeholder")
                     setPositiveButton(R.string.btn_dialog_source_code) { _, _ ->
-                        openUrlInBrowser(SOURCE_LINK)
+                        openUrlInBrowser("https://github.com/ryuunoakaihitomi/rebootmenu")
                         finish()
                     }
                     setNegativeButton(R.string.donate) { _, _ -> teleport<DonateActivity>() }
@@ -148,18 +159,13 @@ class MainActivity : AppCompatActivity() {
                     }
                     setOnCancelListener { powerViewModel.prepare() }
                     /* 主要信息 */
-                    val alertDialogMessageView = BlackMagic.getAlertDialogMessageView(show())
-                    Markwon.builder(this@MainActivity)
-                        .usePlugin(StrikethroughPlugin.create())
-                        .usePlugin(ImagesPlugin.create())
-                        .build()
-                        .setMarkdown(
-                            alertDialogMessageView,
-                            IOUtils.toString(
-                                resources.openRawResource(R.raw.help),
-                                Charset.defaultCharset()
-                            )
+                    markwon().setMarkdown(
+                        BlackMagic.getAlertDialogMessageView(show()),
+                        IOUtils.toString(
+                            resources.openRawResource(R.raw.help),
+                            Charset.defaultCharset()
                         )
+                    )
                     // 不能设置为可选择，否则无法点击打开链接
                     //alertDialogMessageView.setTextIsSelectable(true)
                     Toasty.normal(
@@ -223,3 +229,72 @@ class MainActivity : AppCompatActivity() {
         powerViewModel.prepare()
     }
 }
+
+//region --- private extensions ---
+private fun CharSequence.emphasize() = let {
+    val spannableString = SpannableString(it)
+    val range = 0..it.length
+    spannableString[range] = StyleSpan(Typeface.BOLD)
+    spannableString[range] = TypefaceSpan("monospace")
+    spannableString
+}
+
+/**
+ * 防止无障碍服务攻击
+ * 可以使用adb shell uiautomator dump验证效果
+ */
+private fun View.emptyAccessibilityDelegate() = run {
+    accessibilityDelegate = object : View.AccessibilityDelegate() {
+        override fun addExtraDataToAccessibilityNodeInfo(
+            host: View,
+            info: AccessibilityNodeInfo,
+            extraDataKey: String,
+            arguments: Bundle?
+        ) {
+        }
+
+        override fun dispatchPopulateAccessibilityEvent(
+            host: View?,
+            event: AccessibilityEvent?
+        ) = true
+
+        override fun getAccessibilityNodeProvider(host: View?) = null
+        override fun onInitializeAccessibilityEvent(host: View?, event: AccessibilityEvent?) {}
+        override fun onInitializeAccessibilityNodeInfo(host: View?, info: AccessibilityNodeInfo?) {}
+        override fun onPopulateAccessibilityEvent(host: View?, event: AccessibilityEvent?) {}
+        override fun onRequestSendAccessibilityEvent(
+            host: ViewGroup?,
+            child: View?,
+            event: AccessibilityEvent?
+        ) = false
+
+        override fun performAccessibilityAction(host: View?, action: Int, args: Bundle?) = true
+        override fun sendAccessibilityEvent(host: View?, eventType: Int) {}
+        override fun sendAccessibilityEventUnchecked(host: View?, event: AccessibilityEvent?) {}
+    }
+}
+
+private inline fun <reified T : Activity> Activity.teleport() {
+    startActivity(Intent(this, T::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+    finish()
+}
+
+private fun Context.markwon() = Markwon.builder(this)
+    .usePlugin(StrikethroughPlugin.create())
+    .usePlugin(ImagesPlugin.create {
+        it.errorHandler { url, throwable ->
+            throwable.printStackTrace()
+            when (url) {
+                /**
+                 * 为了让md中的图像在Github页面和离线设备都能正常显示。
+                 * 在文档中保留网址，不使用file:///android/asset。然后在errorHandler中匹配网址返回特定assets图像资源。
+                 */
+                "https://shizuku.rikka.app/logo.png" ->
+                    RoundedBitmapDrawableFactory.create(resources, assets.open("shizuku_logo.png"))
+                else ->
+                    RC.getDrawable(Resources.getSystem(), android.R.drawable.ic_menu_gallery, null)
+            }
+        }
+    })
+    .build()
+//endregion

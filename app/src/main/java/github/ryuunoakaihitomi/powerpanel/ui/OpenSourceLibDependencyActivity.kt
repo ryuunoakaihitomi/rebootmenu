@@ -25,43 +25,38 @@ class OpenSourceLibDependencyActivity : AbsAboutActivity() {
          */
         L(
             "Android Open Source Project", "Google LLC",
-            strOf(R.string.url_aosp_license),
-            strOf(R.string.url_aosp_home)
+            strOf(R.string.url_aosp_license), strOf(R.string.url_aosp_home)
         ),
-        L(
-            "CyanogenMod Platform SDK",
-            "CyanogenMod",
-            AL2,
-            "https://github.com/CyanogenMod/cm_platform_sdk"
-        ),
+        L("CyanogenMod Platform SDK", "CyanogenMod", AL2, ghl("CyanogenMod", "cm_platform_sdk")),
     )
 
     /* 在发布产品中包含的库 */
     @Suppress("SpellCheckingInspection")
     private val libraryList = listOf(
-        L("PowerAct", "ZQY", AL2, "https://github.com/ryuunoakaihitomi/PowerAct"),
-        L("libsu", "John Wu", AL2, "https://github.com/topjohnwu/libsu"),
+        L("PowerAct", "ZQY", AL2, ghl("ryuunoakaihitomi", "PowerAct")),
+        L("libsu", "John Wu", AL2, ghl("topjohnwu", "libsu")),
+        L("LSPosed", "AndroidHiddenApiBypass", AL2, ghl("LSPosed", "AndroidHiddenApiBypass")),
         L("Shizuku", "Rikka", AL2, "https://shizuku.rikka.app"),
-        L("ReToast", "ZQY", AL2, "https://github.com/ryuunoakaihitomi/ReToast"),
-        L("Toasty", "GrenderG", "GNU LGPL v3", "https://github.com/GrenderG/Toasty"),
+        L("ReToast", "ZQY", AL2, ghl("ryuunoakaihitomi", "ReToast")),
+        L("Toasty", "GrenderG", "GNU LGPL v3", ghl("GrenderG", "Toasty")),
         L("Markwon", "Dimitry Ivanov", AL2, "https://noties.io/Markwon"),
-        L("about-page", "Drakeet", AL2, "https://github.com/PureWriter/about-page"),
+        L("about-page", "Drakeet", AL2, ghl("PureWriter", "about-page")),
         L("Commons IO", "Apache", AL2, "http://commons.apache.org/proper/commons-io"),
-        L("Timber", "Jake Wharton", AL2, "https://github.com/JakeWharton/timber"),
-        L("ZXing", "Google LLC", AL2, "https://github.com/zxing/zxing"),
+        L("Timber", "Jake Wharton", AL2, ghl("JakeWharton", "timber")),
+        L("ZXing", "Google LLC", AL2, ghl("zxing")),
     )
 
     /* debug用，发布产品中排除的库 */
     @Suppress("SpellCheckingInspection")
     private val debugLibraryList = listOf(
         L("LeakCanary", "Square, Inc.", AL2, "https://square.github.io/leakcanary"),
-        L("Pandora", "linjiang", AL2, "https://github.com/whataa/pandora"),
+        L("Pandora", "linjiang", AL2, ghl("whataa", "pandora")),
     )
 
     /* 使用的Gradle插件 */
     @Suppress("SpellCheckingInspection")
     private val gradlePluginList = listOf(
-        L("AndResGuard", "shwenzhang", AL2, "https://github.com/shwenzhang/AndResGuard")
+        L("AndResGuard", "shwenzhang", AL2, ghl("shwenzhang", "AndResGuard"))
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -91,15 +86,9 @@ class OpenSourceLibDependencyActivity : AbsAboutActivity() {
         items.add(Category("Gradle plugin"))
         gradlePluginList.forEach { items.add(it) }
     }
-
-//    /**
-//     * 在Android 12 DP中似乎无法自动[finish]掉，[DonateActivity]亦如是。
-//     */
-//    override fun onBackPressed() {
-//        Timber.d("onBackPressed")
-//        super.onBackPressed()
-//        finish()
-//    }
 }
 
 private fun strOf(@StringRes id: Int) = BlackMagic.getGlobalApp().getString(id)
+
+// GitHub Link
+private fun ghl(owner: String, repo: String = owner) = "https://github.com/$owner/$repo"

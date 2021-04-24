@@ -11,7 +11,7 @@
 
 为了规避常规魔法上固有的缺陷和限制条件，强烈推荐用户将本应用与[**Shizuku Manager**](https://shizuku.rikka.app/zh-hans/download.html)搭配使用！用户可以授权本应用的Shizuku权限以享受更佳的操作体验。
 
-![`无法显示Shizuku的图标，请检查网络连接`](https://shizuku.rikka.app/logo.png)
+![`Shizuku的图标载入中...`](https://shizuku.rikka.app/logo.png)
 
 在root模式下，使用*切换模式*按钮可以在特权模式和强制模式间相互切换。有对应强制模式的项目会**变色加粗**。
 
