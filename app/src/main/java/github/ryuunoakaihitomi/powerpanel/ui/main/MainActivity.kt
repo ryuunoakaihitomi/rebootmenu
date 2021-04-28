@@ -1,9 +1,11 @@
 package github.ryuunoakaihitomi.powerpanel.ui.main
 
 import android.app.Activity
+import android.app.UiModeManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.Typeface
 import android.os.Build
@@ -18,6 +20,7 @@ import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.AdapterView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.getSystemService
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
@@ -53,14 +56,28 @@ private const val DIALOG_ALPHA = 0.85f
 
 class MainActivity : AppCompatActivity() {
 
+    private fun compatibilityCheck() {
+        val modeType = getSystemService<UiModeManager>()?.currentModeType
+            ?: Configuration.UI_MODE_TYPE_UNDEFINED
+        val isCompatible =
+            // Wear OS存在界面元素无法显示问题
+            modeType != Configuration.UI_MODE_TYPE_WATCH &&
+                    // Android TV部分功能无法使用
+                    modeType != Configuration.UI_MODE_TYPE_TELEVISION
+        if (!isCompatible) {
+            Timber.i("show unsupported env hint")
+            Toasty.error(this, R.string.toast_unsupported_env, Toasty.LENGTH_LONG).show()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        makeTransparent()
         Timber.v("start!")
+        compatibilityCheck()
         var mainDialog = AlertDialog.Builder(this).create()
         val powerViewModel = ViewModelProvider(this)[PowerViewModel::class.java]
         powerViewModel.labelResId.observe(this) {
-            PowerExecution.execute(it, this, powerViewModel.getForceMode())
+            PowerExecution.execute(this, it, powerViewModel.getForceMode())
         }
         powerViewModel.shortcutInfoArray.observe(this) { it ->
             ShortcutManagerCompat.removeAllDynamicShortcuts(this)

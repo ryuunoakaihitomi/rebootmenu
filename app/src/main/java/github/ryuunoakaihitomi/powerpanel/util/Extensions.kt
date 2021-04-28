@@ -1,6 +1,5 @@
 package github.ryuunoakaihitomi.powerpanel.util
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -13,10 +12,6 @@ import es.dmoral.toasty.Toasty
 import timber.log.Timber
 
 typealias RC = ResourcesCompat
-
-fun Activity.makeTransparent() {
-    window.decorView.alpha = 0f
-}
 
 fun Context.openUrlInBrowser(url: String) {
     runCatching {

@@ -7,13 +7,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import github.ryuunoakaihitomi.powerpanel.desc.PowerExecution
 import github.ryuunoakaihitomi.powerpanel.util.BlackMagic
-import github.ryuunoakaihitomi.powerpanel.util.makeTransparent
 
 class ShortcutActivity : AppCompatActivity() {
 
     companion object {
-        const val EXTRA_LABEL_RES_ID = "extraLabelResId"
-        const val EXTRA_FORCE_MODE = "extraForceMode"
+        private const val EXTRA_LABEL_RES_ID = "extraLabelResId"
+        private const val EXTRA_FORCE_MODE = "extraForceMode"
 
         fun getActionIntent(@StringRes labelResId: Int, forceMode: Boolean = false) = run {
             Intent(BlackMagic.getGlobalApp(), ShortcutActivity::class.java).run {
@@ -26,10 +25,10 @@ class ShortcutActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        makeTransparent()
-        val forceMode = intent.getBooleanExtra(EXTRA_FORCE_MODE, false)
         PowerExecution.execute(
-            intent.getIntExtra(EXTRA_LABEL_RES_ID, ResourcesCompat.ID_NULL), this, forceMode
+            this,
+            intent.getIntExtra(EXTRA_LABEL_RES_ID, ResourcesCompat.ID_NULL),
+            intent.getBooleanExtra(EXTRA_FORCE_MODE, false)
         )
     }
 }

@@ -19,7 +19,7 @@ import timber.log.Timber
 
 object PowerExecution {
 
-    fun execute(@StringRes labelResId: Int, activity: AppCompatActivity, forceMode: Boolean) {
+    fun execute(activity: AppCompatActivity, @StringRes labelResId: Int, forceMode: Boolean) {
         val callback = object : Callback {
 
             override fun done() {
