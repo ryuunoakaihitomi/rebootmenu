@@ -2,8 +2,7 @@
 <resources>
 
     <style name="MainStyle" parent="Theme.AppCompat.DayNight.Dialog.Alert">
-        <!-- 防止在Wear OS中崩溃和隐藏默认Dialog。
-        目前Wear OS最新只到Android P，所以无需在values-v31添加 -->
+        <!-- 防止在Wear OS中崩溃和隐藏默认Dialog -->
         <item name="windowNoTitle">true</item>
     </style>
 </resources>

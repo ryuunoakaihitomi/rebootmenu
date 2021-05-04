@@ -14,7 +14,7 @@
 
 ## 屏幕截图
 
-[壁纸来源](https://www.pixiv.net/artworks/84998106)
+壁纸来源：[佐倉おりこ：猫カフェ開店準備中♪](https://www.pixiv.net/artworks/84998106)
 
 <img src="/annex/Screenshot_20210113-165823.jpg" width="25%" /><img src="/annex/Screenshot_20210113-170632.jpg" width="25%" /><img src="/annex/Screenshot_20210113-170722.jpg" width="25%" /><img src="/annex/Screenshot_20210113-170951.jpg" width="25%" />
 

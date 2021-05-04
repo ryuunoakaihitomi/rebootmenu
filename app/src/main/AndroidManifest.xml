@@ -6,7 +6,7 @@
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
-    <!-- CM平台SDK文档 -->
+    <!-- 来自CM平台SDK文档 -->
     <uses-permission android:name="cyanogenmod.permission.PUBLISH_CUSTOM_TILE" />
 
     <uses-sdk tools:overrideLibrary="rikka.shizuku.shared,rikka.shizuku.provider,rikka.shizuku.api,rikka.shizuku.aidl" />
@@ -26,9 +26,17 @@
         android:banner="@drawable/banner"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:manageSpaceActivity=".ui.DummyActivity"
         android:resizeableActivity="false"
         android:theme="@style/MainStyle"
         tools:targetApi="o">
+
+        <!-- 指定一个未启用的Activity作为manageSpaceActivity以禁止手动清除数据
+         从25开始此按钮不可点击，之前的系统中点击此按钮Settings会抛ANFE -->
+        <activity
+            android:name=".ui.DummyActivity"
+            android:enabled="false" />
+
         <activity
             android:name=".ui.main.MainActivity"
             android:autoRemoveFromRecents="true"

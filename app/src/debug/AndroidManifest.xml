@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 使用DebugView过滤上传的统计信息比较麻烦，干脆在debug变体中禁用Firebase -->
+    <application>
+        <!-- https://firebase.google.com/docs/crashlytics/customize-crash-reports?platform=android#enable-reporting -->
+        <meta-data
+            android:name="firebase_crashlytics_collection_enabled"
+            android:value="false" />
+        <!--  https://firebase.google.com/docs/analytics/configure-data-collection?platform=android#permanently_deactivate_collection -->
+        <meta-data
+            android:name="firebase_analytics_collection_deactivated"
+            android:value="true" />
+    </application>
+</manifest>

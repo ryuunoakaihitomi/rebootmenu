@@ -7,5 +7,7 @@
         <!--<item name="android:windowBlurBehindRadius">16sp</item>-->
         <!-- 在定义模糊时减轻暗淡效果防止背景虚化效果过强 -->
         <item name="android:backgroundDimAmount">0.1</item>
+        <!-- 隐藏默认Dialog -->
+        <item name="windowNoTitle">true</item>
     </style>
 </resources>

@@ -1,6 +1,7 @@
 package github.ryuunoakaihitomi.powerpanel.ui.main
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.app.UiModeManager
 import android.content.Context
 import android.content.Intent
@@ -15,10 +16,10 @@ import android.text.style.StyleSpan
 import android.text.style.TypefaceSpan
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowInsets
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.AdapterView
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.getSystemService
 import androidx.core.content.pm.ShortcutInfoCompat
@@ -236,6 +237,7 @@ class MainActivity : AppCompatActivity() {
                 // 半透明度
                 alpha = DIALOG_ALPHA
                 emptyAccessibilityDelegate()
+                hideSysUi()
             }
         }
         lifecycle.addObserver(LifecycleEventObserver { _, event ->
@@ -314,4 +316,20 @@ private fun Context.markwon() = Markwon.builder(this)
         }
     })
     .build()
+
+/**
+ * 隐藏导航栏和状态栏
+ * TODO 用core-ktx将要出的下一个正式版本代替
+ */
+private fun View.hideSysUi() = apply {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        windowInsetsController?.hide(WindowInsets.Type.systemBars())
+    } else {
+        @Suppress("DEPRECATION") // 假阳性
+        systemUiVisibility =
+            View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
+                    View.SYSTEM_UI_FLAG_FULLSCREEN or
+                    View.SYSTEM_UI_FLAG_IMMERSIVE   // 取消激活导航栏的步骤，原来的行为是在此之后才响应dialog
+    }
+}
 //endregion
