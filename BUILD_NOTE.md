@@ -1,11 +1,19 @@
 # 构建笔记
 
-在构建之前需要进行以下工作
+## 变体
 
-- 在`app`目录中加入Firebase配置文件`google-services.json`
+本应用有两个构建变体：`normal`和`floss`。
 
-构建
+* normal
+带统计组件和完整的帮助文件。面向大多数用户的发布版本。
+
+* floss
+体积较小，不带统计组件和多余权限，面向**已经深入了解本应用并懂得如何提取错误报告**的进阶用户。仅发布在Github Release。
+
+## 步骤
 
 - 修改[`signInfo_example.properties`](signInfo_example.properties)，填入签名信息，并将其命名为`signInfo.properties`
 
-- 执行Gradle任务：`resguardRelease`
+- 如果需要构建`normal`版本，在`app`目录中加入Firebase配置文件`google-services.json`
+
+- 执行Gradle任务：`app:resguardRelease`
