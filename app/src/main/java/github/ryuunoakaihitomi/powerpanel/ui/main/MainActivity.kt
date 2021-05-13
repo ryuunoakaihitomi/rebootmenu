@@ -17,6 +17,7 @@ import android.text.style.TypefaceSpan
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowInsets
+import android.view.WindowInsetsController
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.AdapterView
@@ -233,16 +234,25 @@ class MainActivity : AppCompatActivity() {
                     Toasty.info(this, R.string.toast_shortcut_added).show()
                     return@OnItemLongClickListener true
                 }
-            mainDialog.window?.decorView?.run {
-                // 半透明度
-                alpha = DIALOG_ALPHA
-                emptyAccessibilityDelegate()
-                hideSysUi()
+            mainDialog.window?.run {
+                // TODO Android 12发布后加入
+                //setHideOverlayWindows(true)
+                decorView.run {
+                    alpha = DIALOG_ALPHA
+                    emptyAccessibilityDelegate()
+                    // 在初次resume时，dialog还未show。所以无效，还需要在这里调用
+                    hideSysUi()
+                }
             }
         }
         lifecycle.addObserver(LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_DESTROY) {
-                mainDialog.dismiss()
+            mainDialog.run {
+                when (event) {
+                    Lifecycle.Event.ON_DESTROY -> dismiss()
+                    // 在添加shortcut取消返回时重做
+                    Lifecycle.Event.ON_RESUME -> window?.decorView?.hideSysUi()
+                    else -> if (BuildConfig.DEBUG) Timber.d("Unimplemented lifecycle ${event.name}")
+                }
             }
         })
         powerViewModel.prepare()
@@ -323,13 +333,20 @@ private fun Context.markwon() = Markwon.builder(this)
  */
 private fun View.hideSysUi() = apply {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-        windowInsetsController?.hide(WindowInsets.Type.systemBars())
+        windowInsetsController?.run {
+            hide(WindowInsets.Type.systemBars())
+            // 作用同ui flag的immersive
+            systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        }
+
     } else {
-        @Suppress("DEPRECATION") // 假阳性
+        @Suppress("DEPRECATION")    // 假阳性
         systemUiVisibility =
             View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
                     View.SYSTEM_UI_FLAG_FULLSCREEN or
-                    View.SYSTEM_UI_FLAG_IMMERSIVE   // 取消激活导航栏的步骤，原来的行为是在此之后才响应dialog
+                    // immersive 取消激活导航栏的步骤，原来的行为是在此之后才响应dialog
+                    // sticky 让状态栏在手动呼出之后一段时间自动隐藏
+                    View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
     }
 }
 //endregion

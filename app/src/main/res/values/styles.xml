@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="MainStyle" parent="Theme.AppCompat.DayNight.Dialog.Alert">
+    <style name="MainStyle" parent="BaseMainStyle" />
+
+    <style name="BaseMainStyle" parent="Theme.AppCompat.DayNight.Dialog.Alert">
         <!-- 防止在Wear OS中崩溃和隐藏默认Dialog -->
         <item name="windowNoTitle">true</item>
     </style>

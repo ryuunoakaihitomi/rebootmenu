@@ -8,6 +8,6 @@ import timber.log.Timber
 class MyLogTree : Timber.DebugTree() {
 
     override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
-        super.log(priority, "floss#$tag", message, t)
+        super.log(priority, /* Free PowerPanel */ "FPP#$tag", message, t)
     }
 }

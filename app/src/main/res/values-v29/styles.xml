@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="MainStyle" parent="BaseMainStyle.V29" />
+
+    <style name="BaseMainStyle.V29">
+        <!-- MIUI的强制深色模式会把Toasty的样式改掉，触发方法：设置->显示->更多深色模式设置->应用单独设置->(打开开关) -->
+        <item name="android:forceDarkAllowed">false</item>
+    </style>
+</resources>

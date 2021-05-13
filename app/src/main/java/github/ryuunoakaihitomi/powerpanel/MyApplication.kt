@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Build
 import android.os.StrictMode
 import github.ryuunoakaihitomi.poweract.ExternalUtils
+import github.ryuunoakaihitomi.powerpanel.receiver.ShutdownReceiver
 import github.ryuunoakaihitomi.powerpanel.stat.Statistics
 import github.ryuunoakaihitomi.powerpanel.util.MyLogTree
 import org.lsposed.hiddenapibypass.HiddenApiBypass
@@ -20,6 +21,8 @@ class MyApplication : Application() {
             println("Happy hacking!")   // println不会触发Timber的lint
             val result = HiddenApiBypass.setHiddenApiExemptions("L")
             println("HiddenApiBypass success: $result")
+
+            ShutdownReceiver.register(this)
         }
     }
 

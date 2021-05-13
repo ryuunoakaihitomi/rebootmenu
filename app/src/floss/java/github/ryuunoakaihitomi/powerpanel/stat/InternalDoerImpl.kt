@@ -8,6 +8,13 @@ import timber.log.Timber
  */
 object InternalDoerImpl : InternalDoer {
 
+    init {
+        Thread.setDefaultUncaughtExceptionHandler { t, e ->
+            Timber.e(e, "${e.javaClass.simpleName} in $t")
+            throw e
+        }
+    }
+
     override fun setCustomKey(k: String, v: Any) {
         val value = if (v is Array<*>) v.contentToString() else v
         Timber.i("Custom Key: $k, $value")

@@ -17,12 +17,13 @@
     <string name="toast_switch_to_privileged_mode">切换成特权模式</string>
     <string name="toast_op_failed">操作失败</string>
     <string name="btn_dialog_source_code"><b><font color="red">源代码</font></b></string>    <!-- 这里的HTML标签从26开始生效 -->
-    <string name="toast_enable_accessibility_service_hint">请启用本应用的无障碍服务</string>
+    <string name="enable_accessibility_service_hint">请启用本应用的无障碍服务</string>
     <string name="tile_pwr_menu">电源菜单</string>
     <string name="title_dialog_confirm_op">确认操作　“%s”</string>
     <string name="toast_shortcut_added">已经尝试添加快捷方式</string>
     <string name="donate">捐赠</string>
     <string name="open_source_lib_dependency">开源库依赖项</string>
+    <string name="label_lock_screen_shortcut">快捷锁屏</string>
     <!-- 中国专有Android Source网址 -->
     <string name="url_aosp_home" tools:ignore="Untranslatable">https://source.android.google.cn</string>
     <string name="url_aosp_license" tools:ignore="Untranslatable">https://source.android.google.cn/setup/start/licenses</string>
