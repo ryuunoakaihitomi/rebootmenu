@@ -82,8 +82,10 @@ object PowerExecution {
             /* 在Android 11中无法使用自定义后台Toast，使用全屏通知，或者文本Toast代替Toasty提示用户 */
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 val manager = activity.getSystemService<NotificationManager>()
-                // 开了勿扰无法显示通知，使用文本Toast算了
-                if (manager?.currentInterruptionFilter != NotificationManager.INTERRUPTION_FILTER_ALL) {
+                // 开了勿扰或者禁用，使用文本Toast代替
+                if (manager?.currentInterruptionFilter != NotificationManager.INTERRUPTION_FILTER_ALL ||
+                    !manager.areNotificationsEnabled()
+                ) {
                     mainHandler.postDelayed(toastDelay) {
                         Toast.makeText(
                             activity.application,
