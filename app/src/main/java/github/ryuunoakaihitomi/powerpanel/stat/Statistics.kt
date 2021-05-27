@@ -60,9 +60,11 @@ object Statistics {
 
     fun recordEnvInfo() {
         arrayOf(Build::class, Build.VERSION::class).forEach { clz ->
-            clz.java.fields.forEach {
+            clz.java.fields.forEach enumProps@{
+                val name = it.name
+                if (name == "UNKNOWN") return@enumProps
                 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
-                InternalDoerImpl.setCustomKey("${clz.simpleName} ${it.name}", it[null])
+                InternalDoerImpl.setCustomKey("${clz.simpleName} $name", it[null])
             }
         }
     }

@@ -53,11 +53,11 @@ class OpenSourceLibDependencyActivity : AbsAboutActivity() {
         L("Pandora", "linjiang", AL2, ghl("whataa", "pandora")),
     )
 
-    /* 使用的Gradle插件 */
-    @Suppress("SpellCheckingInspection")
-    private val gradlePluginList = listOf(
-        L("AndResGuard", "shwenzhang", AL2, ghl("shwenzhang", "AndResGuard"))
-    )
+//    /* 使用的Gradle插件 */
+//    @Suppress("SpellCheckingInspection")
+//    private val gradlePluginList = listOf(
+//        L("AndResGuard", "shwenzhang", AL2, ghl("shwenzhang", "AndResGuard"))
+//    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,8 +83,8 @@ class OpenSourceLibDependencyActivity : AbsAboutActivity() {
         libraryList.forEach { items.add(it) }
         items.add(Category("debugImplementation"))
         debugLibraryList.forEach { items.add(it) }
-        items.add(Category("Gradle plugin"))
-        gradlePluginList.forEach { items.add(it) }
+//        items.add(Category("Gradle plugin"))
+//        gradlePluginList.forEach { items.add(it) }
     }
 }
 

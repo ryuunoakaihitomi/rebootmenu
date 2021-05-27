@@ -11,6 +11,8 @@ import android.content.res.Resources
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
+import android.os.Process
+import android.os.UserManager
 import android.text.SpannableString
 import android.text.style.StyleSpan
 import android.text.style.TypefaceSpan
@@ -65,7 +67,9 @@ class MainActivity : AppCompatActivity() {
             // Wear OS存在界面元素无法显示问题
             modeType != Configuration.UI_MODE_TYPE_WATCH &&
                     // Android TV部分功能无法使用
-                    modeType != Configuration.UI_MODE_TYPE_TELEVISION
+                    modeType != Configuration.UI_MODE_TYPE_TELEVISION &&
+                    // 工作资料之类的
+                    getSystemService<UserManager>()!!.userProfiles[0].equals(Process.myUserHandle())
         if (!isCompatible) {
             Timber.i("show unsupported env hint")
             Toasty.error(this, R.string.toast_unsupported_env, Toasty.LENGTH_LONG).show()

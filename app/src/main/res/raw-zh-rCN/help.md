@@ -23,8 +23,6 @@
 
 在无Shizuku支持的情况下，受限模式和特权模式的锁屏的区别是：受限模式的在Android 9.0下不能用生物传感器（例如指纹）解锁，从9.0开始需要常驻后台（无障碍服务）；特权模式无此限制，但是可能会稍有延迟。
 
-不要将此应用安装在[工作资料](https://developer.android.google.cn/work/managed-profiles)！在此处某些功能将无法启用。
-
 ## 作者
 [@ryuunoakaihitomi github.com](https://github.com/ryuunoakaihitomi)
 
