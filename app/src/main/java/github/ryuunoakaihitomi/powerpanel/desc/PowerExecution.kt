@@ -86,13 +86,12 @@ object PowerExecution {
                 if (manager?.currentInterruptionFilter != NotificationManager.INTERRUPTION_FILTER_ALL ||
                     !manager.areNotificationsEnabled()
                 ) {
-                    mainHandler.postDelayed(toastDelay) {
-                        Toast.makeText(
-                            activity.application,
-                            R.string.enable_accessibility_service_hint,
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
+                    // 不延迟防止被识别为后台Toast造成无法显示
+                    Toast.makeText(
+                        activity.application,
+                        R.string.enable_accessibility_service_hint,
+                        Toast.LENGTH_LONG
+                    ).show()
                     return@setUserGuideRunnable
                 }
                 val cid = "accessibility_service_hint"
