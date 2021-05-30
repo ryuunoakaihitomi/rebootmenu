@@ -42,6 +42,7 @@ class OpenSourceLibDependencyActivity : AbsAboutActivity() {
         L("Markwon", "Dimitry Ivanov", AL2, "https://noties.io/Markwon"),
         L("about-page", "Drakeet", AL2, ghl("PureWriter", "about-page")),
         L("Commons IO", "Apache", AL2, "http://commons.apache.org/proper/commons-io"),
+        L("Commons Lang", "Apache", AL2, "https://commons.apache.org/proper/commons-lang"),
         L("Timber", "Jake Wharton", AL2, ghl("JakeWharton", "timber")),
         L("ZXing", "Google LLC", AL2, ghl("zxing")),
     )

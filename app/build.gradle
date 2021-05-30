@@ -15,9 +15,9 @@ android {
         //targetSdkVersion compileSdkVersion
         targetSdkVersion 30
         // 版本号：发布日期
-        versionCode 20210529
+        versionCode 20210530
         // 版本名说明： R3.x.y.z (R3:Refactoring 第三次重构，z:Quick Fix序号)
-        versionName 'R3.8.6.2'
+        versionName 'R3.8.7'
         resConfigs "en", "zh-rCN"
 
         buildConfigField 'String', 'BUILD_TIME', '\"' + new Date() + '\"'
@@ -100,16 +100,17 @@ dependencies {
     implementation "dev.rikka.shizuku:api:$shizuku_version"
     implementation "dev.rikka.shizuku:provider:$shizuku_version"
 
-    implementation 'github.ryuunoakaihitomi.poweract:poweract:1.4.4'
+    implementation 'github.ryuunoakaihitomi.poweract:poweract:1.4.5'
     implementation 'github.ryuunoakaihitomi.retoast:retoast:1.4.1'
     implementation 'com.github.GrenderG:Toasty:1.5.0'
     implementation 'com.github.topjohnwu.libsu:core:3.1.2'
     implementation 'commons-io:commons-io:2.8.0'
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
     implementation 'com.jakewharton.timber:timber:4.7.1'
     implementation 'com.drakeet.about:about:2.4.1'
     implementation 'com.google.zxing:core:3.4.1'
     implementation 'org.cyanogenmod:platform.sdk:5.0.1'
-    implementation 'org.lsposed.hiddenapibypass:hiddenapibypass:1.1'
+    implementation 'org.lsposed.hiddenapibypass:hiddenapibypass:2.0'
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
     debugImplementation 'com.github.whataa:pandora:androidx_v2.1.0'
 }

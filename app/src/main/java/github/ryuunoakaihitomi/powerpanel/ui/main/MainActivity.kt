@@ -342,7 +342,6 @@ private fun View.hideSysUi() = apply {
             // 作用同ui flag的immersive
             systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         }
-
     } else {
         @Suppress("DEPRECATION")    // 假阳性
         systemUiVisibility =

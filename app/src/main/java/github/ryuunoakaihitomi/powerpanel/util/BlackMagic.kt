@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.Application
 import android.widget.TextView
+import org.apache.commons.lang3.reflect.FieldUtils
 import java.lang.Class as C
 
 object BlackMagic {
@@ -18,7 +19,8 @@ object BlackMagic {
         val mAlert = AlertDialog::class.java.getDeclaredField("mAlert")
         mAlert.isAccessible = true
         val mAlertController = mAlert[alertDialog]
-        val mMessageView = mAlertController.javaClass.getDeclaredField("mMessageView")
+        // 为Wear OS中使用的MicroAlertController做适配
+        val mMessageView = FieldUtils.getField(mAlertController.javaClass, "mMessageView", true)
         mMessageView.isAccessible = true
         return mMessageView[mAlertController] as TextView
     }

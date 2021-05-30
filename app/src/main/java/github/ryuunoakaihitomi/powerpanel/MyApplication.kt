@@ -19,7 +19,7 @@ class MyApplication : Application() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             println("Happy hacking!")   // println不会触发Timber的lint
-            val result = HiddenApiBypass.setHiddenApiExemptions("L")
+            val result = HiddenApiBypass.addHiddenApiExemptions("L")
             println("HiddenApiBypass success: $result")
 
             ShutdownReceiver.register(this)
