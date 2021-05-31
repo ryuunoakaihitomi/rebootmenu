@@ -15,9 +15,9 @@ android {
         //targetSdkVersion compileSdkVersion
         targetSdkVersion 30
         // 版本号：发布日期
-        versionCode 20210531
+        versionCode 20210601
         // 版本名说明： R3.x.y.z (R3:Refactoring 第三次重构，z:Quick Fix序号)
-        versionName 'R3.8.7.1'
+        versionName 'R3.8.7.2'
         resConfigs "en", "zh-rCN"
 
         buildConfigField 'String', 'BUILD_TIME', '\"' + new Date() + '\"'
@@ -45,7 +45,7 @@ android {
             signingConfig signingConfigs.release
         }
         debug {
-            versionNameSuffix '-debug'
+            versionNameSuffix '-debug' +/* 精确判断是不是刚才编译的debug版本 */LocalTime.now().format("(HHmmss)")
         }
     }
     flavorDimensions "version"
@@ -105,7 +105,14 @@ dependencies {
     implementation 'com.github.GrenderG:Toasty:1.5.0'
     implementation 'com.github.topjohnwu.libsu:core:3.1.2'
     implementation 'commons-io:commons-io:2.8.0'
-    implementation 'org.apache.commons:commons-lang3:3.12.0'
+    // 不再使用lang3，因为lang3使用的一些java8 API是脱糖库无法完成转换的，即使脱糖库的文档说明支持。
+    // 使用到的例子：
+    //  FieldUtils#getField(Class<?>, String, boolean)
+    //  Validate#notNull(T, String, Object...)
+    //  Objects#requireNonNull(T, Supplier<String>) <- 从这里开始，java.util.function.Supplier无法脱糖成功，而24以下环境找不到它
+    // FIXME 在没有找到更好的解决方法之前只能使用legacy lang2代替
+    //implementation 'org.apache.commons:commons-lang3:3.12.0'
+    implementation group: 'commons-lang', name: 'commons-lang', version: '2.6'
     implementation 'com.jakewharton.timber:timber:4.7.1'
     implementation 'com.drakeet.about:about:2.4.1'
     implementation 'com.google.zxing:core:3.4.1'

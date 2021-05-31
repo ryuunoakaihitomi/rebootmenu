@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.Application
 import android.widget.TextView
-import org.apache.commons.lang3.reflect.FieldUtils
+import org.apache.commons.lang.reflect.FieldUtils
 import java.lang.Class as C
 
 object BlackMagic {
