@@ -11,6 +11,7 @@
     <!-- 来自CM平台SDK文档 -->
     <uses-permission android:name="cyanogenmod.permission.PUBLISH_CUSTOM_TILE" />
 
+    <!-- Shizuku的minSdkVersion是23，因此在使用相关API前必须判断Build.VERSION.SDK_INT -->
     <uses-sdk tools:overrideLibrary="rikka.shizuku.shared,rikka.shizuku.provider,rikka.shizuku.api,rikka.shizuku.aidl" />
 
     <!-- TV -->

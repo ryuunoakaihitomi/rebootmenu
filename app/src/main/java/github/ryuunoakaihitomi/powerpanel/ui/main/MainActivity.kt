@@ -18,8 +18,7 @@ import android.text.style.StyleSpan
 import android.text.style.TypefaceSpan
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowInsets
-import android.view.WindowInsetsController
+import android.view.Window
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.AdapterView
@@ -31,6 +30,9 @@ import androidx.core.graphics.drawable.IconCompat
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.text.set
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.ViewModelProvider
@@ -46,7 +48,9 @@ import github.ryuunoakaihitomi.powerpanel.ui.OpenSourceLibDependencyActivity
 import github.ryuunoakaihitomi.powerpanel.ui.ShortcutActivity
 import github.ryuunoakaihitomi.powerpanel.ui.tile.CmCustomTileService
 import github.ryuunoakaihitomi.powerpanel.util.*
+import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.Markwon
+import io.noties.markwon.MarkwonConfiguration
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin
 import io.noties.markwon.image.ImagesPlugin
 import org.apache.commons.io.IOUtils
@@ -239,14 +243,14 @@ class MainActivity : AppCompatActivity() {
                     return@OnItemLongClickListener true
                 }
             mainDialog.window?.run {
-                // TODO Android 12发布后加入
-                //setHideOverlayWindows(true)
                 decorView.run {
                     alpha = DIALOG_ALPHA
                     emptyAccessibilityDelegate()
-                    // 在初次resume时，dialog还未show。所以无效，还需要在这里调用
-                    hideSysUi()
                 }
+                // 在初次resume时，dialog还未show。所以无效，还需要在这里调用
+                hideSysUi()
+                // TODO Android 12发布后加入
+                //setHideOverlayWindows(true)
             }
         }
         lifecycle.addObserver(LifecycleEventObserver { _, event ->
@@ -254,7 +258,7 @@ class MainActivity : AppCompatActivity() {
                 when (event) {
                     Lifecycle.Event.ON_DESTROY -> dismiss()
                     // 在添加shortcut取消返回时重做
-                    Lifecycle.Event.ON_RESUME -> window?.decorView?.hideSysUi()
+                    Lifecycle.Event.ON_RESUME -> window?.hideSysUi()
                     else -> if (BuildConfig.DEBUG) Timber.d("Unimplemented lifecycle ${event.name}")
                 }
             }
@@ -329,27 +333,19 @@ private fun Context.markwon() = Markwon.builder(this)
             }
         }
     })
+    // 防止打开链接的崩溃
+    .usePlugin(object : AbstractMarkwonPlugin() {
+        override fun configureConfiguration(builder: MarkwonConfiguration.Builder) {
+            builder.linkResolver { _, link -> openUrlInBrowser(link) }
+        }
+    })
     .build()
 
 /**
  * 隐藏导航栏和状态栏
- * TODO 用core-ktx将要出的下一个正式版本代替
  */
-private fun View.hideSysUi() = apply {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-        windowInsetsController?.run {
-            hide(WindowInsets.Type.systemBars())
-            // 作用同ui flag的immersive
-            systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-        }
-    } else {
-        @Suppress("DEPRECATION")    // 假阳性
-        systemUiVisibility =
-            View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
-                    View.SYSTEM_UI_FLAG_FULLSCREEN or
-                    // immersive 取消激活导航栏的步骤，原来的行为是在此之后才响应dialog
-                    // sticky 让状态栏在手动呼出之后一段时间自动隐藏
-                    View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-    }
+private fun Window.hideSysUi() = WindowCompat.getInsetsController(this, decorView)?.run {
+    hide(WindowInsetsCompat.Type.systemBars())
+    systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
 }
 //endregion
