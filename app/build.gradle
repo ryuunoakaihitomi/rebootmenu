@@ -2,7 +2,7 @@ import java.time.LocalDateTime
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-//apply plugin: 'AndResGuard'
+apply plugin: 'AndResGuard'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
 
@@ -17,9 +17,9 @@ android {
         //targetSdkVersion compileSdkVersion
         targetSdkVersion 30
         // 版本号：发布日期
-        versionCode 20210603
+        versionCode 20210604
         // 版本名说明： R3.x.y.z (R3:Refactoring 第三次重构，z:Quick Fix序号)
-        versionName 'R3.8.8'
+        versionName 'R3.8.9'
         resConfigs "en", "zh-rCN"
 
         buildConfigField 'String', 'BUILD_TIME', '\"' + new Date() + '\"'
@@ -146,37 +146,37 @@ android.applicationVariants.all { variant ->
 }
 
 repositories {
+    jcenter() // 被ARG依赖的：com.tencent.mm:SevenZip:1.2.20
     maven {
         url 'https://raw.githubusercontent.com/ryuunoakaihitomi/maven-repository/master'
     }
 }
 
-/* AndResGuard配置 */
-//andResGuard {
-//    mappingFile = null
-//    use7zip = true
-//    useSign = true
-//    fixedResName = "x"
-//    mergeDuplicatedRes = true
-//    whiteList = [
-//            /*
-//            为了防止混淆后找不到资源并最精简配置，
-//            需要编译一个不使用ARG的release包后手动使用jadx等工具搜索getIdentifier()用法，
-//            并检查resources.arsc以确保豁免项存在。
-//             */
-//            "R.string.firebase_database_url",
-//            "R.string.gcm_defaultSenderId",
-//            "R.string.project_id",
-//            "R.string.google_app_id",
-//            "R.string.google_api_key",
-//            "R.string.google_storage_bucket",
-//            "R.string.com.crashlytics.android.build_id",
-//            // 使用资源入口名记录事件：getResourceEntryName()
-//            'R.string.func_*',
-//    ]
-//    compressFilePattern = [
-//            "*.png",
-//    ]
-//    sevenzip { artifact = 'com.tencent.mm:SevenZip:1.2.20' }
-//    digestalg = "SHA-256"
-//}
+andResGuard {
+    mappingFile = null
+    use7zip = true
+    useSign = true
+    fixedResName = "x"
+    mergeDuplicatedRes = true
+    whiteList = [
+            /*
+            为了防止混淆后找不到资源并最精简配置，
+            需要编译一个不使用ARG的release包后手动使用jadx等工具搜索getIdentifier()用法，
+            并检查resources.arsc以确保豁免项存在。
+             */
+            "R.string.firebase_database_url",
+            "R.string.gcm_defaultSenderId",
+            "R.string.project_id",
+            "R.string.google_app_id",
+            "R.string.google_api_key",
+            "R.string.google_storage_bucket",
+            "R.string.com.crashlytics.android.build_id",
+            // 使用资源入口名记录事件：getResourceEntryName()
+            'R.string.func_*',
+    ]
+    compressFilePattern = [
+            "*.png",
+    ]
+    sevenzip { artifact = 'com.tencent.mm:SevenZip:1.2.20' }
+    digestalg = "SHA-256"
+}

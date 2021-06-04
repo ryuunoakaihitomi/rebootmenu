@@ -18,4 +18,4 @@
 
 - 如果需要构建`normal`版本，在`app`目录中加入Firebase配置文件`google-services.json`
 
-- 执行Gradle任务：`app:assembleRelease`
+- 执行Gradle任务：`app:resguardRelease`

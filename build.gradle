@@ -4,6 +4,7 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+        jcenter()   // AndResGuard 1.2.20
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:4.2.1'
@@ -13,8 +14,7 @@ buildscript {
         classpath 'com.google.gms:google-services:4.3.5'
         classpath 'com.google.firebase:firebase-crashlytics-gradle:2.5.2'
 
-        // AndResGuard仍旧使用jcenter，且无法兼容AGP 4.2.0
-        //classpath 'com.tencent.mm:AndResGuard-gradle-plugin:1.2.20'
+        classpath 'com.tencent.mm:AndResGuard-gradle-plugin:1.2.20'
     }
 }
 
