@@ -13,6 +13,7 @@ import com.drakeet.about.Category
 import github.ryuunoakaihitomi.powerpanel.BuildConfig
 import github.ryuunoakaihitomi.powerpanel.R
 import github.ryuunoakaihitomi.powerpanel.util.BlackMagic
+import github.ryuunoakaihitomi.powerpanel.util.openUrlInBrowser
 import com.drakeet.about.License as L
 import com.drakeet.about.License.APACHE_2 as AL2
 
@@ -54,11 +55,11 @@ class OpenSourceLibDependencyActivity : AbsAboutActivity() {
         L("Pandora", "linjiang", AL2, ghl("whataa", "pandora")),
     )
 
-//    /* 使用的Gradle插件 */
-//    @Suppress("SpellCheckingInspection")
-//    private val gradlePluginList = listOf(
-//        L("AndResGuard", "shwenzhang", AL2, ghl("shwenzhang", "AndResGuard"))
-//    )
+    /* 使用的Gradle插件 */
+    @Suppress("SpellCheckingInspection")
+    private val gradlePluginList = listOf(
+        L("AndResGuard", "shwenzhang", AL2, ghl("shwenzhang", "AndResGuard"))
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,11 +71,12 @@ class OpenSourceLibDependencyActivity : AbsAboutActivity() {
         badge?.setTint(ResourcesCompat.getColor(resources, R.color.colorIconBackground, null))
         icon.setImageDrawable(badge)
         icon.setOnLongClickListener {
-            Toast.makeText(this, BuildConfig.BUILD_TIME, Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "とまれかくもあはれ\nほたるほたるおいで", Toast.LENGTH_LONG).show()
+            openUrlInBrowser("https://www.nicovideo.jp/watch/sm15408719")
             true
         }
         slogan.visibility = View.GONE
-        version.text = BuildConfig.VERSION_NAME
+        version.text = BuildConfig.BUILD_TIME
     }
 
     override fun onItemsCreated(items: MutableList<Any>) {
@@ -84,8 +86,8 @@ class OpenSourceLibDependencyActivity : AbsAboutActivity() {
         libraryList.forEach { items.add(it) }
         items.add(Category("debugImplementation"))
         debugLibraryList.forEach { items.add(it) }
-//        items.add(Category("Gradle plugin"))
-//        gradlePluginList.forEach { items.add(it) }
+        items.add(Category("Gradle plugin"))
+        gradlePluginList.forEach { items.add(it) }
     }
 }
 
