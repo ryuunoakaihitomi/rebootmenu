@@ -1,0 +1,35 @@
+name: Android CI
+
+on:
+  push:
+    branches: [ ci-test ]
+  pull_request:
+    branches: [ ci-test ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: set up JDK 11
+      uses: actions/setup-java@v2
+      with:
+        java-version: '11'
+        distribution: 'adopt'
+
+    # Check gradle version in /gradle/wrapper/gradle-wrapper.properties
+    - name: Download gradle
+      run: wget https://services.gradle.org/distributions/gradle-6.7.1-bin.zip
+      
+    - name: Decompress gradle binaries
+      run: unzip -v gradle-6.7.1-bin.zip
+    
+    - name: Copy gradle
+      run: cp ./gradle-6.7.1/bin/* ./ && mkdir -p gradle/gradle-wrapper && cp ./gradle-6.7.1/lib/* ./gradle/gradle-wrapper
+    
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+    - name: Build with Gradle
+      run: ./gradlew build
