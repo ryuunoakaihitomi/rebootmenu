@@ -1,0 +1,74 @@
+# 此文件禁止自动格式化，否则会出现语法错误
+
+# 禁止构建normal release版本，可能会覆盖上传到Google的mapping
+name: Build floss release CI
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+    - 'app/**'
+    - '.github/workflows/*.yml'
+    - 'gradle.properties'
+    - '*.gradle'
+    - '!/**/*.md'
+  pull_request:
+    branches: [ master ]
+    paths-ignore:
+    - '*.md'
+    - 'LICENSE'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: set up JDK
+      uses: actions/setup-java@v2
+      with:
+        java-version: '11'
+        distribution: 'adopt'
+
+    - name: Generate keystore
+      run: keytool -genkey -alias a -dname "CN=CN" -storepass passwd -keypass passwd -keystore android.keystore
+
+    - name: Create sign config
+      run: echo -e "KEY_ALIAS=a\nKEY_PWD=passwd\nSTORE_PWD=passwd\nSTORE_FILE=$(pwd)/android.keystore" > signInfo.properties
+
+      # https://developer.android.google.cn/studio/releases/gradle-plugin#updating-gradle
+    - name: Install gradle wrapper
+      run : gradle wrapper --gradle-version 6.7.1
+
+    - name: Build
+      run: ./gradlew resguardFlossRelease
+
+      # https://github.com/actions/virtual-environments/blob/main/images/linux/Ubuntu2004-README.md#android
+    - name: Check apk
+      env:
+        BUILD_TOOLS_VERSION: 30.0.3
+      run: |
+        export APK_PATH=$(find ./app/build/outputs/apk/floss/release/ -maxdepth 1 -name *.apk)
+        export PATH=$PATH:$ANDROID_SDK_ROOT/build-tools/$BUILD_TOOLS_VERSION
+        aapt list -a -v $APK_PATH
+        aapt2 dump badging $APK_PATH
+        aapt2 dump permissions $APK_PATH  # 不仅包括uses-permission（权限中badging只输出这项）还有自定义permission
+        aapt2 dump strings $APK_PATH
+        aapt2 dump resources $APK_PATH
+        aapt2 dump configurations $APK_PATH
+
+    - name: Upload apk
+      uses: actions/upload-artifact@v2
+      with:
+        name: PowerPanel_apk_${{ github.sha }}
+        path: app/build/outputs/apk/floss/release/*.apk
+        if-no-files-found: error
+
+    - name: Upload mappings
+      uses: actions/upload-artifact@v2
+      with:
+        name: PowerPanel_mappings_${{ github.sha }}
+        path: |
+          app/build/outputs/mapping/flossRelease
+          app/build/outputs/apk/floss/release/AndResGuard_*/*mapping*.txt
+        if-no-files-found: error
