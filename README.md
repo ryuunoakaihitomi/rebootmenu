@@ -1,5 +1,6 @@
 # 电源面板
 
+[![Build floss release CI](https://github.com/ryuunoakaihitomi/rebootmenu/actions/workflows/build_floss_rel.yml/badge.svg?branch=master&event=push)](https://github.com/ryuunoakaihitomi/rebootmenu/actions/workflows/build_floss_rel.yml)
 ![Lines of code](https://img.shields.io/tokei/lines/github/ryuunoakaihitomi/rebootmenu?style=flat-square)
 ![GitHub release (latest by date)](https://img.shields.io/github/downloads/ryuunoakaihitomi/rebootmenu/latest/total?style=flat-square)
 
