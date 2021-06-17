@@ -17,9 +17,9 @@ android {
         //targetSdkVersion compileSdkVersion
         targetSdkVersion 30
         // 版本号：发布日期
-        versionCode 20210608
+        versionCode 20210617
         // 版本名说明： R3.x.y.z (R3:Refactoring 第三次重构，z:Quick Fix序号)
-        versionName 'R3.8.10'
+        versionName 'R3.8.11'
         resConfigs "en", "zh-rCN"
 
         buildConfigField 'String', 'BUILD_TIME', '\"' + new Date() + '\"'
@@ -102,7 +102,7 @@ dependencies {
     implementation "dev.rikka.shizuku:api:$shizuku_version"
     implementation "dev.rikka.shizuku:provider:$shizuku_version"
 
-    implementation 'github.ryuunoakaihitomi.poweract:poweract:1.4.6'
+    implementation 'github.ryuunoakaihitomi.poweract:poweract:1.4.7'
     implementation 'github.ryuunoakaihitomi.retoast:retoast:1.4.1'
     implementation 'com.github.GrenderG:Toasty:1.5.0'
     implementation 'com.github.topjohnwu.libsu:core:3.1.2'
