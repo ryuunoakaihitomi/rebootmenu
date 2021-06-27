@@ -9,13 +9,12 @@ import android.text.style.StyleSpan
 import androidx.annotation.StringRes
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.text.set
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.topjohnwu.superuser.Shell
 import es.dmoral.toasty.Toasty
-import github.ryuunoakaihitomi.powerpanel.MyApplication
 import github.ryuunoakaihitomi.powerpanel.R
 import github.ryuunoakaihitomi.powerpanel.desc.PowerInfo
 import github.ryuunoakaihitomi.powerpanel.util.BlackMagic
@@ -25,7 +24,8 @@ import kotlinx.coroutines.launch
 import rikka.shizuku.Shizuku
 import timber.log.Timber
 
-class PowerViewModel : AndroidViewModel(BlackMagic.getGlobalApp()) {
+// AndroidViewModel 因为魔法问题不可用了
+class PowerViewModel : ViewModel() {
 
     /* Root模式：分隔开受限模式 */
     val rootMode: LiveData<Boolean>
@@ -195,7 +195,7 @@ class PowerViewModel : AndroidViewModel(BlackMagic.getGlobalApp()) {
     }
     //</editor-fold>
 
-    private fun app() = getApplication<MyApplication>()
+    private fun app() = BlackMagic.getGlobalApp()
 
     fun getForceMode() = forceMode.value ?: false
 
