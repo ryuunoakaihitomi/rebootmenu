@@ -27,6 +27,8 @@ import timber.log.Timber
 // AndroidViewModel 因为魔法问题不可用了
 class PowerViewModel : ViewModel() {
 
+    private val app = BlackMagic.getGlobalApp()
+
     /* Root模式：分隔开受限模式 */
     val rootMode: LiveData<Boolean>
         get() = _rootMode
@@ -73,9 +75,9 @@ class PowerViewModel : ViewModel() {
     fun reverseForceMode() {
         forceMode.value = getForceMode().not()
         if (forceMode.value == true) {
-            Toasty.warning(app(), R.string.toast_switch_to_force_mode).show()
+            Toasty.warning(app, R.string.toast_switch_to_force_mode).show()
         } else {
-            Toasty.normal(app(), R.string.toast_switch_to_privileged_mode).show()
+            Toasty.normal(app, R.string.toast_switch_to_privileged_mode).show()
         }
         changeInfo()
     }
@@ -106,7 +108,7 @@ class PowerViewModel : ViewModel() {
             lockScreenPrivileged
         )
 
-        val rawTitle = app().getString(R.string.app_name)
+        val rawTitle = app.getString(R.string.app_name)
         if (rootMode.value == true) {
             _title.value = rawTitle
 
@@ -114,7 +116,7 @@ class PowerViewModel : ViewModel() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R &&
                 Shizuku.pingBinder() &&
                 Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED &&
-                app().packageManager.hasSystemFeature(PackageManager.FEATURE_CONTROLS)
+                app.packageManager.hasSystemFeature(PackageManager.FEATURE_CONTROLS)
             ) {
                 Timber.d("add showSysPowerDialog for device controls")
                 val size = privilegedActions.size
@@ -131,7 +133,7 @@ class PowerViewModel : ViewModel() {
             _title.value = String.format(
                 "%s %s",
                 rawTitle,
-                app().getString(R.string.title_dialog_restricted_mode)
+                app.getString(R.string.title_dialog_restricted_mode)
             )
             _infoArray.value = restrictedActions
             _shortcutInfoArray.value = restrictedActions
@@ -189,13 +191,11 @@ class PowerViewModel : ViewModel() {
             }
             else -> powerInfo
         }.apply {
-            label = colorForceLabel(app().getString(labelResId), this)
+            label = colorForceLabel(app.getString(labelResId), this)
             this.labelResId = labelResId
         }
     }
     //</editor-fold>
-
-    private fun app() = BlackMagic.getGlobalApp()
 
     fun getForceMode() = forceMode.value ?: false
 
@@ -213,7 +213,7 @@ class PowerViewModel : ViewModel() {
         if (isOnForceMode(info)) {
             val range = 0..forceLabel.length
             forceLabel[range] = ForegroundColorSpan(
-                ResourcesCompat.getColor(app().resources, R.color.colorForceModeItem, null)
+                ResourcesCompat.getColor(app.resources, R.color.colorForceModeItem, null)
             )
             forceLabel[range] = StyleSpan(Typeface.BOLD)
         }

@@ -21,7 +21,6 @@ class ShutdownReceiver : BroadcastReceiver() {
     }
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        Intent.ACTION_GTALK_SERVICE_CONNECTED
         if (intent?.action == Intent.ACTION_SHUTDOWN) {
             Timber.d("Shutdown broadcast received.")
             // 偶尔收到Caused by android.os.DeadObjectException的Unable to reach IQSService异常

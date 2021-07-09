@@ -327,7 +327,7 @@ private fun Context.markwon() = Markwon.builder(this)
                  * 在文档中保留网址，不使用file:///android/asset。然后在errorHandler中匹配网址返回特定assets图像资源。
                  */
                 "https://shizuku.rikka.app/logo.png" ->
-                    RoundedBitmapDrawableFactory.create(resources, assets.open("shizuku_logo.png"))
+                    RoundedBitmapDrawableFactory.create(resources, assets.open("shizuku_logo.webp"))
                 else ->
                     RC.getDrawable(Resources.getSystem(), android.R.drawable.ic_menu_gallery, null)
             }
