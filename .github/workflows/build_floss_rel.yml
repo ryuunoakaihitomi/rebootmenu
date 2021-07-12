@@ -30,11 +30,14 @@ jobs:
         java-version: '11'
         distribution: 'adopt'
 
-    - name: Generate keystore
-      run: keytool -genkey -alias a -dname "CN=CN" -storepass passwd -keypass passwd -keystore android.keystore
-
-    - name: Create sign config
-      run: echo -e "KEY_ALIAS=a\nKEY_PWD=passwd\nSTORE_PWD=passwd\nSTORE_FILE=$(pwd)/android.keystore" > signInfo.properties
+    - name: Generate signing info
+      run: |
+        keytool -genkey -alias a -dname "CN=CN" -storepass passwd -keypass passwd -keystore android.keystore
+        touch signInfo.properties
+        echo KEY_ALIAS=a >> signInfo.properties
+        echo KEY_PWD=passwd >> signInfo.properties
+        echo STORE_PWD=passwd >> signInfo.properties
+        echo -e "STORE_FILE=$(pwd)/android.keystore" >> signInfo.properties
 
       # https://developer.android.google.cn/studio/releases/gradle-plugin#updating-gradle
     - name: Install gradle wrapper
