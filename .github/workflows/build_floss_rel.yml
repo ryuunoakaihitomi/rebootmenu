@@ -33,11 +33,10 @@ jobs:
     - name: Generate signing info
       run: |
         keytool -genkey -alias a -dname "CN=CN" -storepass passwd -keypass passwd -keystore android.keystore
-        touch signInfo.properties
         echo KEY_ALIAS=a >> signInfo.properties
         echo KEY_PWD=passwd >> signInfo.properties
         echo STORE_PWD=passwd >> signInfo.properties
-        echo -e "STORE_FILE=$(pwd)/android.keystore" >> signInfo.properties
+        echo STORE_FILE=$(pwd)/android.keystore >> signInfo.properties
 
       # https://developer.android.google.cn/studio/releases/gradle-plugin#updating-gradle
     - name: Install gradle wrapper
