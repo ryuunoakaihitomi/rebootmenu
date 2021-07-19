@@ -38,6 +38,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.ViewModelProvider
 import es.dmoral.toasty.Toasty
 import github.ryuunoakaihitomi.powerpanel.BuildConfig
+import github.ryuunoakaihitomi.powerpanel.MyApplication
 import github.ryuunoakaihitomi.powerpanel.R
 import github.ryuunoakaihitomi.powerpanel.desc.PowerExecution
 import github.ryuunoakaihitomi.powerpanel.desc.getIconResIdArray
@@ -65,6 +66,8 @@ private const val DIALOG_ALPHA = 0.85f
 class MainActivity : AppCompatActivity() {
 
     private fun compatibilityCheck() {
+        val myApp = application as MyApplication
+        if (myApp.hasShownCompatibilityWarning) return
         val modeType = getSystemService<UiModeManager>()?.currentModeType
             ?: Configuration.UI_MODE_TYPE_UNDEFINED
         val isCompatible =
@@ -77,6 +80,7 @@ class MainActivity : AppCompatActivity() {
         if (!isCompatible) {
             Timber.i("show unsupported env hint")
             Toasty.error(this, R.string.toast_unsupported_env, Toasty.LENGTH_LONG).show()
+            myApp.hasShownCompatibilityWarning = true
         }
     }
 
@@ -249,8 +253,9 @@ class MainActivity : AppCompatActivity() {
                 }
                 // 在初次resume时，dialog还未show。所以无效，还需要在这里调用
                 hideSysUi()
-                // TODO Android 12发布后加入
-                //setHideOverlayWindows(true)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    setHideOverlayWindows(true)
+                }
             }
         }
         lifecycle.addObserver(LifecycleEventObserver { _, event ->

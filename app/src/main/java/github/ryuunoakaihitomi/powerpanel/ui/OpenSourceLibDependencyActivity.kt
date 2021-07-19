@@ -1,15 +1,19 @@
 package github.ryuunoakaihitomi.powerpanel.ui
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import com.drakeet.about.AbsAboutActivity
 import com.drakeet.about.Category
+import com.topjohnwu.superuser.Shell
 import github.ryuunoakaihitomi.powerpanel.BuildConfig
 import github.ryuunoakaihitomi.powerpanel.R
 import github.ryuunoakaihitomi.powerpanel.util.BlackMagic
@@ -77,6 +81,10 @@ class OpenSourceLibDependencyActivity : AbsAboutActivity() {
         }
         slogan.visibility = View.GONE
         version.text = BuildConfig.BUILD_TIME
+        version.setOnLongClickListener {
+            recordLogcat()
+            true
+        }
     }
 
     override fun onItemsCreated(items: MutableList<Any>) {
@@ -88,6 +96,36 @@ class OpenSourceLibDependencyActivity : AbsAboutActivity() {
         debugLibraryList.forEach { items.add(it) }
         items.add(Category("Gradle plugin"))
         gradlePluginList.forEach { items.add(it) }
+    }
+
+    /*
+     * ======== 抓取logcat ========
+     *
+     * 一般来说使用错误报告取得在发布后的调试信息，
+     * 不过有时可用这个后门快速抓取logcat以便首先获得一部分可在设备上直接查看的蛛丝马迹。
+     * （错误报告通常很大以至于在终端设备上加载起来极为卡顿，无法直接查看，只能导入至PC后才能查看）
+     */
+
+    private val maxLineCount = 1024
+
+    private val ar = registerForActivityResult(object : ActivityResultContracts.CreateDocument() {
+        override fun createIntent(context: Context, input: String): Intent {
+            return super.createIntent(context, input).apply { type = "text/plain" }
+        }
+    }) {
+        it?.runCatching {
+            Shell.sh("logcat -t $maxLineCount").submit { r ->
+                contentResolver.openOutputStream(this)?.apply {
+                    write(r.out.joinToString(separator = System.lineSeparator()).toByteArray())
+                    close()
+                }
+            }
+        }
+    }
+
+    private fun recordLogcat() {
+        Toast.makeText(application, "Recent $maxLineCount lines Logcat", Toast.LENGTH_LONG).show()
+        ar.launch("logcat_${System.currentTimeMillis().toString(Character.MAX_RADIX)}")
     }
 }
 

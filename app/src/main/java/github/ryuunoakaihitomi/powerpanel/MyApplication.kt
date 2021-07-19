@@ -13,6 +13,11 @@ import timber.log.Timber
 
 class MyApplication : Application() {
 
+    /**
+     * @see [github.ryuunoakaihitomi.powerpanel.ui.main.MainActivity.compatibilityCheck]
+     */
+    var hasShownCompatibilityWarning = false
+
     override fun attachBaseContext(base: Context?) {
         super.attachBaseContext(base)
         Timber.plant(MyLogTree())
