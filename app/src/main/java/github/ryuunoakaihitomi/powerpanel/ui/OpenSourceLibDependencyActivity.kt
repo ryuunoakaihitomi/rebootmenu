@@ -106,7 +106,7 @@ class OpenSourceLibDependencyActivity : AbsAboutActivity() {
      * （错误报告通常很大以至于在终端设备上加载起来极为卡顿，无法直接查看，只能导入至PC后才能查看）
      */
 
-    private val maxLineCount = 1024
+    private val maxLineCount = (1024..2048).random()
 
     private val ar = registerForActivityResult(object : ActivityResultContracts.CreateDocument() {
         override fun createIntent(context: Context, input: String): Intent {
@@ -118,6 +118,7 @@ class OpenSourceLibDependencyActivity : AbsAboutActivity() {
                 contentResolver.openOutputStream(this)?.apply {
                     write(r.out.joinToString(separator = System.lineSeparator()).toByteArray())
                     close()
+                    finish()
                 }
             }
         }
@@ -125,7 +126,7 @@ class OpenSourceLibDependencyActivity : AbsAboutActivity() {
 
     private fun recordLogcat() {
         Toast.makeText(application, "Recent $maxLineCount lines Logcat", Toast.LENGTH_LONG).show()
-        ar.launch("logcat_${System.currentTimeMillis().toString(Character.MAX_RADIX)}")
+        ar.launch("logcat_${System.currentTimeMillis().toString(Character.MAX_RADIX).uppercase()}")
     }
 }
 
