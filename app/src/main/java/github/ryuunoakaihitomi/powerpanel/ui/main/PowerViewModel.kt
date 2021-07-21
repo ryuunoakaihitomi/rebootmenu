@@ -96,7 +96,13 @@ class PowerViewModel : ViewModel() {
         val lockScreenPrivileged = provide(R.string.func_lock_screen_privileged)
 
         /* 这里定义了各个选项的顺序，这个顺序已经经过反复的试验，一般不需要更改 */
-        val restrictedActions = arrayOf(lockScreen, showSysPowerDialog)
+
+        val restrictedActions =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                arrayOf(lockScreen, showSysPowerDialog)
+            else
+                arrayOf(lockScreen)
+
         var privilegedActions = arrayOf(
             reboot,
             shutdown,

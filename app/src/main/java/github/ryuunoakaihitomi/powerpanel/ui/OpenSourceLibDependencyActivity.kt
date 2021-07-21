@@ -10,13 +10,14 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import com.drakeet.about.AbsAboutActivity
 import com.drakeet.about.Category
 import com.topjohnwu.superuser.Shell
 import github.ryuunoakaihitomi.powerpanel.BuildConfig
 import github.ryuunoakaihitomi.powerpanel.R
 import github.ryuunoakaihitomi.powerpanel.util.BlackMagic
+import github.ryuunoakaihitomi.powerpanel.util.RC
 import github.ryuunoakaihitomi.powerpanel.util.openUrlInBrowser
 import com.drakeet.about.License as L
 import com.drakeet.about.License.APACHE_2 as AL2
@@ -71,9 +72,11 @@ class OpenSourceLibDependencyActivity : AbsAboutActivity() {
     }
 
     override fun onCreateHeader(icon: ImageView, slogan: TextView, version: TextView) {
-        val badge = ContextCompat.getDrawable(this, android.R.drawable.ic_lock_power_off)
-        badge?.setTint(ResourcesCompat.getColor(resources, R.color.colorIconBackground, null))
-        icon.setImageDrawable(badge)
+        ContextCompat.getDrawable(this, android.R.drawable.ic_lock_power_off)?.run {
+            val d = DrawableCompat.wrap(this)
+            DrawableCompat.setTint(d, RC.getColor(resources, R.color.colorIconBackground, null))
+            icon.setImageDrawable(d)
+        }
         icon.setOnLongClickListener {
             Toast.makeText(this, "とまれかくもあはれ\nほたるほたるおいで", Toast.LENGTH_LONG).show()
             openUrlInBrowser("https://www.nicovideo.jp/watch/sm15408719")
@@ -98,9 +101,9 @@ class OpenSourceLibDependencyActivity : AbsAboutActivity() {
         gradlePluginList.forEach { items.add(it) }
     }
 
+    //<editor-fold desc="抓取logcat">
+
     /*
-     * ======== 抓取logcat ========
-     *
      * 一般来说使用错误报告取得在发布后的调试信息，
      * 不过有时可用这个后门快速抓取logcat以便首先获得一部分可在设备上直接查看的蛛丝马迹。
      * （错误报告通常很大以至于在终端设备上加载起来极为卡顿，无法直接查看，只能导入至PC后才能查看）
@@ -128,6 +131,7 @@ class OpenSourceLibDependencyActivity : AbsAboutActivity() {
         Toast.makeText(application, "Recent $maxLineCount lines Logcat", Toast.LENGTH_LONG).show()
         ar.launch("logcat_${System.currentTimeMillis().toString(Character.MAX_RADIX).uppercase()}")
     }
+    //</editor-fold>
 }
 
 private fun strOf(@StringRes id: Int) = BlackMagic.getGlobalApp().getString(id)

@@ -9,7 +9,7 @@
 * **特权模式**：在root权限下，可以使用所有功能。
 * **~~强制模式~~**：在root权限下，对于部分项目，强制切断电源。（仅作为兼容早期非标准系统的备用选项，因为有安全风险所以大多数情况下**不推荐使用**）
 
-为了规避常规魔法上固有的缺陷和限制条件，强烈推荐用户将本应用与[**Shizuku Manager**](https://shizuku.rikka.app/zh-hans/download.html)搭配使用！用户可以授权本应用的Shizuku权限以享受更佳的操作体验。
+为了规避常规魔法上固有的缺陷和限制条件，从Android 6.0开始，强烈推荐用户将本应用与[**Shizuku Manager**](https://shizuku.rikka.app/zh-hans/download.html)搭配使用！用户可以授权本应用的Shizuku权限以享受更佳的操作体验。
 
 ![`Shizuku的图标载入中...`](https://shizuku.rikka.app/logo.png)
 

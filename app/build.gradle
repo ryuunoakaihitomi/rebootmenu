@@ -12,14 +12,15 @@ android {
     compileSdkVersion 31
     defaultConfig {
         applicationId "com.ryuunoakaihitomi.rebootmenu"
-        minSdkVersion 21
+        minSdkVersion 19
+        multiDexEnabled true
         // 以下方式会出现这样的错误：android:targetSdkVersion="android-30"
         //targetSdkVersion compileSdkVersion
         targetSdkVersion 31
         // 版本号：发布日期
-        versionCode 20210721
+        versionCode 20210722
         // 版本名说明： R3.x.y.z (R3:Refactoring 第三次重构，z:Quick Fix序号)
-        versionName 'R3.9.0.1'
+        versionName 'R3.9.1'
         resConfigs "en", "zh-rCN"
 
         buildConfigField 'String', 'BUILD_TIME', '\"' + new Date() + '\"'
@@ -77,6 +78,18 @@ android {
 
     lintOptions {
         textReport true
+
+        // 实测看上去没有区别
+        // Resource references will not work correctly in images generated for this vector icon for API < 21; check generated icon to make sure it looks acceptable
+        disable 'VectorRaster'
+
+        // 如果ARG无法下载，就将移除ARG
+        // JCenter Maven repository is no longer receiving updates: newer library versions may be available elsewhere
+        disable 'JcenterRepositoryObsolete'
+    }
+    packagingOptions {
+        // 移除记录依赖的版本信息文件（大部分是AndroidX的）
+        exclude 'META-INF/*.version'
     }
 }
 
@@ -86,6 +99,7 @@ dependencies {
 
     implementation 'androidx.core:core-ktx:1.5.0'
     implementation 'androidx.appcompat:appcompat:1.3.0'
+    implementation "androidx.multidex:multidex:2.0.1"
 
     def lifecycle_version = "2.3.1"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"

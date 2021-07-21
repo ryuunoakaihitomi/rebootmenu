@@ -2,6 +2,7 @@ package github.ryuunoakaihitomi.powerpanel.stat
 
 import android.os.Bundle
 import timber.log.Timber
+import kotlin.system.exitProcess
 
 /**
  * 在floss版中用日志替代
@@ -11,7 +12,7 @@ object InternalDoerImpl : InternalDoer {
     init {
         Thread.setDefaultUncaughtExceptionHandler { t, e ->
             Timber.e(e, "${e.javaClass.simpleName} in $t")
-            throw e
+            exitProcess(-1)
         }
     }
 

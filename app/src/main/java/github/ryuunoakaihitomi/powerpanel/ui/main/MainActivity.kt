@@ -26,6 +26,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.getSystemService
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.graphics.drawable.IconCompat
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
 import androidx.core.graphics.drawable.toBitmap
@@ -60,9 +61,6 @@ import timber.log.Timber
 import java.nio.charset.Charset
 import java.util.*
 
-// 窗口透明度
-private const val DIALOG_ALPHA = 0.85f
-
 class MainActivity : AppCompatActivity() {
 
     private fun compatibilityCheck() {
@@ -71,8 +69,10 @@ class MainActivity : AppCompatActivity() {
         val modeType = getSystemService<UiModeManager>()?.currentModeType
             ?: Configuration.UI_MODE_TYPE_UNDEFINED
         val isCompatible =
-            // Wear OS存在界面元素无法显示问题
-            modeType != Configuration.UI_MODE_TYPE_WATCH &&
+            // KitKat无法长期维护，这次只不过是临时接触了这类设备才给稍微适配
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP &&
+                    // Wear OS存在界面元素无法显示问题
+                    modeType != Configuration.UI_MODE_TYPE_WATCH &&
                     // Android TV部分功能无法使用
                     modeType != Configuration.UI_MODE_TYPE_TELEVISION &&
                     // 工作资料之类的
@@ -213,12 +213,16 @@ class MainActivity : AppCompatActivity() {
             mainDialog.listView.onItemLongClickListener =
                 AdapterView.OnItemLongClickListener { _, _, position, _ ->
                     val item = it[position]
-                    RC.getDrawable(resources, item.iconResId, null)?.run {
+                    val drawable = RC.getDrawable(resources, item.iconResId, null)?.let { d ->
+                        DrawableCompat.wrap(d)
+                    }
+                    drawable?.run {
                         // 注意：必须使用mutate()保持Drawable独立性以修复无法变色的Bug
                         mutate().run {
                             // 如果是强制模式，为了便于区分，改变shortcut图标颜色
                             if (powerViewModel.isOnForceMode(item)) {
-                                setTint(
+                                DrawableCompat.setTint(
+                                    this,
                                     RC.getColor(resources, R.color.colorIconForceModeShortcut, null)
                                 )
                             }
@@ -248,7 +252,7 @@ class MainActivity : AppCompatActivity() {
                 }
             mainDialog.window?.run {
                 decorView.run {
-                    alpha = DIALOG_ALPHA
+                    alpha = 0.85f   // 窗口透明度
                     emptyAccessibilityDelegate()
                 }
                 // 在初次resume时，dialog还未show。所以无效，还需要在这里调用

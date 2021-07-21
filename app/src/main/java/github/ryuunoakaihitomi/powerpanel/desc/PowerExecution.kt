@@ -53,7 +53,7 @@ object PowerExecution {
                 PowerAct.lockScreen(activity, callback)
             }
             R.string.func_sys_pwr_menu -> requestAccessibilityService(activity) {
-                PowerAct.showPowerDialog(activity, callback)
+                @Suppress("NewApi") PowerAct.showPowerDialog(activity, callback)
             }
             R.string.func_reboot -> PowerActX.reboot(callback, forceMode)
             R.string.func_shutdown -> PowerActX.shutdown(callback, forceMode)

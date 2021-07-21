@@ -6,6 +6,7 @@ import android.view.ViewConfiguration
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import androidx.core.graphics.drawable.DrawableCompat
 import github.ryuunoakaihitomi.powerpanel.util.RC
 
 class PowerItemAdapter(context: Context, items: Array<CharSequence>, iconResId: Array<Int>) :
@@ -16,9 +17,12 @@ class PowerItemAdapter(context: Context, items: Array<CharSequence>, iconResId: 
         val view = super.getView(position, convertView, parent)
         val textView = view.findViewById<TextView>(android.R.id.text1)
         textView.compoundDrawablePadding = ViewConfiguration.get(context).scaledTouchSlop
-        val drawable = RC.getDrawable(context.resources, iconResIdList[position], null)?.mutate()
-        drawable?.setTint(textView.textColors.defaultColor)
-        textView.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null)
+        RC.getDrawable(context.resources, iconResIdList[position], null)?.run {
+            DrawableCompat.wrap(mutate())?.run {
+                DrawableCompat.setTint(this, textView.textColors.defaultColor)
+                textView.setCompoundDrawablesWithIntrinsicBounds(this, null, null, null)
+            }
+        }
         return view
     }
 }
