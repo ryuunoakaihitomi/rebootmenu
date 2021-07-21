@@ -30,7 +30,7 @@ jobs:
         java-version: '11'
         distribution: 'adopt'
 
-    # https://stackoverflow.com/questions/53838363/the-security-strength-of-sha-1-digest-algorithm-is-not-sufficient-for-this-key
+      # https://stackoverflow.com/questions/53838363/the-security-strength-of-sha-1-digest-algorithm-is-not-sufficient-for-this-key
     - name: Generate signing info
       run: |
         keytool -genkey -alias a -dname "CN=_" -storepass passwd -keypass passwd -keysize 1024 -keystore android.keystore
