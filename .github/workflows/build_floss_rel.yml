@@ -40,10 +40,12 @@ jobs:
 
       # https://developer.android.google.cn/studio/releases/gradle-plugin#updating-gradle
     - name: Install gradle wrapper
-      run : gradle wrapper --gradle-version 6.7.1
+      env:
+        GRADLE_VERSION: 6.7.1
+      run : gradle wrapper --gradle-version $GRADLE_VERSION
 
     - name: Build
-      run: ./gradlew resguardFlossRelease
+      run: ./gradlew resguardFlossRelease --info --stacktrace
 
       # https://github.com/actions/virtual-environments/blob/main/images/linux/Ubuntu2004-README.md#android
     - name: Check apk
