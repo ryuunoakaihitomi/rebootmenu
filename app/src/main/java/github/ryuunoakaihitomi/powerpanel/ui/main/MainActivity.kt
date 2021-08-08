@@ -48,7 +48,7 @@ import github.ryuunoakaihitomi.powerpanel.stat.Statistics
 import github.ryuunoakaihitomi.powerpanel.ui.DonateActivity
 import github.ryuunoakaihitomi.powerpanel.ui.OpenSourceLibDependencyActivity
 import github.ryuunoakaihitomi.powerpanel.ui.ShortcutActivity
-import github.ryuunoakaihitomi.powerpanel.ui.tile.CmCustomTileWorker
+import github.ryuunoakaihitomi.powerpanel.ui.tile.CmCustomTile
 import github.ryuunoakaihitomi.powerpanel.util.*
 import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.Markwon
@@ -132,7 +132,7 @@ class MainActivity : AppCompatActivity() {
                 })
             }
             PowerActHelper.toggleExposedComponents(application, !rootMode)   // 为CMTile提前更新外置组件可见性
-            CmCustomTileWorker.start()
+            CmCustomTile.start()
             mainDialog = AlertDialog.Builder(this).apply {
                 setTitle(powerViewModel.title.value)
                 setAdapter(

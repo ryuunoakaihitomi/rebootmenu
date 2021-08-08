@@ -21,7 +21,6 @@ import github.ryuunoakaihitomi.poweract.PowerActX
 import github.ryuunoakaihitomi.powerpanel.BuildConfig
 import github.ryuunoakaihitomi.powerpanel.R
 import github.ryuunoakaihitomi.powerpanel.stat.Statistics
-import github.ryuunoakaihitomi.powerpanel.ui.DummyActivity
 import github.ryuunoakaihitomi.powerpanel.ui.ShortcutActivity
 import github.ryuunoakaihitomi.powerpanel.ui.main.MainActivity
 import timber.log.Timber
@@ -103,7 +102,7 @@ object PowerExecution {
                     val dummyPendingIntent = PendingIntent.getActivity(
                         activity,
                         0,
-                        Intent(activity, DummyActivity::class.java),
+                        Intent(activity, Activity::class.java),
                         PendingIntent.FLAG_IMMUTABLE // Android 12必须明确指定可变性
                     )
                     setFullScreenIntent(dummyPendingIntent, true)   // 可点击取消的全屏通知
