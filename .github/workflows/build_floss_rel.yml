@@ -43,7 +43,7 @@ jobs:
       # https://developer.android.google.cn/studio/releases/gradle-plugin#updating-gradle
     - name: Install gradle wrapper
       env:
-        GRADLE_VERSION: 6.7.1
+        GRADLE_VERSION: 7.0.2
       run : gradle wrapper --gradle-version $GRADLE_VERSION
 
     - name: Build
