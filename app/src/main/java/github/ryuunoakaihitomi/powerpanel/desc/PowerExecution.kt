@@ -1,9 +1,6 @@
 package github.ryuunoakaihitomi.powerpanel.desc
 
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
+import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -87,11 +84,7 @@ object PowerExecution {
                     !manager.areNotificationsEnabled()
                 ) {
                     // 不延迟防止被识别为后台Toast造成无法显示
-                    Toast.makeText(
-                        activity.application,
-                        R.string.enable_accessibility_service_hint,
-                        Toast.LENGTH_LONG
-                    ).show()
+                    showEashToast(activity, false)
                     return@setUserGuideRunnable
                 }
                 val cid = "accessibility_service_hint"
@@ -129,16 +122,21 @@ object PowerExecution {
                     }
                 }
             } else {
-                mainHandler.postDelayed(toastDelay) {
-                    Toasty.info(
-                        activity,
-                        R.string.enable_accessibility_service_hint,
-                        Toasty.LENGTH_LONG
-                    ).show()
-                }
+                showEashToast(activity)
+                mainHandler.postDelayed(toastDelay) { showEashToast(activity) }
             }
         }
         work()
+    }
+
+    @Suppress("SpellCheckingInspection")
+    private fun showEashToast(activity: Activity, isCustom: Boolean = true) {
+        val app = activity.application
+        val msgRes = R.string.enable_accessibility_service_hint
+        val duration = Toast.LENGTH_LONG
+
+        if (isCustom) Toasty.info(app, msgRes, duration).show()
+        else Toast.makeText(app, msgRes, duration).show()
     }
 
     fun toPowerControlPanel(context: Context) =

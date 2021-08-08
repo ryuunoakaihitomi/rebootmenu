@@ -47,7 +47,7 @@ jobs:
       run : gradle wrapper --gradle-version $GRADLE_VERSION
 
     - name: Build
-      run: ./gradlew resguardFlossRelease --stacktrace
+      run: ./gradlew assembleFlossRelease --stacktrace
 
       # https://github.com/actions/virtual-environments/blob/main/images/linux/Ubuntu2004-README.md#android
     - name: Check apk
@@ -76,5 +76,4 @@ jobs:
         name: PowerPanel_mappings_${{ github.sha }}
         path: |
           app/build/outputs/mapping/flossRelease
-          app/build/outputs/apk/floss/release/AndResGuard_*/*mapping*.txt
         if-no-files-found: error

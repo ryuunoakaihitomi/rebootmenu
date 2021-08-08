@@ -107,29 +107,7 @@
             </intent-filter>
         </receiver>
 
-        <!--
-
-        TileService必须android:exported="true"才可以启用
-
-        W/ActivityManager: Permission Denial: Accessing service github.ryuunoakaihitomi.powerpanel/.ui.tile.PowerDialogTileService from pid=2358, uid=10250 that is not exported from uid 10265
-        E/TileLifecycleManager: Failed to bind to service
-    java.lang.SecurityException: Not allowed to bind to service Intent { cmp=github.ryuunoakaihitomi.powerpanel/.ui.tile.PowerDialogTileService (has extras) }
-        at android.app.ContextImpl.bindServiceCommon(ContextImpl.java:1922)
-        at android.app.ContextImpl.bindServiceAsUser(ContextImpl.java:1857)
-        at android.content.ContextWrapper.bindServiceAsUser(ContextWrapper.java:810)
-        at com.android.systemui.qs.external.TileLifecycleManager.setBindService(TileLifecycleManager.java:187)
-        at com.android.systemui.qs.external.TileServiceManager.bindService(TileServiceManager.java:200)
-        at com.android.systemui.qs.external.TileServiceManager.setBindRequested(TileServiceManager.java:149)
-        at com.android.systemui.qs.external.CustomTile.handleSetListening(CustomTile.java:249)
-        at com.android.systemui.qs.tileimpl.QSTileImpl.handleSetListeningInternal(QSTileImpl.java:464)
-        at com.android.systemui.qs.tileimpl.QSTileImpl.access$700(QSTileImpl.java:85)
-        at com.android.systemui.qs.tileimpl.QSTileImpl$H.handleMessage(QSTileImpl.java:639)
-        at android.os.Handler.dispatchMessage(Handler.java:106)
-        at android.os.Looper.loopOnce(Looper.java:201)
-        at android.os.Looper.loop(Looper.java:288)
-        at android.os.HandlerThread.run(HandlerThread.java:67)
-
-        -->
+        <!-- TileService必须android:exported="true"才可以启用 -->
 
         <service
             android:name=".ui.tile.PowerDialogTileService"
@@ -152,8 +130,6 @@
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
         </service>
-
-        <service android:name=".ui.tile.CmCustomTileService" />
 
         <!-- Shizuku提供 -->
         <provider

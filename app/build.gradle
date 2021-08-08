@@ -2,7 +2,6 @@ import java.time.LocalDateTime
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'AndResGuard'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
 
@@ -18,9 +17,9 @@ android {
         //targetSdkVersion compileSdkVersion
         targetSdkVersion 31
         // 版本号：发布日期
-        versionCode 20210722
+        versionCode 20210808
         // 版本名说明： R3.x.y.z (R3:Refactoring 第三次重构，z:Quick Fix序号)
-        versionName 'R3.9.1'
+        versionName 'R3.9.2'
         resConfigs "en", "zh-rCN"
 
         buildConfigField 'String', 'BUILD_TIME', '\"' + new Date() + '\"'
@@ -87,9 +86,12 @@ android {
         // JCenter Maven repository is no longer receiving updates: newer library versions may be available elsewhere
         disable 'JcenterRepositoryObsolete'
     }
+    // https://android-developers.googleblog.com/2020/05/android-studio-4.html
+    // Dependencies metadata 章节
+    dependenciesInfo.includeInApk = false
     packagingOptions {
-        // 移除记录依赖的版本信息文件（大部分是AndroidX的）
-        exclude 'META-INF/*.version'
+        exclude 'META-INF/*.version'     // 移除记录依赖的版本信息文件（大部分是AndroidX的）
+        exclude 'androidsupportmultidexversion.txt'
     }
 }
 
@@ -97,15 +99,16 @@ dependencies {
     // ZXing需要method sort(Ljava/util/Comparator;)V in class Ljava/util/List;
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
 
-    implementation 'androidx.core:core-ktx:1.5.0'
-    implementation 'androidx.appcompat:appcompat:1.3.0'
+    implementation 'androidx.core:core-ktx:1.6.0'
+    implementation 'androidx.appcompat:appcompat:1.3.1'
     implementation "androidx.multidex:multidex:2.0.1"
+    implementation "androidx.work:work-runtime-ktx:2.5.0"
 
     def lifecycle_version = "2.3.1"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
 
-    normalImplementation platform('com.google.firebase:firebase-bom:27.1.0')
+    normalImplementation platform('com.google.firebase:firebase-bom:28.3.0')
     normalImplementation 'com.google.firebase:firebase-analytics-ktx'
     normalImplementation 'com.google.firebase:firebase-crashlytics-ktx'
 
@@ -121,7 +124,7 @@ dependencies {
     implementation "dev.rikka.shizuku:provider:$shizuku_version"
 
     implementation 'github.ryuunoakaihitomi.poweract:poweract:1.5.0'
-    runtimeOnly 'github.ryuunoakaihitomi.retoast:retoast:1.7.0'
+    runtimeOnly 'github.ryuunoakaihitomi.retoast:retoast:1.7.1'
     implementation 'com.github.GrenderG:Toasty:1.5.0'
     implementation 'com.github.topjohnwu.libsu:core:3.1.2'
     implementation 'commons-io:commons-io:2.8.0'
@@ -164,37 +167,7 @@ android.applicationVariants.all { variant ->
 }
 
 repositories {
-    jcenter() // 被ARG依赖的：com.tencent.mm:SevenZip:1.2.20
     maven {
         url 'https://raw.githubusercontent.com/ryuunoakaihitomi/maven-repository/master'
     }
-}
-
-andResGuard {
-    mappingFile = null
-    use7zip = true
-    useSign = true
-    fixedResName = "x"
-    mergeDuplicatedRes = true
-    whiteList = [
-            /*
-            为了防止混淆后找不到资源并最精简配置，
-            需要编译一个不使用ARG的release包后手动使用jadx等工具搜索getIdentifier()用法，
-            并检查resources.arsc以确保豁免项存在。
-             */
-            "R.string.firebase_database_url",
-            "R.string.gcm_defaultSenderId",
-            "R.string.project_id",
-            "R.string.google_app_id",
-            "R.string.google_api_key",
-            "R.string.google_storage_bucket",
-            "R.string.com.crashlytics.android.build_id",
-            // 使用资源入口名记录事件：getResourceEntryName()
-            'R.string.func_*',
-    ]
-    compressFilePattern = [
-            "*.png",
-    ]
-    sevenzip { artifact = 'com.tencent.mm:SevenZip:1.2.20' }
-    digestalg = "SHA-256"
 }
