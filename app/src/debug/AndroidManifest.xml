@@ -5,7 +5,8 @@
     <application
         android:allowBackup="true"
         tools:ignore="MissingApplicationIcon"
-        tools:remove="android:manageSpaceActivity">
+        tools:remove="android:manageSpaceActivity"
+        tools:replace="android:allowBackup">
 
         <!-- 使用DebugView过滤上传的统计信息比较麻烦，干脆在debug变体中禁用Firebase -->
 
