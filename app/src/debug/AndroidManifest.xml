@@ -2,7 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <application tools:remove="android:manageSpaceActivity">
+    <application
+        android:allowBackup="true"
+        tools:ignore="MissingApplicationIcon"
+        tools:remove="android:manageSpaceActivity">
 
         <!-- 使用DebugView过滤上传的统计信息比较麻烦，干脆在debug变体中禁用Firebase -->
 

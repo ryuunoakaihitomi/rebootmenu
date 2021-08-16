@@ -13,14 +13,17 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import com.drakeet.about.AbsAboutActivity
 import com.drakeet.about.Category
+import com.google.gson.Gson
+import com.google.gson.JsonParser
 import com.topjohnwu.superuser.Shell
 import github.ryuunoakaihitomi.powerpanel.BuildConfig
 import github.ryuunoakaihitomi.powerpanel.R
 import github.ryuunoakaihitomi.powerpanel.util.BlackMagic
 import github.ryuunoakaihitomi.powerpanel.util.RC
 import github.ryuunoakaihitomi.powerpanel.util.openUrlInBrowser
+import org.apache.commons.io.IOUtils
+import java.nio.charset.StandardCharsets
 import com.drakeet.about.License as L
-import com.drakeet.about.License.APACHE_2 as AL2
 
 class OpenSourceLibDependencyActivity : AbsAboutActivity() {
 
@@ -33,37 +36,12 @@ class OpenSourceLibDependencyActivity : AbsAboutActivity() {
             "Android Open Source Project", "Google LLC",
             strOf(R.string.url_aosp_license), strOf(R.string.url_aosp_home)
         ),
-        L("CyanogenMod Platform SDK", "CyanogenMod", AL2, ghl("CyanogenMod", "cm_platform_sdk")),
-    )
-
-    /* 在发布产品中包含的库 */
-    @Suppress("SpellCheckingInspection")
-    private val libraryList = listOf(
-        L("PowerAct", "ZQY", AL2, ghl("ryuunoakaihitomi", "PowerAct")),
-        L("libsu", "John Wu", AL2, ghl("topjohnwu", "libsu")),
-        L("LSPosed", "AndroidHiddenApiBypass", AL2, ghl("LSPosed", "AndroidHiddenApiBypass")),
-        L("Shizuku", "Rikka", AL2, "https://shizuku.rikka.app"),
-        L("ReToast", "ZQY", AL2, ghl("ryuunoakaihitomi", "ReToast")),
-        L("Toasty", "GrenderG", "GNU LGPL v3", ghl("GrenderG", "Toasty")),
-        L("Markwon", "Dimitry Ivanov", AL2, "https://noties.io/Markwon"),
-        L("about-page", "Drakeet", AL2, ghl("PureWriter", "about-page")),
-        L("Commons IO", "Apache", AL2, "http://commons.apache.org/proper/commons-io"),
-        L("Commons Lang", "Apache", AL2, "https://commons.apache.org/proper/commons-lang"),
-        L("Timber", "Jake Wharton", AL2, ghl("JakeWharton", "timber")),
-        L("ZXing", "Google LLC", AL2, ghl("zxing")),
-    )
-
-    /* debug用，发布产品中排除的库 */
-    @Suppress("SpellCheckingInspection")
-    private val debugLibraryList = listOf(
-        L("LeakCanary", "Square, Inc.", AL2, "https://square.github.io/leakcanary"),
-        L("Pandora", "linjiang", AL2, ghl("whataa", "pandora")),
-    )
-
-    /* 使用的Gradle插件 */
-    @Suppress("SpellCheckingInspection")
-    private val gradlePluginList = listOf(
-        L("AndResGuard", "shwenzhang", AL2, ghl("shwenzhang", "AndResGuard"))
+        L(
+            "CyanogenMod Platform SDK",
+            "CyanogenMod",
+            com.drakeet.about.License.APACHE_2,
+            "https://github.com/CyanogenMod/cm_platform_sdk"
+        ),
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -94,12 +72,14 @@ class OpenSourceLibDependencyActivity : AbsAboutActivity() {
         items.add(Category("Powered by…"))
         platformSupportList.all { items.add(it) }
         items.add(Category("implementation"))
-        libraryList.forEach { items.add(it) }
+        inflateData("_", items)
         items.add(Category("debugImplementation"))
-        debugLibraryList.forEach { items.add(it) }
-        items.add(Category("Gradle plugin"))
-        gradlePluginList.forEach { items.add(it) }
+        inflateData("debug", items)
     }
+
+    private fun inflateData(endpoint: String, l: MutableList<Any>) = JsonParser.parseString(
+        IOUtils.toString(assets.open("dependency_list/$endpoint.json"), StandardCharsets.UTF_8)
+    ).asJsonArray.forEach { l.add(Gson().fromJson(it, L::class.java)) }
 
     //<editor-fold desc="抓取logcat">
 
@@ -135,6 +115,3 @@ class OpenSourceLibDependencyActivity : AbsAboutActivity() {
 }
 
 private fun strOf(@StringRes id: Int) = BlackMagic.getGlobalApp().getString(id)
-
-// GitHub Link
-private fun ghl(owner: String, repo: String = owner) = "https://github.com/$owner/$repo"

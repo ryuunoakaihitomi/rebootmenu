@@ -17,9 +17,9 @@ android {
         //targetSdkVersion compileSdkVersion
         targetSdkVersion 31
         // 版本号：发布日期
-        versionCode 20210809
+        versionCode 20210816
         // 版本名说明： R3.x.y.z (R3:Refactoring 第三次重构，z:Quick Fix序号)
-        versionName 'R3.9.3'
+        versionName 'R3.9.4'
         resConfigs "en", "zh-rCN"
 
         buildConfigField 'String', 'BUILD_TIME', '\"' + new Date() + '\"'
@@ -103,7 +103,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
 
-    normalImplementation platform('com.google.firebase:firebase-bom:28.3.0')
+    normalImplementation platform('com.google.firebase:firebase-bom:28.3.1')
     normalImplementation 'com.google.firebase:firebase-analytics-ktx'
     normalImplementation 'com.google.firebase:firebase-crashlytics-ktx'
 
@@ -118,8 +118,9 @@ dependencies {
     implementation "dev.rikka.shizuku:api:$shizuku_version"
     implementation "dev.rikka.shizuku:provider:$shizuku_version"
 
-    implementation 'github.ryuunoakaihitomi.poweract:poweract:1.5.0'
-    runtimeOnly 'github.ryuunoakaihitomi.retoast:retoast:1.7.1'
+    implementation 'github.ryuunoakaihitomi.poweract:poweract:1.5.1'
+    runtimeOnly 'github.ryuunoakaihitomi.retoast:retoast:1.7.2'
+    implementation 'com.google.code.gson:gson:2.8.7'
     implementation 'com.github.GrenderG:Toasty:1.5.0'
     implementation 'com.github.topjohnwu.libsu:core:3.1.2'
     implementation 'commons-io:commons-io:2.8.0'

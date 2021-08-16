@@ -255,6 +255,7 @@ class MainActivity : AppCompatActivity() {
                     alpha = 0.85f   // 窗口透明度
                     emptyAccessibilityDelegate()
                 }
+                BlackMagic.collapseStatusBarPanels(application)
                 // 在初次resume时，dialog还未show。所以无效，还需要在这里调用
                 hideSysUi()
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {

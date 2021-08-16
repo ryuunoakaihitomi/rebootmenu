@@ -1,0 +1,14 @@
+[
+  {
+    "author": "Square, Inc.",
+    "name": "LeakCanary",
+    "type": "Apache Software License 2.0",
+    "url": "https://square.github.io/leakcanary"
+  },
+  {
+    "author": "linjiang",
+    "name": "Pandora",
+    "type": "Apache Software License 2.0",
+    "url": "https://github.com/whataa/pandora"
+  }
+]
