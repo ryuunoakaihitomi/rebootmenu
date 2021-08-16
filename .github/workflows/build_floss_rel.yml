@@ -62,8 +62,7 @@ jobs:
         echo ===BADGING=== >> $REPORT
         aapt2 dump badging $APK_PATH >> $REPORT
         echo ===PERMISSIONS=== >> $REPORT
-        # 不仅包括uses-permission（权限中badging只输出这项）还有自定义permission
-        aapt2 dump permissions $APK_PATH >> $REPOET
+        aapt2 dump permissions $APK_PATH >> REPORT # 不仅包括uses-permission（权限中badging只输出这项）还有自定义permission
         echo ===STRINGS=== >> $REPORT
         aapt2 dump strings $APK_PATH >> $REPORT
         echo ===RESOURCES=== >> $REPORT
