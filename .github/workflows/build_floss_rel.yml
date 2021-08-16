@@ -56,12 +56,19 @@ jobs:
       run: |
         export APK_PATH=$(find ./app/build/outputs/apk/floss/release/ -maxdepth 1 -name *.apk)
         export PATH=$PATH:$ANDROID_SDK_ROOT/build-tools/$BUILD_TOOLS_VERSION
-        aapt list -a -v $APK_PATH
-        aapt2 dump badging $APK_PATH
-        aapt2 dump permissions $APK_PATH  # 不仅包括uses-permission（权限中badging只输出这项）还有自定义permission
-        aapt2 dump strings $APK_PATH
-        aapt2 dump resources $APK_PATH
-        aapt2 dump configurations $APK_PATH
+        export REPORT=aapt_report.txt
+        echo "===AAPT LIST===" >> $REPORT
+        aapt list -a -v $APK_PATH >> $REPORT
+        echo ===BADGING=== >> $REPORT
+        aapt2 dump badging $APK_PATH >> $REPORT
+        echo ===PERMISSIONS=== >> $REPORT
+        aapt2 dump permissions $APK_PATH >> $REPOET # 不仅包括uses-permission（权限中badging只输出这项）还有自定义permission
+        echo ===STRINGS=== >> $REPORT
+        aapt2 dump strings $APK_PATH >> $REPORT
+        echo ===RESOURCES=== >> $REPORT
+        aapt2 dump resources $APK_PATH >> $REPORT
+        echo ===CONFIGURATIONS=== >> $REPORT
+        aapt2 dump configurations $APK_PATH >> $REPORT
 
     - name: Upload apk
       uses: actions/upload-artifact@v2
@@ -76,4 +83,5 @@ jobs:
         name: PowerPanel_mappings_${{ github.sha }}
         path: |
           app/build/outputs/mapping/flossRelease
+          aapt_report.txt
         if-no-files-found: error
