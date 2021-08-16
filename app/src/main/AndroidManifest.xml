@@ -25,7 +25,7 @@
 
     <application
         android:name=".MyApplication"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:appCategory="productivity"
         android:banner="@drawable/banner"
         android:icon="@mipmap/ic_launcher"
