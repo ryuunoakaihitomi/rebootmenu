@@ -17,9 +17,9 @@ android {
         //targetSdkVersion compileSdkVersion
         targetSdkVersion 31
         // 版本号：发布日期
-        versionCode 20210816
+        versionCode 20210818
         // 版本名说明： R3.x.y.z (R3:Refactoring 第三次重构，z:Quick Fix序号)
-        versionName 'R3.9.4'
+        versionName 'R3.9.5'
         resConfigs "en", "zh-rCN"
 
         buildConfigField 'String', 'BUILD_TIME', '\"' + new Date() + '\"'
@@ -88,6 +88,15 @@ android {
     packagingOptions {
         exclude 'META-INF/*.version'     // 移除记录依赖的版本信息文件（大部分是AndroidX的）
         exclude 'androidsupportmultidexversion.txt'
+        // https://stackoverflow.com/a/41073782/16091156
+        exclude 'kotlin/**'
+        // https://github.com/Kotlin/kotlinx.coroutines/issues/2274
+        exclude 'DebugProbesKt.bin'
+        // 移除Normal构建中的G组件版本
+        // https://stackoverflow.com/a/58855506/16091156
+        exclude 'firebase-*.properties'
+        exclude 'play-services-*.properties'
+        exclude 'transport-*.properties'
     }
 }
 
