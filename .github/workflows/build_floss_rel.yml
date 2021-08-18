@@ -62,7 +62,7 @@ jobs:
         echo ===BADGING=== >> $REPORT
         aapt2 dump badging $APK_PATH >> $REPORT
         echo ===PERMISSIONS=== >> $REPORT
-        aapt2 dump permissions $APK_PATH >> REPORT # 不仅包括uses-permission（权限中badging只输出这项）还有自定义permission
+        aapt2 dump permissions $APK_PATH >> $REPORT # 不仅包括uses-permission（权限中badging只输出这项）还有自定义permission
         echo ===STRINGS=== >> $REPORT
         aapt2 dump strings $APK_PATH >> $REPORT
         echo ===RESOURCES=== >> $REPORT
@@ -77,10 +77,10 @@ jobs:
         path: app/build/outputs/apk/floss/release/*.apk
         if-no-files-found: error
 
-    - name: Upload mappings
+    - name: Upload addition
       uses: actions/upload-artifact@v2
       with:
-        name: PowerPanel_mappings_${{ github.sha }}
+        name: PowerPanel_addition_${{ github.sha }}
         path: |
           app/build/outputs/mapping/flossRelease
           aapt-report.txt
