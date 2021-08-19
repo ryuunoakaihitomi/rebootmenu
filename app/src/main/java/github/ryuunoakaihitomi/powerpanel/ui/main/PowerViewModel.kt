@@ -1,14 +1,16 @@
 package github.ryuunoakaihitomi.powerpanel.ui.main
 
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Build
 import android.text.SpannableString
+import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
+import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
 import androidx.annotation.StringRes
-import androidx.core.content.res.ResourcesCompat
-import androidx.core.text.set
+import androidx.core.graphics.ColorUtils
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -18,6 +20,8 @@ import es.dmoral.toasty.Toasty
 import github.ryuunoakaihitomi.powerpanel.R
 import github.ryuunoakaihitomi.powerpanel.desc.PowerInfo
 import github.ryuunoakaihitomi.powerpanel.util.BlackMagic
+import github.ryuunoakaihitomi.powerpanel.util.RC
+import github.ryuunoakaihitomi.powerpanel.util.set
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -38,9 +42,9 @@ class PowerViewModel : ViewModel() {
     private var forceMode = MutableLiveData<Boolean>()
 
     /* 标题：受限模式会提示用户 */
-    val title: LiveData<String>
+    val title: LiveData<CharSequence>
         get() = _title
-    private var _title = MutableLiveData<String>()
+    private var _title = MutableLiveData<CharSequence>()
 
     /* 观察对象，提供界面资源 */
     val infoArray: LiveData<Array<PowerInfo>>
@@ -136,11 +140,16 @@ class PowerViewModel : ViewModel() {
             // Although you can publish up to five shortcuts (static and dynamic shortcuts combined) at a time for your app, most launchers can only display four.
             _shortcutInfoArray.value = privilegedActions.copyOfRange(0, 4)
         } else {
-            _title.value = String.format(
-                "%s %s",
-                rawTitle,
-                app.getString(R.string.title_dialog_restricted_mode)
+            val ssb = SpannableStringBuilder()
+            val suffix = SpannableString(app.getString(R.string.title_dialog_restricted_mode))
+            suffix[0..suffix.length] = arrayOf(
+                // 这里不简单使用[Color.GRAY]是为了确保在亮暗两种主题上的可视程度一致
+                ForegroundColorSpan(ColorUtils.blendARGB(Color.WHITE, Color.DKGRAY, 0.5f)),
+                RelativeSizeSpan(0.6f),
+                StyleSpan(Typeface.BOLD),
             )
+            ssb.append(rawTitle, " ", suffix)
+            _title.value = ssb
             _infoArray.value = restrictedActions
             _shortcutInfoArray.value = restrictedActions
         }
@@ -218,10 +227,10 @@ class PowerViewModel : ViewModel() {
         val forceLabel = SpannableString(label)
         if (isOnForceMode(info)) {
             val range = 0..forceLabel.length
-            forceLabel[range] = ForegroundColorSpan(
-                ResourcesCompat.getColor(app.resources, R.color.colorForceModeItem, null)
+            forceLabel[range] = arrayOf(
+                ForegroundColorSpan(RC.getColor(app.resources, R.color.colorForceModeItem, null)),
+                StyleSpan(Typeface.BOLD)
             )
-            forceLabel[range] = StyleSpan(Typeface.BOLD)
         }
         return forceLabel
     }

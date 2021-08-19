@@ -30,7 +30,6 @@ import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.graphics.drawable.IconCompat
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
 import androidx.core.graphics.drawable.toBitmap
-import androidx.core.text.set
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -281,8 +280,7 @@ class MainActivity : AppCompatActivity() {
 private fun CharSequence.emphasize() = let {
     val spannableString = SpannableString(it)
     val range = 0..it.length
-    spannableString[range] = StyleSpan(Typeface.BOLD)
-    spannableString[range] = TypefaceSpan("monospace")
+    spannableString[range] = arrayOf(StyleSpan(Typeface.BOLD), TypefaceSpan("monospace"))
     spannableString
 }
 

@@ -6,8 +6,10 @@ import android.net.Uri
 import android.os.Build
 import android.provider.Browser
 import android.service.quicksettings.Tile
+import android.text.Spannable
 import androidx.annotation.RequiresApi
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.text.set
 import es.dmoral.toasty.Toasty
 import timber.log.Timber
 
@@ -30,4 +32,8 @@ fun Tile.updateState(state: Int) {
         this.state = state
         updateTile()
     }
+}
+
+operator fun Spannable.set(range: IntRange, spans: Array<Any>) {
+    for (span in spans) this[range] = span
 }
