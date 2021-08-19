@@ -17,9 +17,9 @@ android {
         //targetSdkVersion compileSdkVersion
         targetSdkVersion 31
         // 版本号：发布日期
-        versionCode 20210819
+        versionCode 20210820
         // 版本名说明： R3.x.y.z (R3:Refactoring 第三次重构，z:Quick Fix序号)
-        versionName 'R3.10.0'
+        versionName 'R3.10.0.1'
         resConfigs "en", "zh-rCN"
 
         buildConfigField 'String', 'BUILD_TIME', '\"' + new Date() + '\"'
@@ -132,7 +132,14 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.7'
     implementation 'com.github.GrenderG:Toasty:1.5.0'
     implementation 'com.github.topjohnwu.libsu:core:3.1.2'
-    implementation 'commons-io:commons-io:2.11.0'
+    // 固定在此版本，理由同下段注释
+    // java.lang.NoClassDefFoundError: j$.wrappers.$r8$wrapper$java$util$function$Supplier$-WRP
+    // 目前搜集到的一些资料
+    // https://issuetracker.google.com/issues/183419297
+    // https://issuetracker.google.com/issues/157854693
+    // https://issuetracker.google.com/issues/155005951
+    // https://issuetracker.google.com/issues/190633902
+    implementation 'commons-io:commons-io:2.8.0'
     // 不再使用lang3，因为lang3使用的一些java8 API是脱糖库无法完成转换的，即使脱糖库的文档说明支持。
     // 使用到的例子：
     //  FieldUtils#getField(Class<?>, String, boolean)
