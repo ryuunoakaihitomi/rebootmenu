@@ -20,7 +20,7 @@
 <img src="/annex/Screenshot_20210113-165823.jpg" width="25%" /><img src="/annex/Screenshot_20210113-170632.jpg" width="25%" /><img src="/annex/Screenshot_20210113-170722.jpg" width="25%" /><img src="/annex/Screenshot_20210113-170951.jpg" width="25%" />
 
 ## 下载
-* [Github Release](https://github.com/ryuunoakaihitomi/rebootmenu/releases)
+* [Github Release](https://github.com/ryuunoakaihitomi/rebootmenu/releases/latest)
 
 * [酷安网](https://www.coolapk.com/apk/com.ryuunoakaihitomi.rebootmenu)
 > 不推荐的备用下载，有无法直接下载APK文件并引流至其客户端的历史。
