@@ -36,7 +36,7 @@
     "url": "https://github.com/GrenderG/Toasty"
   },
   {
-    "author": "Dimitry Ivanov",
+    "author": "Иванов Дмитрий",
     "name": "Markwon",
     "type": "Apache Software License 2.0",
     "url": "https://noties.io/Markwon"
@@ -48,14 +48,14 @@
     "url": "https://github.com/PureWriter/about-page"
   },
   {
-    "author": "Apache",
-    "name": "Commons IO",
+    "author": "Apache Software Foundation",
+    "name": "Apache Commons IO",
     "type": "Apache Software License 2.0",
     "url": "http://commons.apache.org/proper/commons-io"
   },
   {
-    "author": "Apache",
-    "name": "Commons Lang",
+    "author": "Apache Software Foundation",
+    "name": "Apache Commons Lang",
     "type": "Apache Software License 2.0",
     "url": "https://commons.apache.org/proper/commons-lang"
   },
