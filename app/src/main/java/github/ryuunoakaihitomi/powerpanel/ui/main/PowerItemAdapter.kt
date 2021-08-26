@@ -13,8 +13,9 @@ class PowerItemAdapter(context: Context, items: Array<CharSequence>, iconResId: 
     ArrayAdapter<CharSequence>(context, android.R.layout.simple_list_item_1, items) {
     private val iconResIdList: List<Int> = listOf(*iconResId)
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        if (convertView != null) return convertView
+        if (convertView != null && convertView.tag == getItem(position)) return convertView
         val view = super.getView(position, convertView, parent)
+        view.tag = getItem(position)
         val textView = view.findViewById<TextView>(android.R.id.text1)
         textView.compoundDrawablePadding = ViewConfiguration.get(context).scaledTouchSlop
         RC.getDrawable(context.resources, iconResIdList[position], null)?.run {

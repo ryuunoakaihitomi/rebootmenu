@@ -36,6 +36,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.snackbar.Snackbar
 import es.dmoral.toasty.Toasty
 import github.ryuunoakaihitomi.powerpanel.BuildConfig
 import github.ryuunoakaihitomi.powerpanel.MyApplication
@@ -70,12 +71,12 @@ class MainActivity : AppCompatActivity() {
         val isCompatible =
             // KitKat无法长期维护，这次只不过是临时接触了这类设备才给稍微适配
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP &&
-                    // Wear OS存在界面元素无法显示问题
-                    modeType != Configuration.UI_MODE_TYPE_WATCH &&
-                    // Android TV部分功能无法使用
-                    modeType != Configuration.UI_MODE_TYPE_TELEVISION &&
-                    // 工作资料之类的
-                    getSystemService<UserManager>()!!.userProfiles[0].equals(Process.myUserHandle())
+                // Wear OS存在界面元素无法显示问题
+                modeType != Configuration.UI_MODE_TYPE_WATCH &&
+                // Android TV部分功能无法使用
+                modeType != Configuration.UI_MODE_TYPE_TELEVISION &&
+                // 工作资料之类的
+                getSystemService<UserManager>()!!.userProfiles[0].equals(Process.myUserHandle())
         if (!isCompatible) {
             Timber.i("show unsupported env hint")
             Toasty.error(this, R.string.toast_unsupported_env, Toasty.LENGTH_LONG).show()
@@ -209,46 +210,59 @@ class MainActivity : AppCompatActivity() {
                 }
                 setOnCancelListener { finish() }
             }.show()
-            mainDialog.listView.onItemLongClickListener =
-                AdapterView.OnItemLongClickListener { _, _, position, _ ->
-                    val item = it[position]
-                    val drawable = RC.getDrawable(resources, item.iconResId, null)?.let { d ->
-                        DrawableCompat.wrap(d)
-                    }
-                    drawable?.run {
-                        // 注意：必须使用mutate()保持Drawable独立性以修复无法变色的Bug
-                        mutate().run {
-                            // 如果是强制模式，为了便于区分，改变shortcut图标颜色
-                            if (powerViewModel.isOnForceMode(item)) {
-                                DrawableCompat.setTint(
-                                    this,
-                                    RC.getColor(resources, R.color.colorIconForceModeShortcut, null)
-                                )
-                            }
-                            val unspannedLabel = item.label.toString()
-                            val shortcut = ShortcutInfoCompat.Builder(
-                                applicationContext,
-                                // 使用UUID有两种后果：可以重复添加Icon，修复图标无法变色的bug
-                                UUID.randomUUID().toString()
-                            ).run {
-                                setShortLabel(unspannedLabel)
-                                setLongLabel(unspannedLabel)
-                                setIcon(IconCompat.createWithBitmap(toBitmap()))
-                                setIntent(
-                                    ShortcutActivity.getActionIntent(
-                                        item.labelResId,
-                                        powerViewModel.getForceMode()
-                                    )
-                                )
-                                build()
-                            }
-                            ShortcutManagerCompat.requestPinShortcut(application, shortcut, null)
-                        }
-                    }
-                    // 在Android8.0以下和一些自定义系统（自动拒绝）可能没有反馈
-                    Toasty.info(this, R.string.toast_shortcut_added).show()
-                    return@OnItemLongClickListener true
+            val lv = mainDialog.listView
+            lv.onItemLongClickListener = AdapterView.OnItemLongClickListener { _, _, position, _ ->
+                val item = it[position]
+                val drawable = RC.getDrawable(resources, item.iconResId, null)?.let { d ->
+                    DrawableCompat.wrap(d)
                 }
+                drawable?.run {
+                    // 注意：必须使用mutate()保持Drawable独立性以修复无法变色的Bug
+                    mutate().run {
+                        // 如果是强制模式，为了便于区分，改变shortcut图标颜色
+                        if (powerViewModel.isOnForceMode(item)) {
+                            DrawableCompat.setTint(
+                                this,
+                                RC.getColor(resources, R.color.colorIconForceModeShortcut, null)
+                            )
+                        }
+                        val unspannedLabel = item.label.toString()
+                        val shortcut = ShortcutInfoCompat.Builder(
+                            applicationContext,
+                            // 使用UUID有两种后果：可以重复添加Icon，修复图标无法变色的bug
+                            UUID.randomUUID().toString()
+                        ).run {
+                            setShortLabel(unspannedLabel)
+                            setLongLabel(unspannedLabel)
+                            setIcon(IconCompat.createWithBitmap(toBitmap()))
+                            setIntent(
+                                ShortcutActivity.getActionIntent(
+                                    item.labelResId,
+                                    powerViewModel.getForceMode()
+                                )
+                            )
+                            build()
+                        }
+                        ShortcutManagerCompat.requestPinShortcut(application, shortcut, null)
+                    }
+                }
+                // 在Android8.0以下和一些自定义系统（自动拒绝）可能没有反馈
+                Toasty.info(this, R.string.toast_shortcut_added).show()
+                return@OnItemLongClickListener true
+            }
+            /* 检测ListView是否可滑动，提醒用户可能有一些项目被隐藏 */
+            var hasShownScrollListTip = false
+            lv.viewTreeObserver.addOnGlobalLayoutListener {
+//                Timber.d("OnGlobalLayoutListener")
+                val lastVisibleChild = lv.getChildAt(lv.lastVisiblePosition)
+                if (lastVisibleChild != null && lastVisibleChild.bottom > lv.height && !hasShownScrollListTip) {
+                    Timber.d("Tip: scrollable listview")
+                    Snackbar.make(lv, R.string.toast_list_scrollable, Snackbar.LENGTH_SHORT)
+                        .allowInfiniteLines()
+                        .show()
+                    hasShownScrollListTip = true
+                }
+            }
             mainDialog.window?.run {
                 decorView.run {
                     alpha = 0.85f   // 窗口透明度

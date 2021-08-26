@@ -27,4 +27,5 @@
     <!-- 中国专有Android Source网址 -->
     <string name="url_aosp_home" tools:ignore="Untranslatable">https://source.android.google.cn</string>
     <string name="url_aosp_license" tools:ignore="Untranslatable">https://source.android.google.cn/setup/start/licenses</string>
+    <string name="toast_list_scrollable">列表视图是<b>可滚动的</b>，请检查是否有<b>尚未可见</b>的项目。</string>
 </resources>

@@ -4,9 +4,10 @@
 
     <application
         android:allowBackup="true"
+        android:icon="@android:drawable/ic_lock_power_off"
         tools:ignore="MissingApplicationIcon"
-        tools:remove="android:manageSpaceActivity"
-        tools:replace="android:allowBackup">
+        tools:remove="android:manageSpaceActivity,android:resizeableActivity"
+        tools:replace="android:allowBackup,android:icon">
 
         <!-- 使用DebugView过滤上传的统计信息比较麻烦，干脆在debug变体中禁用Firebase -->
 

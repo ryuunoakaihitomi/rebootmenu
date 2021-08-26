@@ -28,4 +28,5 @@
     <string name="label_lock_screen_shortcut">Lock Screen Shortcut</string>
     <string name="url_aosp_home" translatable="false">https://source.android.com</string>
     <string name="url_aosp_license" translatable="false">https://source.android.com/setup/start/licenses</string>
+    <string name="toast_list_scrollable">The ListView is <b>SCROLLABLE</b>, please check if there are any items that are <b>not yet visible</b>.</string>
 </resources>
