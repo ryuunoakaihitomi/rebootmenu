@@ -36,6 +36,8 @@ object BlackMagic {
 
     @SuppressLint("WrongConstant")
     fun collapseStatusBarPanels(context: Context) {
+        // https://developer.android.com/about/versions/12/reference/compat-framework-changes#lock_down_collapse_status_bar
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) return
         @Suppress("SpellCheckingInspection")
         val statusBarManager =
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) context.getSystemService<StatusBarManager>()!!
