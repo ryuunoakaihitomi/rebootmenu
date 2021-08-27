@@ -15,9 +15,14 @@ import timber.log.Timber
 class MyApplication : MultiDexApplication() {
 
     /**
-     * @see [github.ryuunoakaihitomi.powerpanel.ui.main.MainActivity.compatibilityCheck]
+     * @see [github.ryuunoakaihitomi.powerpanel.ui.main.MainActivity.checkCompatibility]
      */
     var hasShownCompatibilityWarning = false
+
+    /**
+     * @see [github.ryuunoakaihitomi.powerpanel.ui.main.MainActivity.checkScrollableListView]
+     */
+    var hasShownScrollListTip = false
 
     override fun attachBaseContext(base: Context?) {
         super.attachBaseContext(base)

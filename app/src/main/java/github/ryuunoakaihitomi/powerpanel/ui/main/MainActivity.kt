@@ -18,10 +18,13 @@ import android.text.style.StyleSpan
 import android.text.style.TypefaceSpan
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.view.Window
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.AdapterView
+import android.widget.ListView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.getSystemService
 import androidx.core.content.pm.ShortcutInfoCompat
@@ -63,9 +66,8 @@ import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
-    private fun compatibilityCheck() {
-        val myApp = application as MyApplication
-        if (myApp.hasShownCompatibilityWarning) return
+    private fun checkCompatibility() {
+        if (myApp().hasShownCompatibilityWarning) return
         val modeType = getSystemService<UiModeManager>()?.currentModeType
             ?: Configuration.UI_MODE_TYPE_UNDEFINED
         val isCompatible =
@@ -80,14 +82,38 @@ class MainActivity : AppCompatActivity() {
         if (!isCompatible) {
             Timber.i("show unsupported env hint")
             Toasty.error(this, R.string.toast_unsupported_env, Toasty.LENGTH_LONG).show()
-            myApp.hasShownCompatibilityWarning = true
+            myApp().hasShownCompatibilityWarning = true
+        }
+    }
+
+    /**
+     * 检测ListView是否可滑动，提醒用户可能有一些项目被隐藏（仅提醒一次）
+     */
+    private fun checkScrollableListView(lv: ListView) {
+        if (!myApp().hasShownScrollListTip) {
+            lv.viewTreeObserver.addOnGlobalLayoutListener(object :
+                ViewTreeObserver.OnGlobalLayoutListener {
+                override fun onGlobalLayout() {
+//                    Timber.d("OnGlobalLayoutListener")
+                    val lastVisibleChild = lv.getChildAt(lv.lastVisiblePosition)
+                    if (lastVisibleChild != null && lastVisibleChild.bottom > lv.height) {
+                        Timber.d("Tip: scrollable listview")
+                        Snackbar.make(lv, R.string.toast_list_scrollable, Snackbar.LENGTH_SHORT)
+                            .allowInfiniteLines()
+                            .show()
+                        myApp().hasShownScrollListTip = true
+                        // This ViewTreeObserver is not alive, call getViewTreeObserver() again
+                        lv.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                    }
+                }
+            })
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Timber.v("start!")
-        compatibilityCheck()
+        checkCompatibility()
         var mainDialog = AlertDialog.Builder(this).create()
         val powerViewModel = ViewModelProvider(this)[PowerViewModel::class.java]
         powerViewModel.labelResId.observe(this) {
@@ -250,19 +276,7 @@ class MainActivity : AppCompatActivity() {
                 Toasty.info(this, R.string.toast_shortcut_added).show()
                 return@OnItemLongClickListener true
             }
-            /* 检测ListView是否可滑动，提醒用户可能有一些项目被隐藏 */
-            var hasShownScrollListTip = false
-            lv.viewTreeObserver.addOnGlobalLayoutListener {
-//                Timber.d("OnGlobalLayoutListener")
-                val lastVisibleChild = lv.getChildAt(lv.lastVisiblePosition)
-                if (lastVisibleChild != null && lastVisibleChild.bottom > lv.height && !hasShownScrollListTip) {
-                    Timber.d("Tip: scrollable listview")
-                    Snackbar.make(lv, R.string.toast_list_scrollable, Snackbar.LENGTH_SHORT)
-                        .allowInfiniteLines()
-                        .show()
-                    hasShownScrollListTip = true
-                }
-            }
+            checkScrollableListView(lv)
             mainDialog.window?.run {
                 decorView.run {
                     alpha = 0.85f   // 窗口透明度
@@ -370,4 +384,13 @@ private fun Window.hideSysUi() = WindowCompat.getInsetsController(this, decorVie
     hide(WindowInsetsCompat.Type.systemBars())
     systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
 }
+
+/**
+ * @link https://stackoverflow.com/a/59472972/16091156
+ */
+private fun Snackbar.allowInfiniteLines() = apply {
+    view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text).isSingleLine = false
+}
+
+private fun Activity.myApp() = application as MyApplication
 //endregion
