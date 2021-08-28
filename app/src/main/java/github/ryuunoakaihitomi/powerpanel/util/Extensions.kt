@@ -9,10 +9,12 @@ import android.os.Build
 import android.provider.Browser
 import android.service.quicksettings.Tile
 import android.text.Spannable
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.core.content.getSystemService
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.text.set
+import com.google.android.material.snackbar.Snackbar
 import es.dmoral.toasty.Toasty
 import timber.log.Timber
 
@@ -45,4 +47,11 @@ fun Context.isWatch() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_
     Configuration.UI_MODE_TYPE_WATCH == getSystemService<UiModeManager>()?.currentModeType
 } else {
     false
+}
+
+/**
+ * @link https://stackoverflow.com/a/59472972/16091156
+ */
+fun Snackbar.allowInfiniteLines() = apply {
+    view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text).isSingleLine = false
 }

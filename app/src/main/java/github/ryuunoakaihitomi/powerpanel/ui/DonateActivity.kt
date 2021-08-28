@@ -11,6 +11,7 @@ import com.google.zxing.common.HybridBinarizer
 import com.google.zxing.qrcode.QRCodeReader
 import github.ryuunoakaihitomi.powerpanel.R
 import github.ryuunoakaihitomi.powerpanel.databinding.ActivityDonateBinding
+import github.ryuunoakaihitomi.powerpanel.util.allowInfiniteLines
 import github.ryuunoakaihitomi.powerpanel.util.isWatch
 import github.ryuunoakaihitomi.powerpanel.util.openUrlInBrowser
 import timber.log.Timber
@@ -47,6 +48,7 @@ class DonateActivity : AppCompatActivity() {
                         transientBottomBar?.removeCallback(this)
                     }
                 })
+                .allowInfiniteLines()
                 .show()
         }
     }

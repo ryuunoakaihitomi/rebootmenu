@@ -22,7 +22,6 @@ import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.AdapterView
 import android.widget.ListView
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.getSystemService
 import androidx.core.content.pm.ShortcutInfoCompat
@@ -382,13 +381,6 @@ private fun Context.markwon() = Markwon.builder(this)
 private fun Window.hideSysUi() = WindowCompat.getInsetsController(this, decorView)?.run {
     hide(WindowInsetsCompat.Type.systemBars())
     systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-}
-
-/**
- * @link https://stackoverflow.com/a/59472972/16091156
- */
-private fun Snackbar.allowInfiniteLines() = apply {
-    view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text).isSingleLine = false
 }
 
 private fun Activity.myApp() = application as MyApplication
