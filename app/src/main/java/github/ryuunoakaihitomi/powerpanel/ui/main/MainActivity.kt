@@ -2,11 +2,9 @@ package github.ryuunoakaihitomi.powerpanel.ui.main
 
 import android.app.Activity
 import android.app.AlertDialog
-import android.app.UiModeManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.Typeface
 import android.os.Build
@@ -68,15 +66,16 @@ class MainActivity : AppCompatActivity() {
 
     private fun checkCompatibility() {
         if (myApp().hasShownCompatibilityWarning) return
-        val modeType = getSystemService<UiModeManager>()?.currentModeType
-            ?: Configuration.UI_MODE_TYPE_UNDEFINED
         val isCompatible =
             // KitKat无法长期维护，这次只不过是临时接触了这类设备才给稍微适配
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP &&
                 // Wear OS存在界面元素无法显示问题
-                modeType != Configuration.UI_MODE_TYPE_WATCH &&
+                !isWatch() &&
                 // Android TV部分功能无法使用
-                modeType != Configuration.UI_MODE_TYPE_TELEVISION &&
+                !packageManager.hasSystemFeature(
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                        PackageManager.FEATURE_LEANBACK else PackageManager.FEATURE_TELEVISION
+                ) &&
                 // 工作资料之类的
                 getSystemService<UserManager>()!!.userProfiles[0].equals(Process.myUserHandle())
         if (!isCompatible) {
@@ -279,7 +278,7 @@ class MainActivity : AppCompatActivity() {
             checkScrollableListView(lv)
             mainDialog.window?.run {
                 decorView.run {
-                    alpha = 0.85f   // 窗口透明度
+                    if (!isWatch()) alpha = 0.85f   // 窗口透明度，在手表上不仅没有透明效果还会使内容暗淡并出现奇怪的重影效果
                     emptyAccessibilityDelegate()
                 }
                 BlackMagic.collapseStatusBarPanels(application)

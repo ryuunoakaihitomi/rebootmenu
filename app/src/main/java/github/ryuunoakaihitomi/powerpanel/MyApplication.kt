@@ -9,6 +9,7 @@ import github.ryuunoakaihitomi.poweract.ExternalUtils
 import github.ryuunoakaihitomi.powerpanel.receiver.ShutdownReceiver
 import github.ryuunoakaihitomi.powerpanel.stat.Statistics
 import github.ryuunoakaihitomi.powerpanel.util.MyLogTree
+import github.ryuunoakaihitomi.powerpanel.util.isWatch
 import org.lsposed.hiddenapibypass.HiddenApiBypass
 import timber.log.Timber
 
@@ -44,7 +45,7 @@ class MyApplication : MultiDexApplication() {
         // 留下PowerAct核心日志用以发布后的调试
         ExternalUtils.enableLog(true)
 
-        /* KitKat系统主题为黑色，因此使用夜间模式作为搭配 */
+        /* KitKat和手表系统主题为黑色，因此使用夜间模式作为搭配 */
         /**
          * WONT FIX 无法使用values-night资源
          *
@@ -53,7 +54,7 @@ class MyApplication : MultiDexApplication() {
          *
          * @see [android.app.UiModeManager.setNightMode](https://developer.android.google.cn/reference/android/app/UiModeManager#setNightMode(int))
          */
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP || isWatch())
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
     }
 }
