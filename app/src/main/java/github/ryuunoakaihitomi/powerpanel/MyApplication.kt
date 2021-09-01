@@ -40,7 +40,7 @@ class MyApplication : MultiDexApplication() {
 
     override fun onCreate() {
         super.onCreate()
-        Statistics.recordEnvInfo()
+        Statistics.initConfig(this)
         if (BuildConfig.DEBUG) StrictMode.enableDefaults()
         // 留下PowerAct核心日志用以发布后的调试
         ExternalUtils.enableLog(true)

@@ -29,4 +29,4 @@
 ## 隐私声明
 本应用开源，代码可供任何人查看。开发者承诺不会使应用做出任何有损用户隐私权等利益的行为。
 
-使用Firebase相关组件进行崩溃报告收集和使用信息统计，这些信息有益于开发者改进本应用。详情参阅：[Firebase 中的隐私权和安全性](https://firebase.google.cn/support/privacy)
+使用Firebase与华为AppGallery Connect相关组件进行崩溃报告收集和使用信息统计，这些信息有益于开发者改进本应用。详情参阅：[Firebase 中的隐私权和安全性](https://firebase.google.cn/support/privacy) [华为AppGallery Connect隐私及安全声明](https://developer.huawei.com/consumer/cn/doc/app/86741055)

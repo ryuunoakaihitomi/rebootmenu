@@ -23,6 +23,7 @@ import github.ryuunoakaihitomi.powerpanel.R
 import github.ryuunoakaihitomi.powerpanel.stat.Statistics
 import github.ryuunoakaihitomi.powerpanel.ui.ShortcutActivity
 import github.ryuunoakaihitomi.powerpanel.ui.main.MainActivity
+import github.ryuunoakaihitomi.powerpanel.util.uiLog
 import timber.log.Timber
 
 object PowerExecution {
@@ -43,6 +44,18 @@ object PowerExecution {
                 }
                 activity.finish()
             }
+        }
+        if (ActivityManager.isUserAMonkey() || Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
+            ActivityManager.isRunningInUserTestHarness()
+        ) {
+            activity.uiLog("Cannot execute in instrumentation test environment to prevent unexpected behaviors!")
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                activity.finishAndRemoveTask()
+                activity.releaseInstance()
+            } else {
+                activity.finishAffinity()
+            }
+            return
         }
         when (labelResId) {
             R.string.func_lock_screen -> requestAccessibilityService(activity) {

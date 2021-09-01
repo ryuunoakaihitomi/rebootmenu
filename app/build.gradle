@@ -4,6 +4,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
+apply plugin: 'com.huawei.agconnect'
 
 apply from: "${rootProject.file('loadProperties.gradle')}"
 
@@ -17,9 +18,9 @@ android {
         //targetSdkVersion compileSdkVersion
         targetSdkVersion 31
         // 版本号：发布日期
-        versionCode 20210830
+        versionCode 20210902
         // 版本名说明： R3.x.y.z (R3:Refactoring 第三次重构，z:Quick Fix序号)
-        versionName 'R3.11.3.1'
+        versionName 'R3.12'
         resConfigs "en", "zh-rCN"
 
         buildConfigField 'String', 'BUILD_TIME', '\"' + new Date() + '\"'
@@ -60,6 +61,11 @@ android {
             dimension "version"
             versionNameSuffix '-floss'
             applicationId 'github.ryuunoakaihitomi.powerpanel'  // 现在想要个新的packageName
+            // 华为插件不知道加的什么东西
+            // https://stackoverflow.com/a/30497221/16091156
+            aaptOptions {
+                ignoreAssetsPattern '!tmp_json.html'
+            }
         }
     }
     compileOptions {
@@ -97,6 +103,10 @@ android {
         exclude 'firebase-*.properties'
         exclude 'play-services-*.properties'
         exclude 'transport-*.properties'
+        // 华为AGC插件
+        exclude 'agconnect-*.properties'
+        exclude 'HMSCore-*.properties'
+        exclude 'network-*.properties'
     }
 }
 
@@ -116,6 +126,8 @@ dependencies {
     normalImplementation 'com.google.firebase:firebase-analytics-ktx'
     normalImplementation 'com.google.firebase:firebase-crashlytics-ktx'
 
+    normalImplementation 'com.huawei.hms:hianalytics:6.2.0.301'
+
     /* ------- 其他第三方开源组件 ------- */
 
     final def markwon_version = '4.6.2'
@@ -123,13 +135,13 @@ dependencies {
     implementation "io.noties.markwon:ext-strikethrough:$markwon_version"
     implementation "io.noties.markwon:image:$markwon_version"
 
-    def shizuku_version = '11.0.3'
+    def shizuku_version = '12.0.0'
     implementation "dev.rikka.shizuku:api:$shizuku_version"
     implementation "dev.rikka.shizuku:provider:$shizuku_version"
 
     implementation 'github.ryuunoakaihitomi.poweract:poweract:1.5.1'
     runtimeOnly 'github.ryuunoakaihitomi.retoast:retoast:1.7.3'
-    implementation 'com.google.code.gson:gson:2.8.7'
+    implementation 'com.google.code.gson:gson:2.8.8'
     implementation 'com.github.GrenderG:Toasty:1.5.0'
     implementation 'com.github.topjohnwu.libsu:core:3.1.2'
     // 固定在此版本，理由同下段注释

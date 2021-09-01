@@ -16,6 +16,7 @@
 
 - 修改[`signInfo_example.properties`](signInfo_example.properties)，填入签名信息，并将其命名为`signInfo.properties`
 
-- 如果需要构建`normal`版本，在`app`目录中加入Firebase配置文件`google-services.json`
+- 如果需要构建`normal`版本，在`app`目录中加入Firebase配置文件`google-services.json`，
+  在`app/src/normal`目录中加入AppGallery Connect配置文件`agconnect-services.json`。
 
 - 执行Gradle任务：`app:assembleRelease`

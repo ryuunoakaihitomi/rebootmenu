@@ -1,5 +1,6 @@
 package github.ryuunoakaihitomi.powerpanel.stat
 
+import android.content.Context
 import android.os.Bundle
 import timber.log.Timber
 import kotlin.system.exitProcess
@@ -14,6 +15,10 @@ object InternalDoerImpl : InternalDoer {
             Timber.e(e, "${e.javaClass.simpleName} in $t")
             exitProcess(-1)
         }
+    }
+
+    override fun initialize(ctx: Context) {
+        Timber.i("init: $ctx")
     }
 
     override fun setCustomKey(k: String, v: Any) {

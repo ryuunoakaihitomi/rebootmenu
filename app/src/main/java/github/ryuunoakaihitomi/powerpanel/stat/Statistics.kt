@@ -1,5 +1,6 @@
 package github.ryuunoakaihitomi.powerpanel.stat
 
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import androidx.annotation.StringRes
@@ -58,7 +59,12 @@ object Statistics {
         InternalDoerImpl.logEvent(EVENT_DIALOG_CANCEL, bundle)
     }
 
-    fun recordEnvInfo() {
+    fun initConfig(context: Context) {
+        recordEnvInfo()
+        InternalDoerImpl.initialize(context)
+    }
+
+    private fun recordEnvInfo() {
         arrayOf(Build::class, Build.VERSION::class).forEach { clz ->
             clz.java.fields.forEach enumProps@{
                 val name = it.name

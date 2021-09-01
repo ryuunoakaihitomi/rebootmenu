@@ -1,15 +1,23 @@
 package github.ryuunoakaihitomi.powerpanel.stat
 
+import android.content.Context
 import android.os.Bundle
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase
+import com.huawei.hms.analytics.HiAnalytics
+import com.huawei.hms.analytics.HiAnalyticsTools
 import timber.log.Timber
 
 /**
  * 目前使用的是`Firebase`
  */
 object InternalDoerImpl : InternalDoer {
+
+    override fun initialize(ctx: Context) {
+        HiAnalyticsTools.enableLog()
+        HiAnalytics.getInstance(ctx)
+    }
 
     override fun setCustomKey(k: String, v: Any) {
         Firebase.crashlytics.apply {

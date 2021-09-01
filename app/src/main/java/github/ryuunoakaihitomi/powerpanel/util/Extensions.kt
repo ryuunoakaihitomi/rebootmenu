@@ -10,6 +10,7 @@ import android.provider.Browser
 import android.service.quicksettings.Tile
 import android.text.Spannable
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.getSystemService
 import androidx.core.content.res.ResourcesCompat
@@ -47,6 +48,11 @@ fun Context.isWatch() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_
     Configuration.UI_MODE_TYPE_WATCH == getSystemService<UiModeManager>()?.currentModeType
 } else {
     false
+}
+
+fun Context.uiLog(msg: String) {
+    Timber.i("UILog -> $msg")
+    Toast.makeText(applicationContext, msg, Toast.LENGTH_LONG).show()
 }
 
 /**

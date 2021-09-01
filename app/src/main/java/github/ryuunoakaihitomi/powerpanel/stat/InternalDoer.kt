@@ -1,5 +1,6 @@
 package github.ryuunoakaihitomi.powerpanel.stat
 
+import android.content.Context
 import android.os.Bundle
 
 /**
@@ -8,6 +9,7 @@ import android.os.Bundle
  */
 interface InternalDoer {
 
+    fun initialize(ctx: Context)
     fun setCustomKey(k: String, v: Any)
     fun logEvent(tag: String, bundle: Bundle)
     fun log(level: String, tag: String, msg: String) {}

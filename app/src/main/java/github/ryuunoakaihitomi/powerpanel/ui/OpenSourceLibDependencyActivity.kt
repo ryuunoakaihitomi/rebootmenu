@@ -23,6 +23,7 @@ import github.ryuunoakaihitomi.powerpanel.R
 import github.ryuunoakaihitomi.powerpanel.util.BlackMagic
 import github.ryuunoakaihitomi.powerpanel.util.RC
 import github.ryuunoakaihitomi.powerpanel.util.openUrlInBrowser
+import github.ryuunoakaihitomi.powerpanel.util.uiLog
 import org.apache.commons.io.IOUtils
 import java.nio.charset.StandardCharsets
 import com.drakeet.about.License as L
@@ -112,7 +113,7 @@ class OpenSourceLibDependencyActivity : AbsAboutActivity() {
     }
 
     private fun recordLogcat() {
-        Toast.makeText(application, "Recent $maxLineCount lines Logcat…", Toast.LENGTH_LONG).show()
+        uiLog("Recent $maxLineCount lines Logcat…")
         ar.launch("logcat_${System.currentTimeMillis().toString(Character.MAX_RADIX).uppercase()}")
     }
     //</editor-fold>
