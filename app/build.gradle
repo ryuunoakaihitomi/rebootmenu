@@ -18,9 +18,9 @@ android {
         //targetSdkVersion compileSdkVersion
         targetSdkVersion 31
         // 版本号：发布日期
-        versionCode 20210902
+        versionCode 20210907
         // 版本名说明： R3.x.y.z (R3:Refactoring 第三次重构，z:Quick Fix序号)
-        versionName 'R3.12'
+        versionName 'R3.12.1'
         resConfigs "en", "zh-rCN"
 
         buildConfigField 'String', 'BUILD_TIME', '\"' + new Date() + '\"'
@@ -139,10 +139,10 @@ dependencies {
     implementation "dev.rikka.shizuku:api:$shizuku_version"
     implementation "dev.rikka.shizuku:provider:$shizuku_version"
 
-    implementation 'github.ryuunoakaihitomi.poweract:poweract:1.5.1'
-    runtimeOnly 'github.ryuunoakaihitomi.retoast:retoast:1.7.3'
+    implementation 'github.ryuunoakaihitomi.poweract:poweract:1.5.3'
+    runtimeOnly 'github.ryuunoakaihitomi.retoast:retoast:1.7.4'
     implementation 'com.google.code.gson:gson:2.8.8'
-    implementation 'com.github.GrenderG:Toasty:1.5.0'
+    implementation 'com.github.GrenderG:Toasty:1.5.2'
     implementation 'com.github.topjohnwu.libsu:core:3.1.2'
     // 固定在此版本，理由同下段注释
     // java.lang.NoClassDefFoundError: j$.wrappers.$r8$wrapper$java$util$function$Supplier$-WRP
