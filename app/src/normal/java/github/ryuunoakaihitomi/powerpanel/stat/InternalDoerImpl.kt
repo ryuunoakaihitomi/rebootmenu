@@ -12,7 +12,7 @@ import github.ryuunoakaihitomi.powerpanel.BuildConfig
 import timber.log.Timber
 
 /**
- * 目前使用的是`Firebase`和`Huawei AppGallery Collect`
+ * 目前使用的是`Firebase`和`Huawei AppGallery Connect`
  */
 object InternalDoerImpl : InternalDoer {
 

@@ -4,6 +4,24 @@
 
 This android app is used to control the power state.
 
+There are 3 operation modes:
+* **RESTRICTED MODE**: Functionality is limited in rootless environments.
+* **PRIVILEGED MODE**: All functions are available with root access.
+* **~~FORCE MODE~~**: Force power off for some items under root access. 
+  (Only as a backup mode for compatibility with earlier non-standard systems, which is **not recommended** in most cases because of some security risks)
+
+To circumvent the inherent flaws and limitations of the regular mechanism, starting from Android 6.0, it is **strongly recommended** to use this app with [**Shizuku Manager**](https://shizuku.rikka.app/zh-hans/download.html)! Granting Shizuku permission to this app to enjoy better operating experiences.
+
+![`loading Shizuku's icon...`](https://shizuku.rikka.app/logo.png)
+
+With root access, use the *Switch mode* button to switch between PRIVILEGED MODE and FORCE MODE. The items with corresponding force mode will **change color and bold**.
+
+RESTRICTED MODE may requires persistent accessibility service, so notification will be left on to maintain foreground process status when the mode is enabled, it can be blocked manually. In some systems, you may have to use other means to keep the service running. (See [Don't kill my app!](https://dontkillmyapp.com))
+
+**Long press** an item to create a **launcher shortcut**. (Some custom systems may need to manually grant permission to add desktop icons in advance) Starting from Android 7.0, provide *Power menu* and *Lock screen* tiles for the quick settings panel. (On CyanogenMod 12.1+, just *Power menu* tile is provided)
+
+In order to prevent misoperation, except for *Lock screen* and *Sys power menu*, other items need to be confirmed again in PRIVILEGED MODE.
+
 ## Author
 [@ryuunoakaihitomi github.com](https://github.com/ryuunoakaihitomi)
 
