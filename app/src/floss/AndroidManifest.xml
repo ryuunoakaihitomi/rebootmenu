@@ -2,5 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <application tools:remove="android:manageSpaceActivity,android:fullBackupOnly" />
+    <application
+        tools:ignore="AllowBackup,MissingApplicationIcon"
+        tools:remove="android:manageSpaceActivity,android:fullBackupOnly" />
 </manifest>

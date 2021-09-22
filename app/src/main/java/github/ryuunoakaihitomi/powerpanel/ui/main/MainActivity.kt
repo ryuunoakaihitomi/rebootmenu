@@ -68,15 +68,15 @@ class MainActivity : AppCompatActivity() {
         val isCompatible =
             // KitKat无法长期维护，这次只不过是临时接触了这类设备才给稍微适配
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP &&
-                // Wear OS存在界面元素无法显示问题
-                !isWatch() &&
-                // Android TV部分功能无法使用
-                !packageManager.hasSystemFeature(
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                        PackageManager.FEATURE_LEANBACK else PackageManager.FEATURE_TELEVISION
-                ) &&
-                // 工作资料之类的
-                getSystemService<UserManager>()!!.userProfiles[0].equals(Process.myUserHandle())
+                    // Wear OS存在界面元素无法显示问题
+                    !isWatch() &&
+                    // Android TV部分功能无法使用
+                    !packageManager.hasSystemFeature(
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                            PackageManager.FEATURE_LEANBACK else PackageManager.FEATURE_TELEVISION
+                    ) &&
+                    // 工作资料之类的
+                    getSystemService<UserManager>()!!.userProfiles[0].equals(Process.myUserHandle())
         if (!isCompatible) {
             Timber.i("show unsupported env hint")
             Toasty.error(this, R.string.toast_unsupported_env, Toasty.LENGTH_LONG).show()
@@ -286,6 +286,8 @@ class MainActivity : AppCompatActivity() {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                     setHideOverlayWindows(true)
                 }
+                // 这里不继续在旧版本检测是否有覆盖层，解决方案可能不可用
+                // https://stackoverflow.com/questions/63152374/flag-window-is-obscured-not-working-on-newer-android
             }
         }
         lifecycle.addObserver(LifecycleEventObserver { _, event ->
