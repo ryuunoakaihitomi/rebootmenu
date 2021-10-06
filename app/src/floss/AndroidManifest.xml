@@ -4,5 +4,5 @@
 
     <application
         tools:ignore="AllowBackup,MissingApplicationIcon"
-        tools:remove="android:manageSpaceActivity,android:fullBackupOnly" />
+        tools:remove="android:fullBackupOnly" />
 </manifest>

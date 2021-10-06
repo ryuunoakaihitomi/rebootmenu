@@ -25,6 +25,8 @@ import github.ryuunoakaihitomi.powerpanel.util.RC
 import github.ryuunoakaihitomi.powerpanel.util.openUrlInBrowser
 import github.ryuunoakaihitomi.powerpanel.util.uiLog
 import org.apache.commons.io.IOUtils
+import timber.log.Timber
+import java.io.IOException
 import java.nio.charset.StandardCharsets
 import com.drakeet.about.License as L
 
@@ -74,15 +76,20 @@ class OpenSourceLibDependencyActivity : AbsAboutActivity() {
     override fun onItemsCreated(items: MutableList<Any>) {
         items.add(Category("Platform Support"))
         platformSupportList.all { items.add(it) }
-        items.add(Category("implementation"))
-        inflateData("implementation", items)
-        items.add(Category("debugImplementation"))
-        inflateData("debug", items)
+        inflateJsonData(items, "implementation")
+        inflateJsonData(items, "debugImplementation", "debug")
+        // 给个位置给Firebase
+        inflateJsonData(items, "non-free", "free")
     }
 
-    private fun inflateData(endpoint: String, l: MutableList<Any>) = JsonParser.parseString(
-        IOUtils.toString(assets.open("dependency_list/$endpoint.json"), StandardCharsets.UTF_8)
-    ).asJsonArray.forEach { l.add(Gson().fromJson(it, L::class.java)) }
+    private fun inflateJsonData(l: MutableList<Any>, title: String, ep: String = title) = try {
+        val `is` = assets.open("dependency_list/$ep.json")
+        l.add(Category(title))
+        JsonParser.parseString(IOUtils.toString(`is`, StandardCharsets.UTF_8))
+            .asJsonArray.forEach { l.add(Gson().fromJson(it, L::class.java)) }
+    } catch (e: IOException) {
+        Timber.w(e.toString())
+    }
 
     //<editor-fold desc="抓取logcat">
 

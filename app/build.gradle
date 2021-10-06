@@ -18,9 +18,9 @@ android {
         //targetSdkVersion compileSdkVersion
         targetSdkVersion 31
         // 版本号：发布日期
-        versionCode 20210922
+        versionCode 20211006
         // 版本名说明： R3.x.y.z (R3:Refactoring 第三次重构，z:Quick Fix序号)
-        versionName 'R3.12.3'
+        versionName 'R3.12.4'
         resConfigs "en", "zh-rCN"
 
         buildConfigField 'String', 'BUILD_TIME', '\"' + new Date() + '\"'
@@ -63,8 +63,9 @@ android {
             applicationId 'github.ryuunoakaihitomi.powerpanel'  // 现在想要个新的packageName
             // 华为插件不知道加的什么东西
             // https://stackoverflow.com/a/30497221/16091156
+            // https://stackoverflow.com/a/56134640/16091156
             aaptOptions {
-                ignoreAssetsPattern '!tmp_json.html'
+                ignoreAssetsPattern 'tmp_json.html'
             }
         }
     }
@@ -140,7 +141,7 @@ dependencies {
     implementation "dev.rikka.shizuku:provider:$shizuku_version"
 
     implementation 'github.ryuunoakaihitomi.poweract:poweract:1.5.3'
-    runtimeOnly 'github.ryuunoakaihitomi.retoast:retoast:1.8.0'
+    runtimeOnly 'github.ryuunoakaihitomi.retoast:retoast:1.9.0'
     implementation 'com.google.code.gson:gson:2.8.8'
     implementation 'com.github.GrenderG:Toasty:1.5.2'
     implementation 'com.github.topjohnwu.libsu:core:3.1.2'
