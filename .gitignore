@@ -88,8 +88,5 @@ lint/tmp/
 # Android Profiling
 *.hprof
 
-# --- 自定义配置 ---
-# 签名信息
-signInfo.properties
-# 华为分析
-agconnect-services.json
+# --- 私密配置 ---
+secret.properties

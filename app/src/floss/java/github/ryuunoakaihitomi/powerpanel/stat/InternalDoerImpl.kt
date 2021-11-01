@@ -1,6 +1,6 @@
 package github.ryuunoakaihitomi.powerpanel.stat
 
-import android.content.Context
+import android.app.Application
 import android.os.Bundle
 import timber.log.Timber
 import kotlin.system.exitProcess
@@ -17,8 +17,8 @@ object InternalDoerImpl : InternalDoer {
         }
     }
 
-    override fun initialize(ctx: Context) {
-        Timber.i("init: $ctx")
+    override fun initialize(app: Application) {
+        Timber.i("init: $app")
     }
 
     override fun setCustomKey(k: String, v: Any) {

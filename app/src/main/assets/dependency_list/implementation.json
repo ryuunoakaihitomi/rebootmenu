@@ -54,10 +54,10 @@
     "url": "http://commons.apache.org/proper/commons-io"
   },
   {
-    "author": "Apache Software Foundation",
-    "name": "Apache Commons Lang",
+    "author": "jOOQ Object Oriented Querying",
+    "name": "jOOR",
     "type": "Apache Software License 2.0",
-    "url": "https://commons.apache.org/proper/commons-lang"
+    "url": "https://github.com/jOOQ/jOOR"
   },
   {
     "author": "Jake Wharton",

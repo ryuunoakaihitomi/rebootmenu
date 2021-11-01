@@ -1,6 +1,6 @@
 package github.ryuunoakaihitomi.powerpanel.stat
 
-import android.content.Context
+import android.app.Application
 import android.os.Build
 import android.os.Bundle
 import androidx.annotation.StringRes
@@ -59,9 +59,9 @@ object Statistics {
         InternalDoerImpl.logEvent(EVENT_DIALOG_CANCEL, bundle)
     }
 
-    fun initConfig(context: Context) {
+    fun initConfig(app: Application) {
         recordEnvInfo()
-        InternalDoerImpl.initialize(context)
+        InternalDoerImpl.initialize(app)
     }
 
     private fun recordEnvInfo() {

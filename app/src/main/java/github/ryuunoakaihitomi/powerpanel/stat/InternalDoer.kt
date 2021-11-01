@@ -1,6 +1,6 @@
 package github.ryuunoakaihitomi.powerpanel.stat
 
-import android.content.Context
+import android.app.Application
 import android.os.Bundle
 
 /**
@@ -8,8 +8,7 @@ import android.os.Bundle
  * 不得在[Statistics]以外调用它的子类
  */
 interface InternalDoer {
-
-    fun initialize(ctx: Context)
+    fun initialize(app: Application)
     fun setCustomKey(k: String, v: Any)
     fun logEvent(tag: String, bundle: Bundle)
     fun log(level: String, tag: String, msg: String) {}

@@ -4,9 +4,10 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
-apply plugin: 'com.huawei.agconnect'
 
 apply from: "${rootProject.file('loadProperties.gradle')}"
+
+Properties p = loadProps('secret')
 
 android {
     compileSdkVersion 31
@@ -18,9 +19,9 @@ android {
         //targetSdkVersion compileSdkVersion
         targetSdkVersion 31
         // 版本号：发布日期
-        versionCode 20211006
+        versionCode 20211102
         // 版本名说明： R3.x.y.z (R3:Refactoring 第三次重构，z:Quick Fix序号)
-        versionName 'R3.12.4'
+        versionName 'R3.13'
         resConfigs "en", "zh-rCN"
 
         buildConfigField 'String', 'BUILD_TIME', '\"' + new Date() + '\"'
@@ -28,7 +29,6 @@ android {
 
     signingConfigs {
         release {
-            Properties p = loadProps('signInfo')
             keyAlias p['KEY_ALIAS']
             keyPassword p['KEY_PWD']
             storePassword p['STORE_PWD']
@@ -55,18 +55,13 @@ android {
     productFlavors {
         normal {
             dimension "version"
+            buildConfigField 'String', 'AK_APP_CENTER', '\"' + p['APP_CENTER'] + '\"'
         }
         // Free/Libre and Open Source Software
         floss {
             dimension "version"
             versionNameSuffix '-floss'
             applicationId 'github.ryuunoakaihitomi.powerpanel'  // 现在想要个新的packageName
-            // 华为插件不知道加的什么东西
-            // https://stackoverflow.com/a/30497221/16091156
-            // https://stackoverflow.com/a/56134640/16091156
-            aaptOptions {
-                ignoreAssetsPattern 'tmp_json.html'
-            }
         }
     }
     compileOptions {
@@ -104,10 +99,8 @@ android {
         exclude 'firebase-*.properties'
         exclude 'play-services-*.properties'
         exclude 'transport-*.properties'
-        // 华为AGC插件
-        exclude 'agconnect-*.properties'
-        exclude 'HMSCore-*.properties'
-        exclude 'network-*.properties'
+        // jOOR引入的
+        exclude 'README.txt'
     }
 }
 
@@ -115,19 +108,19 @@ dependencies {
     // ZXing需要method sort(Ljava/util/Comparator;)V in class Ljava/util/List;
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
 
-    implementation 'androidx.core:core-ktx:1.6.0'
+    implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.3.1'
     implementation 'androidx.multidex:multidex:2.0.1'
 
-    def lifecycle_version = "2.3.1"
+    def lifecycle_version = "2.4.0"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
 
-    normalImplementation platform('com.google.firebase:firebase-bom:28.4.1')
+    normalImplementation platform('com.google.firebase:firebase-bom:29.0.0')
     normalImplementation 'com.google.firebase:firebase-analytics-ktx'
     normalImplementation 'com.google.firebase:firebase-crashlytics-ktx'
 
-    normalImplementation 'com.huawei.hms:hianalytics:6.2.0.301'
+    normalImplementation 'com.microsoft.appcenter:appcenter-analytics:4.3.1'
 
     /* ------- 其他第三方开源组件 ------- */
 
@@ -136,16 +129,16 @@ dependencies {
     implementation "io.noties.markwon:ext-strikethrough:$markwon_version"
     implementation "io.noties.markwon:image:$markwon_version"
 
-    def shizuku_version = '12.0.0'
+    def shizuku_version = '12.1.0'
     implementation "dev.rikka.shizuku:api:$shizuku_version"
     implementation "dev.rikka.shizuku:provider:$shizuku_version"
 
     implementation 'github.ryuunoakaihitomi.poweract:poweract:1.5.3'
-    runtimeOnly 'github.ryuunoakaihitomi.retoast:retoast:1.9.0'
-    implementation 'com.google.code.gson:gson:2.8.8'
+    runtimeOnly 'github.ryuunoakaihitomi.retoast:retoast:2.0.0'
+    implementation 'com.google.code.gson:gson:2.8.9'
     implementation 'com.github.GrenderG:Toasty:1.5.2'
     implementation 'com.github.topjohnwu.libsu:core:3.1.2'
-    // 固定在此版本，理由同下段注释
+    // 固定在此版本，理由同下段注释 （使用的一些java8 API是脱糖库无法完成转换的，即使脱糖库的文档说明支持）
     // java.lang.NoClassDefFoundError: j$.wrappers.$r8$wrapper$java$util$function$Supplier$-WRP
     // 目前搜集到的一些资料
     // https://issuetracker.google.com/issues/183419297
@@ -154,14 +147,7 @@ dependencies {
     // https://issuetracker.google.com/issues/190633902
     //noinspection GradleDependency
     implementation 'commons-io:commons-io:2.8.0'
-    // 不再使用lang3，因为lang3使用的一些java8 API是脱糖库无法完成转换的，即使脱糖库的文档说明支持。
-    // 使用到的例子：
-    //  FieldUtils#getField(Class<?>, String, boolean)
-    //  Validate#notNull(T, String, Object...)
-    //  Objects#requireNonNull(T, Supplier<String>) <- 从这里开始，java.util.function.Supplier无法脱糖成功，而24以下环境找不到它
-    // FIXME 在没有找到更好的解决方法之前只能使用legacy lang2代替
-    //implementation 'org.apache.commons:commons-lang3:3.12.0'
-    implementation group: 'commons-lang', name: 'commons-lang', version: '2.6'
+    implementation 'org.jooq:joor-java-6:0.9.14'
     implementation 'com.jakewharton.timber:timber:5.0.1'
     implementation 'com.drakeet.about:about:2.4.1'
     implementation 'com.google.zxing:core:3.4.1'

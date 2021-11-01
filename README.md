@@ -19,17 +19,23 @@
 
 <img src="/annex/Screenshot_20210113-165823.jpg" width="25%" /><img src="/annex/Screenshot_20210113-170632.jpg" width="25%" /><img src="/annex/Screenshot_20210113-170722.jpg" width="25%" /><img src="/annex/Screenshot_20210113-170951.jpg" width="25%" />
 
-## 下载
+## 📥下载
+
 * [Github Release](https://github.com/ryuunoakaihitomi/rebootmenu/releases/latest)
 
 * [酷安网](https://www.coolapk.com/apk/com.ryuunoakaihitomi.rebootmenu)
+
 > 不推荐的备用下载，有无法直接下载APK文件并引流至其客户端的历史。
 ![相关源代码在此次commit的时间点时已被注释](/annex/coolapk_ban_apk_history.webp)
 
+* [自行构建](BUILD_NOTE.md)
+
 ## 捐赠
+
 如果认为这个小工具或者其源码给你带来了便利，可以考虑捐赠一些金钱以支持开发者。
 
 ![image](./app/src/main/assets/donate.webp)
 
 ## License
+
 MIT

@@ -4,5 +4,11 @@
     "name": "Firebase Android SDK",
     "type": "Apache Software License 2.0",
     "url": "https://github.com/firebase/firebase-android-sdk"
+  },
+  {
+    "author": "Microsoft Corporation",
+    "name": "Visual Studio App Center SDK for Android",
+    "type": "MIT License",
+    "url": "https://github.com/microsoft/appcenter-sdk-android"
   }
 ]
