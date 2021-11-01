@@ -35,10 +35,10 @@ jobs:
     - name: Generate signing info
       run: |
         keytool -genkey -alias a -dname CN=_ -storepass passwd -keypass passwd -keysize 1024 -keystore android.keystore
-        echo KEY_ALIAS=a >> signInfo.properties
-        echo KEY_PWD=passwd >> signInfo.properties
-        echo STORE_PWD=passwd >> signInfo.properties
-        echo STORE_FILE=$(pwd)/android.keystore >> signInfo.properties
+        echo KEY_ALIAS=a >> secret.properties
+        echo KEY_PWD=passwd >> secret.properties
+        echo STORE_PWD=passwd >> secret.properties
+        echo STORE_FILE=$(pwd)/android.keystore >> secret.properties
 
       # https://developer.android.google.cn/studio/releases/gradle-plugin#updating-gradle
     - name: Install gradle wrapper
@@ -52,7 +52,7 @@ jobs:
       # https://github.com/actions/virtual-environments/blob/main/images/linux/Ubuntu2004-README.md#android
     - name: Check apk
       env:
-        BUILD_TOOLS_VERSION: 30.0.3
+        BUILD_TOOLS_VERSION: 31.0.3
       run: |
         export APK_PATH=$(find ./app/build/outputs/apk/floss/release/ -maxdepth 1 -name *.apk)
         export PATH=$PATH:$ANDROID_SDK_ROOT/build-tools/$BUILD_TOOLS_VERSION
