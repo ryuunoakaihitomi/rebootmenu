@@ -52,7 +52,7 @@ jobs:
       # https://github.com/actions/virtual-environments/blob/main/images/linux/Ubuntu2004-README.md#android
     - name: Check apk
       env:
-        BUILD_TOOLS_VERSION: 31.0.3
+        BUILD_TOOLS_VERSION: 31.0.0
       run: |
         export APK_PATH=$(find ./app/build/outputs/apk/floss/release/ -maxdepth 1 -name *.apk)
         export PATH=$PATH:$ANDROID_SDK_ROOT/build-tools/$BUILD_TOOLS_VERSION

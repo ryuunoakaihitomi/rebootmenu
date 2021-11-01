@@ -16,18 +16,11 @@ To circumvent the inherent flaws and limitations of the regular mechanism, start
 
 With root access, use the *Switch mode* button to switch between PRIVILEGED MODE and FORCE MODE. The items with corresponding force mode will **change color and bold**.
 
-RESTRICTED MODE may requires persistent accessibility service, so notification will be left on to
-maintain foreground process status when the mode is enabled, it can be blocked manually. In some
-systems, you may have to use other means to keep the service running. (
-See [Don't kill my app!](https://dontkillmyapp.com))
+RESTRICTED MODE may requires persistent accessibility service, so notification will be left on to maintain foreground process status when the mode is enabled, it can be blocked manually. In some systems, you may have to use other means to keep the service running. (See [Don't kill my app!](https://dontkillmyapp.com))
 
-**Long press** an item to create a **launcher shortcut**. (Some custom systems may need to manually
-grant permission to add desktop icons in advance) Starting from Android 7.0, provide *Power menu*
-and *Lock screen* tiles for the quick settings panel. (On CyanogenMod 12.1+, just *Power menu* tile
-is provided)
+**Long press** an item to create a **launcher shortcut**. (Some custom systems may need to manually grant permission to add launcher icons in advance) Starting from Android 7.0, provide *Power menu* and *Lock screen* tiles for the quick settings panel. (On CyanogenMod 12.1+, just *Power menu* tile is provided)
 
-In order to prevent misoperation, except for *Lock screen* and *Sys power menu*, other items need to
-be confirmed again in PRIVILEGED MODE.
+In order to prevent misoperation, except for *Lock screen* and *Sys power menu*, other items need to be confirmed again in PRIVILEGED MODE.
 
 ## Author
 
