@@ -100,7 +100,7 @@ android {
         exclude 'play-services-*.properties'
         exclude 'transport-*.properties'
         // jOOR引入的
-        exclude 'README.txt'
+        exclude 'META-INF/README.txt'
     }
 }
 
