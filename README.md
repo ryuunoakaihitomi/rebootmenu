@@ -19,7 +19,7 @@
 
 <img src="/annex/Screenshot_20210113-165823.jpg" width="25%" /><img src="/annex/Screenshot_20210113-170632.jpg" width="25%" /><img src="/annex/Screenshot_20210113-170722.jpg" width="25%" /><img src="/annex/Screenshot_20210113-170951.jpg" width="25%" />
 
-## 📥下载
+## 📥 获取安装包
 
 * [Github Release](https://github.com/ryuunoakaihitomi/rebootmenu/releases/latest)
 
