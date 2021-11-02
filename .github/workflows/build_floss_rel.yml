@@ -47,7 +47,7 @@ jobs:
           ~/.gradle/caches
           ~/.gradle/wrapper
           !~/.gradle/caches/build-cache-*
-        key: gradle-deps-core-${{ hashFiles('**/build.gradle.kts') }}
+        key: gradle-deps-core-${{ hashFiles('**/build.gradle') }}
         restore-keys: |
           gradle-deps
 
@@ -62,7 +62,7 @@ jobs:
 
       # https://developer.android.google.cn/studio/releases/gradle-plugin#updating-gradle
     - name: Install gradle wrapper
-      if: hashFiles('gradle/wrapper/gradle-wrapper.jar') == ''
+      if: hashFiles('.gradle/wrapper/gradle-wrapper.jar') == ''
       env:
         GRADLE_VERSION: 7.0.2
       run : gradle wrapper --gradle-version $GRADLE_VERSION
