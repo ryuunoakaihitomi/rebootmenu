@@ -40,6 +40,26 @@ jobs:
         echo STORE_PWD=passwd >> secret.properties
         echo STORE_FILE=$(pwd)/android.keystore >> secret.properties
 
+    - name: Cache Gradle Dependencies
+      uses: actions/cache@v2
+      with:
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+          !~/.gradle/caches/build-cache-*
+        key: gradle-deps-core-${{ hashFiles('**/build.gradle.kts') }}
+        restore-keys: |
+          gradle-deps
+
+    - name: Cache Gradle Build
+      uses: actions/cache@v2
+      with:
+        path: |
+          ~/.gradle/caches/build-cache-*
+        key: gradle-builds-core-${{ github.sha }}
+        restore-keys: |
+          gradle-builds
+
       # https://developer.android.google.cn/studio/releases/gradle-plugin#updating-gradle
     - name: Install gradle wrapper
       env:
