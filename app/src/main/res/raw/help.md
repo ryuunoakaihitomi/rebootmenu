@@ -34,5 +34,4 @@ The following references are the legal statements of the statistics SDK used in 
 >
 > [Visual Studio App Center Security and Compliance](https://docs.microsoft.com/en-us/appcenter/general/app-center-security)
 
-The app is free and open-source, which means that its behavior will never infringe your privacy
-within the developer's control.
+The app is free and open-source, which means that its behavior will never infringe your privacy within the developer's control.
