@@ -26,7 +26,7 @@ object InternalDoerImpl : InternalDoer {
                 is Double -> setCustomKey(k, v)
                 is Boolean -> setCustomKey(k, v)
                 is Array<*> -> setCustomKey(k, v.contentToString())
-                else -> Timber.w("Undefined type: $k, $v")
+                else -> Timber.w("Custom type: $k, $v")
             }
         }
     }
