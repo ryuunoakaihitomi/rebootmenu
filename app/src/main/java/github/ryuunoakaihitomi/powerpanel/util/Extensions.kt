@@ -25,7 +25,6 @@ fun Context.openUrlInBrowser(url: String) {
     runCatching {
         startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
     }.onFailure {
-        Timber.e(it)
         Toasty.info(this, url).show()
         // 分享到其他地方，这个方法catch了ActivityNotFoundException，所以不用担心崩溃问题
         Browser.sendString(this, url)

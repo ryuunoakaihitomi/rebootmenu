@@ -17,7 +17,7 @@ object AppCenterCompat {
     }
 
     /**
-     * 和Firebase.Analytics的数据类型有差异
+     * 和Firebase Analytics的数据类型有差异
      */
     fun trackEvent(tag: String, bundle: Bundle) = launch {
         val map = ArrayMap<String, String>()

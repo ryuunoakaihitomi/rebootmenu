@@ -20,10 +20,7 @@ import com.google.gson.JsonParser
 import com.topjohnwu.superuser.Shell
 import github.ryuunoakaihitomi.powerpanel.BuildConfig
 import github.ryuunoakaihitomi.powerpanel.R
-import github.ryuunoakaihitomi.powerpanel.util.BlackMagic
-import github.ryuunoakaihitomi.powerpanel.util.RC
-import github.ryuunoakaihitomi.powerpanel.util.openUrlInBrowser
-import github.ryuunoakaihitomi.powerpanel.util.uiLog
+import github.ryuunoakaihitomi.powerpanel.util.*
 import org.apache.commons.io.IOUtils
 import timber.log.Timber
 import java.io.IOException
@@ -80,6 +77,7 @@ class OpenSourceLibDependencyActivity : AbsAboutActivity() {
         inflateJsonData(items, "debugImplementation", "debug")
         // 给个位置给Firebase
         inflateJsonData(items, "non-free", "free")
+        inflateJsonData(items, "Gradle plugin", "plugin")
     }
 
     private fun inflateJsonData(l: MutableList<Any>, title: String, ep: String = title) = try {

@@ -4,6 +4,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
+apply plugin: 'android-aspectjx'
 
 apply from: "${rootProject.file('loadProperties.gradle')}"
 
@@ -19,9 +20,9 @@ android {
         //targetSdkVersion compileSdkVersion
         targetSdkVersion 31
         // 版本号：发布日期
-        versionCode 20211103
+        versionCode 20211104
         // 版本名说明： R3.x.y.z (R3:Refactoring 第三次重构，z:Quick Fix序号)
-        versionName 'R3.13.0.1'
+        versionName 'R3.13.1'
         resConfigs "en", "zh-rCN"
 
         buildConfigField 'String', 'BUILD_TIME', '\"' + new Date() + '\"'
@@ -153,6 +154,8 @@ dependencies {
     implementation 'com.google.zxing:core:3.4.1'
     implementation 'org.cyanogenmod:platform.sdk:6.0'
     implementation 'org.lsposed.hiddenapibypass:hiddenapibypass:2.0'
+    implementation "org.aspectj:aspectjrt:1.9.7"
+
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
     // 最新版是v2.1.0，仅支持android-support
     //noinspection GradleDependency
@@ -184,4 +187,9 @@ repositories {
     maven {
         url 'https://raw.githubusercontent.com/ryuunoakaihitomi/maven-repository/master'
     }
+}
+
+//  配置入口和作用点都要制定
+aspectjx {
+    include 'custom_aspect', 'com.drakeet.about'
 }
