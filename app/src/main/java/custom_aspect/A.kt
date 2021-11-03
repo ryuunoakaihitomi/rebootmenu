@@ -13,7 +13,7 @@ class A {
 
     /**
      * 修复about-page在Wear OS上的崩溃
-     * 原因：在WearOS上打开链接会抛出不是[ActivityNotFoundException]的一场
+     * 原因：在WearOS上打开链接会抛出不为[ActivityNotFoundException]的异常
      *
      * `Permission Denial: starting Intent { act=... dat=... cmp=com.google.android.wearable.app/com.google.android.clockwork.wcs.remoteintent.UriRedirectActivity } from ProcessRecord ... requires com.google.android.wearable.READ_SETTINGS`
      * @see ClickableViewHolder
