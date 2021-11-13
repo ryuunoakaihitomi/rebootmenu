@@ -76,5 +76,11 @@
     "name": "Gson",
     "type": "Apache Software License 2.0",
     "url": "https://github.com/google/gson"
+  },
+  {
+    "author": "Rikka",
+    "name": "RikkaX Compatibility",
+    "type": "Apache Software License 2.0",
+    "url": "https://github.com/RikkaApps/RikkaX/tree/master/compatibility"
   }
 ]

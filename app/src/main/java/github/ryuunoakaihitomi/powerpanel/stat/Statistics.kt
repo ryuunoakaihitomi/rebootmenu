@@ -1,11 +1,11 @@
 package github.ryuunoakaihitomi.powerpanel.stat
 
 import android.app.Application
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
-import github.ryuunoakaihitomi.powerpanel.util.BlackMagic
 import rikka.shizuku.Shizuku
 import java.util.*
 
@@ -42,7 +42,7 @@ object Statistics {
             putString(KEY_SRC, split[split.size - 1])
             // 作为数字，也就是用putInt()，在Events面板只能看到平均值和总数
             putString(KEY_TIME_HOUR, Calendar.getInstance()[Calendar.HOUR_OF_DAY].toString())
-            putString(KEY_TYPE, labelResId.toLabel())
+            putString(KEY_TYPE, labelResId.toLabel(activity))
             /* FirebaseAnalytics不支持Boolean (String, long and double param types are supported.) */
             putString(KEY_FORCE_MODE, forceMode.toString())
             putString(KEY_DONE, done.toString())
@@ -51,9 +51,9 @@ object Statistics {
         InternalDoerImpl.logEvent(EVENT_PWR_OP, bundle)
     }
 
-    fun logDialogCancel(@StringRes labelResId: Int, cancelled: Boolean) {
+    fun logDialogCancel(ctx: Context, @StringRes labelResId: Int, cancelled: Boolean) {
         val bundle = Bundle().apply {
-            putString(KEY_TYPE, labelResId.toLabel())
+            putString(KEY_TYPE, labelResId.toLabel(ctx))
             putString(KEY_CANCELLED, cancelled.toString())
         }
         InternalDoerImpl.logEvent(EVENT_DIALOG_CANCEL, bundle)
@@ -75,6 +75,6 @@ object Statistics {
         }
     }
 
-    private fun @receiver:StringRes Int.toLabel() =
-        BlackMagic.getGlobalApp().resources.getResourceEntryName(this)
+    private fun @receiver:StringRes Int.toLabel(c: Context) =
+        c.resources.getResourceEntryName(this)
 }

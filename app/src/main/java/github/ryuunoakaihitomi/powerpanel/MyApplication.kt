@@ -3,6 +3,8 @@ package github.ryuunoakaihitomi.powerpanel
 import android.content.Context
 import android.os.Build
 import android.os.StrictMode
+import android.util.Log
+import android.util.LogPrinter
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.multidex.MultiDexApplication
 import github.ryuunoakaihitomi.poweract.ExternalUtils
@@ -11,14 +13,15 @@ import github.ryuunoakaihitomi.powerpanel.stat.Statistics
 import github.ryuunoakaihitomi.powerpanel.util.MyLogTree
 import github.ryuunoakaihitomi.powerpanel.util.isWatch
 import org.lsposed.hiddenapibypass.HiddenApiBypass
+import rikka.compatibility.DeviceCompatibility
 import timber.log.Timber
 
 class MyApplication : MultiDexApplication() {
 
     /**
-     * @see [github.ryuunoakaihitomi.powerpanel.ui.main.MainActivity.checkCompatibility]
+     * @see [github.ryuunoakaihitomi.powerpanel.ui.main.MainActivity.checkUnsupportedEnv]
      */
-    var hasShownCompatibilityWarning = false
+    var hasShownUnsupportedEnvWarning = false
 
     /**
      * @see [github.ryuunoakaihitomi.powerpanel.ui.main.MainActivity.checkScrollableListView]
@@ -56,5 +59,10 @@ class MyApplication : MultiDexApplication() {
          */
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP || isWatch())
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+
+        // 在MIUI上出了不知道如何修复的bug，除了无能狂怒以外实在无可奈何，非常苦恼。
+        if (DeviceCompatibility.isMiui()) {
+            LogPrinter(Log.ERROR, "雷军！").println("金凡！！！")
+        }
     }
 }

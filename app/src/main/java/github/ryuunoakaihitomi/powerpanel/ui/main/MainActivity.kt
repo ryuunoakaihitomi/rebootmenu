@@ -63,8 +63,8 @@ import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
-    private fun checkCompatibility() {
-        if (myApp().hasShownCompatibilityWarning) return
+    private fun checkUnsupportedEnv() {
+        if (myApp().hasShownUnsupportedEnvWarning) return
         val isCompatible =
             // KitKat无法长期维护，这次只不过是临时接触了这类设备才给稍微适配
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP &&
@@ -72,6 +72,7 @@ class MainActivity : AppCompatActivity() {
                     !isWatch() &&
                     // Android TV部分功能无法使用
                     !packageManager.hasSystemFeature(
+                        @Suppress("DEPRECATION")    // PackageManager.FEATURE_TELEVISION
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
                             PackageManager.FEATURE_LEANBACK else PackageManager.FEATURE_TELEVISION
                     ) &&
@@ -80,7 +81,7 @@ class MainActivity : AppCompatActivity() {
         if (!isCompatible) {
             Timber.i("show unsupported env hint")
             Toasty.error(this, R.string.toast_unsupported_env, Toasty.LENGTH_LONG).show()
-            myApp().hasShownCompatibilityWarning = true
+            myApp().hasShownUnsupportedEnvWarning = true
         }
     }
 
@@ -111,7 +112,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Timber.v("start!")
-        checkCompatibility()
+        checkUnsupportedEnv()
         var mainDialog = AlertDialog.Builder(this).create()
         val powerViewModel = ViewModelProvider(this)[PowerViewModel::class.java]
         powerViewModel.labelResId.observe(this) {
@@ -175,7 +176,7 @@ class MainActivity : AppCompatActivity() {
                             )
                         ) { _, confirmWhich ->
                             val ok = confirmWhich == 0
-                            Statistics.logDialogCancel(item.labelResId, ok.not())
+                            Statistics.logDialogCancel(this.context, item.labelResId, ok.not())
                             if (ok) {
                                 powerViewModel.call(item.labelResId)
                                 // dismiss防止窗口泄漏
@@ -185,7 +186,7 @@ class MainActivity : AppCompatActivity() {
                             }
                         }
                         setOnCancelListener {
-                            Statistics.logDialogCancel(item.labelResId, true)
+                            Statistics.logDialogCancel(this.context, item.labelResId, true)
                             powerViewModel.prepare()
                         }
                         setNeutralButton(null, null)

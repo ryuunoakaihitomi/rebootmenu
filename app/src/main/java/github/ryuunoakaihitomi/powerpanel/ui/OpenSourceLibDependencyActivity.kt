@@ -20,7 +20,10 @@ import com.google.gson.JsonParser
 import com.topjohnwu.superuser.Shell
 import github.ryuunoakaihitomi.powerpanel.BuildConfig
 import github.ryuunoakaihitomi.powerpanel.R
-import github.ryuunoakaihitomi.powerpanel.util.*
+import github.ryuunoakaihitomi.powerpanel.util.BlackMagic
+import github.ryuunoakaihitomi.powerpanel.util.RC
+import github.ryuunoakaihitomi.powerpanel.util.openUrlInBrowser
+import github.ryuunoakaihitomi.powerpanel.util.uiLog
 import org.apache.commons.io.IOUtils
 import timber.log.Timber
 import java.io.IOException
@@ -38,6 +41,7 @@ class OpenSourceLibDependencyActivity : AbsAboutActivity() {
             "Android Open Source Project", "Google LLC",
             strOf(R.string.url_aosp_license), strOf(R.string.url_aosp_home)
         ),
+
         L(
             "CyanogenMod Platform SDK",
             "CyanogenMod",
@@ -124,4 +128,5 @@ class OpenSourceLibDependencyActivity : AbsAboutActivity() {
     //</editor-fold>
 }
 
+// 在Activity初始化前可用
 private fun strOf(@StringRes id: Int) = BlackMagic.getGlobalApp().getString(id)
