@@ -61,6 +61,7 @@ jobs:
           gradle-builds
 
       # https://developer.android.google.cn/studio/releases/gradle-plugin#updating-gradle
+      # gradle/wrapper/gradle-wrapper.properties
     - name: Install gradle wrapper
       env:
         GRADLE_VERSION: 7.0.2
