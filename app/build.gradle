@@ -188,6 +188,10 @@ repositories {
     maven {
         url 'https://raw.githubusercontent.com/ryuunoakaihitomi/maven-repository/master'
     }
+    // 上面仓库的镜像
+    maven {
+        url 'https://raw.fastgit.org/ryuunoakaihitomi/maven-repository/master'
+    }
 }
 
 //  配置入口和作用点都要制定
