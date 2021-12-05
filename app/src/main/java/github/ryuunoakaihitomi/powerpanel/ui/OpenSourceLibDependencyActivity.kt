@@ -1,11 +1,14 @@
 package github.ryuunoakaihitomi.powerpanel.ui
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
 import android.system.Os
 import android.view.View
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -13,17 +16,18 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.widget.doOnTextChanged
 import com.drakeet.about.AbsAboutActivity
 import com.drakeet.about.Category
 import com.google.gson.Gson
 import com.google.gson.JsonParser
 import com.topjohnwu.superuser.Shell
+import es.dmoral.toasty.Toasty
+import github.ryuunoakaihitomi.poweract.Callback
+import github.ryuunoakaihitomi.poweract.PowerActX
 import github.ryuunoakaihitomi.powerpanel.BuildConfig
 import github.ryuunoakaihitomi.powerpanel.R
-import github.ryuunoakaihitomi.powerpanel.util.BlackMagic
-import github.ryuunoakaihitomi.powerpanel.util.RC
-import github.ryuunoakaihitomi.powerpanel.util.openUrlInBrowser
-import github.ryuunoakaihitomi.powerpanel.util.uiLog
+import github.ryuunoakaihitomi.powerpanel.util.*
 import org.apache.commons.io.IOUtils
 import timber.log.Timber
 import java.io.IOException
@@ -60,6 +64,41 @@ class OpenSourceLibDependencyActivity : AbsAboutActivity() {
             val d = DrawableCompat.wrap(this)
             DrawableCompat.setTint(d, RC.getColor(resources, R.color.colorIconBackground, null))
             icon.setImageDrawable(d)
+        }
+        icon.setOnClickListener {
+            // 不被推荐使用但偶尔需要的功能，因此
+            // - 不计入统计
+            // - 不在PowerExecution中抽象，直接调用
+            // - 不记录在帮助文档中
+            val editor = EditText(this)
+            editor.hint = getText(R.string.hint_edittext_custom_reboot)
+            // 保证hint不为monospace，防止长度超出dialog
+            editor.doOnTextChanged { text, _, _, _ ->
+                editor.typeface = if (text.isNullOrEmpty()) Typeface.DEFAULT else Typeface.MONOSPACE
+            }
+            editor.setSingleLine()
+            AlertDialog.Builder(this)
+                .setTitle(R.string.title_dialog_custom_reboot)
+                .setIcon(android.R.drawable.stat_sys_warning)
+                .setView(editor)
+                .setPositiveButton(R.string.func_reboot) { _, _ ->
+                    PowerActX.customReboot(editor.text.toString(), object : Callback {
+                        override fun done() {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                finishAndRemoveTask()
+                            } else {
+                                finish()
+                            }
+                        }
+
+                        override fun failed() {
+                            Timber.i("Failed CR: ${editor.text}")
+                        }
+                    })
+                }
+                .show()
+                .window?.decorView?.emptyAccessibilityDelegate()
+            Toasty.warning(this, R.string.toast_custom_reboot, Toasty.LENGTH_LONG).show()
         }
         icon.setOnLongClickListener {
             Toast.makeText(this, "とまれかくもあはれ\nほたるほたるおいで", Toast.LENGTH_LONG).show()

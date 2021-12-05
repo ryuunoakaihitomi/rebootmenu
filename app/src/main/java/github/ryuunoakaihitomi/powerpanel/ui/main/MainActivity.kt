@@ -14,12 +14,8 @@ import android.os.UserManager
 import android.text.SpannableString
 import android.text.style.StyleSpan
 import android.text.style.TypefaceSpan
-import android.view.View
-import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.view.Window
-import android.view.accessibility.AccessibilityEvent
-import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.AdapterView
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
@@ -311,41 +307,6 @@ private fun CharSequence.emphasize() = let {
     val range = 0..it.length
     spannableString[range] = arrayOf(StyleSpan(Typeface.BOLD), TypefaceSpan("monospace"))
     spannableString
-}
-
-/**
- * 防止无障碍服务攻击
- * 可以使用adb shell uiautomator dump验证效果
- */
-private fun View.emptyAccessibilityDelegate() = run {
-    accessibilityDelegate = object : View.AccessibilityDelegate() {
-        override fun addExtraDataToAccessibilityNodeInfo(
-            host: View,
-            info: AccessibilityNodeInfo,
-            extraDataKey: String,
-            arguments: Bundle?
-        ) {
-        }
-
-        override fun dispatchPopulateAccessibilityEvent(
-            host: View?,
-            event: AccessibilityEvent?
-        ) = true
-
-        override fun getAccessibilityNodeProvider(host: View?) = null
-        override fun onInitializeAccessibilityEvent(host: View?, event: AccessibilityEvent?) {}
-        override fun onInitializeAccessibilityNodeInfo(host: View?, info: AccessibilityNodeInfo?) {}
-        override fun onPopulateAccessibilityEvent(host: View?, event: AccessibilityEvent?) {}
-        override fun onRequestSendAccessibilityEvent(
-            host: ViewGroup?,
-            child: View?,
-            event: AccessibilityEvent?
-        ) = false
-
-        override fun performAccessibilityAction(host: View?, action: Int, args: Bundle?) = true
-        override fun sendAccessibilityEvent(host: View?, eventType: Int) {}
-        override fun sendAccessibilityEventUnchecked(host: View?, event: AccessibilityEvent?) {}
-    }
 }
 
 private inline fun <reified T : Activity> Activity.teleport() {

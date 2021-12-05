@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = '1.5.31'
+    ext.kotlin_version = '1.6.0'
     repositories {
         google()
         mavenCentral()
@@ -17,9 +17,9 @@ buildscript {
 }
 
 // Task: dependencyUpdates
-//plugins {
-//    id "com.github.ben-manes.versions" version "0.39.0"
-//}
+plugins {
+    id "com.github.ben-manes.versions" version "0.39.0"
+}
 
 allprojects {
     repositories {

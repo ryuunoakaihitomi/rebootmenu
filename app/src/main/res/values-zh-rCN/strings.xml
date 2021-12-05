@@ -29,4 +29,7 @@
     <string name="url_aosp_license" tools:ignore="Untranslatable">https://source.android.google.cn/setup/start/licenses</string>
     <string name="toast_list_scrollable">列表视图是<b>可滚动的</b>，请检查是否有<b>尚未可见</b>的项目。</string>
     <string name="snack_donate_guide">♥ <b>感谢你的好意！</b>\n只需点击图片，无需截屏。</string>
+    <string name="title_dialog_custom_reboot">自定义重启参数</string>
+    <string name="hint_edittext_custom_reboot">例如：用于高通设备的edl</string>
+    <string name="toast_custom_reboot">这个功能可能会导致你的设备脱离控制，请谨慎使用。</string>
 </resources>

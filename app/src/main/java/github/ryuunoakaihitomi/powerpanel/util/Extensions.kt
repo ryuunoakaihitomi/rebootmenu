@@ -6,9 +6,14 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.net.Uri
 import android.os.Build
+import android.os.Bundle
 import android.provider.Browser
 import android.service.quicksettings.Tile
 import android.text.Spannable
+import android.view.View
+import android.view.ViewGroup
+import android.view.accessibility.AccessibilityEvent
+import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -59,4 +64,39 @@ fun Context.uiLog(msg: String) {
  */
 fun Snackbar.allowInfiniteLines() = apply {
     view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text).isSingleLine = false
+}
+
+/**
+ * 防止无障碍服务攻击
+ * 可以使用adb shell uiautomator dump验证效果
+ */
+fun View.emptyAccessibilityDelegate() = run {
+    accessibilityDelegate = object : View.AccessibilityDelegate() {
+        override fun addExtraDataToAccessibilityNodeInfo(
+            host: View,
+            info: AccessibilityNodeInfo,
+            extraDataKey: String,
+            arguments: Bundle?
+        ) {
+        }
+
+        override fun dispatchPopulateAccessibilityEvent(
+            host: View?,
+            event: AccessibilityEvent?
+        ) = true
+
+        override fun getAccessibilityNodeProvider(host: View?) = null
+        override fun onInitializeAccessibilityEvent(host: View?, event: AccessibilityEvent?) {}
+        override fun onInitializeAccessibilityNodeInfo(host: View?, info: AccessibilityNodeInfo?) {}
+        override fun onPopulateAccessibilityEvent(host: View?, event: AccessibilityEvent?) {}
+        override fun onRequestSendAccessibilityEvent(
+            host: ViewGroup?,
+            child: View?,
+            event: AccessibilityEvent?
+        ) = false
+
+        override fun performAccessibilityAction(host: View?, action: Int, args: Bundle?) = true
+        override fun sendAccessibilityEvent(host: View?, eventType: Int) {}
+        override fun sendAccessibilityEventUnchecked(host: View?, event: AccessibilityEvent?) {}
+    }
 }

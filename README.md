@@ -30,12 +30,6 @@
 
 * [自行构建](BUILD_NOTE.md)
 
-## 捐赠
-
-如果认为这个小工具或者其源码给你带来了便利，可以考虑捐赠一些金钱以支持开发者。
-
-![image](./app/src/main/assets/donate.webp)
-
 ## License
 
 MIT
