@@ -22,6 +22,10 @@ RESTRICTED MODE may requires persistent accessibility service, so notification w
 
 In order to prevent misoperation, except for *Lock screen* and *Sys power menu*, other items need to be confirmed again in PRIVILEGED MODE.
 
+## ⚠ Unexpected situation
+
+On Android 11, accessibility service has a potential bug that will cause it to stop working. Please use Shizuku instead of it as much as possible.
+
 ## Author
 
 [@ryuunoakaihitomi github.com](https://github.com/ryuunoakaihitomi)

@@ -9,17 +9,12 @@ import android.content.res.Resources
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
-import android.os.Process
-import android.os.UserManager
 import android.text.SpannableString
 import android.text.style.StyleSpan
 import android.text.style.TypefaceSpan
-import android.view.ViewTreeObserver
 import android.view.Window
 import android.widget.AdapterView
-import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.getSystemService
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.DrawableCompat
@@ -32,10 +27,8 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.material.snackbar.Snackbar
 import es.dmoral.toasty.Toasty
 import github.ryuunoakaihitomi.powerpanel.BuildConfig
-import github.ryuunoakaihitomi.powerpanel.MyApplication
 import github.ryuunoakaihitomi.powerpanel.R
 import github.ryuunoakaihitomi.powerpanel.desc.PowerExecution
 import github.ryuunoakaihitomi.powerpanel.desc.getIconResIdArray
@@ -58,52 +51,6 @@ import java.nio.charset.Charset
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
-
-    private fun checkUnsupportedEnv() {
-        if (myApp().hasShownUnsupportedEnvWarning) return
-        val isCompatible =
-            // KitKat无法长期维护，这次只不过是临时接触了这类设备才给稍微适配
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP &&
-                    // Wear OS存在界面元素无法显示问题
-                    !isWatch() &&
-                    // Android TV部分功能无法使用
-                    !packageManager.hasSystemFeature(
-                        @Suppress("DEPRECATION")    // PackageManager.FEATURE_TELEVISION
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                            PackageManager.FEATURE_LEANBACK else PackageManager.FEATURE_TELEVISION
-                    ) &&
-                    // 工作资料之类的
-                    getSystemService<UserManager>()!!.userProfiles[0].equals(Process.myUserHandle())
-        if (!isCompatible) {
-            Timber.i("show unsupported env hint")
-            Toasty.error(this, R.string.toast_unsupported_env, Toasty.LENGTH_LONG).show()
-            myApp().hasShownUnsupportedEnvWarning = true
-        }
-    }
-
-    /**
-     * 检测ListView是否可滑动，提醒用户可能有一些项目被隐藏（仅提醒一次）
-     */
-    private fun checkScrollableListView(lv: ListView) {
-        if (!myApp().hasShownScrollListTip) {
-            lv.viewTreeObserver.addOnGlobalLayoutListener(object :
-                ViewTreeObserver.OnGlobalLayoutListener {
-                override fun onGlobalLayout() {
-//                    Timber.d("OnGlobalLayoutListener")
-                    val lastVisibleChild = lv.getChildAt(lv.lastVisiblePosition)
-                    if (lastVisibleChild != null && lastVisibleChild.bottom > lv.height) {
-                        Timber.d("Tip: scrollable listview")
-                        Snackbar.make(lv, R.string.toast_list_scrollable, Snackbar.LENGTH_SHORT)
-                            .allowInfiniteLines()
-                            .show()
-                        myApp().hasShownScrollListTip = true
-                        // This ViewTreeObserver is not alive, call getViewTreeObserver() again
-                        lv.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                    }
-                }
-            })
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -272,6 +219,9 @@ class MainActivity : AppCompatActivity() {
                 return@OnItemLongClickListener true
             }
             checkScrollableListView(lv)
+            if (!rootMode) {
+                checkBuiltInSupport(lv)
+            }
             mainDialog.window?.run {
                 decorView.run {
                     if (!isWatch()) alpha = 0.85f   // 窗口透明度，在手表上不仅没有透明效果还会使内容暗淡并出现奇怪的重影效果
@@ -346,6 +296,4 @@ private fun Window.hideSysUi() = WindowCompat.getInsetsController(this, decorVie
     hide(WindowInsetsCompat.Type.systemBars())
     systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
 }
-
-private fun Activity.myApp() = application as MyApplication
 //endregion

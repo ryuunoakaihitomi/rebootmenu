@@ -32,4 +32,6 @@
     <string name="title_dialog_custom_reboot">自定义重启参数</string>
     <string name="hint_edittext_custom_reboot">例如：用于高通设备的edl</string>
     <string name="toast_custom_reboot">这个功能可能会导致你的设备脱离控制，请谨慎使用。</string>
+    <string name="snack_main_migrate_tip_for_a12">Android 12可能在快捷设置图块下含有电源菜单按钮</string>
+    <string name="snack_main_migrate_tip_for_miui">MIUI有悬浮球功能可以替代本应用的受限模式</string>
 </resources>

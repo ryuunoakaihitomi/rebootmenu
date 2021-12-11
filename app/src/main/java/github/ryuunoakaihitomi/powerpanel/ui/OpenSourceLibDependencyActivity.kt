@@ -1,5 +1,6 @@
 package github.ryuunoakaihitomi.powerpanel.ui
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
@@ -70,7 +71,9 @@ class OpenSourceLibDependencyActivity : AbsAboutActivity() {
             // - 不计入统计
             // - 不在PowerExecution中抽象，直接调用
             // - 不记录在帮助文档中
+            if (!Shell.rootAccess()) return@setOnClickListener
             val editor = EditText(this)
+            val isS = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
             editor.hint = getText(R.string.hint_edittext_custom_reboot)
             // 保证hint不为monospace，防止长度超出dialog
             editor.doOnTextChanged { text, _, _, _ ->
@@ -97,8 +100,17 @@ class OpenSourceLibDependencyActivity : AbsAboutActivity() {
                     })
                 }
                 .show()
-                .window?.decorView?.emptyAccessibilityDelegate()
-            Toasty.warning(this, R.string.toast_custom_reboot, Toasty.LENGTH_LONG).show()
+                .window?.run {
+                    decorView.emptyAccessibilityDelegate()
+                    @SuppressLint("NewApi") // 假阳性
+                    if (isS) setHideOverlayWindows(true)
+                }
+
+            if (isS) {
+                Toast.makeText(this, R.string.toast_custom_reboot, Toast.LENGTH_LONG).show()
+            } else {
+                Toasty.warning(this, R.string.toast_custom_reboot, Toasty.LENGTH_LONG).show()
+            }
         }
         icon.setOnLongClickListener {
             Toast.makeText(this, "とまれかくもあはれ\nほたるほたるおいで", Toast.LENGTH_LONG).show()

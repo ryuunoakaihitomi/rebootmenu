@@ -32,5 +32,8 @@
     <string name="snack_donate_guide">♥ <b>Thanks for your kindness!</b>\nJust click the picture, no need to take screenshots.</string>
     <string name="title_dialog_custom_reboot">Custom reboot arguments</string>
     <string name="hint_edittext_custom_reboot">e.g., edl for Qualcomm devices.</string>
-    <string name="toast_custom_reboot">This feature may cause your device to be taken out of control, so please use it with caution.</string>
+    <!-- Android 12上Toast的文本长度限制为两行 -->
+    <string name="toast_custom_reboot">This feature may cause your device to be taken out of control, use it with ⚠.</string>
+    <string name="snack_main_migrate_tip_for_a12">Android 12 may contains a POWER MENU button below Quick Settings Tile</string>
+    <string name="snack_main_migrate_tip_for_miui">MIUI has a feature called Quick Ball that can replace the RESTRICTED MODE of this app</string>
 </resources>
