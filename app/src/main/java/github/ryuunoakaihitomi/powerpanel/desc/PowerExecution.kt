@@ -14,8 +14,8 @@ import github.ryuunoakaihitomi.poweract.PowerAct
 import github.ryuunoakaihitomi.poweract.PowerActX
 import github.ryuunoakaihitomi.powerpanel.BuildConfig
 import github.ryuunoakaihitomi.powerpanel.R
+import github.ryuunoakaihitomi.powerpanel.desc.AccessibilityHint.request
 import github.ryuunoakaihitomi.powerpanel.stat.Statistics
-import github.ryuunoakaihitomi.powerpanel.ui.AccessibilityHint.request
 import github.ryuunoakaihitomi.powerpanel.ui.ShortcutActivity
 import github.ryuunoakaihitomi.powerpanel.ui.main.MainActivity
 import github.ryuunoakaihitomi.powerpanel.util.uiLog

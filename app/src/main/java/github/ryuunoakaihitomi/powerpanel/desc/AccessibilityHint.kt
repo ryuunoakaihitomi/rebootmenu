@@ -1,4 +1,4 @@
-package github.ryuunoakaihitomi.powerpanel.ui
+package github.ryuunoakaihitomi.powerpanel.desc
 
 import android.app.*
 import android.content.Intent

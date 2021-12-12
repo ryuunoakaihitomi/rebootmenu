@@ -77,24 +77,28 @@ fun Activity.checkBuiltInSupport(lv: ListView) {
     else myApp().hasCheckedBuiltInSupport = true
 
     val configKey = "checkBuiltInSupport"
-    val maxCheckCount = 3
+    val maxTipCount = 3
     var count: Int
     getPreferences(Context.MODE_PRIVATE).run {
         count = getInt(configKey, 0)
-        if (count >= maxCheckCount) {
-            Timber.d("checkBuiltInSupport() disabled after $count checks.")
+        if (count >= maxTipCount) {
+            Timber.d("checkBuiltInSupport() disabled after $count tips.")
             return
         }
-        edit().putInt(configKey, count + 1).apply()
-    }
 
-    if (DeviceCompatibility.isMiui() &&
-        // 这是已经经过测试的版本: Android M 的 MIUI 10
-        Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-    ) {
-        lv.topSnackBar(R.string.snack_main_migrate_tip_for_miui)
-    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-        lv.topSnackBar(R.string.snack_main_migrate_tip_for_a12)
+        var hasShown = false
+        if (DeviceCompatibility.isMiui() &&
+            // 这是已经经过测试的版本: Android M 的 MIUI 10
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+        ) {
+            lv.topSnackBar(R.string.snack_main_migrate_tip_for_miui)
+            hasShown = true
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            lv.topSnackBar(R.string.snack_main_migrate_tip_for_a12)
+            hasShown = true
+        }
+
+        if (hasShown) edit().putInt(configKey, count + 1).apply()
     }
 }
 
