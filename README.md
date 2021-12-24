@@ -23,6 +23,8 @@
 
 * [Github Release](https://github.com/ryuunoakaihitomi/rebootmenu/releases/latest)
 
+> 🔴 下载指引：如果你不清楚该下载哪个文件，请优先下载体积较大的那个APK文件。
+
 * [酷安网](https://www.coolapk.com/apk/com.ryuunoakaihitomi.rebootmenu)
 
 > 不推荐的备用下载，有无法直接下载APK文件并引流至其客户端的历史。

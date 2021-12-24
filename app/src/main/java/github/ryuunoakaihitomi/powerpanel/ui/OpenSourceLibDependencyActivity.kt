@@ -3,7 +3,9 @@ package github.ryuunoakaihitomi.powerpanel.ui
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
@@ -72,14 +74,15 @@ class OpenSourceLibDependencyActivity : AbsAboutActivity() {
             // - 不在PowerExecution中抽象，直接调用
             // - 不记录在帮助文档中
             if (!Shell.rootAccess()) return@setOnClickListener
-            val editor = EditText(this)
-            val isS = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
-            editor.hint = getText(R.string.hint_edittext_custom_reboot)
-            // 保证hint不为monospace，防止长度超出dialog
-            editor.doOnTextChanged { text, _, _, _ ->
-                editor.typeface = if (text.isNullOrEmpty()) Typeface.DEFAULT else Typeface.MONOSPACE
+            val editor = EditText(this).apply {
+                hint = getText(R.string.hint_edittext_custom_reboot)
+                setSingleLine()
+                // 保证hint不为monospace，防止长度超出dialog
+                doOnTextChanged { text, _, _, _ ->
+                    typeface = if (text.isNullOrEmpty()) Typeface.DEFAULT else Typeface.MONOSPACE
+                }
             }
-            editor.setSingleLine()
+            val isS = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
             AlertDialog.Builder(this)
                 .setTitle(R.string.title_dialog_custom_reboot)
                 .setIcon(android.R.drawable.stat_sys_warning)
@@ -99,11 +102,18 @@ class OpenSourceLibDependencyActivity : AbsAboutActivity() {
                         }
                     })
                 }
-                .show()
-                .window?.run {
-                    decorView.emptyAccessibilityDelegate()
-                    @SuppressLint("NewApi") // 假阳性
-                    if (isS) setHideOverlayWindows(true)
+                .show().run {
+                    window?.run {
+                        decorView.emptyAccessibilityDelegate()
+                        @SuppressLint("NewApi") // 假阳性
+                        if (isS) setHideOverlayWindows(true)
+                    }
+                    // 没有再确认选项，所以做成红色按钮
+                    getButton(DialogInterface.BUTTON_POSITIVE).run {
+                        typeface = Typeface.DEFAULT_BOLD
+                        setTextColor(Color.WHITE)
+                        setBackgroundColor(Color.RED)
+                    }
                 }
 
             if (isS) {
@@ -113,8 +123,8 @@ class OpenSourceLibDependencyActivity : AbsAboutActivity() {
             }
         }
         icon.setOnLongClickListener {
-            Toast.makeText(this, "とまれかくもあはれ\nほたるほたるおいで", Toast.LENGTH_LONG).show()
-            openUrlInBrowser("https://www.nicovideo.jp/watch/sm15408719")
+            Toast.makeText(this, "F.S.I.E.M.I.N", Toast.LENGTH_LONG).show()
+            openUrlInBrowser("https://www.gnu.org/philosophy/free-software-even-more-important.html")
             true
         }
         slogan.visibility = View.GONE

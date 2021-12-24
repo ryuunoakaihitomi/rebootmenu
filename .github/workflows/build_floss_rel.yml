@@ -68,7 +68,7 @@ jobs:
       run : gradle wrapper --gradle-version $GRADLE_VERSION
 
     - name: Build
-      run: ./gradlew assembleFlossRelease --stacktrace
+      run: ./gradlew resguardFlossRelease --stacktrace
 
       # https://github.com/actions/virtual-environments/blob/main/images/linux/Ubuntu2004-README.md#android
     - name: Check apk
@@ -105,4 +105,5 @@ jobs:
         path: |
           app/build/outputs/mapping/flossRelease
           aapt-report.txt
+          app/build/outputs/apk/floss/release/AndResGuard_*/*mapping*.txt
         if-no-files-found: error

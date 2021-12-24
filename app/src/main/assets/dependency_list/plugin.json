@@ -10,5 +10,11 @@
     "name": "Gradle Versions Plugin",
     "type": "Apache Software License 2.0",
     "url": "https://github.com/ben-manes/gradle-versions-plugin"
+  },
+  {
+    "author": "Leon Lambert",
+    "name": "AndResGuard",
+    "type": "Apache Software License 2.0",
+    "url": "https://github.com/Leon406/AndResGuard"
   }
 ]

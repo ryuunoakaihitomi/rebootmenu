@@ -16,7 +16,7 @@
 
 - 需要事先配置好[Android Studio](https://developer.android.google.cn/studio)并导入本项目
 
-- 执行Gradle任务：`app:assembleFlossRelease`
+- 执行Gradle任务：`app:resguardFlossRelease`
 
 - 生成APK文件路径：`app/build/outputs/apk/floss/release/rebootmenu-<版本信息>-floss_release.apk`
 
@@ -27,4 +27,4 @@
 - 修改[`secret_example.properties`](secret_example.properties)，填入签名信息，并将其重命名为`secret.properties`
 
 - 如果需要构建`normal`变体，在`app`目录中加入Firebase配置文件`google-services.json`， 在`secret.properties`中补充Visual
-  Studio App Center的API密钥于`APP_CENTER`字段。运行gradle任务`app:assembleRelease`以同时构建normal和floss版本
+  Studio App Center的API密钥于`APP_CENTER`字段。运行gradle任务`app:resguardRelease`以同时构建normal和floss版本

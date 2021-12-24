@@ -1,20 +1,27 @@
 buildscript {
-    ext.kotlin_version = '1.6.0'
+    ext.kotlin_version = '1.6.10'
     repositories {
         google()
         mavenCentral()
     }
     dependencies {
+        // https://android.googlesource.com/platform/tools/build/
         classpath 'com.android.tools.build:gradle:7.0.4'
+
+        // https://github.com/JetBrains/kotlin
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
         /* Crashlytics */
+        // https://github.com/google/play-services-plugins/tree/master/google-services-plugin
         classpath 'com.google.gms:google-services:4.3.10'
-        // For 2.8.1
-        //noinspection GradleDependency
-        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.8.0'
+        // https://github.com/firebase/firebase-android-sdk
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.8.1'
 
+        // https://github.com/wurensen/gradle_plugin_android_aspectjx
         classpath 'io.github.wurensen:gradle-android-plugin-aspectjx:2.0.14'
+
+        // https://github.com/Leon406/AndResGuard
+        classpath 'io.github.leon406:AndResGuard-gradle-plugin:1.2.22.6'
     }
 }
 
@@ -28,6 +35,18 @@ allprojects {
         google()
         mavenCentral()
         maven { url "https://jitpack.io" }
+    }
+
+    // 在floss变体中过滤gms插件任务
+    // processFlossReleaseGoogleServices
+    tasks.whenTaskAdded {
+        if (['Google', 'Crashlytics'].any { e -> name.contains(e) }) {
+            logger.lifecycle "G task -> $name"
+            if (name.contains('floss'.capitalize())) {
+                System.err.println "Skip G task for floss: $name"
+                enabled = false
+            }
+        }
     }
 }
 

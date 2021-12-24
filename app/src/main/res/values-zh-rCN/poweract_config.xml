@@ -1,5 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="UnusedResources">
-    <string name="poweract_accessibility_service_label">启动选项无障碍服务</string>
+    <string name="poweract_accessibility_service_label">电源面板无障碍服务</string>
     <string name="poweract_accessibility_service_summary">受限模式所需。</string>
-    <string name="poweract_accessibility_service_description">有时受限模式依赖于这个服务。它在任何时候都不会收集用户信息。</string>
+    <string name="poweract_accessibility_service_description">有时受限模式依赖于这个服务，它在任何时候都不会收集用户信息。</string>
 </resources>

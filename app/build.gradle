@@ -5,6 +5,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'android-aspectjx'
+apply plugin: 'AndResGuard'
 
 apply from: "${rootProject.file('loadProperties.gradle')}"
 
@@ -20,10 +21,10 @@ android {
         //targetSdkVersion compileSdkVersion
         targetSdkVersion 31
         // 版本号：发布日期
-        versionCode 20211212
+        versionCode 20211224
         // 版本名说明： R3.x.y.z (R3:Refactoring 第三次重构，z:Quick Fix序号)
         // 不要包含非ASCII可打印字符，会导致Github release文件名异常
-        versionName 'R3.15.0.1'
+        versionName 'R3.15.1'
         resConfigs "en", "zh-rCN"
 
         buildConfigField 'String', 'BUILD_TIME', '\"' + new Date() + '\"'
@@ -117,41 +118,56 @@ android {
 }
 
 dependencies {
+    // https://github.com/google/desugar_jdk_libs
     // ZXing需要method sort(Ljava/util/Comparator;)V in class Ljava/util/List;
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
 
+    // https://github.com/androidx/androidx
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.0'
     implementation 'androidx.multidex:multidex:2.0.1'
-
     def lifecycle_version = "2.4.0"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
 
+    // https://github.com/firebase/firebase-android-sdk
     normalImplementation platform('com.google.firebase:firebase-bom:29.0.0')
     normalImplementation 'com.google.firebase:firebase-analytics-ktx'
     normalImplementation 'com.google.firebase:firebase-crashlytics-ktx'
 
-    // 4.4.1升级会Crash
-    //noinspection GradleDependency
-    normalImplementation 'com.microsoft.appcenter:appcenter-analytics:4.3.1'
+    // https://github.com/microsoft/appcenter-sdk-android
+    normalImplementation 'com.microsoft.appcenter:appcenter-analytics:4.4.2'
 
     /* ------- 其他第三方开源组件 ------- */
 
+    // https://github.com/noties/Markwon
     final def markwon_version = '4.6.2'
     implementation "io.noties.markwon:core:$markwon_version"
     implementation "io.noties.markwon:ext-strikethrough:$markwon_version"
     implementation "io.noties.markwon:image:$markwon_version"
 
+    // https://github.com/RikkaApps/Shizuku
+    // https://github.com/RikkaApps/Shizuku-API
     def shizuku_version = '12.1.0'
     implementation "dev.rikka.shizuku:api:$shizuku_version"
     implementation "dev.rikka.shizuku:provider:$shizuku_version"
 
+    // https://github.com/ryuunoakaihitomi/PowerAct
     implementation 'github.ryuunoakaihitomi.poweract:poweract:1.5.3'
+
+    // https://github.com/ryuunoakaihitomi/ReToast
     runtimeOnly 'github.ryuunoakaihitomi.retoast:retoast:2.0.0'
+
+    // https://github.com/google/gson
     implementation 'com.google.code.gson:gson:2.8.9'
+
+    // https://github.com/GrenderG/Toasty
     implementation 'com.github.GrenderG:Toasty:1.5.2'
+
+    // https://github.com/topjohnwu/libsu
     implementation 'com.github.topjohnwu.libsu:core:3.2.0'
+
+    // https://github.com/apache/commons-io
     // 固定在此版本，理由同下段注释 （使用的一些java8 API是脱糖库无法完成转换的，即使脱糖库的文档说明支持）
     // java.lang.NoClassDefFoundError: j$.wrappers.$r8$wrapper$java$util$function$Supplier$-WRP
     // 目前搜集到的一些资料
@@ -161,16 +177,35 @@ dependencies {
     // https://issuetracker.google.com/issues/190633902
     //noinspection GradleDependency
     implementation 'commons-io:commons-io:2.8.0'
+
+    // https://github.com/jOOQ/jOOR
     implementation 'org.jooq:joor-java-6:0.9.14'
+
+    // https://github.com/JakeWharton/timber
     implementation 'com.jakewharton.timber:timber:5.0.1'
+
+    // https://github.com/PureWriter/about-page
     implementation 'com.drakeet.about:about:2.5.0'
+
+    // https://github.com/zxing/zxing
     implementation 'com.google.zxing:core:3.4.1'
+
+    // https://github.com/CyanogenMod/cm_platform_sdk
     implementation 'org.cyanogenmod:platform.sdk:6.0'
+
+    // https://github.com/LSPosed/AndroidHiddenApiBypass
     implementation 'org.lsposed.hiddenapibypass:hiddenapibypass:3.0'
+
+    // https://github.com/eclipse/org.aspectj
     implementation 'org.aspectj:aspectjrt:1.9.7'
+
+    // https://github.com/RikkaApps/RikkaX/tree/master/compatibility
     implementation 'dev.rikka.rikkax.compatibility:compatibility:2.0.0'
 
+    // https://github.com/square/leakcanary
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
+
+    // https://github.com/whataa/pandora
     // 最新版是v2.1.0，仅支持android-support
     //noinspection GradleDependency
     debugImplementation 'com.github.whataa:pandora:androidx_v2.1.0'
@@ -181,19 +216,6 @@ android.applicationVariants.all { variant ->
     // 规格化APK文件名
     variant.outputs.all {
         outputFileName = "${rootProject.name}-${variant.versionCode}_${variant.versionName}_${variant.buildType.name}.apk"
-    }
-
-    // 在floss变体中过滤gms插件任务
-    // processFlossReleaseGoogleServices
-    tasks.forEach { task ->
-        final def name = task.name
-        if (['Google', 'Crashlytics'].any { e -> name.contains(e) }) {
-            logger.lifecycle "G task in ${variant.flavorName} -> $name"
-            if (name.contains('floss'.capitalize())) {
-                System.err.println "Skip G task for floss: $name"
-                task.enabled = false
-            }
-        }
     }
 }
 
@@ -210,4 +232,33 @@ repositories {
 //  配置入口和作用点都要制定
 aspectjx {
     include 'custom_aspect', 'com.drakeet.about'
+}
+
+andResGuard {
+    mappingFile = null
+    use7zip = true
+    useSign = true
+    fixedResName = "_"    // 设一个简短的值有利于进一步压缩体积
+    mergeDuplicatedRes = true
+    whiteList = [
+            /*
+            为了防止混淆后找不到资源并最精简配置，
+            需要编译一个不使用ARG的release包后手动使用jadx等工具搜索getIdentifier()用法，
+            并检查resources.arsc以确保豁免项存在。
+             */
+            "R.string.firebase_database_url",
+            "R.string.gcm_defaultSenderId",
+            "R.string.project_id",
+            "R.string.google_app_id",
+            "R.string.google_api_key",
+            "R.string.google_storage_bucket",
+            "R.string.com.crashlytics.android.build_id",
+            // 使用资源入口名记录事件：getResourceEntryName()
+            'R.string.func_*',
+    ]
+    compressFilePattern = [
+            "*.png",
+    ]
+    sevenzip { artifact = 'io.github.leon406:SevenZip:1.2.22.5' }
+    digestalg = "SHA-256"
 }

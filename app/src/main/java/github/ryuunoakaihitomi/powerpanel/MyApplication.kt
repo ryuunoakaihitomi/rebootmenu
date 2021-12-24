@@ -3,6 +3,7 @@ package github.ryuunoakaihitomi.powerpanel
 import android.content.Context
 import android.os.Build
 import android.os.StrictMode
+import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.multidex.MultiDexApplication
 import github.ryuunoakaihitomi.poweract.ExternalUtils
@@ -11,7 +12,9 @@ import github.ryuunoakaihitomi.powerpanel.stat.Statistics
 import github.ryuunoakaihitomi.powerpanel.util.MyLogTree
 import github.ryuunoakaihitomi.powerpanel.util.isWatch
 import org.lsposed.hiddenapibypass.HiddenApiBypass
+import rikka.compatibility.DeviceCompatibility
 import timber.log.Timber
+import kotlin.concurrent.timer
 
 class MyApplication : MultiDexApplication() {
 
@@ -61,5 +64,18 @@ class MyApplication : MultiDexApplication() {
          */
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP || isWatch())
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+
+        // 后门：在后台应用被杀检测
+        if (
+            DeviceCompatibility.getRegionForMiui() == "CN" ||
+            DeviceCompatibility.isEmui() ||
+            DeviceCompatibility.isFlyme() ||
+            DeviceCompatibility.isSamsung()
+        ) {
+            timer(daemon = true, period = 1_000 * 60) {
+                //noinspection LogNotTimber
+                Log.i("PowerPanel", "Am I still alive?")
+            }
+        }
     }
 }
