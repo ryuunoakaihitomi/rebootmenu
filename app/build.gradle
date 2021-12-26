@@ -259,6 +259,27 @@ andResGuard {
     compressFilePattern = [
             "*.png",
     ]
-    sevenzip { artifact = 'io.github.leon406:SevenZip:1.2.22.5' }
+    sevenzip {
+        /* 优先使用环境自带的7z命令 */
+        def command = "whereis -b 7z"
+        def shouldUseArtifact = false
+        try {
+            def proc = command.execute()
+            def _7zPath = proc.in.text.split(" ")[1]
+            if (_7zPath.length() > 0) {
+                logger.lifecycle("Has local 7z bin! $_7zPath")
+                path = _7zPath
+            } else {
+                logger.lifecycle("Cannot find 7z by whereis...")
+                shouldUseArtifact = true
+            }
+        } catch (IOException e) {
+            logger.lifecycle("$e.message -> Use artifact...")
+            shouldUseArtifact = true
+        }
+        if (shouldUseArtifact) {
+            artifact = 'io.github.leon406:SevenZip:1.2.22.5'
+        }
+    }
     digestalg = "SHA-256"
 }
