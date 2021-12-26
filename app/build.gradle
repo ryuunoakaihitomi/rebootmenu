@@ -265,15 +265,10 @@ andResGuard {
         def shouldUseArtifact = false
         try {
             def proc = command.execute()
-            def _7zPath = proc.in.text.split(" ")[1]
-            if (_7zPath.length() > 0) {
-                logger.lifecycle("Has local 7z bin! $_7zPath")
-                path = _7zPath
-            } else {
-                logger.lifecycle("Cannot find 7z by whereis...")
-                shouldUseArtifact = true
-            }
-        } catch (IOException e) {
+            def _7zPath = proc.in.text.split(" ")[1].trim()
+            logger.lifecycle("Has local 7z bin! $_7zPath")
+            path = _7zPath
+        } catch (Exception e) {
             logger.lifecycle("$e.message -> Use artifact...")
             shouldUseArtifact = true
         }
