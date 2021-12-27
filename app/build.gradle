@@ -269,7 +269,7 @@ andResGuard {
             logger.lifecycle("Has local 7z bin! $_7zPath")
             path = _7zPath
         } catch (Exception e) {
-            logger.lifecycle("$e.message -> Use artifact...")
+            logger.lifecycle("Can't find 7z bin! Reason: $e -> Use artifact...")
             shouldUseArtifact = true
         }
         if (shouldUseArtifact) {
