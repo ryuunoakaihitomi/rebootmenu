@@ -2,7 +2,7 @@
 
 [![Build floss release CI](https://github.com/ryuunoakaihitomi/rebootmenu/actions/workflows/build_floss_rel.yml/badge.svg?branch=master&event=push)](https://github.com/ryuunoakaihitomi/rebootmenu/actions/workflows/build_floss_rel.yml)
 ![Lines of code](https://img.shields.io/tokei/lines/github/ryuunoakaihitomi/rebootmenu?style=flat-square)
-![GitHub release (latest by date)](https://img.shields.io/github/downloads/ryuunoakaihitomi/rebootmenu/latest/total?style=flat-square)
+[![GitHub release (latest by date)](https://img.shields.io/github/downloads/ryuunoakaihitomi/rebootmenu/latest/total?style=flat-square)](https://github.com/ryuunoakaihitomi/rebootmenu/releases)
 
 ![image](./app/src/main/res/mipmap/ic_launcher.png)
 
@@ -23,7 +23,7 @@
 
 * [Github Release](https://github.com/ryuunoakaihitomi/rebootmenu/releases/latest)
 
-> 🔴 下载指引：如果你不清楚该下载哪个文件，请优先下载体积较大的那个APK文件。
+> 🔴 下载指引：可用于安装的APK文件不止一个。如果你不清楚该下载哪个文件，请优先下载体积较大的。他们的差别可查看[自行构建](BUILD_NOTE.md)说明。
 
 * [酷安网](https://www.coolapk.com/apk/com.ryuunoakaihitomi.rebootmenu)
 
