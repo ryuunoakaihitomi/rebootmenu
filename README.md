@@ -23,7 +23,7 @@
 
 * [Github Release](https://github.com/ryuunoakaihitomi/rebootmenu/releases/latest)
 
-> 🔴 下载指引：可用于安装的APK文件不止一个。如果你不清楚该下载哪个文件，请优先下载体积较大的。他们的差别可查看[自行构建](BUILD_NOTE.md)说明。
+> 🔴 下载指引：可用于安装的APK文件不止一个。如果你不清楚该下载哪个文件，请优先下载体积较大的。他们的差别可查看[构建笔记](BUILD_NOTE.md)说明。
 
 * [酷安网](https://www.coolapk.com/apk/com.ryuunoakaihitomi.rebootmenu)
 
