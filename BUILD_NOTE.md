@@ -14,13 +14,11 @@
 
 ## 步骤
 
-- 需要事先配置好[Android Studio](https://developer.android.google.cn/studio)并导入本项目
+- 需要事先配置好[Android Studio](https://developer.android.google.cn/studio)并导入本项目 （如果无法配置Android Studio，可以尝试[命令行构建](BUILD_CLI.md)）
 
 - 执行Gradle任务：`app:resguardFlossRelease`
 
 - 生成APK文件路径：`app/build/outputs/apk/floss/release/rebootmenu-<版本信息>-floss_release.apk`
-
-- 如果无法配置Android Studio，可以尝试[命令行构建](BUILD_CLI.md)
 
 ## 🈲normal构建步骤⚠
 
