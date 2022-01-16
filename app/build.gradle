@@ -21,10 +21,10 @@ android {
         //targetSdkVersion compileSdkVersion
         targetSdkVersion 31
         // 版本号：发布日期
-        versionCode 20211224
+        versionCode 20220116
         // 版本名说明： R3.x.y.z (R3:Refactoring 第三次重构，z:Quick Fix序号)
         // 不要包含非ASCII可打印字符，会导致Github release文件名异常
-        versionName 'R3.15.1'
+        versionName 'R3.15.2'
         resConfigs "en", "zh-rCN"
 
         buildConfigField 'String', 'BUILD_TIME', '\"' + new Date() + '\"'
@@ -124,7 +124,7 @@ dependencies {
 
     // https://github.com/androidx/androidx
     implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.appcompat:appcompat:1.4.0'
+    implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'androidx.multidex:multidex:2.0.1'
     def lifecycle_version = "2.4.0"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
@@ -165,7 +165,7 @@ dependencies {
     implementation 'com.github.GrenderG:Toasty:1.5.2'
 
     // https://github.com/topjohnwu/libsu
-    implementation 'com.github.topjohnwu.libsu:core:3.2.0'
+    implementation 'com.github.topjohnwu.libsu:core:3.2.1'
 
     // https://github.com/apache/commons-io
     // 固定在此版本，理由同下段注释 （使用的一些java8 API是脱糖库无法完成转换的，即使脱糖库的文档说明支持）
@@ -194,7 +194,7 @@ dependencies {
     implementation 'org.cyanogenmod:platform.sdk:6.0'
 
     // https://github.com/LSPosed/AndroidHiddenApiBypass
-    implementation 'org.lsposed.hiddenapibypass:hiddenapibypass:3.0'
+    implementation 'org.lsposed.hiddenapibypass:hiddenapibypass:4.2'
 
     // https://github.com/eclipse/org.aspectj
     implementation 'org.aspectj:aspectjrt:1.9.7'
@@ -203,7 +203,7 @@ dependencies {
     implementation 'dev.rikka.rikkax.compatibility:compatibility:2.0.0'
 
     // https://github.com/square/leakcanary
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.8.1'
 
     // https://github.com/whataa/pandora
     // 最新版是v2.1.0，仅支持android-support

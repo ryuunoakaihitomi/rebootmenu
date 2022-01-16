@@ -11,5 +11,5 @@ interface InternalDoer {
     fun initialize(app: Application)
     fun setCustomKey(k: String, v: Any)
     fun logEvent(tag: String, bundle: Bundle)
-    fun log(level: String, tag: String, msg: String) {}
+    fun log(level: Int, tag: String, msg: String) {}
 }

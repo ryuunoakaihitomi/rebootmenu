@@ -4,13 +4,13 @@ import android.content.Context
 import android.os.Build
 import android.os.StrictMode
 import android.util.Log
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.multidex.MultiDexApplication
 import github.ryuunoakaihitomi.poweract.ExternalUtils
 import github.ryuunoakaihitomi.powerpanel.receiver.ShutdownReceiver
 import github.ryuunoakaihitomi.powerpanel.stat.Statistics
 import github.ryuunoakaihitomi.powerpanel.util.MyLogTree
 import github.ryuunoakaihitomi.powerpanel.util.isWatch
+import github.ryuunoakaihitomi.powerpanel.util.nox
 import org.lsposed.hiddenapibypass.HiddenApiBypass
 import rikka.compatibility.DeviceCompatibility
 import timber.log.Timber
@@ -62,8 +62,9 @@ class MyApplication : MultiDexApplication() {
          *
          * @see [android.app.UiModeManager.setNightMode](https://developer.android.google.cn/reference/android/app/UiModeManager#setNightMode(int))
          */
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP || isWatch())
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP || isWatch()) nox()
+        // 为Android P启用暗色主题支持
+        else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.P) DarkThemeForP.main(this)
 
         // 后门：在后台应用被杀检测
         if (

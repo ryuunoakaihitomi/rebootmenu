@@ -17,6 +17,7 @@ import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.getSystemService
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.text.set
@@ -100,3 +101,5 @@ fun View.emptyAccessibilityDelegate() = run {
         override fun sendAccessibilityEventUnchecked(host: View?, event: AccessibilityEvent?) {}
     }
 }
+
+fun nox() = AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)

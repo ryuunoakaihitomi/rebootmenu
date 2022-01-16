@@ -2,6 +2,8 @@ package github.ryuunoakaihitomi.powerpanel.stat
 
 import android.app.Application
 import android.os.Bundle
+import android.util.Log
+import android.util.LogPrinter
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase
@@ -38,8 +40,17 @@ object InternalDoerImpl : InternalDoer {
         AppCenterCompat.trackEvent(tag, bundle)
     }
 
-    override fun log(level: String, tag: String, msg: String) {
-        val logLine = listOf(level, tag, msg).toString()
+    override fun log(level: Int, tag: String, msg: String) {
+        LogPrinter(level, "NPP#$tag").println(msg)
+        val level2Str = when (level) {
+            Log.VERBOSE -> "V"
+            Log.DEBUG -> "D"
+            Log.INFO -> "I"
+            Log.WARN -> "W"
+            Log.ERROR -> "E"
+            else -> level.toString()
+        }
+        val logLine = listOf(level2Str, tag, msg).toString()
         Firebase.crashlytics.log(logLine)
     }
 }

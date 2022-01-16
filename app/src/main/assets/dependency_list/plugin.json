@@ -6,15 +6,15 @@
     "url": "https://github.com/wurensen/gradle_plugin_android_aspectjx"
   },
   {
-    "author": "Ben Manes",
-    "name": "Gradle Versions Plugin",
-    "type": "Apache Software License 2.0",
-    "url": "https://github.com/ben-manes/gradle-versions-plugin"
-  },
-  {
     "author": "Leon Lambert",
     "name": "AndResGuard",
     "type": "Apache Software License 2.0",
     "url": "https://github.com/Leon406/AndResGuard"
+  },
+  {
+    "author": "Ben Manes",
+    "name": "Gradle Versions Plugin",
+    "type": "Apache Software License 2.0",
+    "url": "https://github.com/ben-manes/gradle-versions-plugin"
   }
 ]
