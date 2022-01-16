@@ -61,7 +61,7 @@ object DarkThemeForP {
                         if (getWallpaperColors(whichPaper)?.supportDarkTheme() == true) nox()
                         addOnColorsChangedListener({ colors, which ->
                             Timber.d("DT4P: colors changed. c=$colors w=$which")
-                            if (which == whichPaper && colors.supportDarkTheme()) nox()
+                            colors?.run { if (which == whichPaper && supportDarkTheme()) nox() }
                         }, Handler(mainLooper))
                     }
                 }
