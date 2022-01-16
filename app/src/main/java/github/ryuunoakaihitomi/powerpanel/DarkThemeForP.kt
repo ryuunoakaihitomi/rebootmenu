@@ -61,12 +61,16 @@ object DarkThemeForP {
                         if (getWallpaperColors(whichPaper)?.supportDarkTheme() == true) nox()
                         addOnColorsChangedListener({ colors, which ->
                             Timber.d("DT4P: colors changed. c=$colors w=$which")
-                            colors?.run { if (which == whichPaper && supportDarkTheme()) nox() }
+                            colors?.run {
+                                if (which == whichPaper) {
+                                    if (supportDarkTheme()) nox() else lumos()
+                                }
+                            }
                         }, Handler(mainLooper))
                     }
                 }
             }
-            1 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+            1 -> lumos()
             2 -> nox()
         }
     }
@@ -77,4 +81,7 @@ object DarkThemeForP {
     @Suppress("NewApi")
     private fun WallpaperColors.supportDarkTheme() =
         colorHints and WallpaperColors.HINT_SUPPORTS_DARK_THEME != 0
+
+    private fun lumos() =
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
 }
