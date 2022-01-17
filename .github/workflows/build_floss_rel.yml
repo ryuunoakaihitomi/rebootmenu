@@ -12,6 +12,7 @@ on:
     - 'gradle.properties'
     - '*.gradle'
     - '!/**/*.md'
+    - '!.idea/**'
   pull_request:
     branches: [ master ]
     paths-ignore:
@@ -64,13 +65,13 @@ jobs:
       # gradle/wrapper/gradle-wrapper.properties
     - name: Install gradle wrapper
       env:
-        GRADLE_VERSION: 7.0.2
+        GRADLE_VERSION: 7.3.3 # 尝试下最新版本，gradle-wrapper.properties的不要更新，AS依赖
       run : gradle wrapper --gradle-version $GRADLE_VERSION
 
     - name: Build
       run: ./gradlew resguardFlossRelease --stacktrace
 
-      # https://github.com/actions/virtual-environments/blob/main/images/linux/Ubuntu2004-README.md#android
+      # https://github.com/actions/virtual-environments/blob/main/images/linux/Ubuntu2004-Readme.md#android
     - name: Check apk
       env:
         BUILD_TOOLS_VERSION: 31.0.0
