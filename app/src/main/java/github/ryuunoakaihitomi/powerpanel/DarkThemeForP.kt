@@ -47,7 +47,6 @@ object DarkThemeForP {
                 override fun onChange(selfChange: Boolean) {
                     Timber.d("DT4P: config changed")
                     changeTheme()
-                    super.onChange(selfChange)
                 }
             })
         changeTheme()
