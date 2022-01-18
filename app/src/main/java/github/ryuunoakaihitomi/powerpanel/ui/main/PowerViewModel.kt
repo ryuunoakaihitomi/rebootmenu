@@ -2,15 +2,15 @@ package github.ryuunoakaihitomi.powerpanel.ui.main
 
 import android.content.pm.PackageManager
 import android.graphics.Color
-import android.graphics.Typeface
 import android.os.Build
-import android.text.SpannableString
 import android.text.SpannableStringBuilder
-import android.text.style.ForegroundColorSpan
-import android.text.style.RelativeSizeSpan
-import android.text.style.StyleSpan
+import android.text.SpannedString
 import androidx.annotation.StringRes
 import androidx.core.graphics.ColorUtils
+import androidx.core.text.bold
+import androidx.core.text.buildSpannedString
+import androidx.core.text.color
+import androidx.core.text.scale
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -21,9 +21,7 @@ import github.ryuunoakaihitomi.powerpanel.R
 import github.ryuunoakaihitomi.powerpanel.desc.PowerInfo
 import github.ryuunoakaihitomi.powerpanel.util.BlackMagic
 import github.ryuunoakaihitomi.powerpanel.util.RC
-import github.ryuunoakaihitomi.powerpanel.util.set
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import rikka.shizuku.Shizuku
 import timber.log.Timber
@@ -61,7 +59,7 @@ class PowerViewModel : ViewModel() {
 
     // 用来显示对话框
     fun prepare() {
-        GlobalScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             val isRoot = Shell.rootAccess() // 在这里提供root状态
             viewModelScope.launch {
                 _rootMode.value = isRoot
@@ -141,13 +139,16 @@ class PowerViewModel : ViewModel() {
             _shortcutInfoArray.value = privilegedActions.copyOfRange(0, 4)
         } else {
             val ssb = SpannableStringBuilder()
-            val suffix = SpannableString(app.getString(R.string.title_dialog_restricted_mode))
-            suffix[0..suffix.length] = arrayOf(
+            val suffix = buildSpannedString {
                 // 这里不简单使用[Color.GRAY]是为了确保在亮暗两种主题上的可视程度一致
-                ForegroundColorSpan(ColorUtils.blendARGB(Color.WHITE, Color.DKGRAY, 0.5f)),
-                RelativeSizeSpan(0.6f),
-                StyleSpan(Typeface.BOLD),
-            )
+                color(ColorUtils.blendARGB(Color.WHITE, Color.DKGRAY, 0.5f)) {
+                    scale(0.6f) {
+                        bold {
+                            append(app.getString(R.string.title_dialog_restricted_mode))
+                        }
+                    }
+                }
+            }
             ssb.append(rawTitle, " ", suffix)
             _title.value = ssb
             _infoArray.value = restrictedActions
@@ -223,14 +224,11 @@ class PowerViewModel : ViewModel() {
             R.string.func_sys_pwr_menu
         ).contains(item.labelResId).not()
 
-    private fun colorForceLabel(label: String, info: PowerInfo): SpannableString {
-        val forceLabel = SpannableString(label)
+    private fun colorForceLabel(label: String, info: PowerInfo): SpannedString {
+        var forceLabel = SpannedString(label)
+        val forceColor = RC.getColor(app.resources, R.color.colorForceModeItem, null)
         if (isOnForceMode(info)) {
-            val range = 0..forceLabel.length
-            forceLabel[range] = arrayOf(
-                ForegroundColorSpan(RC.getColor(app.resources, R.color.colorForceModeItem, null)),
-                StyleSpan(Typeface.BOLD)
-            )
+            forceLabel = buildSpannedString { bold { color(forceColor) { append(label) } } }
         }
         return forceLabel
     }

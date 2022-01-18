@@ -9,7 +9,6 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Browser
 import android.service.quicksettings.Tile
-import android.text.Spannable
 import android.view.View
 import android.view.ViewGroup
 import android.view.accessibility.AccessibilityEvent
@@ -20,7 +19,6 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.getSystemService
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.text.set
 import com.google.android.material.snackbar.Snackbar
 import es.dmoral.toasty.Toasty
 import timber.log.Timber
@@ -43,10 +41,6 @@ fun Tile.updateState(state: Int) {
         this.state = state
         updateTile()
     }
-}
-
-operator fun Spannable.set(range: IntRange, spans: Array<Any>) {
-    for (span in spans) this[range] = span
 }
 
 fun Context.isWatch() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {

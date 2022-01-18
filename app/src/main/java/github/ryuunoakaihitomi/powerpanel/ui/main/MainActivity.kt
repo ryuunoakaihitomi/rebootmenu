@@ -6,11 +6,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Resources
-import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
-import android.text.SpannableString
-import android.text.style.StyleSpan
 import android.text.style.TypefaceSpan
 import android.view.Window
 import android.widget.AdapterView
@@ -21,6 +18,9 @@ import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.graphics.drawable.IconCompat
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
 import androidx.core.graphics.drawable.toBitmap
+import androidx.core.text.bold
+import androidx.core.text.buildSpannedString
+import androidx.core.text.inSpans
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -253,10 +253,7 @@ class MainActivity : AppCompatActivity() {
 
 //region --- private extensions ---
 private fun CharSequence.emphasize() = let {
-    val spannableString = SpannableString(it)
-    val range = 0..it.length
-    spannableString[range] = arrayOf(StyleSpan(Typeface.BOLD), TypefaceSpan("monospace"))
-    spannableString
+    buildSpannedString { bold { inSpans(TypefaceSpan("monospace")) { append(it) } } }
 }
 
 private inline fun <reified T : Activity> Activity.teleport() {
