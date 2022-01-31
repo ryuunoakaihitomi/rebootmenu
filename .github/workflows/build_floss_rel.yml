@@ -71,6 +71,9 @@ jobs:
     - name: Build
       run: ./gradlew resguardFlossRelease --stacktrace
 
+    - name: Check dependency updates
+      run: ./gradlew dependencyUpdates -DoutputFormatter=html
+
       # https://github.com/actions/virtual-environments/blob/main/images/linux/Ubuntu2004-Readme.md#android
     - name: Check apk
       env:
@@ -107,4 +110,5 @@ jobs:
           app/build/outputs/mapping/flossRelease
           aapt-report.txt
           app/build/outputs/apk/floss/release/AndResGuard_*/*mapping*.txt
+          build/dependencyUpdates/report.html
         if-no-files-found: error

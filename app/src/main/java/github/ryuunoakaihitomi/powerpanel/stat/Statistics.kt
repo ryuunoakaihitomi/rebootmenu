@@ -26,6 +26,11 @@ object Statistics {
     private const val KEY_DONE = "done"
     private const val KEY_SHIZUKU = "shizuku"
 
+    /**
+     * [Build.VERSION.SDK_INT]
+     */
+    private const val KEY_OS_VER = "sdk_int"
+
     /* 记录特权模式二次操作取消 */
     private const val EVENT_DIALOG_CANCEL = "dialog_cancel"
     private const val KEY_CANCELLED = "cancelled"
@@ -47,6 +52,8 @@ object Statistics {
             putString(KEY_FORCE_MODE, forceMode.toString())
             putString(KEY_DONE, done.toString())
             putString(KEY_SHIZUKU, Shizuku.pingBinder().toString())
+            // Firebase取消了系统版本显示（Dashboard现在只有设备型号），而AppCenter只显示占比最多的前三个版本
+            putString(KEY_OS_VER, Build.VERSION.SDK_INT.toString())
         }
         InternalDoerImpl.logEvent(EVENT_PWR_OP, bundle)
     }

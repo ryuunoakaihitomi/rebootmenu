@@ -34,6 +34,8 @@ On Android 11, accessibility service has a potential bug that will cause it to s
 
 The following references are the legal statements of the statistics SDK used in this app.
 
+In some environments, the launcher shortcut may not work after an app update. Just delete and re-add it.
+
 > [Privacy and Security in Firebase](https://firebase.google.com/support/privacy)
 >
 > [Visual Studio App Center Security and Compliance](https://docs.microsoft.com/en-us/appcenter/general/app-center-security)

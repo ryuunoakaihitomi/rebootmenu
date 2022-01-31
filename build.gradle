@@ -6,7 +6,7 @@ buildscript {
     }
     dependencies {
         // https://android.googlesource.com/platform/tools/build/
-        classpath 'com.android.tools.build:gradle:7.0.4'
+        classpath 'com.android.tools.build:gradle:7.1.0'
 
         // https://github.com/JetBrains/kotlin
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
@@ -26,8 +26,9 @@ buildscript {
 }
 
 // Task: dependencyUpdates
+// https://github.com/ben-manes/gradle-versions-plugin
 plugins {
-    id "com.github.ben-manes.versions" version "0.39.0"
+    id "com.github.ben-manes.versions" version "0.41.0"
 }
 
 allprojects {

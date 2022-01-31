@@ -27,6 +27,8 @@
 
 在Android 11下，无障碍服务有着将导致其无法运行的缺陷。请尽可能使用Shizuku来代替。
 
+在部分环境中，应用更新之后，启动器快捷方式可能会失效。删除并重新添加即可。
+
 ## 作者
 [@ryuunoakaihitomi github.com](https://github.com/ryuunoakaihitomi)
 

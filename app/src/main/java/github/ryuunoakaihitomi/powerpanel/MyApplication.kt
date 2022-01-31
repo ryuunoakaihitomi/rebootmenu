@@ -39,7 +39,7 @@ class MyApplication : MultiDexApplication() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             println("Happy hacking!")   // println不会触发Timber的lint
-            val result = HiddenApiBypass.addHiddenApiExemptions("L")
+            val result = HiddenApiBypass.addHiddenApiExemptions("")
             println("HiddenApiBypass success: $result")
 
             ShutdownReceiver.register(this)
