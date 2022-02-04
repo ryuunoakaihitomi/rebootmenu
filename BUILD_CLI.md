@@ -92,7 +92,7 @@ sdk install gradle 7.3.3
 
 ```shell
 cd rebootmenu/app
-keytool -genkey -alias a -dname CN=_ -storepass passwd -keypass passwd -keysize 1024 -keystore android.keystore
+keytool -genkey -alias a -dname CN=_ -storepass passwd -keypass passwd -keyalg RSA -keystore android.keystore
 ```
 
 写入配置文件`secret.properties`

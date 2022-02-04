@@ -35,7 +35,7 @@ jobs:
       # https://stackoverflow.com/questions/53838363/the-security-strength-of-sha-1-digest-algorithm-is-not-sufficient-for-this-key
     - name: Generate signing info
       run: |
-        keytool -genkey -alias a -dname CN=_ -storepass passwd -keypass passwd -keysize 1024 -keystore android.keystore
+        keytool -genkey -alias a -dname CN=_ -storepass passwd -keypass passwd -keyalg RSA -keystore android.keystore
         echo KEY_ALIAS=a >> secret.properties
         echo KEY_PWD=passwd >> secret.properties
         echo STORE_PWD=passwd >> secret.properties
