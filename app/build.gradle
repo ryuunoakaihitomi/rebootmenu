@@ -225,6 +225,9 @@ repositories {
     }
     // 上面仓库的镜像
     maven {
+        url 'https://ghproxy.com/https://raw.githubusercontent.com/ryuunoakaihitomi/maven-repository/master'
+    }
+    maven {
         url 'https://raw.fastgit.org/ryuunoakaihitomi/maven-repository/master'
     }
 }
