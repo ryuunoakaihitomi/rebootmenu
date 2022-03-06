@@ -92,10 +92,9 @@
         <activity
             android:name=".ui.tuner.UiTunerActivity"
             android:excludeFromRecents="true"
-            android:exported="false"
+            android:exported="true"
             android:label="@string/xposed_desc"
-            android:theme="@style/Theme.AppCompat"
-            tools:ignore="IntentFilterExportedReceiver">
+            android:theme="@style/Theme.AppCompat">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="de.robv.android.xposed.category.MODULE_SETTINGS" />

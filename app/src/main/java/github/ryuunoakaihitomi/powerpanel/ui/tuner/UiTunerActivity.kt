@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.annotation.Keep
 import androidx.appcompat.app.AppCompatActivity
 import github.ryuunoakaihitomi.powerpanel.stat.Statistics
+import github.ryuunoakaihitomi.powerpanel.util.uiLog
 import kotlin.system.exitProcess
 
 class UiTunerActivity : AppCompatActivity() {
@@ -21,6 +22,8 @@ class UiTunerActivity : AppCompatActivity() {
             .commit()
         if (hookedByXposed) {
             Statistics.logXposedEnabled()
+        } else {
+            uiLog("Xposed required")
         }
     }
 
