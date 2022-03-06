@@ -41,6 +41,7 @@
         <activity
             android:name=".ui.main.MainActivity"
             android:autoRemoveFromRecents="true"
+            android:clearTaskOnLaunch="true"
             android:exported="true"
             android:launchMode="singleTop">
             <intent-filter>

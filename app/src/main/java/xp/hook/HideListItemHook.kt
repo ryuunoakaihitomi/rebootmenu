@@ -15,7 +15,7 @@ object HideListItemHook : Runnable {
 
     private var shouldHook = true
     private val blockedIndexes by lazy {
-        pref.getStringSet(KEY_REMOVED_ITEM_INDEXES, null)!!
+        pref.getStringSet(KEY_REMOVED_ITEM_INDEXES, setOf())!!
             .toList().map { it.toInt() }.sortedDescending()
     }
 

@@ -25,7 +25,7 @@ jobs:
     if: github.repository_owner == 'ryuunoakaihitomi' # 禁用fork上的CI
 
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
     - name: set up JDK
       uses: actions/setup-java@v2
       with:
@@ -63,23 +63,23 @@ jobs:
 
       # https://developer.android.google.cn/studio/releases/gradle-plugin#updating-gradle
       # gradle/wrapper/gradle-wrapper.properties
-    - name: Install gradle wrapper
-      env:
-        GRADLE_VERSION: 7.3.3 # 尝试下最新版本，gradle-wrapper.properties的不要更新，AS依赖
-      run : gradle wrapper --gradle-version $GRADLE_VERSION
+      - name: Install gradle wrapper
+        env:
+          GRADLE_VERSION: 7.4 # 尝试下最新版本，gradle-wrapper.properties的不要更新，AS依赖
+        run: gradle wrapper --gradle-version $GRADLE_VERSION
 
-    - name: Build
-      run: ./gradlew resguardFlossRelease --stacktrace
+      - name: Check dependency updates
+        run: ./gradlew dependencyUpdates -DoutputFormatter=html
 
-    - name: Check dependency updates
-      run: ./gradlew dependencyUpdates -DoutputFormatter=html
+      - name: Build
+        run: ./gradlew resguardFlossRelease --stacktrace
 
-      # https://github.com/actions/virtual-environments/blob/main/images/linux/Ubuntu2004-Readme.md#android
-    - name: Check apk
-      env:
-        BUILD_TOOLS_VERSION: 31.0.0
-      run: |
-        export APK_PATH=$(find ./app/build/outputs/apk/floss/release/ -maxdepth 1 -name *.apk)
+        # https://github.com/actions/virtual-environments/blob/main/images/linux/Ubuntu2004-Readme.md#android
+      - name: Check apk
+        env:
+          BUILD_TOOLS_VERSION: 31.0.0
+        run: |
+          export APK_PATH=$(find ./app/build/outputs/apk/floss/release/ -maxdepth 1 -name *.apk)
         export PATH=$PATH:$ANDROID_SDK_ROOT/build-tools/$BUILD_TOOLS_VERSION
         export REPORT=aapt-report.txt
         echo "===AAPT LIST===" >> $REPORT
