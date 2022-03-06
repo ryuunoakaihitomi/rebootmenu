@@ -7,17 +7,17 @@ on:
   push:
     branches: [ master ]
     paths:
-    - 'app/**'
-    - '.github/workflows/*.yml'
-    - 'gradle.properties'
-    - '*.gradle'
-    - '!/**/*.md'
-    - '!.idea/**'
+      - 'app/**'
+      - '.github/workflows/*.yml'
+      - 'gradle.properties'
+      - '*.gradle'
+      - '!/**/*.md'
+      - '!.idea/**'
   pull_request:
     branches: [ master ]
     paths-ignore:
-    - '*.md'
-    - 'LICENSE'
+      - '*.md'
+      - 'LICENSE'
 
 jobs:
   build:
@@ -26,47 +26,47 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-    - name: set up JDK
-      uses: actions/setup-java@v2
-      with:
-        java-version: '11'
-        distribution: 'adopt'
+      - name: set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'adopt'
 
-      # https://stackoverflow.com/questions/53838363/the-security-strength-of-sha-1-digest-algorithm-is-not-sufficient-for-this-key
-    - name: Generate signing info
-      run: |
-        keytool -genkey -alias a -dname CN=_ -storepass passwd -keypass passwd -keyalg RSA -keystore android.keystore
-        echo KEY_ALIAS=a >> secret.properties
-        echo KEY_PWD=passwd >> secret.properties
-        echo STORE_PWD=passwd >> secret.properties
-        echo STORE_FILE=$(pwd)/android.keystore >> secret.properties
+        # https://stackoverflow.com/questions/53838363/the-security-strength-of-sha-1-digest-algorithm-is-not-sufficient-for-this-key
+      - name: Generate signing info
+        run: |
+          keytool -genkey -alias a -dname CN=_ -storepass passwd -keypass passwd -keyalg RSA -keystore android.keystore
+          echo KEY_ALIAS=a >> secret.properties
+          echo KEY_PWD=passwd >> secret.properties
+          echo STORE_PWD=passwd >> secret.properties
+          echo STORE_FILE=$(pwd)/android.keystore >> secret.properties
 
-    - name: Cache Gradle Dependencies
-      uses: actions/cache@v2
-      with:
-        path: |
-          ~/.gradle/caches
-          ~/.gradle/wrapper
-          !~/.gradle/caches/build-cache-*
-        key: gradle-deps-core-${{ hashFiles('**/build.gradle') }}
-        restore-keys: |
-          gradle-deps
+      - name: Cache Gradle Dependencies
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+            !~/.gradle/caches/build-cache-*
+          key: gradle-deps-core-${{ hashFiles('**/build.gradle') }}
+          restore-keys: |
+            gradle-deps
 
-    - name: Cache Gradle Build
-      uses: actions/cache@v2
-      with:
-        path: |
-          ~/.gradle/caches/build-cache-*
-        key: gradle-builds-core-${{ github.sha }}
-        restore-keys: |
-          gradle-builds
+      - name: Cache Gradle Build
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches/build-cache-*
+          key: gradle-builds-core-${{ github.sha }}
+          restore-keys: |
+            gradle-builds
 
-      # https://developer.android.google.cn/studio/releases/gradle-plugin#updating-gradle
-      # gradle/wrapper/gradle-wrapper.properties
+        # https://developer.android.google.cn/studio/releases/gradle-plugin#updating-gradle
+        # gradle/wrapper/gradle-wrapper.properties
       - name: Install gradle wrapper
         env:
           GRADLE_VERSION: 7.4 # 尝试下最新版本，gradle-wrapper.properties的不要更新，AS依赖
-        run: gradle wrapper --gradle-version $GRADLE_VERSION
+        run : gradle wrapper --gradle-version $GRADLE_VERSION
 
       - name: Check dependency updates
         run: ./gradlew dependencyUpdates -DoutputFormatter=html
@@ -80,35 +80,35 @@ jobs:
           BUILD_TOOLS_VERSION: 31.0.0
         run: |
           export APK_PATH=$(find ./app/build/outputs/apk/floss/release/ -maxdepth 1 -name *.apk)
-        export PATH=$PATH:$ANDROID_SDK_ROOT/build-tools/$BUILD_TOOLS_VERSION
-        export REPORT=aapt-report.txt
-        echo "===AAPT LIST===" >> $REPORT
-        aapt list -a -v "$APK_PATH" >> $REPORT
-        echo ===BADGING=== >> $REPORT
-        aapt2 dump badging "$APK_PATH" >> $REPORT
-        echo ===PERMISSIONS=== >> $REPORT
-        aapt2 dump permissions "$APK_PATH" >> $REPORT # 不仅包括uses-permission（权限中badging只输出这项）还有自定义permission
-        echo ===STRINGS=== >> $REPORT
-        aapt2 dump strings "$APK_PATH" >> $REPORT
-        echo ===RESOURCES=== >> $REPORT
-        aapt2 dump resources "$APK_PATH" >> $REPORT
-        echo ===CONFIGURATIONS=== >> $REPORT
-        aapt2 dump configurations "$APK_PATH" >> $REPORT
+          export PATH=$PATH:$ANDROID_SDK_ROOT/build-tools/$BUILD_TOOLS_VERSION
+          export REPORT=aapt-report.txt
+          echo "===AAPT LIST===" >> $REPORT
+          aapt list -a -v "$APK_PATH" >> $REPORT
+          echo ===BADGING=== >> $REPORT
+          aapt2 dump badging "$APK_PATH" >> $REPORT
+          echo ===PERMISSIONS=== >> $REPORT
+          aapt2 dump permissions "$APK_PATH" >> $REPORT # 不仅包括uses-permission（权限中badging只输出这项）还有自定义permission
+          echo ===STRINGS=== >> $REPORT
+          aapt2 dump strings "$APK_PATH" >> $REPORT
+          echo ===RESOURCES=== >> $REPORT
+          aapt2 dump resources "$APK_PATH" >> $REPORT
+          echo ===CONFIGURATIONS=== >> $REPORT
+          aapt2 dump configurations "$APK_PATH" >> $REPORT
 
-    - name: Upload apk
-      uses: actions/upload-artifact@v2
-      with:
-        name: PowerPanel_apk_${{ github.sha }}
-        path: app/build/outputs/apk/floss/release/*.apk
-        if-no-files-found: error
+      - name: Upload apk
+        uses: actions/upload-artifact@v2
+        with:
+          name: PowerPanel_apk_${{ github.sha }}
+          path: app/build/outputs/apk/floss/release/*.apk
+          if-no-files-found: error
 
-    - name: Upload addition
-      uses: actions/upload-artifact@v2
-      with:
-        name: PowerPanel_addition_${{ github.sha }}
-        path: |
-          app/build/outputs/mapping/flossRelease
-          aapt-report.txt
-          app/build/outputs/apk/floss/release/AndResGuard_*/*mapping*.txt
-          build/dependencyUpdates/report.html
-        if-no-files-found: error
+      - name: Upload addition
+        uses: actions/upload-artifact@v2
+        with:
+          name: PowerPanel_addition_${{ github.sha }}
+          path: |
+            app/build/outputs/mapping/flossRelease
+            aapt-report.txt
+            app/build/outputs/apk/floss/release/AndResGuard_*/*mapping*.txt
+            build/dependencyUpdates/report.html
+          if-no-files-found: error
