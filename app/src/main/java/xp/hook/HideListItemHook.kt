@@ -8,6 +8,7 @@ import com.github.kyuubiran.ezxhelper.utils.*
 import github.ryuunoakaihitomi.powerpanel.BuildConfig
 import org.apache.commons.lang3.ArrayUtils
 import xp.common.KEY_REMOVED_ITEM_INDEXES
+import xp.common.MAX_ITEM_COUNT
 import xp.common.pref
 
 object HideListItemHook : Runnable {
@@ -19,7 +20,7 @@ object HideListItemHook : Runnable {
     }
 
     private fun mapOpIndex(index: Int) = run {
-        val list = MutableList(9) { it }
+        val list = MutableList(MAX_ITEM_COUNT) { it }
         blockedIndexes.forEach { list.remove(it) }
         list[index]
     }

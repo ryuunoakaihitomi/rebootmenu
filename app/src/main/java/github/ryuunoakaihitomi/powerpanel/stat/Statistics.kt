@@ -75,7 +75,6 @@ object Statistics {
         putString(KEY_TIME_HOUR, Calendar.getInstance()[Calendar.HOUR_OF_DAY].toString())
     })
 
-
     fun initConfig(app: Application) {
         recordEnvInfo()
         InternalDoerImpl.initialize(app)

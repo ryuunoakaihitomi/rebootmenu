@@ -12,14 +12,14 @@ apply from: "${rootProject.file('loadProperties.gradle')}"
 Properties p = loadProps('secret')
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 32
     defaultConfig {
         applicationId "com.ryuunoakaihitomi.rebootmenu"
         minSdkVersion 19
         multiDexEnabled true
         // 以下方式会出现这样的错误：android:targetSdkVersion="android-30"
         //targetSdkVersion compileSdkVersion
-        targetSdkVersion 31
+        targetSdkVersion 32
         // 版本号：发布日期
         versionCode 20220131
         // 版本名说明： R3.x.y.z (R3:Refactoring 第三次重构，z:Quick Fix序号)
@@ -160,13 +160,13 @@ dependencies {
     runtimeOnly 'github.ryuunoakaihitomi.retoast:retoast:2.0.0'
 
     // https://github.com/google/gson
-    implementation 'com.google.code.gson:gson:2.8.9'
+    implementation 'com.google.code.gson:gson:2.9.0'
 
     // https://github.com/GrenderG/Toasty
     implementation 'com.github.GrenderG:Toasty:1.5.2'
 
     // https://github.com/topjohnwu/libsu
-    implementation 'com.github.topjohnwu.libsu:core:3.2.1'
+    implementation 'com.github.topjohnwu.libsu:core:4.0.0'
 
     // https://github.com/apache/commons-io
     // 固定在此版本，理由同下段注释 （使用的一些java8 API是脱糖库无法完成转换的，即使脱糖库的文档说明支持）
@@ -201,7 +201,7 @@ dependencies {
     implementation 'org.lsposed.hiddenapibypass:hiddenapibypass:4.3'
 
     // https://github.com/eclipse/org.aspectj
-    implementation 'org.aspectj:aspectjrt:1.9.7'
+    implementation 'org.aspectj:aspectjrt:1.9.8'
 
     // https://github.com/RikkaApps/RikkaX/tree/master/compatibility
     implementation 'dev.rikka.rikkax.compatibility:compatibility:2.0.0'
@@ -236,9 +236,6 @@ repositories {
     // 上面仓库的镜像
     maven {
         url 'https://ghproxy.com/https://raw.githubusercontent.com/ryuunoakaihitomi/maven-repository/master'
-    }
-    maven {
-        url 'https://raw.fastgit.org/ryuunoakaihitomi/maven-repository/master'
     }
 
     maven { url "https://api.xposed.info/" }
