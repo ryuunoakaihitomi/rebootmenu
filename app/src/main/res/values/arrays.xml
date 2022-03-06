@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+     本模块其实只需要hook自身，因此没必要指定作用域。
+     然而Lsposed似乎不允许不选择任何应用启用模块,而软件列表中不能选中自身。
+     因此勾选SystemUI作为默认作用域，名字中同样包含"UI"这点也省了对用户说明的功夫。
+     -->
+    <string-array name="xposed_scope">
+        <item>com.android.systemui</item>
+    </string-array>
+</resources>

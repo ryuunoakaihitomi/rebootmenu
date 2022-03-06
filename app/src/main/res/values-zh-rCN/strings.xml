@@ -34,4 +34,10 @@
     <string name="toast_custom_reboot">这个功能可能会导致你的设备脱离控制，请谨慎使用。</string>
     <string name="snack_main_migrate_tip_for_a12">Android 12可能在快捷设置图块下含有电源菜单按钮</string>
     <string name="snack_main_migrate_tip_for_miui">MIUI有悬浮球功能可以替代本应用的受限模式</string>
+    <string name="xposed_desc">电源面板用户界面调谐器</string>
+    <string name="title_xposed_index_remove_item">移除列表项的索引</string>
+    <string name="summary_xposed_index_remove_item">在特权模式和强制模式下，根据索引移除选项。</string>
+    <string name="title_xposed_simplify_lsp_name">重命名锁屏</string>
+    <string name="summary_xposed_simplify_lsp_name">将&quot;锁屏(特权)&quot;文字中的&quot;特权&quot;去掉。</string>
+    <string name="title_disable_donation">禁用捐赠入口和界面</string>
 </resources>

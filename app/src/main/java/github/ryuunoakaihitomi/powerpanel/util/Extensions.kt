@@ -17,12 +17,14 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.core.content.res.ResourcesCompat
 import com.google.android.material.snackbar.Snackbar
 import es.dmoral.toasty.Toasty
 import timber.log.Timber
 
+typealias CC = ContextCompat
 typealias RC = ResourcesCompat
 
 fun Context.openUrlInBrowser(url: String) {

@@ -36,4 +36,11 @@
     <string name="toast_custom_reboot">This feature may cause your device to be taken out of control, use it with ⚠.</string>
     <string name="snack_main_migrate_tip_for_a12">Android 12 may contains a POWER MENU button below Quick Settings Tile</string>
     <string name="snack_main_migrate_tip_for_miui">MIUI has a feature called Quick Ball that can replace the RESTRICTED MODE of this app</string>
+    <!-- 命名仿照Android的System UI Tuner -->
+    <string name="xposed_desc">PowerPanel UI Tuner</string>
+    <string name="title_xposed_index_remove_item">Remove options by specified indexes</string>
+    <string name="summary_xposed_index_remove_item">Does not work on Restricted Mode.</string>
+    <string name="title_xposed_simplify_lsp_name">Lock screen (privileged) -> Lock screen</string>
+    <string name="summary_xposed_simplify_lsp_name">Delete the text&quot;(privileged)&quot;.</string>
+    <string name="title_disable_donation">Disable donation entry &amp; page</string>
 </resources>

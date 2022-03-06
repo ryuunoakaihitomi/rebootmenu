@@ -126,6 +126,7 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'androidx.multidex:multidex:2.0.1'
+    implementation 'androidx.preference:preference-ktx:1.2.0'
     def lifecycle_version = "2.4.0"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
@@ -153,7 +154,7 @@ dependencies {
     implementation "dev.rikka.shizuku:provider:$shizuku_version"
 
     // https://github.com/ryuunoakaihitomi/PowerAct
-    implementation 'github.ryuunoakaihitomi.poweract:poweract:1.5.3'
+    implementation 'github.ryuunoakaihitomi.poweract:poweract:1.6.0'
 
     // https://github.com/ryuunoakaihitomi/ReToast
     runtimeOnly 'github.ryuunoakaihitomi.retoast:retoast:2.0.0'
@@ -178,6 +179,9 @@ dependencies {
     //noinspection GradleDependency
     implementation 'commons-io:commons-io:2.8.0'
 
+    // https://github.com/apache/commons-lang
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
+
     // https://github.com/jOOQ/jOOR
     implementation 'org.jooq:joor-java-6:0.9.14'
 
@@ -194,13 +198,16 @@ dependencies {
     implementation 'org.cyanogenmod:platform.sdk:6.0'
 
     // https://github.com/LSPosed/AndroidHiddenApiBypass
-    implementation 'org.lsposed.hiddenapibypass:hiddenapibypass:4.2'
+    implementation 'org.lsposed.hiddenapibypass:hiddenapibypass:4.3'
 
     // https://github.com/eclipse/org.aspectj
     implementation 'org.aspectj:aspectjrt:1.9.7'
 
     // https://github.com/RikkaApps/RikkaX/tree/master/compatibility
     implementation 'dev.rikka.rikkax.compatibility:compatibility:2.0.0'
+
+    // https://github.com/KyuubiRan/EzXHelper
+    implementation 'com.github.kyuubiran:EzXHelper:0.7.1'
 
     // https://github.com/square/leakcanary
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.8.1'
@@ -209,6 +216,9 @@ dependencies {
     // 最新版是v2.1.0，仅支持android-support
     //noinspection GradleDependency
     debugImplementation 'com.github.whataa:pandora:androidx_v2.1.0'
+
+    // https://github.com/rovo89/XposedBridge/wiki/Development-tutorial
+    compileOnly 'de.robv.android.xposed:api:82'
 }
 
 android.applicationVariants.all { variant ->
@@ -230,6 +240,8 @@ repositories {
     maven {
         url 'https://raw.fastgit.org/ryuunoakaihitomi/maven-repository/master'
     }
+
+    maven { url "https://api.xposed.info/" }
 }
 
 //  配置入口和作用点都要制定

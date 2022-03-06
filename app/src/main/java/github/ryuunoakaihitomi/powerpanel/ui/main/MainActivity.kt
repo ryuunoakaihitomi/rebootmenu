@@ -18,9 +18,7 @@ import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.graphics.drawable.IconCompat
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
 import androidx.core.graphics.drawable.toBitmap
-import androidx.core.text.bold
-import androidx.core.text.buildSpannedString
-import androidx.core.text.inSpans
+import androidx.core.text.*
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -109,7 +107,21 @@ class MainActivity : AppCompatActivity() {
                     val item = it[which]
                     if (powerViewModel.shouldConfirmAgain(item)) {
                         setTitle(
-                            String.format(getString(R.string.title_dialog_confirm_op), item.label)
+                            buildSpannedString {
+                                val s =
+                                    getString(R.string.title_dialog_confirm_op).format(item.label)
+                                val cutPos = s.length - item.label.length - 2    // 包含两个引号
+                                append(s.subSequence(0, cutPos))
+                                backgroundColor(
+                                    CC.getColor(this@MainActivity, R.color.colorConfirmOpBackground)
+                                ) {
+                                    color(
+                                        CC.getColor(this@MainActivity, R.color.colorConfirmOpText)
+                                    ) {
+                                        append(s.substring(cutPos))
+                                    }
+                                }
+                            }
                         )
                         setAdapter(null, null)
                         setItems(

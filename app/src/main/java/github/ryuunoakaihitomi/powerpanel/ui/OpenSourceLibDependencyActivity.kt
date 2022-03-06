@@ -17,7 +17,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
-import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.widget.doOnTextChanged
 import com.drakeet.about.AbsAboutActivity
@@ -63,7 +62,7 @@ class OpenSourceLibDependencyActivity : AbsAboutActivity() {
     }
 
     override fun onCreateHeader(icon: ImageView, slogan: TextView, version: TextView) {
-        ContextCompat.getDrawable(this, android.R.drawable.ic_lock_power_off)?.run {
+        CC.getDrawable(this, android.R.drawable.ic_lock_power_off)?.run {
             val d = DrawableCompat.wrap(this)
             DrawableCompat.setTint(d, RC.getColor(resources, R.color.colorIconBackground, null))
             icon.setImageDrawable(d)

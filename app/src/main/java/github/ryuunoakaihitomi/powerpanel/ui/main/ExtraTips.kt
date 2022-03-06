@@ -31,6 +31,7 @@ fun Activity.checkUnsupportedEnv() {
                 // Wear OS存在界面元素无法显示问题
                 !isWatch() &&
                 // Android TV部分功能无法使用
+                //NOTE TX6只回报FEATURE_LIVE_TV，与AVD行为不同，暂不改进
                 !packageManager.hasSystemFeature(
                     @Suppress("DEPRECATION")    // PackageManager.FEATURE_TELEVISION
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)

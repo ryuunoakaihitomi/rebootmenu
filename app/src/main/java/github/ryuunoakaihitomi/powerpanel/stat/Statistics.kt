@@ -35,6 +35,9 @@ object Statistics {
     private const val EVENT_DIALOG_CANCEL = "dialog_cancel"
     private const val KEY_CANCELLED = "cancelled"
 
+    /* 记录启用了Xposed模块功能 */
+    private const val EVENT_XPOSED_ENABLED = "xp_enabled"
+
     fun logPowerOperation(
         activity: AppCompatActivity,
         @StringRes labelResId: Int,
@@ -65,6 +68,13 @@ object Statistics {
         }
         InternalDoerImpl.logEvent(EVENT_DIALOG_CANCEL, bundle)
     }
+
+    fun logXposedEnabled() = InternalDoerImpl.logEvent(EVENT_XPOSED_ENABLED, Bundle().apply {
+        putString(KEY_OS_VER, Build.VERSION.SDK_INT.toString())
+        putString(KEY_SHIZUKU, Shizuku.pingBinder().toString())
+        putString(KEY_TIME_HOUR, Calendar.getInstance()[Calendar.HOUR_OF_DAY].toString())
+    })
+
 
     fun initConfig(app: Application) {
         recordEnvInfo()

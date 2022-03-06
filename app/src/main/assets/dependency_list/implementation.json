@@ -54,6 +54,12 @@
     "url": "http://commons.apache.org/proper/commons-io"
   },
   {
+    "author": "Apache Software Foundation",
+    "name": "Apache Commons Lang",
+    "type": "Apache Software License 2.0",
+    "url": "https://commons.apache.org/proper/commons-lang"
+  },
+  {
     "author": "jOOQ Object Oriented Querying",
     "name": "jOOR",
     "type": "Apache Software License 2.0",
@@ -82,5 +88,17 @@
     "name": "RikkaX Compatibility",
     "type": "Apache Software License 2.0",
     "url": "https://github.com/RikkaApps/RikkaX/tree/master/compatibility"
+  },
+  {
+    "author": "rovo89",
+    "name": "Xposed",
+    "type": "Apache Software License 2.0",
+    "url": "https://github.com/rovo89/XposedBridge"
+  },
+  {
+    "author": "KyuubiRan",
+    "name": "EzXHelper",
+    "type": "Apache Software License 2.0",
+    "url": "https://github.com/KyuubiRan/EzXHelper"
   }
 ]

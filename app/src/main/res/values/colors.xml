@@ -3,4 +3,6 @@
     <color name="colorIconBackground">#C73E3A</color>    <!-- https://nipponcolors.com/#ginsyu -->
     <color name="colorIconForceModeShortcut">@android:color/holo_red_light</color>
     <color name="colorForceModeItem">@android:color/holo_red_dark</color>
+    <color name="colorConfirmOpText">@android:color/white</color>
+    <color name="colorConfirmOpBackground">@android:color/black</color>
 </resources>

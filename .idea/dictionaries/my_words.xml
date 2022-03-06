@@ -6,6 +6,7 @@
       <w>desugaring</w>
       <w>jetpack</w>
       <w>libre</w>
+      <w>lsposed</w>
       <w>lumos</w>
       <w>markwon</w>
       <w>misoperation</w>
@@ -17,6 +18,10 @@
       <w>shizuku</w>
       <w>systemui</w>
       <w>teleport</w>
+      <w>xposeddescription</w>
+      <w>xposedminversion</w>
+      <w>xposedmodule</w>
+      <w>xposedscope</w>
     </words>
   </dictionary>
 </component>

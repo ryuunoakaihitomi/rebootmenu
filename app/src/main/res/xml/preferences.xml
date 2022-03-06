@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- /java/xp/common/Config.kt -->
+
+    <MultiSelectListPreference
+        app:key="removed_item_indexes"
+        app:summary="@string/summary_xposed_index_remove_item"
+        app:title="@string/title_xposed_index_remove_item" />
+    <SwitchPreference
+        app:key="rename_lock_screen_item"
+        app:summary="@string/summary_xposed_simplify_lsp_name"
+        app:title="@string/title_xposed_simplify_lsp_name" />
+    <SwitchPreference
+        app:key="disable_donation"
+        app:title="@string/title_disable_donation" />
+</PreferenceScreen>

@@ -6,9 +6,11 @@ import android.view.ViewConfiguration
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import androidx.annotation.Keep
 import androidx.core.graphics.drawable.DrawableCompat
 import github.ryuunoakaihitomi.powerpanel.util.RC
 
+@Keep
 class PowerItemAdapter(context: Context, items: Array<CharSequence>, iconResId: Array<Int>) :
     ArrayAdapter<CharSequence>(context, android.R.layout.simple_list_item_1, items) {
     private val iconResIdList: List<Int> = listOf(*iconResId)
