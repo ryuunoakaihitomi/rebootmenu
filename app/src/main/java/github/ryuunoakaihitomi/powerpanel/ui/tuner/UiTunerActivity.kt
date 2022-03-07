@@ -10,25 +10,25 @@ import kotlin.system.exitProcess
 class UiTunerActivity : AppCompatActivity() {
 
     companion object {
-        @JvmStatic
         @Keep
         private val hookedByXposed = false
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        supportFragmentManager.beginTransaction()
-            .replace(android.R.id.content, UiTunerFragment())
-            .commit()
         if (hookedByXposed) {
+            supportFragmentManager.beginTransaction()
+                .replace(android.R.id.content, UiTunerFragment())
+                .commit()
             Statistics.logXposedEnabled()
         } else {
             uiLog("Xposed required")
+            finish()
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        exitProcess(0)  // 自杀让lsposed实现生效
+        if (hookedByXposed) exitProcess(0)  // 自杀让lsposed实现生效
     }
 }
