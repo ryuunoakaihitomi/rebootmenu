@@ -5,6 +5,7 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.pm.ShortcutManager
 import android.content.res.Resources
 import android.os.Build
 import android.os.Bundle
@@ -12,6 +13,7 @@ import android.text.style.TypefaceSpan
 import android.view.Window
 import android.widget.AdapterView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.getSystemService
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.DrawableCompat
@@ -60,6 +62,11 @@ class MainActivity : AppCompatActivity() {
             PowerExecution.execute(this, it, powerViewModel.getForceMode())
         }
         powerViewModel.shortcutInfoArray.observe(this) { it ->
+            // 小天才Z6巅峰版把ShortcutManager阉割了
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1 && getSystemService<ShortcutManager>() == null) {
+                Timber.w("ShortcutMgr == null")
+                return@observe
+            }
             ShortcutManagerCompat.removeAllDynamicShortcuts(this)
             val maxCount = ShortcutManagerCompat.getMaxShortcutCountPerActivity(this)
             if (maxCount >= it.size) {
