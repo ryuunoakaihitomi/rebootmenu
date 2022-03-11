@@ -166,7 +166,7 @@ dependencies {
     implementation 'com.github.GrenderG:Toasty:1.5.2'
 
     // https://github.com/topjohnwu/libsu
-    implementation 'com.github.topjohnwu.libsu:core:4.0.0'
+    implementation 'com.github.topjohnwu.libsu:core:4.0.2'
 
     // https://github.com/apache/commons-io
     // 固定在此版本，理由同下段注释 （使用的一些java8 API是脱糖库无法完成转换的，即使脱糖库的文档说明支持）
@@ -207,7 +207,7 @@ dependencies {
     implementation 'dev.rikka.rikkax.compatibility:compatibility:2.0.0'
 
     // https://github.com/KyuubiRan/EzXHelper
-    implementation 'com.github.kyuubiran:EzXHelper:0.7.1'
+    implementation 'com.github.kyuubiran:EzXHelper:0.7.4'
 
     // https://github.com/square/leakcanary
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.8.1'
@@ -232,13 +232,24 @@ android.applicationVariants.all { variant ->
 repositories {
     maven {
         url 'https://raw.githubusercontent.com/ryuunoakaihitomi/maven-repository/master'
+        content {
+            includeGroupByRegex "github.ryuunoakaihitomi.*"
+        }
     }
     // 上面仓库的镜像
     maven {
         url 'https://ghproxy.com/https://raw.githubusercontent.com/ryuunoakaihitomi/maven-repository/master'
+        content {
+            includeGroupByRegex "github.ryuunoakaihitomi.*"
+        }
     }
 
-    maven { url "https://api.xposed.info/" }
+    maven {
+        url "https://api.xposed.info/"
+        content {
+            includeGroup "de.robv.android.xposed"
+        }
+    }
 }
 
 //  配置入口和作用点都要制定
