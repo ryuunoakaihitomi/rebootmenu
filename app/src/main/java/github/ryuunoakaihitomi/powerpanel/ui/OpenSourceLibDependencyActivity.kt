@@ -171,7 +171,7 @@ class OpenSourceLibDependencyActivity : AbsAboutActivity() {
         it?.runCatching {
             val command =
                 "logcat -t $maxLineCount${if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) " --pid=${Os.getpid()}" else ""}"
-            Shell.sh(command).submit { r ->
+            Shell.cmd(command).submit { r ->
                 contentResolver.openOutputStream(this)?.apply {
                     write(r.out.joinToString(separator = System.lineSeparator()).toByteArray())
                     close()
