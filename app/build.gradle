@@ -21,10 +21,10 @@ android {
         //targetSdkVersion compileSdkVersion
         targetSdkVersion 32
         // 版本号：发布日期
-        versionCode 20220306
+        versionCode 20220313
         // 版本名说明： R3.x.y.z (R3:Refactoring 第三次重构，z:Quick Fix序号)
         // 不要包含非ASCII可打印字符，会导致Github release文件名异常
-        versionName 'R3.15.4'
+        versionName 'R3.15.5'
         resConfigs "en", "zh-rCN"
 
         buildConfigField 'String', 'BUILD_TIME', '\"' + new Date() + '\"'
@@ -207,7 +207,7 @@ dependencies {
     implementation 'dev.rikka.rikkax.compatibility:compatibility:2.0.0'
 
     // https://github.com/KyuubiRan/EzXHelper
-    implementation 'com.github.kyuubiran:EzXHelper:0.7.4'
+    implementation 'com.github.kyuubiran:EzXHelper:0.7.5'
 
     // https://github.com/square/leakcanary
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.8.1'
