@@ -1,0 +1,7 @@
+root = true
+
+[*.kt]
+# unset 没有作用（可能会使用默认设置？）
+# 即使用ij_java_(class/names)_count_to_use_import_on_demand也改不了java通配符导包：import java.util.*
+ij_kotlin_name_count_to_use_star_import = 2147483647
+ij_kotlin_name_count_to_use_star_import_for_members = 2147483647

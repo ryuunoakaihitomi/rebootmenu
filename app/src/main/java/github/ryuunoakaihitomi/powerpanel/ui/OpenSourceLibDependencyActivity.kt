@@ -29,7 +29,12 @@ import github.ryuunoakaihitomi.poweract.Callback
 import github.ryuunoakaihitomi.poweract.PowerActX
 import github.ryuunoakaihitomi.powerpanel.BuildConfig
 import github.ryuunoakaihitomi.powerpanel.R
-import github.ryuunoakaihitomi.powerpanel.util.*
+import github.ryuunoakaihitomi.powerpanel.util.BlackMagic
+import github.ryuunoakaihitomi.powerpanel.util.CC
+import github.ryuunoakaihitomi.powerpanel.util.RC
+import github.ryuunoakaihitomi.powerpanel.util.emptyAccessibilityDelegate
+import github.ryuunoakaihitomi.powerpanel.util.openUrlInBrowser
+import github.ryuunoakaihitomi.powerpanel.util.uiLog
 import org.apache.commons.io.IOUtils
 import timber.log.Timber
 import java.io.IOException

@@ -20,7 +20,11 @@ import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.graphics.drawable.IconCompat
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
 import androidx.core.graphics.drawable.toBitmap
-import androidx.core.text.*
+import androidx.core.text.backgroundColor
+import androidx.core.text.bold
+import androidx.core.text.buildSpannedString
+import androidx.core.text.color
+import androidx.core.text.inSpans
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -38,7 +42,13 @@ import github.ryuunoakaihitomi.powerpanel.ui.DonateActivity
 import github.ryuunoakaihitomi.powerpanel.ui.OpenSourceLibDependencyActivity
 import github.ryuunoakaihitomi.powerpanel.ui.ShortcutActivity
 import github.ryuunoakaihitomi.powerpanel.ui.tile.CmCustomTile
-import github.ryuunoakaihitomi.powerpanel.util.*
+import github.ryuunoakaihitomi.powerpanel.util.BlackMagic
+import github.ryuunoakaihitomi.powerpanel.util.CC
+import github.ryuunoakaihitomi.powerpanel.util.PowerActHelper
+import github.ryuunoakaihitomi.powerpanel.util.RC
+import github.ryuunoakaihitomi.powerpanel.util.emptyAccessibilityDelegate
+import github.ryuunoakaihitomi.powerpanel.util.isWatch
+import github.ryuunoakaihitomi.powerpanel.util.openUrlInBrowser
 import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.Markwon
 import io.noties.markwon.MarkwonConfiguration
