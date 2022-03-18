@@ -61,11 +61,9 @@ class PowerViewModel : ViewModel() {
     fun prepare() {
         viewModelScope.launch(Dispatchers.IO) {
             // 在这里提供root状态
-            // 由于libsu 4.0.0的变更，Shell.rootAccess()在返回true的情况下不再准确；尝试执行命令进一步判断
+            // 由于libsu 4.0.0的变更，Shell.rootAccess()在返回true的情况下不再准确；需要进一步判断
             val isRoot = if (Shell.rootAccess()) {
-                val result = Shell.cmd("su -c id").exec()
-                Timber.d("c=${result.code}, e=${result.err}, o=${result.out}")
-                result.isSuccess
+                Shell.getShell().isRoot
             } else false
 
             viewModelScope.launch {

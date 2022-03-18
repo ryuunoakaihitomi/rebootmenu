@@ -65,7 +65,7 @@ jobs:
         # gradle/wrapper/gradle-wrapper.properties
       - name: Install gradle wrapper
         env:
-          GRADLE_VERSION: 7.4 # 尝试下最新版本，gradle-wrapper.properties的不要更新，AS依赖
+          GRADLE_VERSION: 7.4.1 # 尝试下最新版本，gradle-wrapper.properties的不要更新，AS依赖
         run: gradle wrapper --gradle-version $GRADLE_VERSION
 
       - name: Check dependency updates
