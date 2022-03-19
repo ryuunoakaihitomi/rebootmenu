@@ -21,10 +21,10 @@ android {
         //targetSdkVersion compileSdkVersion
         targetSdkVersion 32
         // 版本号：发布日期
-        versionCode 20220319
+        versionCode 20220320
         // 版本名说明： R3.x.y.z (R3:Refactoring 第三次重构，z:Quick Fix序号)
         // 不要包含非ASCII可打印字符，会导致Github release文件名异常
-        versionName 'R3.15.6'
+        versionName 'R3.15.6.1'
         resConfigs "en", "zh-rCN"
 
         buildConfigField 'String', 'BUILD_TIME', '\"' + new Date() + '\"'

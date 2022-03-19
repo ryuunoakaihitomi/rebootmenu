@@ -279,10 +279,10 @@ class MainActivity : AppCompatActivity() {
             }
         })
         powerViewModel.prepare()
-        // 基于以下文章给Android 12之前的MIUI添加背景模糊特效，手表都是黑色背景故不作处理
+        // 遵照其环境下的系统电源菜单界面，基于以下文章给Android 12之前的MIUI添加背景模糊特效，手表都是黑色背景故不作处理
         // https://www.cnblogs.com/zhucai/p/miui-real-time-blur.html
         if (!isWatch() && DeviceCompatibility.isMiui() && Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
-            setTheme(R.style.Theme_AppCompat_DayNight)  // 不使用Dialog是因为模糊区仅中间一小块，非常难看
+            setTheme(R.style.MainStyleBlurCompat)
             window.run {
                 decorView.alpha = 0f
                 addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND)

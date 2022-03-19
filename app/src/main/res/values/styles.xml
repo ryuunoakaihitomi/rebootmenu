@@ -7,4 +7,9 @@
         <!-- 防止在Wear OS中崩溃和隐藏默认Dialog -->
         <item name="windowNoTitle">true</item>
     </style>
+
+    <!-- 不使用Dialog是因为模糊区仅中间一小块，非常难看 -->
+    <style name="MainStyleBlurCompat" parent="Theme.AppCompat.DayNight">
+        <item name="android:backgroundDimAmount">0</item>
+    </style>
 </resources>
