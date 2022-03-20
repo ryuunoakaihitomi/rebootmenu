@@ -211,6 +211,12 @@ class MainActivity : AppCompatActivity() {
             }.show()
             val lv = mainDialog.listView
             lv.onItemLongClickListener = AdapterView.OnItemLongClickListener { _, _, position, _ ->
+                // 和上面那个用到ShortcutManagerCompat的例子不同，requestPinShortcut()从26开始才直接调用
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&
+                    getSystemService<ShortcutManager>() == null
+                ) {
+                    return@OnItemLongClickListener false
+                }
                 val item = it[position]
                 val drawable = RC.getDrawable(resources, item.iconResId, null)?.let { d ->
                     DrawableCompat.wrap(d)
