@@ -230,16 +230,17 @@ android.applicationVariants.all { variant ->
 }
 
 repositories {
-    def ghReadPkgPat = 'ghp_extQ2D8b8NztcmmUyMzngcthP2VYJm0cEGS\u0020'
 
     // 写起来繁琐了，不知道怎么解决，原因：
     // https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-gradle-registry#publishing-a-package
     // By default, GitHub publishes the package to an existing repository with the same name as the package.
+    // 而且还有潜在危险
+    // https://github.community/t/download-from-github-package-registry-without-authentication/14407/148
     maven {
         url 'https://maven.pkg.github.com/ryuunoakaihitomi/ReToast'
         credentials {
             username = 'ryuunoakaihitomi'
-            password = ghReadPkgPat
+            password = 'ghp_extQ2D8b8NztcmmUyMzngcthP2VYJm0cEGS\u0020'
         }
         content {
             includeGroup "github.ryuunoakaihitomi.retoast"
@@ -249,7 +250,7 @@ repositories {
         url 'https://maven.pkg.github.com/ryuunoakaihitomi/PowerAct'
         credentials {
             username = 'ryuunoakaihitomi'
-            password = ghReadPkgPat
+            password = 'ghp_extQ2D8b8NztcmmUyMzngcthP2VYJm0cEGS\u0020'
         }
         content {
             includeGroup "github.ryuunoakaihitomi.poweract"
