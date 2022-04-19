@@ -1,5 +1,6 @@
 package github.ryuunoakaihitomi.powerpanel.ui
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.media.AudioManager
 import android.media.AudioManager.ADJUST_SAME
@@ -22,10 +23,18 @@ class VolumeControlActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         Timber.v("active")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            startActivity(Intent(Settings.Panel.ACTION_VOLUME))
+            try {
+                startActivity(Intent(Settings.Panel.ACTION_VOLUME))
+            } catch (e: ActivityNotFoundException) {
+                showCompatUi()
+            }
         } else {
-            getSystemService<AudioManager>()?.adjustVolume(ADJUST_SAME, FLAG_SHOW_UI)
+            showCompatUi()
         }
         finish()
+    }
+
+    private fun showCompatUi() {
+        getSystemService<AudioManager>()?.adjustVolume(ADJUST_SAME, FLAG_SHOW_UI)
     }
 }
