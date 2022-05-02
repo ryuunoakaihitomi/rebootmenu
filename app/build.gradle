@@ -21,10 +21,10 @@ android {
         //targetSdkVersion compileSdkVersion
         targetSdkVersion 32
         // 版本号：发布日期
-        versionCode 20220419
+        versionCode 20220503
         // 版本名说明： R3.x.y.z (R3:Refactoring 第三次重构，z:Quick Fix序号)
         // 不要包含非ASCII可打印字符，会导致Github release文件名异常
-        versionName 'R3.15.7'
+        versionName 'R3.15.8'
         resConfigs "en", "zh-rCN"
 
         buildConfigField 'String', 'BUILD_TIME', '\"' + new Date() + '\"'
@@ -132,12 +132,12 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
 
     // https://github.com/firebase/firebase-android-sdk
-    normalImplementation platform('com.google.firebase:firebase-bom:29.2.1')
+    normalImplementation platform('com.google.firebase:firebase-bom:29.3.1')
     normalImplementation 'com.google.firebase:firebase-analytics-ktx'
     normalImplementation 'com.google.firebase:firebase-crashlytics-ktx'
 
     // https://github.com/microsoft/appcenter-sdk-android
-    normalImplementation 'com.microsoft.appcenter:appcenter-analytics:4.4.2'
+    normalImplementation 'com.microsoft.appcenter:appcenter-analytics:4.4.3'
 
     /* ------- 其他第三方开源组件 ------- */
 
@@ -154,7 +154,7 @@ dependencies {
     implementation "dev.rikka.shizuku:provider:$shizuku_version"
 
     // https://github.com/ryuunoakaihitomi/PowerAct
-    implementation 'github.ryuunoakaihitomi.poweract:poweract:1.6.1'
+    implementation 'github.ryuunoakaihitomi.poweract:poweract:1.7.1'
 
     // https://github.com/ryuunoakaihitomi/ReToast
     runtimeOnly 'github.ryuunoakaihitomi.retoast:retoast:2.0.0'
@@ -189,10 +189,10 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:5.0.1'
 
     // https://github.com/PureWriter/about-page
-    implementation 'com.drakeet.about:about:2.5.0'
+    implementation 'com.drakeet.about:about:2.5.1'
 
     // https://github.com/zxing/zxing
-    implementation 'com.google.zxing:core:3.4.1'
+    implementation 'com.google.zxing:core:3.5.0'
 
     // https://github.com/CyanogenMod/cm_platform_sdk
     implementation 'org.cyanogenmod:platform.sdk:6.0'
@@ -207,10 +207,10 @@ dependencies {
     implementation 'dev.rikka.rikkax.compatibility:compatibility:2.0.0'
 
     // https://github.com/KyuubiRan/EzXHelper
-    implementation 'com.github.kyuubiran:EzXHelper:0.8.6'
+    implementation 'com.github.kyuubiran:EzXHelper:0.8.8'
 
     // https://github.com/square/leakcanary
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.8.1'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.9.1'
 
     // https://github.com/whataa/pandora
     // 最新版是v2.1.0，仅支持android-support

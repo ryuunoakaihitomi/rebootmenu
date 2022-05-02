@@ -58,6 +58,7 @@ import io.noties.markwon.image.ImagesPlugin
 import org.apache.commons.io.IOUtils
 import rikka.compatibility.DeviceCompatibility
 import rikka.shizuku.Shizuku
+import rikka.sui.Sui
 import timber.log.Timber
 import java.nio.charset.Charset
 import java.util.*
@@ -97,9 +98,10 @@ class MainActivity : AppCompatActivity() {
         }
         powerViewModel.infoArray.observe(this) {
             val rootMode = powerViewModel.rootMode.value ?: false
-            /* 特权模式下主动请求Shizuku授权，在受限模式下PowerAct已经处理好这个步骤 */
+            // 特权模式下（或者发现 Sui 时）主动请求 Shizuku 授权
+            // 在受限模式下 PowerAct 已经处理好这个步骤
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
-                rootMode && Shizuku.pingBinder() &&
+                (rootMode || Sui.isSui()) && Shizuku.pingBinder() &&
                 Shizuku.checkSelfPermission() != PackageManager.PERMISSION_GRANTED
             ) {
                 Timber.i("Request shizuku permission.")
