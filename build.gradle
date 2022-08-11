@@ -3,9 +3,12 @@ buildscript {
     repositories {
 
         // 考虑到命令行构建，优先使用访问速度较快的仓库镜像
-        // https://developer.aliyun.com/mvn/guide
-        maven { url 'https://maven.aliyun.com/repository/google' }
-        maven { url 'https://maven.aliyun.com/repository/central' }
+        // 但是有些较新的库，阿里云没更新过来，所以在Github Actions中禁用
+        if (System.getenv("CI") != "true") {
+            // https://developer.aliyun.com/mvn/guide
+            maven { url 'https://maven.aliyun.com/repository/google' }
+            maven { url 'https://maven.aliyun.com/repository/central' }
+        }
 
         google()
         mavenCentral()
@@ -42,8 +45,10 @@ plugins {
 allprojects {
     repositories {
 
-        maven { url 'https://maven.aliyun.com/repository/google' }
-        maven { url 'https://maven.aliyun.com/repository/central' }
+        if (System.getenv("CI") != "true") {
+            maven { url 'https://maven.aliyun.com/repository/google' }
+            maven { url 'https://maven.aliyun.com/repository/central' }
+        }
 
         google()
         mavenCentral()
