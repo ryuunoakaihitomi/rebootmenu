@@ -4,7 +4,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
-apply plugin: 'android-aspectjx'
+//apply plugin: 'android-aspectjx'
 apply plugin: 'AndResGuard'
 
 apply from: "${rootProject.file('loadProperties.gradle')}"
@@ -120,14 +120,14 @@ android {
 dependencies {
     // https://github.com/google/desugar_jdk_libs
     // ZXing需要method sort(Ljava/util/Comparator;)V in class Ljava/util/List;
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.0'
 
     // https://github.com/androidx/androidx
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'androidx.preference:preference-ktx:1.2.0'
-    def lifecycle_version = "2.4.0"
+    def lifecycle_version = "2.4.1"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
 
@@ -137,7 +137,7 @@ dependencies {
     normalImplementation 'com.google.firebase:firebase-crashlytics-ktx'
 
     // https://github.com/microsoft/appcenter-sdk-android
-    normalImplementation 'com.microsoft.appcenter:appcenter-analytics:4.4.3'
+    normalImplementation 'com.microsoft.appcenter:appcenter-analytics:4.4.5'
 
     /* ------- 其他第三方开源组件 ------- */
 
@@ -160,13 +160,13 @@ dependencies {
     runtimeOnly 'github.ryuunoakaihitomi.retoast:retoast:2.0.0'
 
     // https://github.com/google/gson
-    implementation 'com.google.code.gson:gson:2.9.0'
+    implementation 'com.google.code.gson:gson:2.9.1'
 
     // https://github.com/GrenderG/Toasty
     implementation 'com.github.GrenderG:Toasty:1.5.2'
 
     // https://github.com/topjohnwu/libsu
-    implementation 'com.github.topjohnwu.libsu:core:4.0.3'
+    implementation 'com.github.topjohnwu.libsu:core:5.0.2'
 
     // https://github.com/apache/commons-io
     // 固定在此版本，理由同下段注释 （使用的一些java8 API是脱糖库无法完成转换的，即使脱糖库的文档说明支持）
@@ -207,7 +207,7 @@ dependencies {
     implementation 'dev.rikka.rikkax.compatibility:compatibility:2.0.0'
 
     // https://github.com/KyuubiRan/EzXHelper
-    implementation 'com.github.kyuubiran:EzXHelper:0.8.8'
+    implementation 'com.github.kyuubiran:EzXHelper:1.0.1'
 
     // https://github.com/square/leakcanary
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.9.1'
@@ -253,9 +253,10 @@ repositories {
 }
 
 //  配置入口和作用点都要制定
-aspectjx {
-    include 'custom_aspect', 'com.drakeet.about'
-}
+//aspectjx {
+//    enabled false
+////    include 'custom_aspect', 'com.drakeet.about'
+//}
 
 andResGuard {
     mappingFile = null
@@ -284,6 +285,7 @@ andResGuard {
     ]
     sevenzip {
         /* 优先使用环境自带的7z命令 */
+        // TODO 使用which命令查找7z
         def command = "whereis -b 7z"
         def shouldUseArtifact = false
         try {

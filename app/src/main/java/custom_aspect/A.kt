@@ -7,6 +7,7 @@ import org.aspectj.lang.ProceedingJoinPoint
 import org.aspectj.lang.annotation.Around
 import org.aspectj.lang.annotation.Aspect
 
+@Deprecated("build.gradle")
 @Suppress("unused", "SpellCheckingInspection")
 @Aspect
 class A {

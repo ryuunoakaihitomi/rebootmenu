@@ -10,7 +10,7 @@ import com.google.zxing.RGBLuminanceSource
 import com.google.zxing.common.HybridBinarizer
 import com.google.zxing.qrcode.QRCodeReader
 import github.ryuunoakaihitomi.powerpanel.R
-import github.ryuunoakaihitomi.powerpanel.databinding.ActivityDonateBinding
+import github.ryuunoakaihitomi.powerpanel.databinding.LayoutSingleImageBinding
 import github.ryuunoakaihitomi.powerpanel.util.allowInfiniteLines
 import github.ryuunoakaihitomi.powerpanel.util.isWatch
 import github.ryuunoakaihitomi.powerpanel.util.openUrlInBrowser
@@ -18,13 +18,13 @@ import timber.log.Timber
 
 class DonateActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityDonateBinding
+    private lateinit var binding: LayoutSingleImageBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityDonateBinding.inflate(layoutInflater)
+        binding = LayoutSingleImageBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.ivDonate.run {
+        binding.ivImage.run {
             val bitmap = BitmapFactory.decodeStream(assets.open("donate.webp"))
             setImageBitmap(bitmap)
             setOnClickListener {

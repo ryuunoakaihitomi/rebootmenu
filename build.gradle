@@ -1,24 +1,32 @@
 buildscript {
-    ext.kotlin_version = '1.6.20'
+    ext.kotlin_version = '1.7.10'
     repositories {
+
+        // 考虑到命令行构建，优先使用访问速度较快的仓库镜像
+        // https://developer.aliyun.com/mvn/guide
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/central' }
+
         google()
         mavenCentral()
     }
     dependencies {
         // https://android.googlesource.com/platform/tools/build/
-        classpath 'com.android.tools.build:gradle:7.1.3'
+        classpath 'com.android.tools.build:gradle:7.2.0'
 
         // https://github.com/JetBrains/kotlin
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
         /* Crashlytics */
         // https://github.com/google/play-services-plugins/tree/master/google-services-plugin
-        classpath 'com.google.gms:google-services:4.3.10'
+        classpath 'com.google.gms:google-services:4.3.13'
         // https://github.com/firebase/firebase-android-sdk
-        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.8.1'
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.1'
 
+        // 此库长时间未更新，已无法适配新的AGP。虽然有了修改库，但是感觉也是无法长期维护的
+        // A类和相关的Gradle配置不再起作用，仅作为开发笔记保留；现在在Wear OS显示开源库信息是用二维码指向依赖列表json的URL
         // https://github.com/wurensen/gradle_plugin_android_aspectjx
-        classpath 'io.github.wurensen:gradle-android-plugin-aspectjx:2.0.14'
+        //classpath 'io.github.wurensen:gradle-android-plugin-aspectjx:2.0.14'
 
         // https://github.com/Leon406/AndResGuard
         classpath 'io.github.leon406:AndResGuard-gradle-plugin:1.2.22.6'
@@ -33,8 +41,13 @@ plugins {
 
 allprojects {
     repositories {
+
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/central' }
+
         google()
         mavenCentral()
+
         maven { url "https://jitpack.io" }
     }
 

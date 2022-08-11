@@ -41,10 +41,12 @@ import github.ryuunoakaihitomi.powerpanel.desc.getLabelArray
 import github.ryuunoakaihitomi.powerpanel.stat.Statistics
 import github.ryuunoakaihitomi.powerpanel.ui.DonateActivity
 import github.ryuunoakaihitomi.powerpanel.ui.OpenSourceLibDependencyActivity
+import github.ryuunoakaihitomi.powerpanel.ui.Osld4WearActivity
 import github.ryuunoakaihitomi.powerpanel.ui.ShortcutActivity
 import github.ryuunoakaihitomi.powerpanel.ui.tile.CmCustomTile
 import github.ryuunoakaihitomi.powerpanel.util.BlackMagic
 import github.ryuunoakaihitomi.powerpanel.util.CC
+import github.ryuunoakaihitomi.powerpanel.util.PROJECT_URL
 import github.ryuunoakaihitomi.powerpanel.util.PowerActHelper
 import github.ryuunoakaihitomi.powerpanel.util.RC
 import github.ryuunoakaihitomi.powerpanel.util.emptyAccessibilityDelegate
@@ -182,12 +184,12 @@ class MainActivity : AppCompatActivity() {
                     // 准备使用下面的MarkDown组件
                     setMessage("placeholder")
                     setPositiveButton(R.string.btn_dialog_source_code) { _, _ ->
-                        openUrlInBrowser("https://github.com/ryuunoakaihitomi/rebootmenu")
+                        openUrlInBrowser(PROJECT_URL)
                         finish()
                     }
                     setNegativeButton(R.string.donate) { _, _ -> teleport<DonateActivity>() }
                     setNeutralButton(R.string.open_source_lib_dependency) { _, _ ->
-                        teleport<OpenSourceLibDependencyActivity>()
+                        if (isWatch()) teleport<Osld4WearActivity>() else teleport<OpenSourceLibDependencyActivity>()
                     }
                     setOnCancelListener { powerViewModel.prepare() }
                     /* 主要信息 */

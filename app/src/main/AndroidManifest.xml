@@ -59,6 +59,11 @@
             android:theme="@style/Theme.AppCompat.NoActionBar" />
 
         <activity
+            android:name=".ui.Osld4WearActivity"
+            android:label="@string/open_source_lib_dependency"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+
+        <activity
             android:name=".ui.DonateActivity"
             android:exported="true"
             android:label="@string/donate"
