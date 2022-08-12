@@ -2,9 +2,7 @@ package github.ryuunoakaihitomi.powerpanel.ui
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.content.Context
 import android.content.DialogInterface
-import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Build
@@ -174,11 +172,7 @@ class OpenSourceLibDependencyActivity : AbsAboutActivity() {
 
     private val maxLineCount = 2048
 
-    private val ar = registerForActivityResult(object : CreateDocument("todo/todo") {
-        override fun createIntent(context: Context, input: String): Intent {
-            return super.createIntent(context, input).apply { type = "text/plain" }
-        }
-    }) {
+    private val ar = registerForActivityResult(CreateDocument("text/plain")) {
         it?.runCatching {
             val command =
                 "logcat -t $maxLineCount${if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) " --pid=${Os.getpid()}" else ""}"
