@@ -15,7 +15,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.contract.ActivityResultContracts.CreateDocument
 import androidx.annotation.StringRes
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.widget.doOnTextChanged
@@ -33,6 +33,7 @@ import github.ryuunoakaihitomi.powerpanel.util.BlackMagic
 import github.ryuunoakaihitomi.powerpanel.util.CC
 import github.ryuunoakaihitomi.powerpanel.util.RC
 import github.ryuunoakaihitomi.powerpanel.util.emptyAccessibilityDelegate
+import github.ryuunoakaihitomi.powerpanel.util.isWatch
 import github.ryuunoakaihitomi.powerpanel.util.openUrlInBrowser
 import github.ryuunoakaihitomi.powerpanel.util.uiLog
 import org.apache.commons.io.IOUtils
@@ -64,6 +65,11 @@ class OpenSourceLibDependencyActivity : AbsAboutActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         supportActionBar?.setDisplayHomeAsUpEnabled(false)
+
+        if (isWatch()) {
+            uiLog("Denied on wear")
+            finish()
+        }
     }
 
     override fun onCreateHeader(icon: ImageView, slogan: TextView, version: TextView) {
@@ -77,7 +83,7 @@ class OpenSourceLibDependencyActivity : AbsAboutActivity() {
             // - 不计入统计
             // - 不在PowerExecution中抽象，直接调用
             // - 不记录在帮助文档中
-            if (!Shell.rootAccess()) return@setOnClickListener
+            if (Shell.isAppGrantedRoot() != true) return@setOnClickListener
             val editor = EditText(this).apply {
                 hint = getText(R.string.hint_edittext_custom_reboot)
                 setSingleLine()
@@ -168,7 +174,7 @@ class OpenSourceLibDependencyActivity : AbsAboutActivity() {
 
     private val maxLineCount = 2048
 
-    private val ar = registerForActivityResult(object : ActivityResultContracts.CreateDocument() {
+    private val ar = registerForActivityResult(object : CreateDocument("todo/todo") {
         override fun createIntent(context: Context, input: String): Intent {
             return super.createIntent(context, input).apply { type = "text/plain" }
         }
