@@ -33,10 +33,11 @@
         android:fullBackupOnly="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:localeConfig="@xml/locales_config"
         android:manageSpaceActivity="java.lang.Class"
         android:resizeableActivity="false"
         android:theme="@style/MainStyle"
-        tools:targetApi="o">
+        tools:targetApi="33">
 
         <activity
             android:name=".ui.main.MainActivity"
