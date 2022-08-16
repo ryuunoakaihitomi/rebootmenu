@@ -21,7 +21,7 @@ class PowerItemAdapter(context: Context, items: Array<CharSequence>, iconResId: 
         val textView = view.findViewById<TextView>(android.R.id.text1)
         textView.compoundDrawablePadding = ViewConfiguration.get(context).scaledTouchSlop
         RC.getDrawable(context.resources, iconResIdList[position], null)?.run {
-            DrawableCompat.wrap(mutate())?.run {
+            DrawableCompat.wrap(mutate()).run {
                 DrawableCompat.setTint(this, textView.textColors.defaultColor)
                 textView.setCompoundDrawablesWithIntrinsicBounds(this, null, null, null)
             }
