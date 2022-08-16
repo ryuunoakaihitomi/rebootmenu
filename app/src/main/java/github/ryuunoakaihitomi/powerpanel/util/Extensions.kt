@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
+import android.view.accessibility.AccessibilityNodeProvider
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -78,23 +79,23 @@ fun View.emptyAccessibilityDelegate() = run {
         }
 
         override fun dispatchPopulateAccessibilityEvent(
-            host: View?,
-            event: AccessibilityEvent?
+            host: View,
+            event: AccessibilityEvent
         ) = true
 
-        override fun getAccessibilityNodeProvider(host: View?) = null
-        override fun onInitializeAccessibilityEvent(host: View?, event: AccessibilityEvent?) {}
-        override fun onInitializeAccessibilityNodeInfo(host: View?, info: AccessibilityNodeInfo?) {}
-        override fun onPopulateAccessibilityEvent(host: View?, event: AccessibilityEvent?) {}
+        override fun getAccessibilityNodeProvider(host: View): AccessibilityNodeProvider? = null
+        override fun onInitializeAccessibilityEvent(host: View, event: AccessibilityEvent) {}
+        override fun onInitializeAccessibilityNodeInfo(host: View, info: AccessibilityNodeInfo) {}
+        override fun onPopulateAccessibilityEvent(host: View, event: AccessibilityEvent) {}
         override fun onRequestSendAccessibilityEvent(
-            host: ViewGroup?,
-            child: View?,
-            event: AccessibilityEvent?
+            host: ViewGroup,
+            child: View,
+            event: AccessibilityEvent
         ) = false
 
-        override fun performAccessibilityAction(host: View?, action: Int, args: Bundle?) = true
-        override fun sendAccessibilityEvent(host: View?, eventType: Int) {}
-        override fun sendAccessibilityEventUnchecked(host: View?, event: AccessibilityEvent?) {}
+        override fun performAccessibilityAction(host: View, action: Int, args: Bundle?) = true
+        override fun sendAccessibilityEvent(host: View, eventType: Int) {}
+        override fun sendAccessibilityEventUnchecked(host: View, event: AccessibilityEvent) {}
     }
 }
 

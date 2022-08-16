@@ -1,6 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="UnusedResources">
-    <string name="poweract_accessibility_service_label">PowerPanel Accessibility Service</string>
-    <string name="poweract_accessibility_service_description">Sometimes, RESTRICTED MODE depends on it. The service will not collect user data at any time.</string>
-    <string name="poweract_accessibility_service_summary">Restricted mode required.</string>
-    <bool name="poweract_accessibility_service_show_foreground_notification">true</bool>
+    <!--
+     https://developer.android.com/guide/topics/ui/notifiers/notification-permission
+     且现在不在推荐使用无障碍服务,不再试图保活
+      -->
+    <bool name="poweract_accessibility_service_show_foreground_notification">false</bool>
 </resources>

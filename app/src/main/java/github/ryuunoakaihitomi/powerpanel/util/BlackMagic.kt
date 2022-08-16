@@ -35,4 +35,7 @@ object BlackMagic {
             else context.getSystemService("statusbar")
         on(statusBarManager).call("collapsePanels")
     }
+
+    fun getBooleanSystemProperties(key: String): Boolean =
+        onClass("android.os.SystemProperties").call("getBoolean", key, false).get()
 }

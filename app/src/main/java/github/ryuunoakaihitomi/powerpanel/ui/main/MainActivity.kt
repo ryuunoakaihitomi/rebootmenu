@@ -273,6 +273,13 @@ class MainActivity : AppCompatActivity() {
                 hideSysUi()
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                     setHideOverlayWindows(true)
+                    // 在不支持模糊背景的环境中回滚暗淡外观
+                    if (!BlackMagic.getBooleanSystemProperties("ro.surface_flinger.supports_background_blur")) {
+                        // appcompat/appcompat/src/main/res/values/themes_base.xml
+                        // frameworks/base/core/res/res/values/themes.xml
+                        // backgroundDimAmount
+                        attributes = attributes.apply { dimAmount = 0.6f }
+                    }
                 }
                 // 这里不继续在旧版本检测是否有覆盖层，解决方案可能不可用
                 // https://stackoverflow.com/questions/63152374/flag-window-is-obscured-not-working-on-newer-android
@@ -339,7 +346,7 @@ private fun Context.markwon() = Markwon.builder(this)
 /**
  * 隐藏导航栏和状态栏
  */
-private fun Window.hideSysUi() = WindowCompat.getInsetsController(this, decorView)?.run {
+private fun Window.hideSysUi() = WindowCompat.getInsetsController(this, decorView).run {
     hide(WindowInsetsCompat.Type.systemBars())
     systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
 }
