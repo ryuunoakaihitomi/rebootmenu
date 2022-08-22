@@ -31,6 +31,7 @@ import github.ryuunoakaihitomi.powerpanel.util.BlackMagic
 import github.ryuunoakaihitomi.powerpanel.util.CC
 import github.ryuunoakaihitomi.powerpanel.util.RC
 import github.ryuunoakaihitomi.powerpanel.util.emptyAccessibilityDelegate
+import github.ryuunoakaihitomi.powerpanel.util.isRoot
 import github.ryuunoakaihitomi.powerpanel.util.isWatch
 import github.ryuunoakaihitomi.powerpanel.util.openUrlInBrowser
 import github.ryuunoakaihitomi.powerpanel.util.uiLog
@@ -81,7 +82,7 @@ class OpenSourceLibDependencyActivity : AbsAboutActivity() {
             // - 不计入统计
             // - 不在PowerExecution中抽象，直接调用
             // - 不记录在帮助文档中
-            if (Shell.isAppGrantedRoot() != true) return@setOnClickListener
+            if (!isRoot()) return@setOnClickListener
             val editor = EditText(this).apply {
                 hint = getText(R.string.hint_edittext_custom_reboot)
                 setSingleLine()

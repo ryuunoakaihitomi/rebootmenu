@@ -15,12 +15,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.topjohnwu.superuser.Shell
 import es.dmoral.toasty.Toasty
 import github.ryuunoakaihitomi.powerpanel.R
 import github.ryuunoakaihitomi.powerpanel.desc.PowerInfo
 import github.ryuunoakaihitomi.powerpanel.util.BlackMagic
 import github.ryuunoakaihitomi.powerpanel.util.RC
+import github.ryuunoakaihitomi.powerpanel.util.isRoot
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import rikka.shizuku.Shizuku
@@ -66,11 +66,7 @@ class PowerViewModel : ViewModel() {
                 Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED
             } else {
                 // if Sui is not present, fallback to plain old su
-                // 在这里提供root状态
-                // 由于libsu 4.0.0的变更，Shell.rootAccess()在返回true的情况下不再准确；需要进一步判断
-                if (Shell.rootAccess()) {
-                    Shell.getShell().isRoot
-                } else false
+                isRoot()
             }
 
             viewModelScope.launch {

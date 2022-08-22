@@ -1,0 +1,4 @@
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="UnusedResources">
+    <string name="poweract_accessibility_service_description">It is no longer recommended to enable this service, please use Shizuku instead whenever possible.</string>
+    <string name="poweract_accessibility_service_summary">Restricted mode required. (DEPRECATED)</string>
+</resources>

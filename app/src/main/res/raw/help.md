@@ -24,7 +24,18 @@ In order to prevent misoperation, except for *Lock screen* and *Sys power menu*,
 
 ## ⚠ Unexpected situation
 
-On Android 11, accessibility service has a potential bug that will cause it to stop working. Please use Shizuku instead of it as much as possible.
+* Accessibility service
+
+On Android 11, accessibility service has a potential bug that will cause it to stop working.
+
+Starting from Android 13, accessibility service is classified as ["restricted settings"](https://blog.esper.io/android-13-sideloading-restriction-harder-malware-abuse-accessibility-apis/#android-13s-restricted-access-to-accessibility-services).
+Users need to allow restricted settings to use it, which is one more troublesome step.
+
+In restricted mode, please use Shizuku instead of accessibility service if possible.
+
+* Launcher shortcut
+
+In some environments, the launcher shortcut may not work after the application has been updated. Just delete and re-add it.
 
 ## Author
 

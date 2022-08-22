@@ -1,0 +1,4 @@
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="UnusedResources">
+    <string name="poweract_accessibility_service_description">现在不再推荐启用这个服务已经，请尽可能使用 Shizuku 代替。</string>
+    <string name="poweract_accessibility_service_summary">受限模式所需。（不再推荐）</string>
+</resources>
