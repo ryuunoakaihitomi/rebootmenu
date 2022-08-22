@@ -21,10 +21,10 @@ android {
         //targetSdkVersion compileSdkVersion
         targetSdkVersion 33
         // 版本号：发布日期
-        versionCode 20220822
+        versionCode 20220823
         // 版本名说明： R3.x.y.z (R3:Refactoring 第三次重构，z:Quick Fix序号)
         // 不要包含非ASCII可打印字符，会导致Github release文件名异常
-        versionName 'R3.16'
+        versionName 'R3.16.0.1'
         resConfigs "en", "zh-rCN"
 
         buildConfigField 'String', 'BUILD_TIME', '\"' + new Date() + '\"'
@@ -279,6 +279,10 @@ andResGuard {
             "R.string.google_api_key",
             "R.string.google_storage_bucket",
             "R.string.com.crashlytics.android.build_id",
+            // 新增：以后在resources.arsc看到像API key的项目都要加进去
+            "R.string.com.google.firebase.crashlytics.mapping_file_id",
+            "R.string.google_crash_reporting_api_key",
+            "R.string.default_web_client_id",
             // 使用资源入口名记录事件：getResourceEntryName()
             'R.string.func_*',
     ]
