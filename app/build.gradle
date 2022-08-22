@@ -21,10 +21,10 @@ android {
         //targetSdkVersion compileSdkVersion
         targetSdkVersion 33
         // 版本号：发布日期
-        versionCode 20220503
+        versionCode 20220822
         // 版本名说明： R3.x.y.z (R3:Refactoring 第三次重构，z:Quick Fix序号)
         // 不要包含非ASCII可打印字符，会导致Github release文件名异常
-        versionName 'R3.15.8'
+        versionName 'R3.16'
         resConfigs "en", "zh-rCN"
 
         buildConfigField 'String', 'BUILD_TIME', '\"' + new Date() + '\"'
@@ -134,7 +134,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
 
     // https://github.com/firebase/firebase-android-sdk
-    normalImplementation platform('com.google.firebase:firebase-bom:29.3.1')
+    normalImplementation platform('com.google.firebase:firebase-bom:30.3.2')
     normalImplementation 'com.google.firebase:firebase-analytics-ktx'
     normalImplementation 'com.google.firebase:firebase-crashlytics-ktx'
 
@@ -287,7 +287,7 @@ andResGuard {
     ]
     sevenzip {
         /* 优先使用环境自带的7z命令 */
-        // TODO 使用which命令查找7z
+        // 咕咕咕 TODO 使用which命令查找7z
         def command = "whereis -b 7z"
         def shouldUseArtifact = false
         try {
