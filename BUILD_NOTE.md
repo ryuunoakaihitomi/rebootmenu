@@ -18,7 +18,7 @@
 
 - 执行Gradle任务：`app:resguardFlossRelease`
 
-- 生成APK文件路径：`app/build/intermediates/apk/floss/release/rebootmenu-<版本信息>-floss_release.apk`
+- 生成APK文件路径：`app/build/outputs/apk/floss/release/rebootmenu-<版本信息>-floss_release.apk`
 
 ## 🈲normal构建步骤⚠
 
