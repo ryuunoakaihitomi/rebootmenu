@@ -1,6 +1,6 @@
 # 命令行构建教程
 
-* 使用Android Studio的GUI式构建是方便而且推荐的做法。但是在其他不得不使用命令行界面的场景，也许有本教程的用武之地。
+* 使用Android Studio的GUI式构建是方便而且最为推荐的做法。但是在其他不得不使用命令行界面的场景，也许有本教程的用武之地。
 * 本教程也可以作为参考资料用来命令行构建其他应用。
 
 ## 环境要求
@@ -10,7 +10,7 @@
 指令集|`amd64`|`arm64`经测试无法构建（Android设备，使用[Termux](https://termux.com)）
 最低内存|`3G`|理论上也许支持更低的内存
 最低存储|`10G`|实测整个构建过程完成一次后，硬盘占用6.6G
-操作系统|`Ubuntu Server 20.04.3 LTS`|使用[AOSP所要求的软件环境](https://source.android.google.cn/setup/build/requirements#software-requirements)以确保构建成功，使用服务器版以降低资源占用
+操作系统|`Ubuntu Server 22.04.1 LTS`|使用[AOSP所要求的软件环境](https://source.android.google.cn/setup/build/requirements#software-requirements)以确保构建成功，使用服务器版以降低资源占用
 
 ## 步骤
 
@@ -47,27 +47,27 @@ git clone --depth=1 https://github.com/ryuunoakaihitomi/rebootmenu.git
 下载地址获取方式：在[Android Developer的Android Studio下载页面](https://developer.android.google.cn/studio#downloads)**往下翻**，翻到Command line tools only标题处，找到linux项之后同意条款复制链接
 
 ```shell
-wget https://dl.google.com/android/repository/commandlinetools-linux-7583922_latest.zip # 如果下载地址有变，在这里修改
+wget https://dl.google.com/android/repository/commandlinetools-linux-8512546_latest.zip # 如果下载地址有变，在这里修改
 unzip commandlinetools-linux-*_latest.zip
 ```
 
 #### 配置Android SDK
 
-新建一个目录作为SDk根目录
+新建一个目录作为SDK根目录
 
 ```shell
 mkdir android_sdk
 export ANDROID_SDK_ROOT=$HOME/android_sdk
 ```
 
-安装Android 12的SDK，compileSdkVersion用的是这个，用法参考[sdkmanager用户指南](https://developer.android.google.cn/studio/command-line/sdkmanager?hl=zh_cn)
+在使用SDK之前也要同意协议，参考
+* [sdkmanager用户指南](https://developer.android.google.cn/studio/command-line/sdkmanager?hl=zh_cn)
+* [Automatically accept all SDK licences](https://stackoverflow.com/a/45782695)
 
 ```shell
 cd cmdline-tools/bin # 命令行工具目录
-./sdkmanager --sdk_root=$HOME/android_sdk "platforms;android-31"
+yes | ./sdkmanager  --sdk_root=$HOME/android_sdk --licenses
 ```
-
-按`y`并回车同意协议
 
 #### 安装Gradle
 
@@ -75,13 +75,13 @@ cd cmdline-tools/bin # 命令行工具目录
 * https://gradle.org/install
 * https://sdkman.io/install
 
-安装的版本是`7.3.3`（经测试可用，这是教程发布时最新的版本）
+安装的版本是`7.5.1`（经测试可用，这是教程编辑时最新的版本）
 
 ```shell
 cd ~
 curl -s "https://get.sdkman.io" | bash
 source "$HOME/.sdkman/bin/sdkman-init.sh"
-sdk install gradle 7.3.3
+sdk install gradle 7.5.1
 ```
 
 ### 构建
