@@ -15,7 +15,7 @@ android {
     compileSdkVersion 33
     defaultConfig {
         applicationId "com.ryuunoakaihitomi.rebootmenu"
-        minSdkVersion 19
+        minSdkVersion 16
         multiDexEnabled true
         // 以下方式会出现这样的错误：android:targetSdkVersion="android-30"
         //targetSdkVersion compileSdkVersion
@@ -291,14 +291,18 @@ andResGuard {
     ]
     sevenzip {
         /* 优先使用环境自带的7z命令 */
-        // 咕咕咕 TODO 使用which命令查找7z
-        def command = "whereis -b 7z"
+        def command = "which 7z"
         def shouldUseArtifact = false
         try {
             def proc = command.execute()
-            def _7zPath = proc.in.text.split(" ")[1].trim()
-            logger.lifecycle("Has local 7z bin! $_7zPath")
-            path = _7zPath
+            def _7zPath = proc.in.text.trim()
+            if (_7zPath.isEmpty()) {
+                logger.lifecycle("7z bin not exists!")
+                shouldUseArtifact = true
+            } else {
+                logger.lifecycle("Has local 7z bin. $_7zPath")
+                path = _7zPath
+            }
         } catch (Exception e) {
             logger.lifecycle("Can't find 7z bin! Reason: $e -> Use artifact...")
             shouldUseArtifact = true
