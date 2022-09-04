@@ -103,10 +103,8 @@ class MainActivity : AppCompatActivity() {
         }
         powerViewModel.forceMode.observe(this) {
             val isAtLeastS = VERSION.SDK_INT >= Build.VERSION_CODES.S
-            val msgRes: Int
             val rawTitle = getString(R.string.app_name)
             if (it == true) {
-                msgRes = R.string.toast_switch_to_force_mode
                 if (isAtLeastS) {
                     powerViewModel.setTitle(SpannableStringBuilder().apply {
                         append(rawTitle, " ", buildSpannedString {
@@ -120,14 +118,13 @@ class MainActivity : AppCompatActivity() {
                         })
                     })
                 } else {
-                    Toasty.warning(application, msgRes).show()
+                    Toasty.warning(application, R.string.toast_switch_to_force_mode).show()
                 }
             } else {
-                msgRes = R.string.toast_switch_to_privileged_mode
                 if (isAtLeastS) {
                     powerViewModel.setTitle(rawTitle)
                 } else {
-                    Toasty.normal(application, msgRes).show()
+                    Toasty.normal(application, R.string.toast_switch_to_privileged_mode).show()
                 }
             }
         }
