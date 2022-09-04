@@ -8,7 +8,9 @@ import android.content.pm.PackageManager
 import android.content.pm.ShortcutManager
 import android.content.res.Resources
 import android.os.Build
+import android.os.Build.VERSION
 import android.os.Bundle
+import android.text.SpannableStringBuilder
 import android.text.style.TypefaceSpan
 import android.view.Window
 import android.view.WindowManager
@@ -26,6 +28,7 @@ import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
 import androidx.core.text.color
 import androidx.core.text.inSpans
+import androidx.core.text.scale
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -78,7 +81,7 @@ class MainActivity : AppCompatActivity() {
         }
         powerViewModel.shortcutInfoArray.observe(this) { it ->
             // 小天才Z6巅峰版把ShortcutManager阉割了
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1 && getSystemService<ShortcutManager>() == null) {
+            if (VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1 && getSystemService<ShortcutManager>() == null) {
                 Timber.w("ShortcutMgr == null")
                 return@observe
             }
@@ -98,11 +101,41 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+        powerViewModel.forceMode.observe(this) {
+            val isAtLeastS = VERSION.SDK_INT >= Build.VERSION_CODES.S
+            val msgRes: Int
+            val rawTitle = getString(R.string.app_name)
+            if (it == true) {
+                msgRes = R.string.toast_switch_to_force_mode
+                if (isAtLeastS) {
+                    powerViewModel.setTitle(SpannableStringBuilder().apply {
+                        append(rawTitle, " ", buildSpannedString {
+                            color(CC.getColor(application, R.color.colorForceModeItem)) {
+                                scale(0.6f) {
+                                    bold {
+                                        append(getString(R.string.title_dialog_force_mode))
+                                    }
+                                }
+                            }
+                        })
+                    })
+                } else {
+                    Toasty.warning(application, msgRes).show()
+                }
+            } else {
+                msgRes = R.string.toast_switch_to_privileged_mode
+                if (isAtLeastS) {
+                    powerViewModel.setTitle(rawTitle)
+                } else {
+                    Toasty.normal(application, msgRes).show()
+                }
+            }
+        }
         powerViewModel.infoArray.observe(this) {
             val rootMode = powerViewModel.rootMode.value ?: false
             // 特权模式下（或者发现 Sui 时）主动请求 Shizuku 授权
             // 在受限模式下 PowerAct 已经处理好这个步骤
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
+            if (VERSION.SDK_INT >= Build.VERSION_CODES.M &&
                 (rootMode || Sui.isSui()) && Shizuku.pingBinder() &&
                 Shizuku.checkSelfPermission() != PackageManager.PERMISSION_GRANTED
             ) {
@@ -216,9 +249,7 @@ class MainActivity : AppCompatActivity() {
             val lv = mainDialog.listView
             lv.onItemLongClickListener = AdapterView.OnItemLongClickListener { _, _, position, _ ->
                 // 和上面那个用到ShortcutManagerCompat的例子不同，requestPinShortcut()从26开始才直接调用
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&
-                    getSystemService<ShortcutManager>() == null
-                ) {
+                if (VERSION.SDK_INT >= Build.VERSION_CODES.O && getSystemService<ShortcutManager>() == null) {
                     return@OnItemLongClickListener false
                 }
                 val item = it[position]
@@ -271,7 +302,7 @@ class MainActivity : AppCompatActivity() {
                 BlackMagic.collapseStatusBarPanels(application)
                 // 在初次resume时，dialog还未show。所以无效，还需要在这里调用
                 hideSysUi()
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                if (VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                     setHideOverlayWindows(true)
                     // 在不支持模糊背景的环境中回滚暗淡外观
                     if (!BlackMagic.getBooleanSystemProperties("ro.surface_flinger.supports_background_blur")) {
@@ -298,7 +329,7 @@ class MainActivity : AppCompatActivity() {
         powerViewModel.prepare()
         // 遵照其环境下的系统电源菜单界面，基于以下文章给Android 12之前的MIUI添加背景模糊特效，手表都是黑色背景故不作处理
         // https://www.cnblogs.com/zhucai/p/miui-real-time-blur.html
-        if (!isWatch() && DeviceCompatibility.isMiui() && Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+        if (!isWatch() && DeviceCompatibility.isMiui() && VERSION.SDK_INT < Build.VERSION_CODES.S) {
             setTheme(R.style.MainStyleBlurCompat)
             window.run {
                 decorView.alpha = 0f

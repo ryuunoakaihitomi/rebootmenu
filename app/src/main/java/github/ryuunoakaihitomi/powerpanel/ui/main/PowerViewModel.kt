@@ -15,7 +15,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import es.dmoral.toasty.Toasty
 import github.ryuunoakaihitomi.powerpanel.R
 import github.ryuunoakaihitomi.powerpanel.desc.PowerInfo
 import github.ryuunoakaihitomi.powerpanel.util.BlackMagic
@@ -38,7 +37,8 @@ class PowerViewModel : ViewModel() {
     private var _rootMode = MutableLiveData<Boolean>()
 
     /* 强制模式：分隔开特权模式 */
-    private var forceMode = MutableLiveData<Boolean>()
+    private var _forceMode = MutableLiveData<Boolean>()
+    val forceMode = _forceMode as LiveData<Boolean>
 
     /* 标题：受限模式会提示用户 */
     val title: LiveData<CharSequence>
@@ -71,7 +71,6 @@ class PowerViewModel : ViewModel() {
 
             viewModelScope.launch {
                 _rootMode.value = hasPrivilege
-                forceMode.value = false
                 changeInfo()
             }
         }
@@ -83,13 +82,12 @@ class PowerViewModel : ViewModel() {
     }
 
     fun reverseForceMode() {
-        forceMode.value = getForceMode().not()
-        if (forceMode.value == true) {
-            Toasty.warning(app, R.string.toast_switch_to_force_mode).show()
-        } else {
-            Toasty.normal(app, R.string.toast_switch_to_privileged_mode).show()
-        }
+        _forceMode.value = getForceMode().not()
         changeInfo()
+    }
+
+    fun setTitle(title: CharSequence) {
+        _title.value = title
     }
 
     private fun changeInfo() {
@@ -126,7 +124,8 @@ class PowerViewModel : ViewModel() {
 
         val rawTitle = app.getString(R.string.app_name)
         if (rootMode.value == true) {
-            _title.value = rawTitle
+            // 如果title在之前就已经设定，可能是因为在强制模式下
+            if (_title.value.isNullOrEmpty()) _title.value = rawTitle
 
             /* 在Android 11中，为特权模式添加打开系统电源菜单的选项以访问设备控制器（使用Shizuku实现） */
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R &&
@@ -221,7 +220,7 @@ class PowerViewModel : ViewModel() {
     }
     //</editor-fold>
 
-    fun getForceMode() = forceMode.value ?: false
+    fun getForceMode() = _forceMode.value ?: false
 
     fun isOnForceMode(info: PowerInfo) = getForceMode() and info.hasForceMode
 

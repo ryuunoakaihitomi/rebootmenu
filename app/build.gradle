@@ -15,7 +15,7 @@ android {
     compileSdkVersion 33
     defaultConfig {
         applicationId "com.ryuunoakaihitomi.rebootmenu"
-        minSdkVersion 16
+        minSdkVersion 19
         multiDexEnabled true
         // 以下方式会出现这样的错误：android:targetSdkVersion="android-30"
         //targetSdkVersion compileSdkVersion

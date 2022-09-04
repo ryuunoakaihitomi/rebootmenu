@@ -16,6 +16,7 @@
     <string name="func_lock_screen_privileged">Lock screen (privileged)</string>
     <string name="title_dialog_restricted_mode">RESTRICTED MODE</string>
     <string name="toast_switch_to_force_mode">Switch to FORCE mode</string>
+    <string name="title_dialog_force_mode">FORCE MODE</string>
     <string name="toast_switch_to_privileged_mode">Switch to PRIVILEGED mode</string>
     <string name="toast_op_failed">Operation FAILED</string>
     <string name="btn_dialog_source_code"><i><u>Source Code</u></i></string>

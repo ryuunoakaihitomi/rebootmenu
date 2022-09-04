@@ -14,6 +14,7 @@
     <string name="func_lock_screen_privileged">锁屏(特权)</string>    <!-- 使用半角符号节省长度用来显示App shortcut -->
     <string name="title_dialog_restricted_mode">受限模式</string>
     <string name="toast_switch_to_force_mode">切换成强制模式</string>
+    <string name="title_dialog_force_mode">强制模式</string>
     <string name="toast_switch_to_privileged_mode">切换成特权模式</string>
     <string name="toast_op_failed">操作失败</string>
     <string name="btn_dialog_source_code"><b><font color="red">源代码</font></b></string>    <!-- 这里的HTML标签从26开始生效 -->
