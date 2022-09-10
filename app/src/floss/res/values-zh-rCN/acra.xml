@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="acra_toast_text">抱歉，应用崩溃了。\n错误信息已保存至缓存。</string>
+</resources>

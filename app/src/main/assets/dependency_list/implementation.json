@@ -100,5 +100,17 @@
     "name": "EzXHelper",
     "type": "Apache Software License 2.0",
     "url": "https://github.com/KyuubiRan/EzXHelper"
+  },
+  {
+    "author": "ACRA organization",
+    "name": "ACRA",
+    "type": "Apache Software License 2.0",
+    "url": "https://github.com/ACRA/acra"
+  },
+  {
+    "author": "Google LLC",
+    "name": "AutoService",
+    "type": "Apache Software License 2.0",
+    "url": "https://github.com/google/auto/tree/master/service"
   }
 ]

@@ -45,15 +45,15 @@ plugins {
 allprojects {
     repositories {
 
-        if (System.getenv("CI") != "true") {
-            maven { url 'https://maven.aliyun.com/repository/google' }
-            maven { url 'https://maven.aliyun.com/repository/central' }
-        }
-
         google()
         mavenCentral()
 
         maven { url "https://jitpack.io" }
+
+        if (System.getenv("CI") != "true") {
+            maven { url 'https://maven.aliyun.com/repository/google' }
+            maven { url 'https://maven.aliyun.com/repository/central' }
+        }
     }
 
     // 在floss变体中过滤gms插件任务

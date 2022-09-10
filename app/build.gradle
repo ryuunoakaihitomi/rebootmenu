@@ -2,6 +2,7 @@ import java.time.LocalDateTime
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'org.jetbrains.kotlin.kapt'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
 //apply plugin: 'android-aspectjx'
@@ -125,8 +126,8 @@ dependencies {
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
 
     // https://github.com/androidx/androidx
-    implementation 'androidx.core:core-ktx:1.8.0'
-    implementation 'androidx.appcompat:appcompat:1.5.0'
+    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'androidx.preference:preference-ktx:1.2.0'
     def lifecycle_version = "2.5.1"
@@ -140,6 +141,16 @@ dependencies {
 
     // https://github.com/microsoft/appcenter-sdk-android
     normalImplementation 'com.microsoft.appcenter:appcenter-analytics:4.4.5'
+
+    // https://github.com/ACRA/acra
+    def acraVersion = '5.9.6'
+    flossImplementation "ch.acra:acra-core:$acraVersion"
+    flossImplementation "ch.acra:acra-toast:$acraVersion"
+
+    // https://github.com/google/auto/tree/master/service
+    def autoServiceVersion = '1.0.1'
+    flossCompileOnly "com.google.auto.service:auto-service-annotations:$autoServiceVersion"
+    kapt "com.google.auto.service:auto-service:$autoServiceVersion"
 
     /* ------- 其他第三方开源组件 ------- */
 

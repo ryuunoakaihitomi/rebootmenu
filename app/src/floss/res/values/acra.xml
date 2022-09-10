@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="acra_toast_text">Sorry, the application crashed.\nThe error info has been saved to cache.</string>
+</resources>

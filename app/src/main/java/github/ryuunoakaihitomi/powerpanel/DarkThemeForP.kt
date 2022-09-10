@@ -9,8 +9,8 @@ import android.os.Build
 import android.os.Handler
 import android.provider.Settings
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.getSystemService
+import github.ryuunoakaihitomi.powerpanel.util.lumos
 import github.ryuunoakaihitomi.powerpanel.util.nox
 import timber.log.Timber
 
@@ -80,7 +80,4 @@ object DarkThemeForP {
     @Suppress("NewApi")
     private fun WallpaperColors.supportDarkTheme() =
         colorHints and WallpaperColors.HINT_SUPPORTS_DARK_THEME != 0
-
-    private fun lumos() =
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
 }

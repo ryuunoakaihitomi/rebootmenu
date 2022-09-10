@@ -3,6 +3,7 @@ package github.ryuunoakaihitomi.powerpanel.ui.main
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ShortcutManager
@@ -176,15 +177,9 @@ class MainActivity : AppCompatActivity() {
                                 }
                             }
                         )
-                        setAdapter(null, null)
-                        setItems(
-                            arrayOf(
-                                resources.getText(android.R.string.ok).emphasize(),
-                                resources.getText(android.R.string.cancel).emphasize()
-                            )
-                        ) { _, confirmWhich ->
+                        val confirmListener = DialogInterface.OnClickListener { _, confirmWhich ->
                             val ok = confirmWhich == 0
-                            Statistics.logDialogCancel(this.context, item.labelResId, ok.not())
+                            Statistics.logDialogCancel(context, item.labelResId, ok.not())
                             if (ok) {
                                 powerViewModel.call(item.labelResId)
                                 // dismiss防止窗口泄漏
@@ -192,6 +187,31 @@ class MainActivity : AppCompatActivity() {
                             } else {
                                 powerViewModel.prepare()
                             }
+                        }
+                        // 修复本应用在CrackDroid项目上二次确认的“确认/取消”选项无法显示的问题，我恰好有台吃灰的558泡面盖可以刷机测试
+                        // 参考资料看isCrackDroidEnv的文档
+                        if (isCrackDroidEnv) {
+                            setAdapter(
+                                PowerItemAdapter(
+                                    context,
+                                    arrayOf(
+                                        resources.getText(android.R.string.ok).emphasize(),
+                                        resources.getText(android.R.string.cancel).emphasize(),
+                                    ),
+                                    arrayOf(
+                                        R.drawable.ic_baseline_check_24,
+                                        R.drawable.ic_baseline_close_24,
+                                    )
+                                ), confirmListener
+                            )
+                        } else {
+                            setAdapter(null, null)
+                            setItems(
+                                arrayOf(
+                                    resources.getText(android.R.string.ok).emphasize(),
+                                    resources.getText(android.R.string.cancel).emphasize()
+                                ), confirmListener
+                            )
                         }
                         setOnCancelListener {
                             Statistics.logDialogCancel(this.context, item.labelResId, true)
@@ -377,5 +397,22 @@ private fun Context.markwon() = Markwon.builder(this)
 private fun Window.hideSysUi() = WindowCompat.getInsetsController(this, decorView).run {
     hide(WindowInsetsCompat.Type.systemBars())
     systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+}
+
+/**
+ * 参考资料：
+ * https://www.bilibili.com/video/BV1Ra411G7fp
+ * https://www.bilibili.com/video/BV1aS4y1N78d
+ * https://pan.baidu.com/s/1LQw_fftvfQzpHS12mtl5tQ?pwd=gf4y
+ * https://community.wvbtech.com/d/3027
+ * 判断是CracKDroid的依据
+ * 根据CPU型号：
+ * * [Kindle刷机指南Ver2.0 220831.pdf](https://pan.baidu.com/s/1LQw_fftvfQzpHS12mtl5tQ?pwd=gf4y#list/path=%2FCracKDroid%2F%E6%95%99%E7%A8%8B)
+ * ，查看“支持机型”部分
+ * * [亚马逊 Kindle 系列产品硬件技术参数大全 中央处理器（CPU）](https://bookfere.com/post/694.html#p03)
+ */
+@Suppress("SpellCheckingInspection")
+private val isCrackDroidEnv by lazy {
+    Build.BRAND == "Amazon" && Build.HARDWARE == "freescale" && BlackMagic.getSystemProperties("ro.board.platform") == "imx6"
 }
 //endregion
