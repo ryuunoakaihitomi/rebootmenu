@@ -31,6 +31,7 @@ import github.ryuunoakaihitomi.powerpanel.util.BlackMagic
 import github.ryuunoakaihitomi.powerpanel.util.CC
 import github.ryuunoakaihitomi.powerpanel.util.RC
 import github.ryuunoakaihitomi.powerpanel.util.emptyAccessibilityDelegate
+import github.ryuunoakaihitomi.powerpanel.util.isCrackDroidEnv
 import github.ryuunoakaihitomi.powerpanel.util.isRoot
 import github.ryuunoakaihitomi.powerpanel.util.isWatch
 import github.ryuunoakaihitomi.powerpanel.util.openUrlInBrowser
@@ -138,7 +139,8 @@ class OpenSourceLibDependencyActivity : AbsAboutActivity() {
         }
         slogan.visibility = View.GONE
         version.text = BuildConfig.BUILD_TIME
-        version.setOnLongClickListener {
+        // 可能把DocumentUI阉割了
+        if (!isCrackDroidEnv) version.setOnLongClickListener {
             recordLogcat()
             true
         }

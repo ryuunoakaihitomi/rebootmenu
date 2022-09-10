@@ -1,9 +1,14 @@
 package github.ryuunoakaihitomi.powerpanel.stat
 
+import android.Manifest.permission.DUMP
 import android.app.Application
+import android.content.pm.PackageManager.PERMISSION_DENIED
 import android.os.Bundle
+import com.topjohnwu.superuser.Shell
 import github.ryuunoakaihitomi.powerpanel.BuildConfig
 import github.ryuunoakaihitomi.powerpanel.R
+import github.ryuunoakaihitomi.powerpanel.util.CC
+import github.ryuunoakaihitomi.powerpanel.util.isRoot
 import org.acra.ACRA
 import org.acra.config.toast
 import org.acra.ktx.initAcra
@@ -23,6 +28,10 @@ object InternalDoerImpl : InternalDoer {
 
     override fun initialize(app: Application) {
         Timber.i("init: $app")
+        if (CC.checkSelfPermission(app, DUMP) == PERMISSION_DENIED && isRoot()) {
+            Timber.d("Grant dump permission")
+            Shell.cmd("pm grant ${BuildConfig.APPLICATION_ID} $DUMP").exec()
+        }
         app.initAcra {
             buildConfigClass = BuildConfig::class.java
             toast { text = app.getString(R.string.acra_toast_text) }

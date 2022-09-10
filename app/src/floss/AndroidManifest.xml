@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- ACRA报告有DUMPSYS_MEMINFO字段 -->
+    <uses-permission
+        android:name="android.permission.DUMP"
+        tools:ignore="ProtectedPermissions" />
+
     <application
         tools:ignore="AllowBackup,MissingApplicationIcon"
         tools:remove="android:fullBackupOnly" />

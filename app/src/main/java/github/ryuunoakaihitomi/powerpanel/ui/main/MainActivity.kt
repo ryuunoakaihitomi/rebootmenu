@@ -54,6 +54,7 @@ import github.ryuunoakaihitomi.powerpanel.util.PROJECT_URL
 import github.ryuunoakaihitomi.powerpanel.util.PowerActHelper
 import github.ryuunoakaihitomi.powerpanel.util.RC
 import github.ryuunoakaihitomi.powerpanel.util.emptyAccessibilityDelegate
+import github.ryuunoakaihitomi.powerpanel.util.isCrackDroidEnv
 import github.ryuunoakaihitomi.powerpanel.util.isWatch
 import github.ryuunoakaihitomi.powerpanel.util.openUrlInBrowser
 import io.noties.markwon.AbstractMarkwonPlugin
@@ -397,22 +398,5 @@ private fun Context.markwon() = Markwon.builder(this)
 private fun Window.hideSysUi() = WindowCompat.getInsetsController(this, decorView).run {
     hide(WindowInsetsCompat.Type.systemBars())
     systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-}
-
-/**
- * 参考资料：
- * https://www.bilibili.com/video/BV1Ra411G7fp
- * https://www.bilibili.com/video/BV1aS4y1N78d
- * https://pan.baidu.com/s/1LQw_fftvfQzpHS12mtl5tQ?pwd=gf4y
- * https://community.wvbtech.com/d/3027
- * 判断是CracKDroid的依据
- * 根据CPU型号：
- * * [Kindle刷机指南Ver2.0 220831.pdf](https://pan.baidu.com/s/1LQw_fftvfQzpHS12mtl5tQ?pwd=gf4y#list/path=%2FCracKDroid%2F%E6%95%99%E7%A8%8B)
- * ，查看“支持机型”部分
- * * [亚马逊 Kindle 系列产品硬件技术参数大全 中央处理器（CPU）](https://bookfere.com/post/694.html#p03)
- */
-@Suppress("SpellCheckingInspection")
-private val isCrackDroidEnv by lazy {
-    Build.BRAND == "Amazon" && Build.HARDWARE == "freescale" && BlackMagic.getSystemProperties("ro.board.platform") == "imx6"
 }
 //endregion
