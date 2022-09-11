@@ -17,7 +17,7 @@ class MyReportSenderFactory : ReportSenderFactory {
         return object : ReportSender {
             override fun send(context: Context, errorContent: CrashReportData) {
                 Timber.e("CRASH!")
-                File("${context.externalCacheDir}/CrashReport/${Date().time}.txt").run {
+                File("${context.externalCacheDir}/CrashReport/${Date().time}.json").run {
                     parentFile?.mkdirs()
                     writeText(errorContent.toJSON())
                 }

@@ -22,10 +22,10 @@ android {
         //targetSdkVersion compileSdkVersion
         targetSdkVersion 33
         // 版本号：发布日期
-        versionCode 20220823
+        versionCode 20220911
         // 版本名说明： R3.x.y.z (R3:Refactoring 第三次重构，z:Quick Fix序号)
         // 不要包含非ASCII可打印字符，会导致Github release文件名异常
-        versionName 'R3.16.0.1'
+        versionName 'R3.16.1'
         resConfigs "en", "zh-rCN"
 
         buildConfigField 'String', 'BUILD_TIME', '\"' + new Date() + '\"'
@@ -135,7 +135,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
 
     // https://github.com/firebase/firebase-android-sdk
-    normalImplementation platform('com.google.firebase:firebase-bom:30.3.2')
+    normalImplementation platform('com.google.firebase:firebase-bom:30.4.1')
     normalImplementation 'com.google.firebase:firebase-analytics-ktx'
     normalImplementation 'com.google.firebase:firebase-crashlytics-ktx'
 
@@ -202,7 +202,7 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:5.0.1'
 
     // https://github.com/PureWriter/about-page
-    implementation 'com.drakeet.about:about:2.5.1'
+    implementation 'com.drakeet.about:about:2.5.2'
 
     // https://github.com/zxing/zxing
     implementation 'com.google.zxing:core:3.5.0'
@@ -220,7 +220,7 @@ dependencies {
     implementation 'dev.rikka.rikkax.compatibility:compatibility:2.0.0'
 
     // https://github.com/KyuubiRan/EzXHelper
-    implementation 'com.github.kyuubiran:EzXHelper:1.0.1'
+    implementation 'com.github.kyuubiran:EzXHelper:1.0.3'
 
     // https://github.com/square/leakcanary
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.9.1'
