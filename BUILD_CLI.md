@@ -2,14 +2,15 @@
 
 * 使用Android Studio的GUI式构建是方便而且最为推荐的做法。但是在其他不得不使用命令行界面的场景，也许有本教程的用武之地。
 * 本教程也可以作为参考资料用来命令行构建其他应用。
+* 随着时间的推移，本教程有失效的可能；届时请自行查找解决方案，教程里也包含了一些参考链接。
 
 ## 环境要求
 
 项目|参数|说明
 ---|---|---
 指令集|`amd64`|`arm64`经测试无法构建（Android设备，使用[Termux](https://termux.com)）
-最低内存|`3G`|理论上也许支持更低的内存
-最低存储|`10G`|实测整个构建过程完成一次后，硬盘占用6.6G
+最低内存|`4GB`|
+最低存储|`10GB`|
 操作系统|`Ubuntu Server 22.04.1 LTS`|使用[AOSP所要求的软件环境](https://source.android.google.cn/setup/build/requirements#software-requirements)以确保构建成功，使用服务器版以降低资源占用
 
 ## 步骤
@@ -66,7 +67,7 @@ export ANDROID_SDK_ROOT=$HOME/android_sdk
 
 ```shell
 cd cmdline-tools/bin # 命令行工具目录
-yes | ./sdkmanager  --sdk_root=$HOME/android_sdk --licenses
+yes | ./sdkmanager --sdk_root=$HOME/android_sdk --licenses
 ```
 
 #### 安装Gradle
@@ -113,4 +114,4 @@ echo STORE_FILE=android.keystore >> secret.properties
 gradle resguardFlossRelease
 ```
 
-等待片刻，输出最后出现`BUILD SUCCESSFUL`即构建成功，apk文件在`app/build/outputs/apk/floss/release`下
+等待片刻（根据硬件配置和网络环境的不同可能需要等待5至20分钟），输出最后出现`BUILD SUCCESSFUL`即构建成功，apk文件在`app/build/outputs/apk/floss/release`下
