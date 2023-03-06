@@ -1,5 +1,5 @@
 # RebootMenu
-[中文](https://github.com/ryuunoakaihitomi/rebootmenu)/[EN](https://github.com/ryuunoakaihitomi/rebootmenu/README-EN.md)
+[中文](README.md)/[EN](README-EN.md)
 
 [![Build floss release CI](https://github.com/ryuunoakaihitomi/rebootmenu/actions/workflows/build_floss_rel.yml/badge.svg?branch=master&event=push)](https://github.com/ryuunoakaihitomi/rebootmenu/actions/workflows/build_floss_rel.yml)
 ![GitHub all releases](https://img.shields.io/github/downloads/ryuunoakaihitomi/rebootmenu/total?style=flat-square)
