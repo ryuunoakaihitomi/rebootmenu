@@ -1,5 +1,7 @@
 # 电源面板
 
+[中文](README.md)/[EN](README-EN.md)
+
 [![Build floss release CI](https://github.com/ryuunoakaihitomi/rebootmenu/actions/workflows/build_floss_rel.yml/badge.svg?branch=master&event=push)](https://github.com/ryuunoakaihitomi/rebootmenu/actions/workflows/build_floss_rel.yml)
 ![GitHub all releases](https://img.shields.io/github/downloads/ryuunoakaihitomi/rebootmenu/total?style=flat-square)
 [![GitHub release (latest by date)](https://img.shields.io/github/downloads/ryuunoakaihitomi/rebootmenu/latest/total?style=flat-square)](https://github.com/ryuunoakaihitomi/rebootmenu/releases)
