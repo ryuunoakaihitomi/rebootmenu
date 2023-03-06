@@ -1,31 +1,36 @@
 # RebootMenu
 [中文](https://github.com/ryuunoakaihitomi/rebootmenu)/[EN](https://github.com/ryuunoakaihitomi/rebootmenu/README-EN.md)
 
-Android 10 (Q) or above has limited reboot menu options (can't reboot into recovery or bootloader, for example). This project aims to add those options to the reboot menu.
+[![Build floss release CI](https://github.com/ryuunoakaihitomi/rebootmenu/actions/workflows/build_floss_rel.yml/badge.svg?branch=master&event=push)](https://github.com/ryuunoakaihitomi/rebootmenu/actions/workflows/build_floss_rel.yml)
+![GitHub all releases](https://img.shields.io/github/downloads/ryuunoakaihitomi/rebootmenu/total?style=flat-square)
+[![GitHub release (latest by date)](https://img.shields.io/github/downloads/ryuunoakaihitomi/rebootmenu/latest/total?style=flat-square)](https://github.com/ryuunoakaihitomi/rebootmenu/releases)
 
-This project is only tested on Pixel devices.
+![image](./app/src/main/res/mipmap/ic_launcher.png)
+
+## Overview
+This is a power menu app.
+Using this app can reduce the frequency of using the power button, thereby extending its lifespan.
+Please see [here](./app/src/main/res/raw-zh-rCN/help.md) for more detailed help information.
 
 ## Screenshots
 
-<img src="./art/screenshot_1.png" width="200" /> <img src="./art/screenshot_2.png" width="200" /> <img src="./art/screenshot_3.png" width="200" />
+Wallpaper source: [Sakura Orico: Preparing to Open a Cat Cafe♪](https://www.pixiv.net/artworks/84998106)
 
-## How to build
+<img src="/annex/Screenshot_20210113-165823.jpg" width="25%" /><img src="/annex/Screenshot_20210113-170632.jpg" width="25%" /><img src="/annex/Screenshot_20210113-170722.jpg" width="25%" /><img src="/annex/Screenshot_20210113-170951.jpg" width="25%" />
 
-1. Clone the project
-2. Open the project in Android Studio
-3. Build and run
 
-## How to install
+## 📥 Get the apk
 
-1. Download the APK file from the [releases page](https://github.com/ryuunoakaihitomi/rebootmenu/releases)
-2. Install the APK file on your device
+* [Github Release](https://github.com/ryuunoakaihitomi/rebootmenu/releases/latest)
 
-## How to use
+> 🔴 Download Guide: There is more than one APK file available for installation. If you are not sure which file to download, please prioritize the larger one. The difference between them can be found in the [Build Note](BUILD_NOTE.md) instructions.
 
-1. Reboot your device
-2. Long-press the power button
-3. Tap "Restart options"
-4. Choose the option you want
+* [Coolapk](https://www.coolapk.com/apk/com.ryuunoakaihitomi.rebootmenu)
+
+> Backup download not recommended, with a history of being unable to download APK files directly and diverting to its own client.
+![Related source code has been commented out at the time of this commit](/annex/coolapk_ban_apk_history.webp)
+
+* [Self-build](BUILD_NOTE.md)
 
 ## License
 
