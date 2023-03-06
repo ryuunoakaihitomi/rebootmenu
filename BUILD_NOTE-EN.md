@@ -16,7 +16,7 @@ Smaller in size, does not include statistics component and unnecessary permissio
 
 ## Steps
 
-- Android Studio needs to be configured in advance and this project needs to be imported (if you cannot configure Android Studio, you can try [command line build](BUILD_CLI.md)).
+- Android Studio needs to be configured in advance and this project needs to be imported (if you cannot configure Android Studio, you can try [command line build](BUILD_CLI-EN.md)).
 
 - Execute the Gradle task: `app:resguardFlossRelease`.
 
