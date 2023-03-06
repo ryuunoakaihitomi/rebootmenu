@@ -1,6 +1,6 @@
 # 构建笔记
 
-[中文](BUILD_NOTE.md)/[EN](README_NOTE-EN)
+[中文](BUILD_NOTE.md)/[EN](README_NOTE-EN.md)
 ## 变体
 
 本应用有两个构建变体：`normal`,`floss`
