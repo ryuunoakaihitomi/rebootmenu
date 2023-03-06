@@ -30,7 +30,7 @@ Wallpaper source: [Sakura Orico: Preparing to Open a Cat Cafe♪](https://www.pi
 > Backup download not recommended, with a history of being unable to download APK files directly and diverting to its own client.
 ![Related source code has been commented out at the time of this commit](/annex/coolapk_ban_apk_history.webp)
 
-* [Self-build](BUILD_NOTE.md)
+* [Self-build](BUILD_NOTE-EN.md)
 
 ## License
 
