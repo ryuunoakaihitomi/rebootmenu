@@ -25,11 +25,6 @@
 
 > 🔴 下载指引：可用于安装的APK文件不止一个。如果你不清楚该下载哪个文件，请优先下载体积较大的。他们的差别可查看[构建笔记](BUILD_NOTE.md)说明。
 
-* [酷安网](https://www.coolapk.com/apk/com.ryuunoakaihitomi.rebootmenu)
-
-> 不推荐的备用下载，有无法直接下载APK文件并引流至其客户端的历史。
-![相关源代码在此次commit的时间点时已被注释](/annex/coolapk_ban_apk_history.webp)
-
 * [自行构建](BUILD_NOTE.md)
 
 ## License
